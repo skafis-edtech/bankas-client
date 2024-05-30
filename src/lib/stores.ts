@@ -6,7 +6,7 @@ import { auth, db } from '$services/firebaseConfig';
 
 interface User {
 	uid: string;
-	email: string | null;
+	email: string;
 	username: string;
 	role: string;
 }
@@ -20,7 +20,7 @@ onAuthStateChanged(auth, async (firebaseUser) => {
 			const userData = userDoc.data() as User;
 			currentUser.set({
 				uid: firebaseUser.uid,
-				email: firebaseUser.email,
+				email: firebaseUser.email!,
 				username: userData.username,
 				role: userData.role
 			});
@@ -36,3 +36,4 @@ const logout = async () => {
 };
 
 export { currentUser, logout };
+export type { User };

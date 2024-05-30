@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { routes } from '$utils/routes';
+	import { ROUTES } from '$utils/constants';
 </script>
 
 <nav>
-	{#each routes as route}
+	{#each ROUTES as route}
 		<a href={route.path}>
 			{route.name}
 		</a>
