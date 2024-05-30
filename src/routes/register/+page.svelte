@@ -5,10 +5,15 @@
 	let email = '';
 	let password = '';
 	let username = '';
-	let role = 'user'; // Default role, change as necessary
+	let role = 'user';
 	let errorMessage = '';
+	let terms = false;
 
 	async function register() {
+		if (!terms) {
+			errorMessage = 'You must agree to the terms';
+			return;
+		}
 		try {
 			await registerUser(email, password, username, role);
 			goto('/');
@@ -20,6 +25,7 @@
 </script>
 
 <h1>Register</h1>
+<p>For admin(being able to approve other's uploads) - email naglis.suliokas@gmail.com</p>
 <form on:submit|preventDefault={register}>
 	<div>
 		<label for="email">Email:</label>
@@ -34,11 +40,11 @@
 		<input type="text" id="username" bind:value={username} required />
 	</div>
 	<div>
-		<label for="role">Role:</label>
-		<select id="role" bind:value={role}>
-			<option value="user">User</option>
-			<option value="admin">Admin</option>
-		</select>
+		<label for="terms"
+			>I agree that all my email will be used for communicating with system admin, I agree that my
+			username, uploaded problems and problem meta data will be public for everyone to see</label
+		>
+		<input type="checkbox" id="terms" required bind:checked={terms} />
 	</div>
 	{#if errorMessage}
 		<p style="color: red;">{errorMessage}</p>
