@@ -19,3 +19,4 @@
 <input type="password" bind:value={password} placeholder="Password" />
 <button on:click={login}>Login</button>
 <p>Forgot password? Email system admin naglis.suliokas@gmail.com</p>
+<p>Don't have an account? <a href="/register">Register</a></p>

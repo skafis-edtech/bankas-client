@@ -1,0 +1,19 @@
+{
+	"users": {},
+	"problems": {
+		"SKF-1": {
+			"problemText": "",
+			"problemImage": "images/skf1.png",
+			"categoryId": "1",
+			"createdOn": "2014-01-01T00:00:00Z"
+		}
+	},
+	"categories": {
+		"1": {
+			"name": "Math. Algebra",
+			"description": "Math problems related to algebra",
+			"createdBy": "crow123",
+			"createdOn": "2014-01-01T00:00:00Z"
+		}
+	}
+}

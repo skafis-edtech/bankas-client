@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { registerUser } from '$lib/auth';
 	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
 
 	let email = '';
 	let password = '';
@@ -8,10 +9,22 @@
 	let role = 'user';
 	let errorMessage = '';
 	let terms = false;
+	let recaptchaVerified = false;
+	let recaptchaToken = '';
 
 	async function register() {
+		if (!recaptchaVerified) {
+			errorMessage = 'Please complete the reCAPTCHA';
+			return;
+		}
 		if (!terms) {
 			errorMessage = 'You must agree to the terms';
+			return;
+		}
+
+		const recaptchaResponse = await verifyRecaptcha(recaptchaToken);
+		if (!recaptchaResponse.success) {
+			alert('reCAPTCHA verification failed. Please try again.');
 			return;
 		}
 		try {
@@ -22,6 +35,38 @@
 			errorMessage = error.message;
 		}
 	}
+
+	const verifyRecaptcha = async (token: string) => {
+		const secretKey = '6Lej_-wpAAAAAHR1zJxw4Ksh-JnzpZc75kInsKED';
+		const response = await fetch(
+			`https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${token}`,
+			{
+				method: 'POST'
+			}
+		);
+		return response.json();
+	};
+
+	const onRecaptchaLoad = () => {
+		grecaptcha.render('recaptcha', {
+			sitekey: '6Lej_-wpAAAAAM8JzHOHlC6MatWgHeYajYR8ThPp',
+			callback: onRecaptchaSuccess
+		});
+	};
+
+	const onRecaptchaSuccess = (token: string) => {
+		recaptchaToken = token;
+	};
+
+	onMount(() => {
+		// Ensure reCAPTCHA script is fully loaded
+		const interval = setInterval(() => {
+			if (typeof grecaptcha !== 'undefined') {
+				clearInterval(interval);
+				onRecaptchaLoad();
+			}
+		}, 100);
+	});
 </script>
 
 <h1>Register</h1>
@@ -41,11 +86,14 @@
 	</div>
 	<div>
 		<label for="terms"
-			>I agree that all my email will be used for communicating with system admin, I agree that my
-			username, uploaded problems and problem meta data will be public for everyone to see</label
+			>I agree that my email address will be used for communicating by system admin. I confirm that
+			email adress is correct. I understand that system admin can delete my account if not receiving
+			response by email 30 days after notice.</label
 		>
 		<input type="checkbox" id="terms" required bind:checked={terms} />
 	</div>
+	<div id="recaptcha"></div>
+
 	{#if errorMessage}
 		<p style="color: red;">{errorMessage}</p>
 	{/if}

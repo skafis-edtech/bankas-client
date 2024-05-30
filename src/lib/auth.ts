@@ -1,4 +1,5 @@
 import { auth, db } from '$services/firebaseConfig';
+import { ROLES } from '$utils/constants';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc, getDoc, query, where, collection, getDocs } from 'firebase/firestore';
 
@@ -8,16 +9,19 @@ export const registerUser = async (
 	username: string,
 	role: string
 ) => {
-	const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-	const user = userCredential.user;
+	if (role !== ROLES.USER) {
+		const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+		const user = userCredential.user;
 
-	await setDoc(doc(db, 'users', user.uid), {
-		username,
-		role,
-		email: user.email
-	});
-
-	return user;
+		await setDoc(doc(db, 'users', user.uid), {
+			username,
+			role,
+			email: user.email
+		});
+		return user;
+	} else {
+		throw new Error('Invalid role');
+	}
 };
 
 export const loginUser = async (username: string, password: string) => {

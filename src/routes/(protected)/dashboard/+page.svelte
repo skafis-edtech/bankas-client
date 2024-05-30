@@ -4,7 +4,6 @@
 	import { goto } from '$app/navigation';
 	import { get } from 'svelte/store';
 	import { ROLES } from '$utils/constants';
-	import ProblemSubmitted from '$components/ui/ProblemSubmitted.svelte';
 
 	let user: User | null = null;
 
@@ -14,17 +13,17 @@
 			goto('/login');
 		} else {
 			user = userState;
+			if (user.role === ROLES.ADMIN) {
+				goto('/review-dashboard');
+			} else if (user.role === ROLES.USER) {
+				goto('/submit-dashboard');
+			} else {
+				throw new Error('Invalid role' + user.role);
+			}
 		}
 	});
 </script>
 
 {#if user}
-	<h1>Submit Dashboard</h1>
-	<p>Welcome, {user.username}</p>
-	{#if user.role === ROLES.ADMIN}
-		<p>Back to review <a href="/review-dashboard">Review dashboard</a></p>
-	{/if}
-	<p>Your submitted (approved and under review)</p>
-	<ProblemSubmitted />
-	<p>Upload new. <a href="/submit-new">Submit new</a></p>
+	<h1>Dashboard. Redirecting...</h1>
 {/if}

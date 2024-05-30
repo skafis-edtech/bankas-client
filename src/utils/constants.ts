@@ -3,13 +3,7 @@ interface Route {
 	name: string;
 }
 
-export const ROUTES: Route[] = [
-	{ path: '/', name: 'Home' },
-	{ path: '/submit-dashboard', name: 'submit dashboard' },
-	{ path: '/review-dashboard', name: 'review dashboard' },
-	{ path: '/submit-new', name: 'submit new' },
-	{ path: '/register', name: 'register' }
-];
+export const ROUTES: Route[] = [];
 
 interface Roles {
 	[key: string]: string;
