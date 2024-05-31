@@ -44,7 +44,7 @@ test('should not allow a user to update users document', async () => {
 	expect(error).not.toBeNull();
 });
 
-//UTILS
+// Helper functions
 const getRandomString = (length: number) => {
 	const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 	let result = '';
