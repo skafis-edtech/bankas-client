@@ -24,7 +24,15 @@
 	{#if user.role === ROLES.ADMIN}
 		<p>Back to review <a href="/review-dashboard">Review dashboard</a></p>
 	{/if}
-	<p>Your submitted (approved and under review)</p>
+	<p>Under review</p>
+	<p>Approved</p>
 	<ProblemSubmitted />
 	<p>Upload new. <a href="/submit-new">Submit new</a></p>
 {/if}
+
+<style lang="scss">
+	h1 {
+		margin-top: 0;
+		font-size: 1.5rem;
+	}
+</style>

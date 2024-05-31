@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { logout } from '$lib/stores';
+	import { logout } from '$services/auth';
 	import { onMount } from 'svelte';
 	import { currentUser, type User } from '$lib/stores';
 	import { get } from 'svelte/store';

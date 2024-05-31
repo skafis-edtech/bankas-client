@@ -1,4 +1,4 @@
-import { loginUser, registerUser } from '$lib/auth';
+import { registerUser } from '$services/auth';
 import { db } from '$services/firebaseConfig';
 import { expect, test } from '@playwright/test';
 import { deleteDoc, doc, getDoc, updateDoc } from 'firebase/firestore';

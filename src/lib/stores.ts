@@ -1,8 +1,8 @@
+import { auth, db } from '$services/firebaseConfig';
+import { onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 import { writable } from 'svelte/store';
 import type { Writable } from 'svelte/store';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
-import { auth, db } from '$services/firebaseConfig';
 
 interface User {
 	uid: string;
@@ -30,10 +30,5 @@ onAuthStateChanged(auth, async (firebaseUser) => {
 	}
 });
 
-const logout = async () => {
-	await signOut(auth);
-	currentUser.set(null);
-};
-
-export { currentUser, logout };
+export { currentUser };
 export type { User };

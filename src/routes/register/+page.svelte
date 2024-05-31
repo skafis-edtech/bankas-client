@@ -1,12 +1,13 @@
 <script lang="ts">
-	import { registerUser } from '$lib/auth';
+	import { recaptchaLoaded, registerUser, renderRecaptha, verifyRecaptcha } from '$services/auth';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import { ROLES } from '$utils/constants';
 
 	let email = '';
 	let password = '';
 	let username = '';
-	let role = 'user';
+	let role = ROLES.USER;
 	let errorMessage = '';
 	let terms = false;
 	let recaptchaVerified = false;
@@ -36,22 +37,8 @@
 		}
 	}
 
-	const verifyRecaptcha = async (token: string) => {
-		const secretKey = '6Lej_-wpAAAAAHR1zJxw4Ksh-JnzpZc75kInsKED';
-		const response = await fetch(
-			`https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${token}`,
-			{
-				method: 'POST'
-			}
-		);
-		return response.json();
-	};
-
 	const onRecaptchaLoad = () => {
-		grecaptcha.render('recaptcha', {
-			sitekey: '6Lej_-wpAAAAAM8JzHOHlC6MatWgHeYajYR8ThPp',
-			callback: onRecaptchaSuccess
-		});
+		renderRecaptha(onRecaptchaSuccess);
 	};
 
 	const onRecaptchaSuccess = (token: string) => {
@@ -59,9 +46,8 @@
 	};
 
 	onMount(() => {
-		// Ensure reCAPTCHA script is fully loaded
 		const interval = setInterval(() => {
-			if (typeof grecaptcha !== 'undefined') {
+			if (recaptchaLoaded()) {
 				clearInterval(interval);
 				onRecaptchaLoad();
 			}
