@@ -24,6 +24,13 @@
 	{#if user.role === ROLES.ADMIN}
 		<p>Back to review <a href="/review-dashboard">Review dashboard</a></p>
 	{/if}
+	{#if user.role !== ROLES.ADMIN}
+		<p>
+			Want to review others? Email <a href="mailto:naglis.suliokas@gmail.com"
+				>naglis.suliokas@gmail.com</a
+			> to get access
+		</p>
+	{/if}
 	<p>Under review</p>
 	<p>Approved</p>
 	<ProblemSubmitted />
