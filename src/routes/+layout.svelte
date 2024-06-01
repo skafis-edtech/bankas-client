@@ -2,8 +2,6 @@
 	import Footer from '$components/layout/Footer.svelte';
 	import Header from '$components/layout/Header.svelte';
 	import '../app.css';
-
-	let showModal = false;
 </script>
 
 <header>
@@ -18,3 +16,33 @@
 	<aside></aside>
 </main>
 <footer><Footer /></footer>
+
+<style lang="scss">
+	header {
+		height: 95px;
+	}
+	footer {
+		height: 68px;
+		padding: 10px;
+		text-align: center;
+	}
+	main {
+		min-height: calc(100vh - 95px - 68px);
+		display: flex;
+	}
+	section {
+		flex: 10 10 0;
+		background-color: beige;
+	}
+	aside {
+		flex: 3 3 0;
+	}
+	@media screen and (max-width: 768px) {
+		aside {
+			display: none;
+		}
+		header {
+			height: fit-content;
+		}
+	}
+</style>
