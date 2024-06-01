@@ -1,4 +1,4 @@
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { db, storage } from './firebaseConfig';
 import { getDownloadURL, ref } from 'firebase/storage';
 
@@ -56,4 +56,52 @@ export const fetchData = async (): Promise<Data> => {
 	}
 
 	return { problems, categories };
+};
+
+export interface ProblemWithMeta {
+	id: string;
+	problemText?: string;
+	problemImage?: string;
+	answerText?: string;
+	answerImage?: string;
+	category: string;
+	createdOn: string;
+	author: string;
+}
+
+export const fetchById = async (id: string): Promise<ProblemWithMeta | null> => {
+	try {
+		const problemDocRef = doc(db, 'problems', id);
+		const problemDocSnap = await getDoc(problemDocRef);
+
+		if (problemDocSnap.exists()) {
+			const problemData = problemDocSnap.data();
+			const problem: ProblemWithMeta = {
+				id: id,
+				problemText: problemData.problemText || '',
+				problemImage: problemData.problemImage ? await getImageUrl(problemData.problemImage) : '',
+				answerText: problemData.answerText || '',
+				answerImage: problemData.answerImage ? await getImageUrl(problemData.answerImage) : '',
+				category: '',
+				createdOn: problemData.createdOn,
+				author: problemData.createdBy || ''
+			};
+
+			// Fetch the corresponding category
+			const categoryDocRef = doc(db, 'categories', problemData.categoryId);
+			const categoryDocSnap = await getDoc(categoryDocRef);
+
+			if (categoryDocSnap.exists()) {
+				problem.category = categoryDocSnap.data().name;
+			}
+
+			return problem;
+		} else {
+			alert('Problem with the given ID does not exist.');
+			return null;
+		}
+	} catch (error) {
+		console.error('Error fetching document:', error);
+		return null;
+	}
 };
