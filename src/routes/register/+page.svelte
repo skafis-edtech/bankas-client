@@ -60,6 +60,11 @@
 
 <div class="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
 	<h2 class="text-center text-2xl font-semibold text-gray-700 dark:text-white">Register</h2>
+	<p class="text-red-600">
+		Registration is disabled at the moment. Contact administrator <a
+			href="mailto:naglis.suliokas@gmail.com">naglis.suliokas@gmail.com</a
+		>
+	</p>
 	<form on:submit|preventDefault={register} class="space-y-6">
 		<div>
 			<Label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300"

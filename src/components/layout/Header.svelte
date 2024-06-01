@@ -13,7 +13,7 @@
 		>
 	</NavBrand>
 	<NavHamburger class="text-white" />
-	<NavUl class="flex-nowrap items-center">
+	<NavUl class="flex-nowrap items-center m0p0-inside-ul">
 		{#if $currentUser}
 			<div class="flex flex-row gap-2">
 				<p class="text-white">{$currentUser.username}</p>
@@ -40,3 +40,9 @@
 		{/if}
 	</NavUl>
 </Navbar>
+
+<style>
+	:global(.m0p0-inside-ul ul) {
+		@apply p-0 m-0;
+	}
+</style>
