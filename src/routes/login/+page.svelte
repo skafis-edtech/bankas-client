@@ -1,14 +1,43 @@
 <script lang="ts">
 	import { loginUser } from '$services/auth';
 	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
+	import { currentUser } from '$lib/stores';
+	import { ROLES } from '$utils/constants';
 
 	let username = '';
 	let password = '';
 
+	onMount(() => {
+		const unsubscribe = currentUser.subscribe(async (userState) => {
+			if (userState && userState.username) {
+				if (userState.role === ROLES.ADMIN) {
+					await goto('/review-dashboard');
+				} else if (userState.role === ROLES.USER) {
+					await goto('/submit-dashboard');
+				} else {
+					throw new Error('Unknown role' + userState.role);
+				}
+			}
+		});
+
+		return () => unsubscribe();
+	});
+
 	async function login() {
 		try {
 			await loginUser(username, password);
-			goto('/');
+			currentUser.subscribe((user) => {
+				if (user && user.username) {
+					if (user.role === ROLES.ADMIN) {
+						goto('/review-dashboard');
+					} else if (user.role === ROLES.USER) {
+						goto('/submit-dashboard');
+					} else {
+						throw new Error('Unknown role' + user.role);
+					}
+				}
+			});
 		} catch (error) {
 			console.error('Login failed:', error);
 		}

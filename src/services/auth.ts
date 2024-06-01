@@ -39,7 +39,6 @@ export const loginUser = async (username: string, password: string) => {
 	}
 	const userDoc = querySnapshot.docs[0];
 	const email = userDoc.data().email;
-
 	return signInWithEmailAndPassword(auth, email, password);
 };
 
