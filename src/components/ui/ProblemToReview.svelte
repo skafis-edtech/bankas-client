@@ -1,5 +1,4 @@
 <script>
-	import Problem from './Problem.svelte';
 </script>
 
 <button>Approve</button>

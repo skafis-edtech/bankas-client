@@ -33,6 +33,7 @@
 	section {
 		flex: 10 10 0;
 		background-color: beige;
+		padding: 10px;
 	}
 	aside {
 		flex: 3 3 0;

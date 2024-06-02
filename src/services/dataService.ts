@@ -3,6 +3,7 @@ import { db, storage } from './firebaseConfig';
 import { getDownloadURL, ref } from 'firebase/storage';
 
 export interface Problem {
+	id: string;
 	problemText?: string;
 	problemImage?: string;
 	answerText?: string;
@@ -12,6 +13,7 @@ export interface Problem {
 }
 
 export interface Category {
+	id: string;
 	name: string;
 	description: string;
 	createdBy: string;
@@ -69,7 +71,7 @@ export interface ProblemWithMeta {
 	author: string;
 }
 
-export const fetchById = async (id: string): Promise<ProblemWithMeta | null> => {
+export const fetchByIdAllData = async (id: string): Promise<ProblemWithMeta | null> => {
 	try {
 		const problemDocRef = doc(db, 'problems', id);
 		const problemDocSnap = await getDoc(problemDocRef);
@@ -104,4 +106,38 @@ export const fetchById = async (id: string): Promise<ProblemWithMeta | null> => 
 		console.error('Error fetching document:', error);
 		return null;
 	}
+};
+
+export const fetchCategories = async (): Promise<Category[]> => {
+	const categoriesSnapshot = await getDocs(collection(db, 'categories'));
+
+	let categories: Category[] = [];
+	for (const doc of categoriesSnapshot.docs) {
+		categories.push({ ...doc.data(), id: doc.id } as Category);
+	}
+
+	return categories;
+};
+
+export const fetchProblemsOfCategory = async (categoryId: string): Promise<Problem[]> => {
+	const problemsSnapshot = await getDocs(collection(db, 'problems'));
+
+	let problems: Problem[] = [];
+	for (const doc of problemsSnapshot.docs) {
+		const data = doc.data() as Problem;
+		if (data.categoryId === categoryId) {
+			const problem: Problem = {
+				id: doc.id,
+				problemText: data.problemText || '',
+				problemImage: data.problemImage ? await getImageUrl(data.problemImage) : '',
+				answerText: data.answerText || '',
+				answerImage: data.answerImage ? await getImageUrl(data.answerImage) : '',
+				createdOn: data.createdOn,
+				categoryId: data.categoryId
+			};
+			problems.push(problem);
+		}
+	}
+
+	return problems;
 };

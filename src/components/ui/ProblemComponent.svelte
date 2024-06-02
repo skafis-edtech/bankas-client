@@ -5,16 +5,18 @@
 	export let problemAllData: ProblemWithMeta | null = null;
 </script>
 
-<Card class="mb-4 min-w-full">
+<Card class="my-6 min-w-full">
 	<div class="flex flex-col relative">
 		<h2 class="text-xl font-bold mb-6">{problemAllData?.id}</h2>
 		<ProblemMeta
 			category={problemAllData?.category}
 			author={problemAllData?.author}
-			createdOn={problemAllData?.createdOn}
+			createdOn={new Date(problemAllData?.createdOn || '').toLocaleDateString('lt-LT') +
+				' ' +
+				new Date(problemAllData?.createdOn || '').toLocaleTimeString('lt-LT')}
 		/>
 		{#if problemAllData?.problemText}
-			<p class="mb-2">{problemAllData?.problemText}</p>
+			<p class="mb-2 text-black">{problemAllData?.problemText}</p>
 		{/if}
 		{#if problemAllData?.problemImage}
 			<div class="p-2">
@@ -30,12 +32,12 @@
 			<summary class="text-right">Žr. atsakymą</summary>
 			{#if problemAllData?.answerText}
 				<p><strong>Atsakymas:</strong></p>
-				<p class="mb-2">{problemAllData?.answerText}</p>
+				<p class="mb-2 text-black">{problemAllData?.answerText}</p>
 			{/if}
 			{#if problemAllData?.answerImage}
 				<img
 					src={problemAllData?.answerImage}
-					alt="Answer "
+					alt="Answer"
 					class="max-w-full h-auto object-cover my-2"
 				/>
 			{/if}

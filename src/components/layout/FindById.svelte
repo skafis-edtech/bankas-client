@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Problem from '$components/ui/Problem.svelte';
-	import { fetchById, type ProblemWithMeta } from '$services/dataService';
+	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
+	import { fetchByIdAllData, type ProblemWithMeta } from '$services/dataService';
 	import { Button, Input } from 'flowbite-svelte';
 	import { writable } from 'svelte/store';
 	let skfCode = writable('SKF-');
@@ -9,11 +9,11 @@
 
 	const fetchStuff = async () => {
 		console.log('fetching');
-		problemAllData = await fetchById($skfCode);
+		problemAllData = await fetchByIdAllData($skfCode);
 	};
 </script>
 
-<div class="flex flex-col my-8 container mx-auto p-4">
+<div class="flex flex-col my-8 container mx-auto">
 	<h1 class="text-2xl font-semibold text-center">Unikalus kodas</h1>
 	<p class="text-center">Įveskite unikalų užduoties SKF kodą (skaičius)</p>
 	<form on:submit|preventDefault={() => fetchStuff()} class="flex flex-col mb-8">
@@ -35,6 +35,6 @@
 		<Button class="m-auto text-center" type="submit">Rodyti</Button>
 	</form>
 	{#if problemAllData}
-		<Problem {problemAllData} />
+		<ProblemComponent {problemAllData} />
 	{/if}
 </div>
