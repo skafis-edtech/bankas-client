@@ -15,7 +15,7 @@
 	<NavHamburger class="text-white" />
 	<NavUl class="flex-nowrap items-center m0p0-inside-ul">
 		{#if $currentUser}
-			<div class="flex flex-row gap-2 m-4">
+			<div class="flex flex-row gap-2 mx-4 mt-3">
 				<p class="text-white">{$currentUser.username}</p>
 				<UserSolid class="h-6 w-6 text-white" />
 			</div>

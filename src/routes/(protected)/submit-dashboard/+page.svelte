@@ -1,30 +1,16 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { currentUser, type User } from '$lib/stores';
-	import { goto } from '$app/navigation';
-	import { get } from 'svelte/store';
 	import { ROLES } from '$utils/constants';
 	import ProblemSubmitted from '$components/ui/ProblemSubmitted.svelte';
-
-	let user: User | null = null;
-
-	onMount(() => {
-		const userState = get(currentUser);
-		if (!userState) {
-			goto('/login');
-		} else {
-			user = userState;
-		}
-	});
+	import { currentUser } from '$lib/stores';
 </script>
 
-{#if user}
+{#if $currentUser}
 	<h1>Submit Dashboard</h1>
-	<p>Welcome, {user.username}</p>
-	{#if user.role === ROLES.ADMIN}
+	<p>Welcome, {$currentUser.username}</p>
+	{#if $currentUser.role === ROLES.ADMIN}
 		<p>Back to review <a href="/review-dashboard">Review dashboard</a></p>
 	{/if}
-	{#if user.role !== ROLES.ADMIN}
+	{#if $currentUser.role !== ROLES.ADMIN}
 		<p>
 			Want to review others? Email <a href="mailto:naglis.suliokas@gmail.com"
 				>naglis.suliokas@gmail.com</a
@@ -35,6 +21,8 @@
 	<p>Approved</p>
 	<ProblemSubmitted />
 	<p>Upload new. <a href="/submit-new">Submit new</a></p>
+{:else}
+	<p>Unauthorized</p>
 {/if}
 
 <style lang="scss">

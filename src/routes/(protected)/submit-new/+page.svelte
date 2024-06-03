@@ -1,40 +1,28 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { currentUser, type User } from '$lib/stores';
-	import { goto } from '$app/navigation';
-	import { get } from 'svelte/store';
-
-	let user: User | null = null;
-
-	onMount(() => {
-		const userState = get(currentUser);
-		if (!userState) {
-			goto('/login');
-		} else {
-			user = userState;
-		}
-	});
+	import { currentUser } from '$lib/stores';
+	import ProblemCreate from '$components/forms/ProblemCreate.svelte';
+	import { Button } from 'flowbite-svelte';
+	import CategoryCreate from '$components/forms/CategoryCreate.svelte';
 </script>
 
-{#if user}
-	<p>Welcome, {user.username}</p>
-	<p>If you refresh, changes will not be saved</p>
-	<p><a href="/submit-dashboard">Go back</a> (not saved)</p>
-	<p>category1</p>
-	<p>categoryName</p>
-	<p>description</p>
-	<p>q1</p>
-	<p>questionText/image</p>
-	<p>answerText/image</p>
-	<p>q2</p>
-	<p>questionText/image</p>
-	<p>answerText/image</p>
-	<p>+</p>
-	<p>
-		Upload only original problems, created by you (which will wave your copyright rights and make it
-		royalty-free) or problems that are already royalty-free. It will be reviewed by admins and if
-		it's approved, it will be public for everyone to see (together with your username, but not
-		email) and use.
-	</p>
-	<button>submit for review</button>
+{#if $currentUser}
+	<h1 class="text-4xl font-semibold my-4 text-center">Įkelti naują kategoriją</h1>
+	<p class="text-red-600 text-center">Changes are not saved automatically!</p>
+	<Button href="/submit-dashboard" class="ml-4">Go back</Button>
+
+	<div class="text-center">
+		<CategoryCreate />
+		<ProblemCreate />
+		<div class="mx-auto mt-8 w-1/2">
+			<p>
+				By clicking "Submit for review" you confirm that you upload only original problems, created
+				by you (which will wave your copyright rights and make it royalty-free) or problems that are
+				already royalty-free. It will be reviewed by admins and if it's approved, it will be public
+				for everyone to see and use (together with your username, but not email).
+			</p>
+			<Button class="my-4">Submit for review</Button>
+		</div>
+	</div>
+{:else}
+	<p>Unauthorized</p>
 {/if}
