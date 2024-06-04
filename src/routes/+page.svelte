@@ -1,6 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { fetchCategories, type Category } from '$services/dataService';
+	import {
+		fetchCategories,
+		fetchNumOfCategories,
+		fetchNumOfProblems,
+		type CategoryForDatabase as Category
+	} from '$services/dataService';
 	import FindById from '$components/layout/FindById.svelte';
 	import { Accordion } from 'flowbite-svelte';
 	import CategoryComponent from '$components/layout/CategoryComponent.svelte';
@@ -10,6 +15,9 @@
 
 	let categories: Category[] = [];
 
+	let numOfProblems: number | null = null;
+	let numOfCategories: number | null = null;
+
 	onMount(async () => {
 		try {
 			categories = await fetchCategories();
@@ -18,10 +26,26 @@
 		} finally {
 			loading = false;
 		}
+
+		try {
+			numOfProblems = await fetchNumOfProblems();
+		} catch (e: any) {
+			error = e.message;
+		}
+
+		try {
+			numOfCategories = await fetchNumOfCategories();
+		} catch (e: any) {
+			error = e.message;
+		}
 	});
 </script>
 
 <h1 class="text-4xl font-semibold my-4 text-center">Skafis užduočių bankas</h1>
+<h3 class="text-xl font-semibold my-4 text-center">Užduočių: {numOfProblems || 'Loading...'}</h3>
+<h3 class="text-xl font-semibold my-4 text-center">
+	Kategorijų: {numOfCategories || 'Loading...'}
+</h3>
 
 <FindById />
 

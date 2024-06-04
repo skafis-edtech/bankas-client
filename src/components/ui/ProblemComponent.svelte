@@ -7,7 +7,7 @@
 
 <Card class="my-6 min-w-full">
 	<div class="flex flex-col relative">
-		<h2 class="text-xl font-bold mb-6">{problemAllData?.id}</h2>
+		<h2 class="text-xl font-bold mb-6 text-left">{problemAllData?.id}</h2>
 		<ProblemMeta
 			category={problemAllData?.category}
 			author={problemAllData?.author}
@@ -16,14 +16,14 @@
 				new Date(problemAllData?.createdOn || '').toLocaleTimeString('lt-LT')}
 		/>
 		{#if problemAllData?.problemText}
-			<p class="mb-2 text-black">{problemAllData?.problemText}</p>
+			<p class="mb-2 text-black text-left">{problemAllData?.problemText}</p>
 		{/if}
 		{#if problemAllData?.problemImage}
 			<div class="p-2">
 				<img
 					src={problemAllData?.problemImage}
 					alt="Problem"
-					class="max-w-full h-auto object-cover"
+					class="max-w-full h-auto object-cover text-left"
 				/>
 			</div>
 		{/if}

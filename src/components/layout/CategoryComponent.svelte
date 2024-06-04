@@ -1,6 +1,10 @@
 <script lang="ts">
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
-	import { fetchProblemsOfCategory, type Category, type Problem } from '$services/dataService';
+	import {
+		fetchProblemsOfCategory,
+		type CategoryForDatabase as Category,
+		type ProblemForDatabase as Problem
+	} from '$services/dataService';
 	import { AccordionItem } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 
