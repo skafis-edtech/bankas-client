@@ -1,6 +1,6 @@
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
 import { db, storage } from './firebaseConfig';
-import { getDownloadURL, ref } from 'firebase/storage';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import type { Writable } from 'svelte/store';
 
 export interface ProblemForDatabase {
@@ -180,14 +180,50 @@ export const fetchLastUsedCode = async (): Promise<string | undefined> => {
 
 export const postCategoryWithProblemsFull = async (
 	category: CategoryForDatabase,
-	problems: Writable<ProblemFullWithFiles>[]
+	problems: ProblemFullWithFiles[]
 ): Promise<void> => {
-	const categoryRef = collection(db, 'categories');
-	const problemsRef = collection(db, 'problems');
-	console.log('category', category);
-	problems.forEach(async (problem) => {
-		console.log('problem', problem);
+	setDoc(doc(db, 'categories', category.id), {
+		name: category.name,
+		description: category.description || '',
+		createdBy: category.createdBy,
+		createdOn: category.createdOn
 	});
 
-	alert('TODO: gonna do stuff');
+	problems.forEach(async (problem) => {
+		setDoc(doc(db, 'problems', problem.id), {
+			problemText: problem.problemText || '',
+			problemImage: problem.problemImage || '',
+			answerText: problem.answerText || '',
+			answerImage: problem.answerImage || '',
+			categoryId: category.id,
+			createdOn: problem.createdOn
+		});
+		try {
+			if (problem.problemImageFile && problem.problemImage && !isUrl(problem.problemImage)) {
+				const storageRefProblem = ref(storage, problem.problemImage);
+				await uploadBytes(storageRefProblem, problem.problemImageFile);
+			}
+			if (problem.answerImageFile && problem.answerImage && !isUrl(problem.answerImage)) {
+				const storageRefAnswer = ref(storage, problem.answerImage);
+				await uploadBytes(storageRefAnswer, problem.answerImageFile);
+			}
+		} catch (error) {
+			console.error('Error uploading file:', error);
+		}
+	});
+};
+
+/**
+ * Updates the last used SKF code in Firestore.
+ * @param {string} lastUsedCode - The last used SKF code to be updated.
+ * @returns {Promise<void>}
+ */
+export const updateLastUsedSkfCode = async (lastUsedCode: string): Promise<void> => {
+	try {
+		const docRef = doc(db, 'meta', 'problemMeta');
+		await setDoc(docRef, { lastUsedCode: lastUsedCode }, { merge: true }); // Add merge option to update instead of overwrite
+		console.log('Document successfully updated');
+	} catch (error) {
+		console.error('Error updating document: ', error);
+	}
 };

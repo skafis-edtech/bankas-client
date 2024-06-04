@@ -7,14 +7,11 @@
 {#if $currentUser}
 	<h1>Submit Dashboard</h1>
 	<p>Welcome, {$currentUser.username}</p>
-	{#if $currentUser.role === ROLES.ADMIN}
-		<p>Back to review <a href="/review-dashboard">Review dashboard</a></p>
-	{/if}
 	{#if $currentUser.role !== ROLES.ADMIN}
 		<p>
 			Want to review others? Email <a href="mailto:naglis.suliokas@gmail.com"
 				>naglis.suliokas@gmail.com</a
-			> to get access
+			> to get access!
 		</p>
 	{/if}
 	<p>Under review</p>

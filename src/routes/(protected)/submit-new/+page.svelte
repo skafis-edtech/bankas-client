@@ -3,14 +3,17 @@
 	import ProblemCreate from '$components/forms/ProblemCreate.svelte';
 	import { Button } from 'flowbite-svelte';
 	import CategoryCreate from '$components/forms/CategoryCreate.svelte';
-	import { writable, type Writable } from 'svelte/store';
+	import { get, writable, type Writable } from 'svelte/store';
 	import {
 		postCategoryWithProblemsFull,
+		fetchLastUsedCode,
+		updateLastUsedSkfCode,
 		type CategoryForDatabase,
 		type ProblemFullWithFiles
 	} from '$services/dataService';
 	import { goto } from '$app/navigation';
-	import { generateGUID } from '$utils/helpers';
+	import { generateGUID, isUrl } from '$utils/helpers';
+	import { genSkfId } from '$utils/helpers';
 
 	let category: Writable<CategoryForDatabase> = writable({} as CategoryForDatabase);
 	let problemsFullWithFiles: Writable<Writable<ProblemFullWithFiles>[]> = writable([]);
@@ -22,13 +25,15 @@
 			answerText: '',
 			categoryId: '',
 			createdOn: '',
-			problemImageFile: null,
-			answerImageFile: null
+			problemImage: undefined,
+			answerImage: undefined,
+			problemImageFile: undefined,
+			answerImageFile: undefined
 		};
 		problemsFullWithFiles.update((problems) => [...problems, writable(newProblem)]);
 	}
 
-	const submitCategoryWithProblems = () => {
+	const submitCategoryWithProblems = async () => {
 		if (!$currentUser) {
 			alert('Unauthorized');
 			return;
@@ -40,18 +45,38 @@
 			c.createdOn = new Date().toISOString();
 			return c;
 		});
+
+		const lastUsedSkfCode: string | undefined = await fetchLastUsedCode();
+		if (!lastUsedSkfCode) {
+			alert('Error: Could not fetch last used code');
+			return;
+		}
+
 		problemsFullWithFiles.update((p) => {
-			return p.map((problem) => {
+			return p.map((problem, index) => {
 				problem.update((p) => {
+					p.id = genSkfId(lastUsedSkfCode, index);
 					p.categoryId = randomUUID;
 					p.createdOn = new Date().toISOString();
+					if (p.problemImageFile && !isUrl(p.problemImage || '')) {
+						p.problemImage = `problems/${p.id}.${p.problemImageFile?.name.split('.').pop()}`;
+					}
+					if (p.answerImageFile && !isUrl(p.answerImage || '')) {
+						p.answerImage = `answers/${p.id}.${p.answerImageFile?.name.split('.').pop()}`;
+					}
 					return p;
 				});
 				return problem;
 			});
 		});
 
-		postCategoryWithProblemsFull($category, $problemsFullWithFiles)
+		await updateLastUsedSkfCode(genSkfId(lastUsedSkfCode, $problemsFullWithFiles.length - 1));
+		console.log(lastUsedSkfCode, $problemsFullWithFiles.length - 1);
+
+		postCategoryWithProblemsFull(
+			$category,
+			$problemsFullWithFiles.map((p) => get(p))
+		)
 			.then(() => {
 				alert('Category with problems submitted for review');
 				goto('/submit-dashboard');
