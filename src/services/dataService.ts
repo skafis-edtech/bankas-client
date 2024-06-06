@@ -31,9 +31,9 @@ export interface Data {
 	categories: Record<string, CategoryForDatabase>;
 }
 
-const isUrl = (path: string): boolean => path.startsWith('https');
+export const isUrl = (path: string): boolean => path.startsWith('https');
 
-const getImageUrl = async (path: string): Promise<string> => {
+export const getImageUrl = async (path: string): Promise<string> => {
 	if (isUrl(path)) {
 		return path;
 	} else {
