@@ -44,7 +44,7 @@
 <h1 class="text-4xl font-semibold my-4 text-center">Skafis užduočių bankas</h1>
 <h3 class="text-xl font-semibold my-4 text-center">Užduočių: {numOfProblems || 'Loading...'}</h3>
 <h3 class="text-xl font-semibold my-4 text-center">
-	Kategorijų: {numOfCategories || 'Loading...'}
+	Kategorojų: {numOfCategories || 'Loading...'}
 </h3>
 
 <FindById />
