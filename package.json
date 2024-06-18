@@ -13,7 +13,7 @@
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
 		"test:unit": "vitest",
-		"genapi": "openapi-generator-cli generate -i https://bankas-skafis-api-latest.onrender.com/v3/api-docs -g typescript-axios -o services/gen-client/"
+		"genapi": "openapi-generator-cli generate -i https://api.bankas.skafis.lt/v3/api-docs -g typescript-axios -o services/gen-client/"
 	},
 	"devDependencies": {
 		"@openapitools/openapi-generator-cli": "^2.9.0",

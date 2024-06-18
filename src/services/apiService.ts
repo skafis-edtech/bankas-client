@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { CategoryControllerApi, ProblemControllerApi, TestControllerApi } from './gen-client/api'; // Adjust the import path
 
-const basePath = 'https://bankas-skafis-api-latest.onrender.com'; // Replace with your actual API base URL
+const basePath = 'https://api.skafis.bankas.lt'; // Replace with your actual API base URL
 const accessToken = 'eykjnkjnkjnkjnkjnkjnkjnkjnkjnkjnkjnkjn'; // Replace with your actual login token
 const axiosInstance = axios.create({
 	baseURL: basePath,

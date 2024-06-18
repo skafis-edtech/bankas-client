@@ -2,7 +2,7 @@
 
 Problems for school bank (repository).
 
-uses API. https://bankas-skafis-api-latest.onrender.com/v3/api-docs
+uses API. https://api.bankas.skafis.lt/v3/api-docs
 
 ## Tech
 
