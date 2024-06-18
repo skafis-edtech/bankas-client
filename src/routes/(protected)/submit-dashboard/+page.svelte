@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
 	import { ROLES } from '$utils/constants';
 	import ProblemSubmitted from '$components/ui/ProblemSubmitted.svelte';
 	import { currentUser } from '$lib/stores';
@@ -27,4 +27,53 @@
 		margin-top: 0;
 		font-size: 1.5rem;
 	}
-</style>
+</style> -->
+
+<script lang="ts">
+	import { onMount } from 'svelte';
+	import { categoryApi, problemApi, testApi } from '$services/apiService'; // Adjust the import path
+	import type { CategoryViewDto, ProblemViewDto } from '$services/gen-client';
+
+	let categories: CategoryViewDto[] = [];
+	let problems: ProblemViewDto[] = [];
+	let userId = '';
+
+	// Fetch all categories on component mount
+	onMount(async () => {
+		try {
+			const categoryResponse = await categoryApi.getAllCategories();
+			categories = categoryResponse.data;
+
+			// Fetch problems for the first category as an example
+			if (categories.length > 0) {
+				const problemResponse = await problemApi.getProblemsByCategory(categories[0].id);
+				problems = problemResponse.data;
+			}
+
+			// Test API to get user ID
+			const userIdResponse = await testApi.test();
+			userId = userIdResponse.data;
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
+	});
+</script>
+
+<main>
+	<h1>Categories</h1>
+	<ul>
+		{#each categories as category}
+			<li>{category.name} - {category.description}</li>
+		{/each}
+	</ul>
+
+	<h1>Problems</h1>
+	<ul>
+		{#each problems as problem}
+			<li>{problem.problemText}</li>
+		{/each}
+	</ul>
+
+	<h1>User ID</h1>
+	<p>{userId}</p>
+</main>

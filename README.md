@@ -20,7 +20,7 @@ uses API. https://bankas-skafis-api-latest.onrender.com/v3/api-docs
 
 pnpm install
 
-pnpm start
+pnpm dev
 
 gen services and models from openapi docs - pnpm genapi
 
