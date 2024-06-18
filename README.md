@@ -1,38 +1,42 @@
-# create-svelte
+# bankas.skafis.lt
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+Problems for school bank (repository).
 
-## Creating a project
+uses API. https://bankas-skafis-api-latest.onrender.com/v3/api-docs
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Tech
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+- svelte, vite, typescript, pnpm
+- firebase auth
+- firebase storage
+- firebase firestore
+- google analytics
+- svelte flowbite components
+- svelte flowbite icons
+- github actions
+- openapi-generator-cli
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+## Dev
 
-## Developing
+pnpm install
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+pnpm start
 
-```bash
-npm run dev
+gen services and models from openapi docs - pnpm genapi
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+## prod
 
-## Building
+branches: main & dev
 
-To create a production version of your app:
+- dev - for dev and test.
+- main - when merged/pushed deploys to firebase (github actions)
 
-```bash
-npm run build
-```
+## stuff/process/logs
 
-You can preview the production build with `npm run preview`.
+### 2024-06-18
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+I have backend!!! (some kind of)
+
+Versions will be only after I make the basic upload & review stuff. This will be v1.0.0 which will be used for all the demos to get money and attention. Then I am going to start using CHANGELOG - next versions will have fully functional backend - i.e. with authetication management and with captcha management.
+
+Now openapi-generator. It takes openapi docs and generates services and models from it for typescript frontend.
