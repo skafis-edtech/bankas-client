@@ -1,15 +1,14 @@
 <script lang="ts">
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
-	import { fetchByIdAllData, type ProblemWithMeta } from '$services/dataService';
 	import { Button, Input } from 'flowbite-svelte';
 	import { writable } from 'svelte/store';
 	let skfCode = writable('SKF-');
 
-	let problemAllData: ProblemWithMeta | null = null;
+	// let problemAllData: ProblemWithMeta | null = null;
 
 	const fetchStuff = async () => {
 		console.log('fetching');
-		problemAllData = await fetchByIdAllData($skfCode);
+		// problemAllData = await fetchByIdAllData($skfCode);
 	};
 </script>
 
@@ -33,8 +32,9 @@
 			class="block px-4 py-2 text-lg w-80 m-auto my-4"
 		/>
 		<Button class="m-auto text-center" type="submit">Rodyti</Button>
-	</form>
+		<!-- </form>
 	{#if problemAllData}
 		<ProblemComponent {problemAllData} />
-	{/if}
+	{/if} -->
+	</form>
 </div>

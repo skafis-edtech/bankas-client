@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { CategoryForDatabase } from '$services/dataService';
 	import { Card, Input, Label } from 'flowbite-svelte';
 	import { writable, type Writable } from 'svelte/store';
 
-	export let category: Writable<CategoryForDatabase>;
+	// export let category: Writable<CategoryForDatabase>;
+	export let category: Writable<any> = writable({} as any);
 </script>
 
 <Card class="max-w-md mx-auto my-6 min-w-full p-6 bg-white rounded-lg shadow-md dark:bg-gray-800">

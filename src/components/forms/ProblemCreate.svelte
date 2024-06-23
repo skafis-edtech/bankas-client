@@ -1,10 +1,9 @@
 <script lang="ts">
 	import ImageUploadTextarea from '$components/ui/ImageUploadTextarea.svelte';
-	import type { ProblemFullWithFiles } from '$services/dataService';
 	import { Card } from 'flowbite-svelte';
 	import { type Writable } from 'svelte/store';
 
-	export let problemData: Writable<ProblemFullWithFiles>;
+	export let problemData: Writable<any>;
 </script>
 
 <Card class="my-6 min-w-full">

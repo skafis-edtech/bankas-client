@@ -4,87 +4,80 @@
 	import { Button } from 'flowbite-svelte';
 	import CategoryCreate from '$components/forms/CategoryCreate.svelte';
 	import { get, writable, type Writable } from 'svelte/store';
-	import {
-		postCategoryWithProblemsFull,
-		fetchLastUsedCode,
-		updateLastUsedSkfCode,
-		type CategoryForDatabase,
-		type ProblemFullWithFiles
-	} from '$services/dataService';
 	import { goto } from '$app/navigation';
 	import { generateGUID, isUrl } from '$utils/helpers';
 	import { genSkfId } from '$utils/helpers';
 
-	let category: Writable<CategoryForDatabase> = writable({} as CategoryForDatabase);
-	let problemsFullWithFiles: Writable<Writable<ProblemFullWithFiles>[]> = writable([]);
+	// let category: Writable<CategoryForDatabase> = writable({} as CategoryForDatabase);
+	// let problemsFullWithFiles: Writable<Writable<ProblemFullWithFiles>[]> = writable([]);
 
-	function addProblem() {
-		const newProblem: ProblemFullWithFiles = {
-			id: 'SKF-..',
-			problemText: '',
-			answerText: '',
-			categoryId: '',
-			createdOn: '',
-			problemImage: undefined,
-			answerImage: undefined,
-			problemImageFile: undefined,
-			answerImageFile: undefined
-		};
-		problemsFullWithFiles.update((problems) => [...problems, writable(newProblem)]);
-	}
+	// function addProblem() {
+	// 	const newProblem: ProblemFullWithFiles = {
+	// 		id: 'SKF-..',
+	// 		problemText: '',
+	// 		answerText: '',
+	// 		categoryId: '',
+	// 		createdOn: '',
+	// 		problemImage: undefined,
+	// 		answerImage: undefined,
+	// 		problemImageFile: undefined,
+	// 		answerImageFile: undefined
+	// 	};
+	// 	problemsFullWithFiles.update((problems) => [...problems, writable(newProblem)]);
+	// }
 
-	const submitCategoryWithProblems = async () => {
-		if (!$currentUser) {
-			alert('Unauthorized');
-			return;
-		}
-		const randomUUID = generateGUID();
-		category.update((c) => {
-			c.id = randomUUID;
-			c.createdBy = $currentUser.username;
-			c.createdOn = new Date().toISOString();
-			return c;
-		});
+	// const submitCategoryWithProblems = async () => {
+	// 	if (!$currentUser) {
+	// 		alert('Unauthorized');
+	// 		return;
+	// 	}
+	// 	const randomUUID = generateGUID();
+	// 	category.update((c) => {
+	// 		c.id = randomUUID;
+	// 		c.createdBy = $currentUser.username;
+	// 		c.createdOn = new Date().toISOString();
+	// 		return c;
+	// 	});
 
-		const lastUsedSkfCode: string | undefined = await fetchLastUsedCode();
-		if (!lastUsedSkfCode) {
-			alert('Error: Could not fetch last used code');
-			return;
-		}
+	// 	const lastUsedSkfCode: string | undefined = await fetchLastUsedCode();
+	// 	if (!lastUsedSkfCode) {
+	// 		alert('Error: Could not fetch last used code');
+	// 		return;
+	// 	}
 
-		problemsFullWithFiles.update((p) => {
-			return p.map((problem, index) => {
-				problem.update((p) => {
-					p.id = genSkfId(lastUsedSkfCode, index);
-					p.categoryId = randomUUID;
-					p.createdOn = new Date().toISOString();
-					if (p.problemImageFile && !isUrl(p.problemImage || '')) {
-						p.problemImage = `problems/${p.id}.${p.problemImageFile?.name.split('.').pop()}`;
-					}
-					if (p.answerImageFile && !isUrl(p.answerImage || '')) {
-						p.answerImage = `answers/${p.id}.${p.answerImageFile?.name.split('.').pop()}`;
-					}
-					return p;
-				});
-				return problem;
-			});
-		});
+	// 	problemsFullWithFiles.update((p) => {
+	// 		return p.map((problem, index) => {
+	// 			problem.update((p) => {
+	// 				p.id = genSkfId(lastUsedSkfCode, index);
+	// 				p.categoryId = randomUUID;
+	// 				p.createdOn = new Date().toISOString();
+	// 				if (p.problemImageFile && !isUrl(p.problemImage || '')) {
+	// 					p.problemImage = `problems/${p.id}.${p.problemImageFile?.name.split('.').pop()}`;
+	// 				}
+	// 				if (p.answerImageFile && !isUrl(p.answerImage || '')) {
+	// 					p.answerImage = `answers/${p.id}.${p.answerImageFile?.name.split('.').pop()}`;
+	// 				}
+	// 				return p;
+	// 			});
+	// 			return problem;
+	// 		});
+	// 	});
 
-		await updateLastUsedSkfCode(genSkfId(lastUsedSkfCode, $problemsFullWithFiles.length - 1));
-		console.log(lastUsedSkfCode, $problemsFullWithFiles.length - 1);
+	// 	await updateLastUsedSkfCode(genSkfId(lastUsedSkfCode, $problemsFullWithFiles.length - 1));
+	// 	console.log(lastUsedSkfCode, $problemsFullWithFiles.length - 1);
 
-		postCategoryWithProblemsFull(
-			$category,
-			$problemsFullWithFiles.map((p) => get(p))
-		)
-			.then(() => {
-				alert('Category with problems submitted for review');
-				goto('/submit-dashboard');
-			})
-			.catch((e) => {
-				alert('Error: ' + e.message);
-			});
-	};
+	// 	postCategoryWithProblemsFull(
+	// 		$category,
+	// 		$problemsFullWithFiles.map((p) => get(p))
+	// 	)
+	// 		.then(() => {
+	// 			alert('Category with problems submitted for review');
+	// 			goto('/submit-dashboard');
+	// 		})
+	// 		.catch((e) => {
+	// 			alert('Error: ' + e.message);
+	// 		});
+	// };
 </script>
 
 {#if $currentUser}
@@ -99,7 +92,7 @@
 		class="ml-4">Go back</Button
 	>
 
-	<form class="text-center" on:submit|preventDefault={() => submitCategoryWithProblems()}>
+	<!-- <form class="text-center" on:submit|preventDefault={() => submitCategoryWithProblems()}>
 		<CategoryCreate {category} />
 		{#each $problemsFullWithFiles as problem, index}
 			<ProblemCreate bind:problemData={problem} />
@@ -114,7 +107,7 @@
 			</p>
 			<Button class="my-4" type="submit">Submit for review</Button>
 		</div>
-	</form>
+	</form> -->
 {:else}
 	<p>Unauthorized</p>
 {/if}

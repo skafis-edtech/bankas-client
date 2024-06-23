@@ -1,22 +1,17 @@
 <script lang="ts">
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
-	import {
-		fetchProblemsOfCategory,
-		type CategoryForDatabase as Category,
-		type ProblemForDatabase as Problem
-	} from '$services/dataService';
 	import { AccordionItem } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 
 	let loading: boolean = true;
 	let error: string | null = null;
-	let problems: Problem[] = [];
+	let problems: any[] = [];
 
-	export let category: Category;
+	export let category: any;
 
 	onMount(async () => {
 		try {
-			problems = await fetchProblemsOfCategory(category.id);
+			// problems = await fetchProblemsOfCategory(category.id);
 		} catch (e: any) {
 			error = e.message;
 		} finally {

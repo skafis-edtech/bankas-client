@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { Card } from 'flowbite-svelte';
 	import ProblemMeta from './ProblemMeta.svelte';
-	import type { ProblemWithMeta } from '$services/dataService';
-	export let problemAllData: ProblemWithMeta | null = null;
+	export let problemAllData: any | null = null;
 </script>
 
 <Card class="my-6 min-w-full">
