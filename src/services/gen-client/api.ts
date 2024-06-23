@@ -26,25 +26,6 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 /**
  * 
  * @export
- * @interface CategoriesForAuthor
- */
-export interface CategoriesForAuthor {
-    /**
-     * 
-     * @type {Array<UnderReviewCategory>}
-     * @memberof CategoriesForAuthor
-     */
-    'underReviewCategories': Array<UnderReviewCategory>;
-    /**
-     * 
-     * @type {Array<Category>}
-     * @memberof CategoriesForAuthor
-     */
-    'approvedCategories': Array<Category>;
-}
-/**
- * 
- * @export
  * @interface Category
  */
 export interface Category {
@@ -627,7 +608,7 @@ export const CategoryControllerApiAxiosParamCreator = function (configuration?: 
     return {
         /**
          * 
-         * @summary Works. ADMIN
+         * @summary ADMIN
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -665,7 +646,7 @@ export const CategoryControllerApiAxiosParamCreator = function (configuration?: 
         },
         /**
          * 
-         * @summary Works. USER
+         * @summary USER
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -703,7 +684,7 @@ export const CategoryControllerApiAxiosParamCreator = function (configuration?: 
         },
         /**
          * 
-         * @summary Works. PUBLIC
+         * @summary PUBLIC
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -733,12 +714,12 @@ export const CategoryControllerApiAxiosParamCreator = function (configuration?: 
         },
         /**
          * 
-         * @summary Works. USER
+         * @summary USER
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         getMyAllSubmittedCategories: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/category/myAllSubmitted`;
+            const localVarPath = `/category/myUnderReview`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -767,7 +748,41 @@ export const CategoryControllerApiAxiosParamCreator = function (configuration?: 
         },
         /**
          * 
-         * @summary Works. PUBLIC
+         * @summary USER
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMyPublicCategories: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/category/myPublic`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary PUBLIC
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -797,7 +812,7 @@ export const CategoryControllerApiAxiosParamCreator = function (configuration?: 
         },
         /**
          * 
-         * @summary Works. PUBLIC
+         * @summary PUBLIC
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -831,7 +846,7 @@ export const CategoryControllerApiAxiosParamCreator = function (configuration?: 
         },
         /**
          * 
-         * @summary Works. ADMIN
+         * @summary ADMIN
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -865,7 +880,7 @@ export const CategoryControllerApiAxiosParamCreator = function (configuration?: 
         },
         /**
          * 
-         * @summary Works. ADMIN
+         * @summary ADMIN
          * @param {string} id 
          * @param {RejectMsgDto} rejectMsgDto 
          * @param {*} [options] Override http request option.
@@ -909,7 +924,7 @@ export const CategoryControllerApiAxiosParamCreator = function (configuration?: 
         },
         /**
          * 
-         * @summary Works. USER
+         * @summary USER
          * @param {CategoryPostDto} categoryPostDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -949,7 +964,7 @@ export const CategoryControllerApiAxiosParamCreator = function (configuration?: 
         },
         /**
          * 
-         * @summary Works. USER
+         * @summary USER
          * @param {string} id 
          * @param {CategoryPostDto} categoryPostDto 
          * @param {*} [options] Override http request option.
@@ -1003,7 +1018,7 @@ export const CategoryControllerApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Works. ADMIN
+         * @summary ADMIN
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1016,7 +1031,7 @@ export const CategoryControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Works. USER
+         * @summary USER
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1029,7 +1044,7 @@ export const CategoryControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Works. PUBLIC
+         * @summary PUBLIC
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1041,11 +1056,11 @@ export const CategoryControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Works. USER
+         * @summary USER
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getMyAllSubmittedCategories(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CategoriesForAuthor>> {
+        async getMyAllSubmittedCategories(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<UnderReviewCategory>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getMyAllSubmittedCategories(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CategoryControllerApi.getMyAllSubmittedCategories']?.[localVarOperationServerIndex]?.url;
@@ -1053,7 +1068,19 @@ export const CategoryControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Works. PUBLIC
+         * @summary USER
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMyPublicCategories(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Category>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMyPublicCategories(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CategoryControllerApi.getMyPublicCategories']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary PUBLIC
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1065,7 +1092,7 @@ export const CategoryControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Works. PUBLIC
+         * @summary PUBLIC
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1078,7 +1105,7 @@ export const CategoryControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Works. ADMIN
+         * @summary ADMIN
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1090,7 +1117,7 @@ export const CategoryControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Works. ADMIN
+         * @summary ADMIN
          * @param {string} id 
          * @param {RejectMsgDto} rejectMsgDto 
          * @param {*} [options] Override http request option.
@@ -1104,7 +1131,7 @@ export const CategoryControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Works. USER
+         * @summary USER
          * @param {CategoryPostDto} categoryPostDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1117,7 +1144,7 @@ export const CategoryControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Works. USER
+         * @summary USER
          * @param {string} id 
          * @param {CategoryPostDto} categoryPostDto 
          * @param {*} [options] Override http request option.
@@ -1141,7 +1168,7 @@ export const CategoryControllerApiFactory = function (configuration?: Configurat
     return {
         /**
          * 
-         * @summary Works. ADMIN
+         * @summary ADMIN
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1151,7 +1178,7 @@ export const CategoryControllerApiFactory = function (configuration?: Configurat
         },
         /**
          * 
-         * @summary Works. USER
+         * @summary USER
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1161,7 +1188,7 @@ export const CategoryControllerApiFactory = function (configuration?: Configurat
         },
         /**
          * 
-         * @summary Works. PUBLIC
+         * @summary PUBLIC
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1170,16 +1197,25 @@ export const CategoryControllerApiFactory = function (configuration?: Configurat
         },
         /**
          * 
-         * @summary Works. USER
+         * @summary USER
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMyAllSubmittedCategories(options?: any): AxiosPromise<CategoriesForAuthor> {
+        getMyAllSubmittedCategories(options?: any): AxiosPromise<Array<UnderReviewCategory>> {
             return localVarFp.getMyAllSubmittedCategories(options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @summary Works. PUBLIC
+         * @summary USER
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMyPublicCategories(options?: any): AxiosPromise<Array<Category>> {
+            return localVarFp.getMyPublicCategories(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary PUBLIC
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1188,7 +1224,7 @@ export const CategoryControllerApiFactory = function (configuration?: Configurat
         },
         /**
          * 
-         * @summary Works. PUBLIC
+         * @summary PUBLIC
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1198,7 +1234,7 @@ export const CategoryControllerApiFactory = function (configuration?: Configurat
         },
         /**
          * 
-         * @summary Works. ADMIN
+         * @summary ADMIN
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1207,7 +1243,7 @@ export const CategoryControllerApiFactory = function (configuration?: Configurat
         },
         /**
          * 
-         * @summary Works. ADMIN
+         * @summary ADMIN
          * @param {string} id 
          * @param {RejectMsgDto} rejectMsgDto 
          * @param {*} [options] Override http request option.
@@ -1218,7 +1254,7 @@ export const CategoryControllerApiFactory = function (configuration?: Configurat
         },
         /**
          * 
-         * @summary Works. USER
+         * @summary USER
          * @param {CategoryPostDto} categoryPostDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1228,7 +1264,7 @@ export const CategoryControllerApiFactory = function (configuration?: Configurat
         },
         /**
          * 
-         * @summary Works. USER
+         * @summary USER
          * @param {string} id 
          * @param {CategoryPostDto} categoryPostDto 
          * @param {*} [options] Override http request option.
@@ -1249,7 +1285,7 @@ export const CategoryControllerApiFactory = function (configuration?: Configurat
 export class CategoryControllerApi extends BaseAPI {
     /**
      * 
-     * @summary Works. ADMIN
+     * @summary ADMIN
      * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1261,7 +1297,7 @@ export class CategoryControllerApi extends BaseAPI {
 
     /**
      * 
-     * @summary Works. USER
+     * @summary USER
      * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1273,7 +1309,7 @@ export class CategoryControllerApi extends BaseAPI {
 
     /**
      * 
-     * @summary Works. PUBLIC
+     * @summary PUBLIC
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CategoryControllerApi
@@ -1284,7 +1320,7 @@ export class CategoryControllerApi extends BaseAPI {
 
     /**
      * 
-     * @summary Works. USER
+     * @summary USER
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CategoryControllerApi
@@ -1295,7 +1331,18 @@ export class CategoryControllerApi extends BaseAPI {
 
     /**
      * 
-     * @summary Works. PUBLIC
+     * @summary USER
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CategoryControllerApi
+     */
+    public getMyPublicCategories(options?: RawAxiosRequestConfig) {
+        return CategoryControllerApiFp(this.configuration).getMyPublicCategories(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary PUBLIC
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CategoryControllerApi
@@ -1306,7 +1353,7 @@ export class CategoryControllerApi extends BaseAPI {
 
     /**
      * 
-     * @summary Works. PUBLIC
+     * @summary PUBLIC
      * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1318,7 +1365,7 @@ export class CategoryControllerApi extends BaseAPI {
 
     /**
      * 
-     * @summary Works. ADMIN
+     * @summary ADMIN
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CategoryControllerApi
@@ -1329,7 +1376,7 @@ export class CategoryControllerApi extends BaseAPI {
 
     /**
      * 
-     * @summary Works. ADMIN
+     * @summary ADMIN
      * @param {string} id 
      * @param {RejectMsgDto} rejectMsgDto 
      * @param {*} [options] Override http request option.
@@ -1342,7 +1389,7 @@ export class CategoryControllerApi extends BaseAPI {
 
     /**
      * 
-     * @summary Works. USER
+     * @summary USER
      * @param {CategoryPostDto} categoryPostDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1354,7 +1401,7 @@ export class CategoryControllerApi extends BaseAPI {
 
     /**
      * 
-     * @summary Works. USER
+     * @summary USER
      * @param {string} id 
      * @param {CategoryPostDto} categoryPostDto 
      * @param {*} [options] Override http request option.
@@ -1376,7 +1423,7 @@ export const ProblemControllerApiAxiosParamCreator = function (configuration?: C
     return {
         /**
          * 
-         * @summary Works. ADMIN
+         * @summary ADMIN
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1414,7 +1461,7 @@ export const ProblemControllerApiAxiosParamCreator = function (configuration?: C
         },
         /**
          * 
-         * @summary Works. USER
+         * @summary USER
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1452,7 +1499,7 @@ export const ProblemControllerApiAxiosParamCreator = function (configuration?: C
         },
         /**
          * 
-         * @summary Works. USER
+         * @summary USER
          * @param {string} id 
          * @param {FixMyUnderReviewProblemRequest} [fixMyUnderReviewProblemRequest] 
          * @param {*} [options] Override http request option.
@@ -1494,7 +1541,7 @@ export const ProblemControllerApiAxiosParamCreator = function (configuration?: C
         },
         /**
          * 
-         * @summary Works. ADMIN
+         * @summary ADMIN
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1528,7 +1575,7 @@ export const ProblemControllerApiAxiosParamCreator = function (configuration?: C
         },
         /**
          * 
-         * @summary Works. USER
+         * @summary USER
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1562,7 +1609,7 @@ export const ProblemControllerApiAxiosParamCreator = function (configuration?: C
         },
         /**
          * 
-         * @summary Works. PUBLIC
+         * @summary PUBLIC
          * @param {string} skfCode 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1596,7 +1643,7 @@ export const ProblemControllerApiAxiosParamCreator = function (configuration?: C
         },
         /**
          * 
-         * @summary Works. PUBLIC
+         * @summary PUBLIC
          * @param {string} categoryId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1630,7 +1677,7 @@ export const ProblemControllerApiAxiosParamCreator = function (configuration?: C
         },
         /**
          * 
-         * @summary Works. PUBLIC
+         * @summary PUBLIC
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1660,7 +1707,7 @@ export const ProblemControllerApiAxiosParamCreator = function (configuration?: C
         },
         /**
          * 
-         * @summary Works. ADMIN
+         * @summary ADMIN
          * @param {string} id 
          * @param {RejectMsgDto} rejectMsgDto 
          * @param {*} [options] Override http request option.
@@ -1704,7 +1751,7 @@ export const ProblemControllerApiAxiosParamCreator = function (configuration?: C
         },
         /**
          *              This endpoint allows uploading problem information as JSON along with optional image files.              **Request Type**: `multipart/form-data`             - Key `problem`: JSON string containing the problem information             - Key `problemImageFile`: (optional) Image file associated with the problem             - Key `answerImageFile`: (optional) Image file associated with the answer              **Logic**:             - If `problem.problemImageUrl` is a URL and `problemImageFile` is null, return `problemImagePath = problem.problemImage`.             - If `problem.problemImageUrl` is \"\" and `problemImageFile` is provided, upload the file and return `problemImagePath = \"problems/SKF-...\"`.             - If `problem.problemImageUrl` is \"\" and `problemImageFile` is null, return `problemImagePath = \"\"`.         
-         * @summary Works. USER. Careful! Complex file and text upload logic AND not easily testable file upload!
+         * @summary USER. Careful! Complex file and text upload logic AND not easily testable file upload!
          * @param {FixMyUnderReviewProblemRequest} [fixMyUnderReviewProblemRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1752,7 +1799,7 @@ export const ProblemControllerApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Works. ADMIN
+         * @summary ADMIN
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1765,7 +1812,7 @@ export const ProblemControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Works. USER
+         * @summary USER
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1778,7 +1825,7 @@ export const ProblemControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Works. USER
+         * @summary USER
          * @param {string} id 
          * @param {FixMyUnderReviewProblemRequest} [fixMyUnderReviewProblemRequest] 
          * @param {*} [options] Override http request option.
@@ -1792,7 +1839,7 @@ export const ProblemControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Works. ADMIN
+         * @summary ADMIN
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1804,7 +1851,7 @@ export const ProblemControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Works. USER
+         * @summary USER
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1816,7 +1863,7 @@ export const ProblemControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Works. PUBLIC
+         * @summary PUBLIC
          * @param {string} skfCode 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1829,7 +1876,7 @@ export const ProblemControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Works. PUBLIC
+         * @summary PUBLIC
          * @param {string} categoryId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1842,7 +1889,7 @@ export const ProblemControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Works. PUBLIC
+         * @summary PUBLIC
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1854,7 +1901,7 @@ export const ProblemControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Works. ADMIN
+         * @summary ADMIN
          * @param {string} id 
          * @param {RejectMsgDto} rejectMsgDto 
          * @param {*} [options] Override http request option.
@@ -1868,7 +1915,7 @@ export const ProblemControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          *              This endpoint allows uploading problem information as JSON along with optional image files.              **Request Type**: `multipart/form-data`             - Key `problem`: JSON string containing the problem information             - Key `problemImageFile`: (optional) Image file associated with the problem             - Key `answerImageFile`: (optional) Image file associated with the answer              **Logic**:             - If `problem.problemImageUrl` is a URL and `problemImageFile` is null, return `problemImagePath = problem.problemImage`.             - If `problem.problemImageUrl` is \"\" and `problemImageFile` is provided, upload the file and return `problemImagePath = \"problems/SKF-...\"`.             - If `problem.problemImageUrl` is \"\" and `problemImageFile` is null, return `problemImagePath = \"\"`.         
-         * @summary Works. USER. Careful! Complex file and text upload logic AND not easily testable file upload!
+         * @summary USER. Careful! Complex file and text upload logic AND not easily testable file upload!
          * @param {FixMyUnderReviewProblemRequest} [fixMyUnderReviewProblemRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1891,7 +1938,7 @@ export const ProblemControllerApiFactory = function (configuration?: Configurati
     return {
         /**
          * 
-         * @summary Works. ADMIN
+         * @summary ADMIN
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1901,7 +1948,7 @@ export const ProblemControllerApiFactory = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Works. USER
+         * @summary USER
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1911,7 +1958,7 @@ export const ProblemControllerApiFactory = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Works. USER
+         * @summary USER
          * @param {string} id 
          * @param {FixMyUnderReviewProblemRequest} [fixMyUnderReviewProblemRequest] 
          * @param {*} [options] Override http request option.
@@ -1922,7 +1969,7 @@ export const ProblemControllerApiFactory = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Works. ADMIN
+         * @summary ADMIN
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1931,7 +1978,7 @@ export const ProblemControllerApiFactory = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Works. USER
+         * @summary USER
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1940,7 +1987,7 @@ export const ProblemControllerApiFactory = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Works. PUBLIC
+         * @summary PUBLIC
          * @param {string} skfCode 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1950,7 +1997,7 @@ export const ProblemControllerApiFactory = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Works. PUBLIC
+         * @summary PUBLIC
          * @param {string} categoryId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1960,7 +2007,7 @@ export const ProblemControllerApiFactory = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Works. PUBLIC
+         * @summary PUBLIC
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1969,7 +2016,7 @@ export const ProblemControllerApiFactory = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Works. ADMIN
+         * @summary ADMIN
          * @param {string} id 
          * @param {RejectMsgDto} rejectMsgDto 
          * @param {*} [options] Override http request option.
@@ -1980,7 +2027,7 @@ export const ProblemControllerApiFactory = function (configuration?: Configurati
         },
         /**
          *              This endpoint allows uploading problem information as JSON along with optional image files.              **Request Type**: `multipart/form-data`             - Key `problem`: JSON string containing the problem information             - Key `problemImageFile`: (optional) Image file associated with the problem             - Key `answerImageFile`: (optional) Image file associated with the answer              **Logic**:             - If `problem.problemImageUrl` is a URL and `problemImageFile` is null, return `problemImagePath = problem.problemImage`.             - If `problem.problemImageUrl` is \"\" and `problemImageFile` is provided, upload the file and return `problemImagePath = \"problems/SKF-...\"`.             - If `problem.problemImageUrl` is \"\" and `problemImageFile` is null, return `problemImagePath = \"\"`.         
-         * @summary Works. USER. Careful! Complex file and text upload logic AND not easily testable file upload!
+         * @summary USER. Careful! Complex file and text upload logic AND not easily testable file upload!
          * @param {FixMyUnderReviewProblemRequest} [fixMyUnderReviewProblemRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2000,7 +2047,7 @@ export const ProblemControllerApiFactory = function (configuration?: Configurati
 export class ProblemControllerApi extends BaseAPI {
     /**
      * 
-     * @summary Works. ADMIN
+     * @summary ADMIN
      * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2012,7 +2059,7 @@ export class ProblemControllerApi extends BaseAPI {
 
     /**
      * 
-     * @summary Works. USER
+     * @summary USER
      * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2024,7 +2071,7 @@ export class ProblemControllerApi extends BaseAPI {
 
     /**
      * 
-     * @summary Works. USER
+     * @summary USER
      * @param {string} id 
      * @param {FixMyUnderReviewProblemRequest} [fixMyUnderReviewProblemRequest] 
      * @param {*} [options] Override http request option.
@@ -2037,7 +2084,7 @@ export class ProblemControllerApi extends BaseAPI {
 
     /**
      * 
-     * @summary Works. ADMIN
+     * @summary ADMIN
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProblemControllerApi
@@ -2048,7 +2095,7 @@ export class ProblemControllerApi extends BaseAPI {
 
     /**
      * 
-     * @summary Works. USER
+     * @summary USER
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProblemControllerApi
@@ -2059,7 +2106,7 @@ export class ProblemControllerApi extends BaseAPI {
 
     /**
      * 
-     * @summary Works. PUBLIC
+     * @summary PUBLIC
      * @param {string} skfCode 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2071,7 +2118,7 @@ export class ProblemControllerApi extends BaseAPI {
 
     /**
      * 
-     * @summary Works. PUBLIC
+     * @summary PUBLIC
      * @param {string} categoryId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2083,7 +2130,7 @@ export class ProblemControllerApi extends BaseAPI {
 
     /**
      * 
-     * @summary Works. PUBLIC
+     * @summary PUBLIC
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProblemControllerApi
@@ -2094,7 +2141,7 @@ export class ProblemControllerApi extends BaseAPI {
 
     /**
      * 
-     * @summary Works. ADMIN
+     * @summary ADMIN
      * @param {string} id 
      * @param {RejectMsgDto} rejectMsgDto 
      * @param {*} [options] Override http request option.
@@ -2107,7 +2154,7 @@ export class ProblemControllerApi extends BaseAPI {
 
     /**
      *              This endpoint allows uploading problem information as JSON along with optional image files.              **Request Type**: `multipart/form-data`             - Key `problem`: JSON string containing the problem information             - Key `problemImageFile`: (optional) Image file associated with the problem             - Key `answerImageFile`: (optional) Image file associated with the answer              **Logic**:             - If `problem.problemImageUrl` is a URL and `problemImageFile` is null, return `problemImagePath = problem.problemImage`.             - If `problem.problemImageUrl` is \"\" and `problemImageFile` is provided, upload the file and return `problemImagePath = \"problems/SKF-...\"`.             - If `problem.problemImageUrl` is \"\" and `problemImageFile` is null, return `problemImagePath = \"\"`.         
-     * @summary Works. USER. Careful! Complex file and text upload logic AND not easily testable file upload!
+     * @summary USER. Careful! Complex file and text upload logic AND not easily testable file upload!
      * @param {FixMyUnderReviewProblemRequest} [fixMyUnderReviewProblemRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2229,7 +2276,7 @@ export const UserControllerApiAxiosParamCreator = function (configuration?: Conf
     return {
         /**
          * 
-         * @summary Works. PUBLIC
+         * @summary PUBLIC
          * @param {string} username 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2263,7 +2310,7 @@ export const UserControllerApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * 
-         * @summary Works. USER
+         * @summary USER
          * @param {UserBioDto} userBioDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2313,7 +2360,7 @@ export const UserControllerApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Works. PUBLIC
+         * @summary PUBLIC
          * @param {string} username 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2326,7 +2373,7 @@ export const UserControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Works. USER
+         * @summary USER
          * @param {UserBioDto} userBioDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2349,7 +2396,7 @@ export const UserControllerApiFactory = function (configuration?: Configuration,
     return {
         /**
          * 
-         * @summary Works. PUBLIC
+         * @summary PUBLIC
          * @param {string} username 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2359,7 +2406,7 @@ export const UserControllerApiFactory = function (configuration?: Configuration,
         },
         /**
          * 
-         * @summary Works. USER
+         * @summary USER
          * @param {UserBioDto} userBioDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2379,7 +2426,7 @@ export const UserControllerApiFactory = function (configuration?: Configuration,
 export class UserControllerApi extends BaseAPI {
     /**
      * 
-     * @summary Works. PUBLIC
+     * @summary PUBLIC
      * @param {string} username 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2391,7 +2438,7 @@ export class UserControllerApi extends BaseAPI {
 
     /**
      * 
-     * @summary Works. USER
+     * @summary USER
      * @param {UserBioDto} userBioDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

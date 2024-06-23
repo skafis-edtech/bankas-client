@@ -12,6 +12,7 @@ interface User {
 }
 
 const currentUser: Writable<User | null> = writable(null);
+const idToken: Writable<string | null> = writable(null);
 
 onAuthStateChanged(auth, async (firebaseUser) => {
 	if (firebaseUser) {
@@ -25,10 +26,12 @@ onAuthStateChanged(auth, async (firebaseUser) => {
 				role: userData.role
 			});
 		}
+		idToken.set(await firebaseUser.getIdToken());
 	} else {
 		currentUser.set(null);
+		idToken.set(null);
 	}
 });
 
-export { currentUser };
+export { currentUser, idToken };
 export type { User };

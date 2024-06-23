@@ -1,18 +1,36 @@
 import axios from 'axios';
-import { CategoryControllerApi, ProblemControllerApi, TestControllerApi } from './gen-client/api'; // Adjust the import path
+import { get } from 'svelte/store';
+import {
+	CategoryControllerApi,
+	ProblemControllerApi,
+	TestControllerApi,
+	UserControllerApi
+} from './gen-client/api'; // Adjust the import path
+import { idToken } from '$lib/stores';
 
 const basePath = 'https://api.bankas.skafis.lt';
-// const accessToken = 'your-access-token'; // Replace with your actual access token
 
 const axiosInstance = axios.create({
 	baseURL: basePath
-	// headers: {
-	// 	Authorization: `Bearer ${accessToken}`
-	// }
 });
+
+// Add a request interceptor to set the Authorization header dynamically
+axiosInstance.interceptors.request.use(
+	async (config) => {
+		const token = get(idToken);
+		if (token) {
+			config.headers['Authorization'] = `Bearer ${token}`;
+		}
+		return config;
+	},
+	(error) => {
+		return Promise.reject(error);
+	}
+);
 
 const categoryApi = new CategoryControllerApi(undefined, basePath, axiosInstance);
 const problemApi = new ProblemControllerApi(undefined, basePath, axiosInstance);
+const userApi = new UserControllerApi(undefined, basePath, axiosInstance);
 const testApi = new TestControllerApi(undefined, basePath, axiosInstance);
 
-export { categoryApi, problemApi, testApi };
+export { categoryApi, problemApi, userApi, testApi };

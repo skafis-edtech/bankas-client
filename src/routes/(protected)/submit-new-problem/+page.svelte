@@ -82,14 +82,14 @@
 
 {#if $currentUser}
 	<h1 class="text-4xl font-semibold my-4 text-center">Įkelti savo užduotis</h1>
-	<p class="text-red-600 text-center">Changes are not saved automatically!</p>
+	<p class="text-red-600 text-center">Pakeitimai nėra išsaugomi automatiškai!</p>
 	<Button
 		on:click={() => {
-			if (confirm('Are you sure you want to go back? All changes will be lost.')) {
+			if (confirm('Ar tikrai norite grįžti? Pakeitimai nebus išsaugoti.')) {
 				goto('/submit-dashboard');
 			}
 		}}
-		class="ml-4">Go back</Button
+		class="ml-4">Grįžti</Button
 	>
 
 	<!-- <form class="text-center" on:submit|preventDefault={() => submitCategoryWithProblems()}>

@@ -10,6 +10,6 @@ interface Roles {
 }
 
 export const ROLES: Roles = {
-	ADMIN: 'admin',
-	USER: 'user'
+	ADMIN: 'ADMIN',
+	USER: 'USER'
 };

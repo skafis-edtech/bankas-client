@@ -32,21 +32,21 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { categoryApi, problemApi, testApi } from '$services/apiService'; // Adjust the import path
-	import type { CategoryViewDto, ProblemViewDto } from '$services/gen-client';
+	import type { Category, ProblemDisplayViewDto } from '$services/gen-client';
 
-	let categories: CategoryViewDto[] = [];
-	let problems: ProblemViewDto[] = [];
+	let categories: Category[] = [];
+	let problems: ProblemDisplayViewDto[] = [];
 	let userId = '';
 
 	// Fetch all categories on component mount
 	onMount(async () => {
 		try {
-			const categoryResponse = await categoryApi.getAllCategories();
+			const categoryResponse = await categoryApi.getAllPublicCategories();
 			categories = categoryResponse.data;
 
 			// Fetch problems for the first category as an example
 			if (categories.length > 0) {
-				const problemResponse = await problemApi.getProblemsByCategory(categories[0].id);
+				const problemResponse = await problemApi.getPublicProblemsByCategory(categories[0].id);
 				problems = problemResponse.data;
 			}
 
@@ -76,4 +76,7 @@
 
 	<h1>User ID</h1>
 	<p>{userId}</p>
+
+	<a href="/submit-new-category">New caytegory</a>
+	<a href="/submit-new-problem">New problem</a>
 </main>
