@@ -1,5 +1,5 @@
 <p>
-	Website author's blog and other interesting stuff here:{' '}
+	Tinklapio autoriaus blog'as bei kiti įdomūs dalykai čia:{' '}
 	<a
 		target="_blank"
 		class="text-blue-800 underline"
@@ -8,4 +8,4 @@
 		>npw.lt
 	</a>
 </p>
-<p>Last time updated: 2024-06-01</p>
+<p>Paskutinį kartą atnaujinta: 2024-06-01</p>

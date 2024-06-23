@@ -34,9 +34,9 @@
 </script>
 
 <h1 class="text-4xl font-semibold my-4 text-center">Skafis užduočių bankas</h1>
-<h3 class="text-xl font-semibold my-4 text-center">Užduočių: {numOfProblems || 'Loading...'}</h3>
+<h3 class="text-xl font-semibold my-4 text-center">Užduočių: {numOfProblems || 'Kraunasi...'}</h3>
 <h3 class="text-xl font-semibold my-4 text-center">
-	Kategorojų: {numOfCategories || 'Loading...'}
+	Kategorijų: {numOfCategories || 'Kraunasi...'}
 </h3>
 
 <FindById />
@@ -53,9 +53,9 @@
 
 <Accordion>
 	{#if loading}
-		<p>Loading...</p>
+		<p>Kraunasi...</p>
 	{:else if error}
-		<p>Error: {error}</p>
+		<p>Klaida: {error}</p>
 	{:else}
 		<!-- {#each Object.entries(categories) as [id, category]}
 			<CategoryComponent {category} />

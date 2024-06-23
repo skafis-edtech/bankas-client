@@ -21,21 +21,21 @@
 			</div>
 		{/if}
 		<NavLi class="text-right" on:click={() => goto('/')}
-			><Button><HomeSolid class="mr-2" />Home</Button></NavLi
+			><Button><HomeSolid class="mr-2" />Pradžia</Button></NavLi
 		>
 		{#if $currentUser}
 			{#if $currentUser.role === 'admin'}
 				<NavLi on:click={() => goto('/review-dashboard')} class="text-right"
-					><Button>Review</Button></NavLi
+					><Button>Peržiūrėti</Button></NavLi
 				>
 			{/if}
 			<NavLi on:click={() => goto('/submit-dashboard')} class="text-right"
-				><Button>Submit</Button></NavLi
+				><Button>Pateikti</Button></NavLi
 			>
 			<NavLi class="text-right" on:click={() => goto('/logout')}><Button>Logout</Button></NavLi>
 		{:else}
 			<NavLi class="text-right" on:click={() => goto('/login')}>
-				<Button>Login</Button>
+				<Button>Prisijungti</Button>
 			</NavLi>
 		{/if}
 	</NavUl>
