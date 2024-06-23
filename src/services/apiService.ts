@@ -8,7 +8,7 @@ import {
 } from './gen-client/api'; // Adjust the import path
 import { idToken } from '$lib/stores';
 
-const basePath = 'https://api.bankas.skafis.lt';
+const basePath = 'http://localhost'; //api.bankas.skafis.lt';
 
 const axiosInstance = axios.create({
 	baseURL: basePath

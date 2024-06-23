@@ -1,17 +1,21 @@
 <script lang="ts">
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
+	import { getNiceTimeString } from '$lib/utils';
+	import { categoryApi, problemApi } from '$services/apiService';
+	import type { Category, ProblemDisplayViewDto } from '$services/gen-client';
 	import { AccordionItem } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 
 	let loading: boolean = true;
 	let error: string | null = null;
-	let problems: any[] = [];
+	let problems: ProblemDisplayViewDto[] = [];
 
-	export let category: any;
+	export let category: Category;
 
 	onMount(async () => {
 		try {
-			// problems = await fetchProblemsOfCategory(category.id);
+			const response = await problemApi.getPublicProblemsByCategory(category.id);
+			problems = response.data;
 		} catch (e: any) {
 			error = e.message;
 		} finally {
@@ -23,11 +27,20 @@
 <AccordionItem class="bg-slate-200 my-4 ">
 	<span slot="header" class="text-black">{category.name}</span>
 	<p><strong>Aprašymas: </strong>{category.description}</p>
-	<p><strong>Autorius: </strong>{category.createdBy}</p>
+	<p><strong>Autorius: </strong>{category.author}</p>
 	<p>
-		<strong>Sukurta: </strong>{new Date(category?.createdOn || '').toLocaleDateString('lt-LT') +
-			' ' +
-			new Date(category?.createdOn || '').toLocaleTimeString('lt-LT')}
+		<strong>Sukurta: </strong>{getNiceTimeString(category.createdOn)}
+	</p>
+	<p>
+		<strong>Paskutinį kartą keista: </strong>{getNiceTimeString(category.lastModifiedOn)}
+	</p>
+	<p>
+		<strong>Patvirtino naudotojas: </strong>
+		{category.approvedBy}
+	</p>
+	<p>
+		<strong>Patvirtinta: </strong>
+		{getNiceTimeString(category.approvedOn)}
 	</p>
 	{#if loading}
 		<p>Loading...</p>
@@ -37,15 +50,26 @@
 		<div class="container mx-auto">
 			{#each Object.entries(problems) as [id, problem]}
 				<ProblemComponent
-					problemAllData={{
-						id: problem.id,
+					problemMainData={{
+						skfCode: problem.skfCode,
 						problemText: problem.problemText,
-						problemImage: problem.problemImage,
+						problemImageSrc: problem.problemImageSrc,
 						answerText: problem.answerText,
-						answerImage: problem.answerImage,
+						answerImageSrc: problem.answerImageSrc
+					}}
+					problemMetaData={{
+						author: problem.author,
 						createdOn: problem.createdOn,
-						category: category?.name,
-						author: category?.createdBy
+						lastModifiedOn: problem.lastModifiedOn,
+						approvedBy: problem.approvedBy,
+						approvedOn: problem.approvedOn,
+						categoryName: category.name,
+						categoryDescription: category.description,
+						categoryAuthor: category.author,
+						categoryCreatedOn: category.createdOn,
+						categoryLastModifiedOn: category.lastModifiedOn,
+						categoryApprovedBy: category.approvedBy,
+						categoryApprovedOn: category.approvedOn
 					}}
 				/>
 			{/each}
