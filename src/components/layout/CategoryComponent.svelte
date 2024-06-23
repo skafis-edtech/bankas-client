@@ -43,9 +43,9 @@
 		{getNiceTimeString(category.approvedOn)}
 	</p>
 	{#if loading}
-		<p>Loading...</p>
+		<p>Kraunasi...</p>
 	{:else if error}
-		<p>Error: {error}</p>
+		<p>Klaida: {error}</p>
 	{:else}
 		<div class="container mx-auto">
 			{#each Object.entries(problems) as [id, problem]}
