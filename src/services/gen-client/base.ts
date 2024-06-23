@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Skafis užduočių bankas API
- * This is bankas.skafis.lt API.
+ * This is bankas.skafis.lt API. https://api.bankas.skafis.lt
  *
  * The version of the OpenAPI document: 1.0.0
  * 
@@ -19,7 +19,7 @@ import type { Configuration } from './configuration';
 import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
 import globalAxios from 'axios';
 
-export const BASE_PATH = "https://bankas-skafis-api-latest.onrender.com".replace(/\/+$/, "");
+export const BASE_PATH = "https://api.bankas.skafis.lt".replace(/\/+$/, "");
 
 /**
  *

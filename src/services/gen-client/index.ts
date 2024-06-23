@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Skafis užduočių bankas API
- * This is bankas.skafis.lt API.
+ * This is bankas.skafis.lt API. https://api.bankas.skafis.lt
  *
  * The version of the OpenAPI document: 1.0.0
  * 
