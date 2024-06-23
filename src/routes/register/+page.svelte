@@ -1,5 +1,11 @@
 <script lang="ts">
-	import { recaptchaLoaded, registerUser, renderRecaptha, verifyRecaptcha } from '$services/auth';
+	import {
+		isUsernameAvailable,
+		recaptchaLoaded,
+		registerUser,
+		renderRecaptha,
+		verifyRecaptcha
+	} from '$services/auth';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { ROLES } from '$utils/constants';
@@ -8,6 +14,7 @@
 
 	let email = writable('');
 	let password = writable('');
+	let confirmPassword = writable('');
 	let username = writable('');
 	let role = ROLES.USER;
 	let errorMessage = writable('');
@@ -16,12 +23,24 @@
 	let recaptchaToken = writable('');
 
 	async function register() {
+		if ($password !== $confirmPassword) {
+			$errorMessage = 'Passwords do not match';
+			return;
+		}
 		if (!$recaptchaVerified) {
 			$errorMessage = 'Please complete the reCAPTCHA';
 			return;
 		}
 		if (!$terms) {
 			$errorMessage = 'You must agree to the terms';
+			return;
+		}
+		if (!$email || !$password || !$username) {
+			$errorMessage = 'All fields are required';
+			return;
+		}
+		if (!isUsernameAvailable($username)) {
+			$errorMessage = 'Username is already taken';
 			return;
 		}
 
@@ -60,11 +79,6 @@
 
 <div class="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
 	<h2 class="text-center text-2xl font-semibold text-gray-700 dark:text-white">Register</h2>
-	<p class="text-red-600">
-		Registration is disabled at the moment. Contact administrator <a
-			href="mailto:naglis.suliokas@gmail.com">naglis.suliokas@gmail.com</a
-		>
-	</p>
 	<form on:submit|preventDefault={register} class="space-y-6">
 		<div>
 			<Label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
@@ -75,6 +89,19 @@
 				type="email"
 				bind:value={$email}
 				placeholder="Email"
+				required
+				class="mt-1 block w-full px-4 py-2 text-lg"
+			/>
+		</div>
+		<div>
+			<Label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+				>Username</Label
+			>
+			<Input
+				id="username"
+				type="text"
+				bind:value={$username}
+				placeholder="Username"
 				required
 				class="mt-1 block w-full px-4 py-2 text-lg"
 			/>
@@ -93,14 +120,15 @@
 			/>
 		</div>
 		<div>
-			<Label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-				>Username</Label
+			<Label
+				for="confirmPassword"
+				class="block text-sm font-medium text-gray-700 dark:text-gray-300">Confirm password</Label
 			>
 			<Input
-				id="username"
-				type="text"
-				bind:value={$username}
-				placeholder="Username"
+				id="confirmPassword"
+				type="password"
+				bind:value={$confirmPassword}
+				placeholder="Confirm password"
 				required
 				class="mt-1 block w-full px-4 py-2 text-lg"
 			/>

@@ -1,12 +1,7 @@
-import { currentUser, type User } from '$lib/stores';
+import { currentUser } from '$lib/stores';
 import { auth, db } from '$services/firebaseConfig';
 import { ROLES } from '$utils/constants';
-import {
-	createUserWithEmailAndPassword,
-	onAuthStateChanged,
-	signInWithEmailAndPassword,
-	signOut
-} from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { doc, setDoc, query, where, collection, getDocs } from 'firebase/firestore';
 
 export const registerUser = async (
@@ -28,6 +23,13 @@ export const registerUser = async (
 	} else {
 		throw new Error('Invalid role');
 	}
+};
+
+export const isUsernameAvailable = async (username: string) => {
+	const usersRef = collection(db, 'users');
+	const q = query(usersRef, where('username', '==', username));
+	const querySnapshot = await getDocs(q);
+	return querySnapshot.empty;
 };
 
 export const loginUser = async (username: string, password: string) => {

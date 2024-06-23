@@ -1,14 +1,14 @@
-// apiService.ts
 import axios from 'axios';
 import { CategoryControllerApi, ProblemControllerApi, TestControllerApi } from './gen-client/api'; // Adjust the import path
 
-const basePath = 'https://api.skafis.bankas.lt'; // Replace with your actual API base URL
-const accessToken = 'eykjnkjnkjnkjnkjnkjnkjnkjnkjnkjnkjnkjn'; // Replace with your actual login token
+const basePath = 'https://api.bankas.skafis.lt';
+// const accessToken = 'your-access-token'; // Replace with your actual access token
+
 const axiosInstance = axios.create({
-	baseURL: basePath,
-	headers: {
-		Authorization: `Bearer ${accessToken}`
-	}
+	baseURL: basePath
+	// headers: {
+	// 	Authorization: `Bearer ${accessToken}`
+	// }
 });
 
 const categoryApi = new CategoryControllerApi(undefined, basePath, axiosInstance);
