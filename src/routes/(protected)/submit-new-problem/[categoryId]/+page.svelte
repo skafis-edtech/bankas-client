@@ -81,7 +81,8 @@
 </script>
 
 {#if $currentUser}
-	<h1 class="text-4xl font-semibold my-4 text-center">Įkelti savo užduotis</h1>
+	<h1 class="text-4xl font-semibold my-4 text-center">Įkelkite savo užduotis</h1>
+	<h1 class="text-2xl font-semibold my-4 text-center">Kategorija: jijij</h1>
 	<p class="text-red-600 text-center">Pakeitimai nėra išsaugomi automatiškai!</p>
 	<Button
 		on:click={() => {
