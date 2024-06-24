@@ -6,7 +6,7 @@ import {
 	TestControllerApi,
 	UserControllerApi
 } from './gen-client/api'; // Adjust the import path
-import { idToken } from '$lib/stores';
+import { currentUser } from '$lib/stores';
 
 const basePath = 'http://localhost'; //api.bankas.skafis.lt';
 
@@ -17,7 +17,15 @@ const axiosInstance = axios.create({
 // Add a request interceptor to set the Authorization header dynamically
 axiosInstance.interceptors.request.use(
 	async (config) => {
-		const token = get(idToken);
+		// Wait for the token to be available
+		const token = await new Promise((resolve) => {
+			const unsubscribe = currentUser.subscribe((user) => {
+				if (user && user.idToken) {
+					resolve(user.idToken);
+					unsubscribe();
+				}
+			});
+		});
 		if (token) {
 			config.headers['Authorization'] = `Bearer ${token}`;
 		}

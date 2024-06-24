@@ -58,9 +58,9 @@
 
 <Accordion>
 	{#if loading}
-		<p>Kraunasi...</p>
+		<p class="text-center">Kraunasi...</p>
 	{:else if error}
-		<p>Klaida: {error}</p>
+		<p class="text-red-600 text-center">Klaida: {error}</p>
 	{:else}
 		{#each Object.entries(categories) as [id, category]}
 			<CategoryComponent {category} />

@@ -6,10 +6,7 @@
 </script>
 
 {#if $currentUser && $currentUser.role === ROLES.ADMIN}
-	<h1>Admin Dashboard</h1>
-	<p>Welcome, {$currentUser.username}</p>
-	<p>Review</p>
-	<ProblemToReview />
+	<h1 class="text-4xl font-semibold my-4 text-center">Uždavinių peržiūra</h1>
 {:else}
 	<p>Unauthorized</p>
 {/if}

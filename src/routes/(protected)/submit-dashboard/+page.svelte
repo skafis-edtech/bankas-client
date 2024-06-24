@@ -1,82 +1,65 @@
-<!-- <script lang="ts">
-	import { ROLES } from '$utils/constants';
-	import ProblemSubmitted from '$components/ui/ProblemSubmitted.svelte';
-	import { currentUser } from '$lib/stores';
-</script>
-
-{#if $currentUser}
-	<h1>Submit Dashboard</h1>
-	<p>Welcome, {$currentUser.username}</p>
-	{#if $currentUser.role !== ROLES.ADMIN}
-		<p>
-			Want to review others? Email <a href="mailto:naglis.suliokas@gmail.com"
-				>naglis.suliokas@gmail.com</a
-			> to get access!
-		</p>
-	{/if}
-	<p>Under review</p>
-	<p>Approved</p>
-	<ProblemSubmitted />
-	<p>Upload new. <a href="/submit-new">Submit new</a></p>
-{:else}
-	<p>Unauthorized</p>
-{/if}
-
-<style lang="scss">
-	h1 {
-		margin-top: 0;
-		font-size: 1.5rem;
-	}
-</style> -->
-
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { categoryApi, problemApi, testApi } from '$services/apiService'; // Adjust the import path
-	import type { Category, ProblemDisplayViewDto } from '$services/gen-client';
+	import {
+		UnderReviewProblemReviewStatusEnum,
+		type Category,
+		type UnderReviewCategory
+	} from '$services/gen-client';
+	import { categoryApi } from '$services/apiService';
+	import SubmitPageCategory from '$components/layout/SubmitPageCategory.svelte';
+	import { currentUser } from '$lib/stores';
+	import { Accordion, Button } from 'flowbite-svelte';
+	import { goto } from '$app/navigation';
 
-	let categories: Category[] = [];
-	let problems: ProblemDisplayViewDto[] = [];
-	let userId = '';
+	let loading = true;
+	let error = '';
 
-	// Fetch all categories on component mount
+	let myUnderReviewCategories: UnderReviewCategory[] = [];
+	let allPublicCategories: Category[] = [];
+
 	onMount(async () => {
 		try {
-			const categoryResponse = await categoryApi.getAllPublicCategories();
-			categories = categoryResponse.data;
-
-			// Fetch problems for the first category as an example
-			if (categories.length > 0) {
-				const problemResponse = await problemApi.getPublicProblemsByCategory(categories[0].id);
-				problems = problemResponse.data;
-			}
-
-			// Test API to get user ID
-			const userIdResponse = await testApi.test();
-			userId = userIdResponse.data;
-		} catch (error) {
-			console.error('Error fetching data:', error);
+			const response = await categoryApi.getAllPublicCategories();
+			allPublicCategories = response.data;
+		} catch (e: any) {
+			error = e.message;
+		}
+		try {
+			const response = await categoryApi.getMyUnderReviewCategories();
+			myUnderReviewCategories = response.data;
+		} catch (e: any) {
+			error = e.message;
+		} finally {
+			loading = false;
 		}
 	});
 </script>
 
-<main>
-	<h1>Categories</h1>
-	<ul>
-		{#each categories as category}
-			<li>{category.name} - {category.description}</li>
-		{/each}
-	</ul>
-
-	<h1>Problems</h1>
-	<ul>
-		{#each problems as problem}
-			<li>{problem.problemText}</li>
-		{/each}
-	</ul>
-
-	<h1>User ID</h1>
-	<p>{userId}</p>
-
-	<a href="/submit-new-category">New caytegory</a>
-	<a href="/submit-new-problem">New problem</a>
-</main>
+<h1 class="text-4xl font-semibold my-4 text-center">Uždavinių pateikimas</h1>
+{#if loading}
+	<p class="text-center">Kraunasi...</p>
+{/if}
+{#if error}
+	<p class="text-red-600 text-center">Klaida: {error}</p>
+{/if}
+<Accordion class="mt-8">
+	{#each myUnderReviewCategories as category}
+		<SubmitPageCategory
+			{category}
+			isPending={category.reviewStatus === UnderReviewProblemReviewStatusEnum.Pending}
+			isRejected={category.reviewStatus === UnderReviewProblemReviewStatusEnum.Rejected}
+			isOwnedByUser={true}
+		/>
+	{/each}
+	<div class="flex flex-row justify-center">
+		<Button color="green" on:click={() => goto('/submit-new-category')}
+			>Kurti naują kategoriją</Button
+		>
+	</div>
+	<div class="my-8">
+		<hr class="border-y-2 border-black" />
+	</div>
+	{#each allPublicCategories as category}
+		<SubmitPageCategory {category} isOwnedByUser={category.author === $currentUser?.username} />
+	{/each}
+</Accordion>

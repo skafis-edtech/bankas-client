@@ -718,8 +718,8 @@ export const CategoryControllerApiAxiosParamCreator = function (configuration?: 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMyAllSubmittedCategories: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/category/myUnderReview`;
+        getMyPublicCategories: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/category/myPublic`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -752,8 +752,8 @@ export const CategoryControllerApiAxiosParamCreator = function (configuration?: 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMyPublicCategories: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/category/myPublic`;
+        getMyUnderReviewCategories: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/category/myUnderReview`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1060,10 +1060,10 @@ export const CategoryControllerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getMyAllSubmittedCategories(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<UnderReviewCategory>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getMyAllSubmittedCategories(options);
+        async getMyPublicCategories(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Category>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMyPublicCategories(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CategoryControllerApi.getMyAllSubmittedCategories']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['CategoryControllerApi.getMyPublicCategories']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -1072,10 +1072,10 @@ export const CategoryControllerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getMyPublicCategories(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Category>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getMyPublicCategories(options);
+        async getMyUnderReviewCategories(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<UnderReviewCategory>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMyUnderReviewCategories(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CategoryControllerApi.getMyPublicCategories']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['CategoryControllerApi.getMyUnderReviewCategories']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -1201,8 +1201,8 @@ export const CategoryControllerApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMyAllSubmittedCategories(options?: any): AxiosPromise<Array<UnderReviewCategory>> {
-            return localVarFp.getMyAllSubmittedCategories(options).then((request) => request(axios, basePath));
+        getMyPublicCategories(options?: any): AxiosPromise<Array<Category>> {
+            return localVarFp.getMyPublicCategories(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1210,8 +1210,8 @@ export const CategoryControllerApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMyPublicCategories(options?: any): AxiosPromise<Array<Category>> {
-            return localVarFp.getMyPublicCategories(options).then((request) => request(axios, basePath));
+        getMyUnderReviewCategories(options?: any): AxiosPromise<Array<UnderReviewCategory>> {
+            return localVarFp.getMyUnderReviewCategories(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1325,8 +1325,8 @@ export class CategoryControllerApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof CategoryControllerApi
      */
-    public getMyAllSubmittedCategories(options?: RawAxiosRequestConfig) {
-        return CategoryControllerApiFp(this.configuration).getMyAllSubmittedCategories(options).then((request) => request(this.axios, this.basePath));
+    public getMyPublicCategories(options?: RawAxiosRequestConfig) {
+        return CategoryControllerApiFp(this.configuration).getMyPublicCategories(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1336,8 +1336,8 @@ export class CategoryControllerApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof CategoryControllerApi
      */
-    public getMyPublicCategories(options?: RawAxiosRequestConfig) {
-        return CategoryControllerApiFp(this.configuration).getMyPublicCategories(options).then((request) => request(this.axios, this.basePath));
+    public getMyUnderReviewCategories(options?: RawAxiosRequestConfig) {
+        return CategoryControllerApiFp(this.configuration).getMyUnderReviewCategories(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

@@ -76,7 +76,7 @@
 	</div>
 {/if}
 {#if username === $currentUser?.username && !editingState}
-	<div class="flex flex-row gap-2 justify-center">
+	<div class="flex flex-row justify-center">
 		<Button on:click={() => startEditing()}>Redaguoti aprašymą (bio)</Button>
 	</div>
 {/if}

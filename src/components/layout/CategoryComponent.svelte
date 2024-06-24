@@ -24,7 +24,7 @@
 	});
 </script>
 
-<AccordionItem class="bg-slate-200 my-4 ">
+<AccordionItem class="bg-slate-200 my-4">
 	<span slot="header" class="text-black">{category.name}</span>
 	<p><strong>Aprašymas: </strong>{category.description}</p>
 	<p><strong>Autorius: </strong>{category.author}</p>
