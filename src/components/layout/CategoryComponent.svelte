@@ -27,7 +27,11 @@
 <AccordionItem class="bg-slate-200 my-4">
 	<span slot="header" class="text-black">{category.name}</span>
 	<p><strong>Aprašymas: </strong>{category.description}</p>
-	<p><strong>Autorius: </strong>{category.author}</p>
+	<p>
+		<strong>Autorius: </strong><a href="/user/{category.author}" class="underline"
+			>{category.author}</a
+		>
+	</p>
 	<p>
 		<strong>Sukurta: </strong>{getNiceTimeString(category.createdOn)}
 	</p>
@@ -36,7 +40,7 @@
 	</p>
 	<p>
 		<strong>Patvirtino naudotojas: </strong>
-		{category.approvedBy}
+		<a href="/user/{category.approvedBy}" class="underline">{category.approvedBy}</a>
 	</p>
 	<p>
 		<strong>Patvirtinta: </strong>

@@ -6,10 +6,10 @@
 		type UnderReviewCategory
 	} from '$services/gen-client';
 	import { categoryApi } from '$services/apiService';
-	import SubmitPageCategory from '$components/layout/SubmitPageCategory.svelte';
 	import { currentUser } from '$lib/stores';
 	import { Accordion, Button } from 'flowbite-svelte';
 	import { goto } from '$app/navigation';
+	import CategorySubmitted from '$components/ui/CategorySubmitted.svelte';
 
 	let loading = true;
 	let error = '';
@@ -44,12 +44,7 @@
 {/if}
 <Accordion class="mt-8">
 	{#each myUnderReviewCategories as category}
-		<SubmitPageCategory
-			{category}
-			isPending={category.reviewStatus === UnderReviewProblemReviewStatusEnum.Pending}
-			isRejected={category.reviewStatus === UnderReviewProblemReviewStatusEnum.Rejected}
-			isOwnedByUser={true}
-		/>
+		<CategorySubmitted {category} />
 	{/each}
 	<div class="flex flex-row justify-center">
 		<Button color="green" on:click={() => goto('/submit-new-category')}
@@ -60,6 +55,6 @@
 		<hr class="border-y-2 border-black" />
 	</div>
 	{#each allPublicCategories as category}
-		<SubmitPageCategory {category} isOwnedByUser={category.author === $currentUser?.username} />
+		<CategorySubmitted {category} />
 	{/each}
 </Accordion>

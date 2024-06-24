@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { writable } from 'svelte/store';
-	import { AccordionItem, Badge, Button } from 'flowbite-svelte';
+	import { AccordionItem, Badge, Button, P } from 'flowbite-svelte';
 	import {
 		UnderReviewCategoryReviewStatusEnum,
 		type Category,
@@ -8,11 +8,9 @@
 	} from '$services/gen-client';
 	import { goto } from '$app/navigation';
 	import { categoryApi } from '$services/apiService';
+	import { currentUser } from '$lib/stores';
 
 	export let category: Category | UnderReviewCategory;
-	export let isOwnedByUser: boolean = false;
-	export let isPending: boolean = false;
-	export let isRejected: boolean = false;
 
 	const open = writable(false);
 
@@ -33,22 +31,23 @@
 			<p>{category.name}</p>
 		</div>
 		<div>
-			{#if isOwnedByUser}
-				{#if isPending}
+			{#if 'reviewStatus' in category}
+				{#if category.reviewStatus === UnderReviewCategoryReviewStatusEnum.Pending}
 					<Badge color="yellow" class="ml-2">Peržiūrima</Badge>
 				{/if}
-				{#if isRejected}
-					<Badge color="red" class="ml-2">Atšaukta</Badge>
+				{#if category.reviewStatus === UnderReviewCategoryReviewStatusEnum.Rejected}
+					<Badge color="red" class="ml-2">Atmesta</Badge>
+				{/if}
+				{#if category.reviewStatus === UnderReviewCategoryReviewStatusEnum.Pending || category.reviewStatus === UnderReviewCategoryReviewStatusEnum.Rejected}
+					<Button color="red" on:click={() => handleDelete(category.id)} class="p-2 mx-2"
+						>Ištrinti</Button
+					>
+					<Button color="yellow" on:click={() => alert('TODO: send PUT request')} class="p-2 mx-2"
+						>Redaguoti</Button
+					>
 				{/if}
 			{/if}
-			{#if isPending || isRejected}
-				<Button color="red" on:click={() => handleDelete(category.id)} class="p-2 mx-2"
-					>Ištrinti</Button
-				>
-				<Button color="yellow" on:click={() => alert('TODO: send PUT request')} class="p-2 mx-2"
-					>Redaguoti</Button
-				>
-			{/if}
+
 			<Button
 				color="green"
 				on:click={() => goto(`/submit-new-problem/${category.id}`)}
