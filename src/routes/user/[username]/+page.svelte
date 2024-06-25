@@ -66,14 +66,14 @@
 {#if !editingState}
 	<h3 class="text-lg font-semibold my-4 text-center">{bio}</h3>
 {:else}
-	<div class="flex flex-col items-center">
+	<form class="flex flex-col items-center" on:submit={() => saveEdit()}>
 		<textarea bind:value={editedBio} class="h-32 w-10/12 p-2 border border-gray-300 rounded-md mb-4"
 		></textarea>
 		<div class="flex flex-row gap-8 justify-center">
 			<Button color="light" on:click={cancelEdit}>Atšaukti</Button>
-			<Button color="primary" on:click={saveEdit}>Išsaugoti</Button>
+			<Button color="blue" type="submit">Išsaugoti</Button>
 		</div>
-	</div>
+	</form>
 {/if}
 {#if username === $currentUser?.username && !editingState}
 	<div class="flex flex-row justify-center">

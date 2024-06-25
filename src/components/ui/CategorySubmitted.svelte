@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { writable } from 'svelte/store';
+	import { writable, type Writable } from 'svelte/store';
 	import { AccordionItem, Badge, Button, P } from 'flowbite-svelte';
 	import {
 		UnderReviewCategoryReviewStatusEnum,
@@ -9,19 +9,37 @@
 	import { goto } from '$app/navigation';
 	import { categoryApi } from '$services/apiService';
 	import { currentUser } from '$lib/stores';
+	import { onMount } from 'svelte';
+	import { EditOutline, PlusOutline, TrashBinSolid } from 'flowbite-svelte-icons';
 
 	export let category: Category | UnderReviewCategory;
+	export let operationDone: Writable<boolean>;
 
 	const open = writable(false);
 
-	const handleDelete = async (categoryId: string) => {
+	onMount(() => {
+		operationDone.set(false);
+	});
+
+	const handleDelete = async (categoryId: string, event: Event) => {
+		event.stopPropagation();
 		const confirmed = confirm(
 			'Ar tikrai norite ištrinti kategoriją su visais jai priklausančiais uždaviniais?'
 		);
 		if (confirmed) {
 			await categoryApi.deleteUnderReviewCategory(categoryId);
-			alert('Kategorija ištrinta');
+			operationDone.set(true);
 		}
+	};
+
+	const handleEdit = (event: Event) => {
+		event.stopPropagation();
+		alert('TODO: send PUT request');
+	};
+
+	const handleAddTask = (categoryId: string, event: Event) => {
+		event.stopPropagation();
+		goto(`/submit-new-problem/${categoryId}`);
 	};
 </script>
 
@@ -39,20 +57,23 @@
 					<Badge color="red" class="ml-2">Atmesta</Badge>
 				{/if}
 				{#if category.reviewStatus === UnderReviewCategoryReviewStatusEnum.Pending || category.reviewStatus === UnderReviewCategoryReviewStatusEnum.Rejected}
-					<Button color="red" on:click={() => handleDelete(category.id)} class="p-2 mx-2"
-						>Ištrinti</Button
+					<Button
+						color="red"
+						on:click={(event) => handleDelete(category.id, event)}
+						class="p-2 mx-1"><TrashBinSolid /></Button
 					>
-					<Button color="yellow" on:click={() => alert('TODO: send PUT request')} class="p-2 mx-2"
-						>Redaguoti</Button
+					<Button color="yellow" on:click={handleEdit} class="p-2 mx-1" title="ji"
+						><EditOutline /></Button
 					>
 				{/if}
 			{/if}
 
 			<Button
 				color="green"
-				on:click={() => goto(`/submit-new-problem/${category.id}`)}
-				class="p-2 mx-2">Pridėti užduočių</Button
-			>
+				on:click={(event) => handleAddTask(category.id, event)}
+				class="p-2 ml-1 mr-4"
+				><PlusOutline />
+			</Button>
 		</div>
 	</span>
 	<div>

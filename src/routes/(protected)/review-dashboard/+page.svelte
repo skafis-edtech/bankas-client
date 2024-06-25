@@ -6,11 +6,14 @@
 	import type { UnderReviewCategory } from '$services/gen-client';
 	import { categoryApi } from '$services/apiService';
 	import { Accordion } from 'flowbite-svelte';
+	import { writable } from 'svelte/store';
 
 	let loading = true;
 	let error = '';
 
 	let underReviewCategories: UnderReviewCategory[] = [];
+
+	let operationDone = writable(false);
 
 	onMount(async () => {
 		try {
@@ -34,7 +37,7 @@
 	{/if}
 	<Accordion class="mt-8">
 		{#each underReviewCategories as category}
-			<CategoryToReview {category} />
+			<CategoryToReview {category} {operationDone} />
 		{/each}
 		{#if underReviewCategories.length === 0}
 			<p class="text-center">Nėra kategorijų peržiūrai</p>

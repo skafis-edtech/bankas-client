@@ -3,16 +3,19 @@
 	import { AccordionItem, Badge, Button, P } from 'flowbite-svelte';
 	import {
 		UnderReviewCategoryReviewStatusEnum,
-		type Category,
 		type UnderReviewCategory
 	} from '$services/gen-client';
-	import { goto } from '$app/navigation';
 	import { categoryApi } from '$services/apiService';
-	import { currentUser } from '$lib/stores';
+	import { onMount } from 'svelte';
 
 	export let category: UnderReviewCategory;
+	export let operationDone: Writable<boolean>;
 
 	const open = writable(false);
+
+	onMount(() => {
+		operationDone.set(false);
+	});
 
 	const handleReject = async (categoryId: string) => {
 		const msg = prompt('Įveskite atmetimo priežastį (žinutę kategorijos autoriui):');
@@ -21,12 +24,12 @@
 			return;
 		}
 		await categoryApi.rejectCategory(categoryId, { rejectionMessage: msg });
-		alert('Kategorija sėkmingai atmesta');
+		operationDone.set(true);
 	};
 
 	const handleApprove = async (categoryId: string) => {
 		await categoryApi.approveCategory(categoryId);
-		alert('Kategorija sėkmingai patvirtinta');
+		operationDone.set(true);
 	};
 </script>
 
@@ -66,10 +69,6 @@
 				<p><strong>Rejected On:</strong> {category.rejectedOn}</p>
 				<p><strong>Rejection Message:</strong> {category.rejectionMessage}</p>
 			{/if}
-		{/if}
-		{#if 'approvedBy' in category}
-			<p><strong>Approved By:</strong> {category.approvedBy}</p>
-			<p><strong>Approved On:</strong> {category.approvedOn}</p>
 		{/if}
 	</div>
 </AccordionItem>

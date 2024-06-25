@@ -7,6 +7,10 @@
 	import { goto } from '$app/navigation';
 	import { generateGUID, isUrl } from '$utils/helpers';
 	import { genSkfId } from '$utils/helpers';
+	import { page } from '$app/stores';
+
+	let categoryId: string;
+	$: categoryId = get(page).params.categoryId;
 
 	// let category: Writable<CategoryForDatabase> = writable({} as CategoryForDatabase);
 	// let problemsFullWithFiles: Writable<Writable<ProblemFullWithFiles>[]> = writable([]);
@@ -81,8 +85,8 @@
 </script>
 
 {#if $currentUser}
-	<h1 class="text-4xl font-semibold my-4 text-center">Įkelkite savo užduotis</h1>
-	<h1 class="text-2xl font-semibold my-4 text-center">Kategorija: jijij</h1>
+	<h1 class="text-4xl font-semibold my-4 text-center">Užduočių įkėlimas</h1>
+	<h1 class="text-2xl font-semibold my-4 text-center">Kategorija: {categoryId}</h1>
 	<p class="text-red-600 text-center">Pakeitimai nėra išsaugomi automatiškai!</p>
 	<Button
 		on:click={() => {
