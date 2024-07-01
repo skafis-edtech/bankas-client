@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { writable } from 'svelte/store';
+	import { writable, type Writable } from 'svelte/store';
 	import { AccordionItem, Badge, Button, P } from 'flowbite-svelte';
 	import {
 		UnderReviewCategoryReviewStatusEnum,

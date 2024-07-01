@@ -37,9 +37,9 @@
 		alert('TODO: send PUT request');
 	};
 
-	const handleAddTask = (categoryId: string, event: Event) => {
+	const handleAddTask = (categoryId: string, categoryName: string, event: Event) => {
 		event.stopPropagation();
-		goto(`/submit-new-problem/${categoryId}`);
+		goto(`/submit-new-problem/${categoryId}/${categoryName}`);
 	};
 </script>
 
@@ -70,7 +70,7 @@
 
 			<Button
 				color="green"
-				on:click={(event) => handleAddTask(category.id, event)}
+				on:click={(event) => handleAddTask(category.id, category.name, event)}
 				class="p-2 ml-1 mr-4"
 				><PlusOutline />
 			</Button>
