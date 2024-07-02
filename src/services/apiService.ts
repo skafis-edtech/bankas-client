@@ -7,11 +7,10 @@ import {
 	UserControllerApi
 } from './gen-client/api'; // Adjust the import path
 import { currentUser } from '$lib/stores';
-
-const basePath = 'http://localhost'; //api.bankas.skafis.lt';
+import { BASE_PATH } from './gen-client/base';
 
 const axiosInstance = axios.create({
-	baseURL: basePath
+	baseURL: BASE_PATH
 });
 
 // Add a request interceptor to set the Authorization header dynamically
@@ -44,9 +43,9 @@ axiosInstance.interceptors.request.use(
 	}
 );
 
-const categoryApi = new CategoryControllerApi(undefined, basePath, axiosInstance);
-const problemApi = new ProblemControllerApi(undefined, basePath, axiosInstance);
-const userApi = new UserControllerApi(undefined, basePath, axiosInstance);
-const testApi = new TestControllerApi(undefined, basePath, axiosInstance);
+const categoryApi = new CategoryControllerApi(undefined, BASE_PATH, axiosInstance);
+const problemApi = new ProblemControllerApi(undefined, BASE_PATH, axiosInstance);
+const userApi = new UserControllerApi(undefined, BASE_PATH, axiosInstance);
+const testApi = new TestControllerApi(undefined, BASE_PATH, axiosInstance);
 
 export { categoryApi, problemApi, userApi, testApi };
