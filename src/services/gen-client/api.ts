@@ -1578,40 +1578,6 @@ export const ProblemControllerApiAxiosParamCreator = function (configuration?: C
         },
         /**
          * 
-         * @summary ADMIN
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getAllUnderReviewProblems: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/problem/underReview`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @summary USER
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1730,6 +1696,44 @@ export const ProblemControllerApiAxiosParamCreator = function (configuration?: C
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * This will fetch a list of problems under review by doesn\'t matter - under review or approved - category ID.
+         * @summary ADMIN
+         * @param {string} categoryId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getUnderReviewProblemsByArbitraryCategory: async (categoryId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'categoryId' is not null or undefined
+            assertParamExists('getUnderReviewProblemsByArbitraryCategory', 'categoryId', categoryId)
+            const localVarPath = `/problem/underReview/byArbitraryCategory/{categoryId}`
+                .replace(`{${"categoryId"}}`, encodeURIComponent(String(categoryId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -1893,18 +1897,6 @@ export const ProblemControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary ADMIN
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getAllUnderReviewProblems(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<UnderReviewProblemDisplayViewDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllUnderReviewProblems(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ProblemControllerApi.getAllUnderReviewProblems']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
          * @summary USER
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1951,6 +1943,19 @@ export const ProblemControllerApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPublicProblemsCount(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProblemControllerApi.getPublicProblemsCount']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * This will fetch a list of problems under review by doesn\'t matter - under review or approved - category ID.
+         * @summary ADMIN
+         * @param {string} categoryId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getUnderReviewProblemsByArbitraryCategory(categoryId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<UnderReviewProblemDisplayViewDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getUnderReviewProblemsByArbitraryCategory(categoryId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ProblemControllerApi.getUnderReviewProblemsByArbitraryCategory']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -2025,15 +2030,6 @@ export const ProblemControllerApiFactory = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary ADMIN
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getAllUnderReviewProblems(options?: any): AxiosPromise<Array<UnderReviewProblemDisplayViewDto>> {
-            return localVarFp.getAllUnderReviewProblems(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @summary USER
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2069,6 +2065,16 @@ export const ProblemControllerApiFactory = function (configuration?: Configurati
          */
         getPublicProblemsCount(options?: any): AxiosPromise<CountDto> {
             return localVarFp.getPublicProblemsCount(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * This will fetch a list of problems under review by doesn\'t matter - under review or approved - category ID.
+         * @summary ADMIN
+         * @param {string} categoryId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getUnderReviewProblemsByArbitraryCategory(categoryId: string, options?: any): AxiosPromise<Array<UnderReviewProblemDisplayViewDto>> {
+            return localVarFp.getUnderReviewProblemsByArbitraryCategory(categoryId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2142,17 +2148,6 @@ export class ProblemControllerApi extends BaseAPI {
 
     /**
      * 
-     * @summary ADMIN
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ProblemControllerApi
-     */
-    public getAllUnderReviewProblems(options?: RawAxiosRequestConfig) {
-        return ProblemControllerApiFp(this.configuration).getAllUnderReviewProblems(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
      * @summary USER
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2195,6 +2190,18 @@ export class ProblemControllerApi extends BaseAPI {
      */
     public getPublicProblemsCount(options?: RawAxiosRequestConfig) {
         return ProblemControllerApiFp(this.configuration).getPublicProblemsCount(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * This will fetch a list of problems under review by doesn\'t matter - under review or approved - category ID.
+     * @summary ADMIN
+     * @param {string} categoryId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProblemControllerApi
+     */
+    public getUnderReviewProblemsByArbitraryCategory(categoryId: string, options?: RawAxiosRequestConfig) {
+        return ProblemControllerApiFp(this.configuration).getUnderReviewProblemsByArbitraryCategory(categoryId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

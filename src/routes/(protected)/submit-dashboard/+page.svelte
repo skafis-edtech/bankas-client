@@ -45,6 +45,7 @@
 
 {#if $currentUser}
 	<h1 class="text-4xl font-semibold my-4 text-center">Uždavinių pateikimas</h1>
+	<p>Sorry, dar negalima peržiūrėti pateiktų užduočių...</p>
 	{#if loading}
 		<p class="text-center">Kraunasi...</p>
 	{/if}

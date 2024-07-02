@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { currentUser } from '$lib/stores';
 	import { ROLES } from '$utils/constants';
-	import CategoryToReview from '$components/ui/CategoryToReview.svelte';
+	import CategoryForReview from '$components/ui/CategoryForReview.svelte';
 	import { onMount } from 'svelte';
-	import type { UnderReviewCategory } from '$services/gen-client';
+	import type { Category, UnderReviewCategory } from '$services/gen-client';
 	import { categoryApi } from '$services/apiService';
 	import { Accordion } from 'flowbite-svelte';
 	import { writable } from 'svelte/store';
@@ -12,6 +12,7 @@
 	let error = '';
 
 	let underReviewCategories: UnderReviewCategory[] = [];
+	let publicCategories: Category[] = [];
 
 	let operationDone = writable(false);
 
@@ -19,6 +20,12 @@
 		try {
 			const response = await categoryApi.getSubmittedCategories();
 			underReviewCategories = response.data;
+		} catch (e: any) {
+			error = e.message;
+		}
+		try {
+			const response = await categoryApi.getAllPublicCategories();
+			publicCategories = response.data;
 		} catch (e: any) {
 			error = e.message;
 		} finally {
@@ -35,14 +42,12 @@
 	{#if error}
 		<p class="text-red-600 text-center">Klaida: {error}</p>
 	{/if}
-	<Accordion class="mt-8">
-		{#each underReviewCategories as category}
-			<CategoryToReview {category} {operationDone} />
-		{/each}
-		{#if underReviewCategories.length === 0}
-			<p class="text-center">Nėra kategorijų peržiūrai</p>
-		{/if}
-	</Accordion>
+	{#each underReviewCategories as category}
+		<CategoryForReview {category} {operationDone} />
+	{/each}
+	{#each publicCategories as category}
+		<CategoryForReview {category} {operationDone} />
+	{/each}
 {:else}
 	<p>Unauthorized</p>
 {/if}

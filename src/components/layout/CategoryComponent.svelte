@@ -53,29 +53,31 @@
 	{:else}
 		<div class="container mx-auto">
 			{#each Object.entries(problems) as [id, problem]}
-				<ProblemComponent
-					problemMainData={{
-						skfCode: problem.skfCode,
-						problemText: problem.problemText,
-						problemImageSrc: problem.problemImageSrc,
-						answerText: problem.answerText,
-						answerImageSrc: problem.answerImageSrc
-					}}
-					problemMetaData={{
-						author: problem.author,
-						createdOn: problem.createdOn,
-						lastModifiedOn: problem.lastModifiedOn,
-						approvedBy: problem.approvedBy,
-						approvedOn: problem.approvedOn,
-						categoryName: category.name,
-						categoryDescription: category.description,
-						categoryAuthor: category.author,
-						categoryCreatedOn: category.createdOn,
-						categoryLastModifiedOn: category.lastModifiedOn,
-						categoryApprovedBy: category.approvedBy,
-						categoryApprovedOn: category.approvedOn
-					}}
-				/>
+				<div class="my-6">
+					<ProblemComponent
+						problemMainData={{
+							skfCode: problem.skfCode,
+							problemText: problem.problemText,
+							problemImageSrc: problem.problemImageSrc,
+							answerText: problem.answerText,
+							answerImageSrc: problem.answerImageSrc
+						}}
+						problemMetaData={{
+							author: problem.author,
+							createdOn: problem.createdOn,
+							lastModifiedOn: problem.lastModifiedOn,
+							approvedBy: problem.approvedBy,
+							approvedOn: problem.approvedOn,
+							categoryName: category.name,
+							categoryDescription: category.description,
+							categoryAuthor: category.author,
+							categoryCreatedOn: category.createdOn,
+							categoryLastModifiedOn: category.lastModifiedOn,
+							categoryApprovedBy: category.approvedBy,
+							categoryApprovedOn: category.approvedOn
+						}}
+					/>
+				</div>
 			{/each}
 		</div>
 	{/if}

@@ -6,7 +6,7 @@
 	export let problemMetaData: Components.ProblemMetaData;
 </script>
 
-<Card class="my-6 min-w-full">
+<Card class="min-w-full">
 	<div class="flex flex-col relative">
 		<h2 class="text-xl font-bold mb-6 text-left">{problemMainData.skfCode}</h2>
 		<ProblemMeta {problemMetaData} />
