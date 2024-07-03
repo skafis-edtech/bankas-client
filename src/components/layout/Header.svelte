@@ -1,6 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { currentUser } from '$lib/stores';
+	import { ROLES } from '$utils/constants';
 	import { Button, NavBrand, NavHamburger, NavLi, NavUl, Navbar } from 'flowbite-svelte';
 	import { HomeSolid, UserSolid } from 'flowbite-svelte-icons';
 </script>
@@ -15,27 +16,29 @@
 	<NavHamburger class="text-white" />
 	<NavUl class="flex-nowrap items-center m0p0-inside-ul">
 		{#if $currentUser}
-			<div class="flex flex-row gap-2 mx-4 mt-3">
-				<p class="text-white">{$currentUser.username}</p>
-				<UserSolid class="h-6 w-6 text-white" />
+			<div class="flex flex-row gap-2">
+				<a href="/user/{$currentUser.username}" class="text-white self-center underline"
+					>{$currentUser.username}</a
+				>
+				<UserSolid class="h-6 w-6 text-white self-center" />
 			</div>
 		{/if}
 		<NavLi class="text-right" on:click={() => goto('/')}
-			><Button><HomeSolid class="mr-2" />Home</Button></NavLi
+			><Button><HomeSolid class="mr-2" />Pradžia</Button></NavLi
 		>
 		{#if $currentUser}
-			{#if $currentUser.role === 'admin'}
+			{#if $currentUser.role === ROLES.ADMIN}
 				<NavLi on:click={() => goto('/review-dashboard')} class="text-right"
-					><Button>Review</Button></NavLi
+					><Button>Peržiūrėti</Button></NavLi
 				>
 			{/if}
 			<NavLi on:click={() => goto('/submit-dashboard')} class="text-right"
-				><Button>Submit</Button></NavLi
+				><Button>Pateikti</Button></NavLi
 			>
-			<NavLi class="text-right" on:click={() => goto('/logout')}><Button>Logout</Button></NavLi>
+			<NavLi class="text-right" on:click={() => goto('/logout')}><Button>Atsijungti</Button></NavLi>
 		{:else}
 			<NavLi class="text-right" on:click={() => goto('/login')}>
-				<Button>Login</Button>
+				<Button>Prisijungti</Button>
 			</NavLi>
 		{/if}
 	</NavUl>

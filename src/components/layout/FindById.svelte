@@ -1,15 +1,33 @@
 <script lang="ts">
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
-	import { fetchByIdAllData, type ProblemWithMeta } from '$services/dataService';
+	import { categoryApi, problemApi } from '$services/apiService';
+	import type { Category, ProblemDisplayViewDto } from '$services/gen-client';
 	import { Button, Input } from 'flowbite-svelte';
 	import { writable } from 'svelte/store';
 	let skfCode = writable('SKF-');
 
-	let problemAllData: ProblemWithMeta | null = null;
+	let problemDisplayViewDto: ProblemDisplayViewDto;
+	let problemCategory: Category;
+	let error = '';
+	let loading = false;
 
 	const fetchStuff = async () => {
-		console.log('fetching');
-		problemAllData = await fetchByIdAllData($skfCode);
+		loading = true;
+		try {
+			const response = await problemApi.getPublicProblem($skfCode);
+			problemDisplayViewDto = response.data;
+		} catch (e: any) {
+			error = e.message;
+		}
+
+		try {
+			const response = await categoryApi.getPublicCategory(problemDisplayViewDto.categoryId);
+			problemCategory = response.data;
+		} catch (e: any) {
+			error = e.message;
+		} finally {
+			loading = false;
+		}
 	};
 </script>
 
@@ -34,7 +52,35 @@
 		/>
 		<Button class="m-auto text-center" type="submit">Rodyti</Button>
 	</form>
-	{#if problemAllData}
-		<ProblemComponent {problemAllData} />
+	{#if problemDisplayViewDto && problemCategory}
+		<ProblemComponent
+			problemMainData={{
+				skfCode: problemDisplayViewDto.skfCode,
+				problemText: problemDisplayViewDto.problemText,
+				problemImageSrc: problemDisplayViewDto.problemImageSrc,
+				answerText: problemDisplayViewDto.answerText,
+				answerImageSrc: problemDisplayViewDto.answerImageSrc
+			}}
+			problemMetaData={{
+				author: problemDisplayViewDto.author,
+				createdOn: problemDisplayViewDto.createdOn,
+				lastModifiedOn: problemDisplayViewDto.lastModifiedOn,
+				approvedBy: problemDisplayViewDto.approvedBy,
+				approvedOn: problemDisplayViewDto.approvedOn,
+				categoryName: problemCategory.name,
+				categoryDescription: problemCategory.description,
+				categoryAuthor: problemCategory.author,
+				categoryCreatedOn: problemCategory.createdOn,
+				categoryLastModifiedOn: problemCategory.lastModifiedOn,
+				categoryApprovedBy: problemCategory.approvedBy,
+				categoryApprovedOn: problemCategory.approvedOn
+			}}
+		/>
+	{/if}
+	{#if loading}
+		<p class="text-center">Kraunasi...</p>
+	{/if}
+	{#if error}
+		<p class="text-red-600 text-center">Klaida: {error}</p>
 	{/if}
 </div>

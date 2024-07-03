@@ -3,7 +3,8 @@
 
 	export let value: string | undefined;
 	export let imageFile: File | null | undefined;
-	export let uploadedImage: string | undefined;
+
+	let uploadedImage: string | undefined;
 
 	export let label: string;
 	export let id: string;
@@ -18,13 +19,11 @@
 	function handleDragOver(event: DragEvent) {
 		event.preventDefault();
 		isDragOver = true;
-		console.log('drag over');
 	}
 
 	function handleDragLeave(event: DragEvent) {
 		event.preventDefault();
 		isDragOver = false;
-		console.log('drag leave');
 	}
 
 	function handleDrop(event: DragEvent) {
@@ -72,7 +71,7 @@
 	<textarea
 		{id}
 		bind:value
-		placeholder="Input text and/or drag and drop or paste image here..."
+		placeholder="Įveskite tekstą ir/arba nutempkite arba įklijuokite paveikslėlį..."
 		class={`mt-1 block px-4 py-2 w-full text-lg text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${isDragOver ? 'bg-blue-100' : ''} ${textareaClass}`}
 		on:input={handleInput}
 		on:dragover={handleDragOver}

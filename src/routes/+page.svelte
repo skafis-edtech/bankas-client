@@ -1,14 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import {
-		fetchCategories,
-		fetchNumOfCategories,
-		fetchNumOfProblems,
-		type CategoryForDatabase as Category
-	} from '$services/dataService';
 	import FindById from '$components/layout/FindById.svelte';
-	import { Accordion } from 'flowbite-svelte';
+	import { Accordion, Badge } from 'flowbite-svelte';
 	import CategoryComponent from '$components/layout/CategoryComponent.svelte';
+	import type { Category } from '$services/gen-client';
+	import { categoryApi, problemApi } from '$services/apiService';
 
 	let loading: boolean = true;
 	let error: string | null = null;
@@ -20,21 +16,22 @@
 
 	onMount(async () => {
 		try {
-			categories = await fetchCategories();
+			const response = await categoryApi.getAllPublicCategories();
+			categories = response.data;
 		} catch (e: any) {
 			error = e.message;
 		} finally {
 			loading = false;
 		}
-
 		try {
-			numOfProblems = await fetchNumOfProblems();
+			const response = await problemApi.getPublicProblemsCount();
+			numOfProblems = response.data.count;
 		} catch (e: any) {
 			error = e.message;
 		}
-
 		try {
-			numOfCategories = await fetchNumOfCategories();
+			const response = await categoryApi.getPublicCategoriesCount();
+			numOfCategories = response.data.count;
 		} catch (e: any) {
 			error = e.message;
 		}
@@ -42,9 +39,14 @@
 </script>
 
 <h1 class="text-4xl font-semibold my-4 text-center">Skafis užduočių bankas</h1>
-<h3 class="text-xl font-semibold my-4 text-center">Užduočių: {numOfProblems || 'Loading...'}</h3>
+<Badge color="red" class="flex justify-center"
+	>DĖMESIO! Dabartinė šio tinklapio versija nėra stabili bei nėra išbaigta! Nekelkite ilgalaikių
+	duomenų</Badge
+>
+
+<h3 class="text-xl font-semibold my-4 text-center">Užduočių: {numOfProblems || 'Kraunasi...'}</h3>
 <h3 class="text-xl font-semibold my-4 text-center">
-	Kategorojų: {numOfCategories || 'Loading...'}
+	Kategorijų: {numOfCategories || 'Kraunasi...'}
 </h3>
 
 <FindById />
@@ -61,9 +63,9 @@
 
 <Accordion>
 	{#if loading}
-		<p>Loading...</p>
+		<p class="text-center">Kraunasi...</p>
 	{:else if error}
-		<p>Error: {error}</p>
+		<p class="text-red-600 text-center">Klaida: {error}</p>
 	{:else}
 		{#each Object.entries(categories) as [id, category]}
 			<CategoryComponent {category} />

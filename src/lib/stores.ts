@@ -9,6 +9,7 @@ interface User {
 	email: string;
 	username: string;
 	role: string;
+	idToken: string;
 }
 
 const currentUser: Writable<User | null> = writable(null);
@@ -16,13 +17,16 @@ const currentUser: Writable<User | null> = writable(null);
 onAuthStateChanged(auth, async (firebaseUser) => {
 	if (firebaseUser) {
 		const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+		const idToken = await firebaseUser.getIdToken();
+
 		if (userDoc.exists()) {
 			const userData = userDoc.data() as User;
 			currentUser.set({
 				uid: firebaseUser.uid,
 				email: firebaseUser.email!,
 				username: userData.username,
-				role: userData.role
+				role: userData.role,
+				idToken: idToken
 			});
 		}
 	} else {

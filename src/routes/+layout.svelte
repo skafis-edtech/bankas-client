@@ -7,7 +7,7 @@
 <header>
 	<Header />
 	<p class="text-sm text-center my-2">
-		By using this website you agree with Google Analytics cookie usage
+		Naudodamiesi šiuo tinklapiu jūs sutinkate su Google Analytics slapukų naudojimu.
 	</p>
 </header>
 <main>

@@ -1,5 +1,11 @@
 <script lang="ts">
-	import { recaptchaLoaded, registerUser, renderRecaptha, verifyRecaptcha } from '$services/auth';
+	import {
+		isUsernameAvailable,
+		recaptchaLoaded,
+		registerUser,
+		renderRecaptha,
+		verifyRecaptcha
+	} from '$services/auth';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { ROLES } from '$utils/constants';
@@ -8,6 +14,7 @@
 
 	let email = writable('');
 	let password = writable('');
+	let confirmPassword = writable('');
 	let username = writable('');
 	let role = ROLES.USER;
 	let errorMessage = writable('');
@@ -16,18 +23,30 @@
 	let recaptchaToken = writable('');
 
 	async function register() {
+		if ($password !== $confirmPassword) {
+			$errorMessage = 'Slaptažodžiai nesutampa';
+			return;
+		}
 		if (!$recaptchaVerified) {
-			$errorMessage = 'Please complete the reCAPTCHA';
+			$errorMessage = 'Prašome užpildyti reCAPTCHA';
 			return;
 		}
 		if (!$terms) {
-			$errorMessage = 'You must agree to the terms';
+			$errorMessage = 'Turite sutikti su sąlygomis';
+			return;
+		}
+		if (!$email || !$password || !$username) {
+			$errorMessage = 'Visi laukai turi būti užpildyti';
+			return;
+		}
+		if (!isUsernameAvailable($username)) {
+			$errorMessage = 'Prisijungimo vardas jau užimtas';
 			return;
 		}
 
 		const recaptchaResponse = await verifyRecaptcha($recaptchaToken);
 		if (!recaptchaResponse.success) {
-			alert('reCAPTCHA verification failed. Please try again.');
+			alert('reCAPTCHA patvirtinimas nesėkmingas. Bandykite dar kartą.');
 			return;
 		}
 		try {
@@ -59,57 +78,66 @@
 </script>
 
 <div class="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
-	<h2 class="text-center text-2xl font-semibold text-gray-700 dark:text-white">Register</h2>
-	<p class="text-red-600">
-		Registration is disabled at the moment. Contact administrator <a
-			href="mailto:naglis.suliokas@gmail.com">naglis.suliokas@gmail.com</a
-		>
-	</p>
+	<h2 class="text-center text-2xl font-semibold text-gray-700 dark:text-white">Registracija</h2>
 	<form on:submit|preventDefault={register} class="space-y-6">
 		<div>
 			<Label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-				>Email</Label
+				>El. paštas</Label
 			>
 			<Input
 				id="email"
 				type="email"
 				bind:value={$email}
-				placeholder="Email"
-				required
-				class="mt-1 block w-full px-4 py-2 text-lg"
-			/>
-		</div>
-		<div>
-			<Label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-				>Password</Label
-			>
-			<Input
-				id="password"
-				type="password"
-				bind:value={$password}
-				placeholder="Password"
+				placeholder="example@example.com"
 				required
 				class="mt-1 block w-full px-4 py-2 text-lg"
 			/>
 		</div>
 		<div>
 			<Label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-				>Username</Label
+				>Prisijungimo vardas</Label
 			>
 			<Input
 				id="username"
 				type="text"
 				bind:value={$username}
-				placeholder="Username"
+				placeholder="example123"
+				required
+				class="mt-1 block w-full px-4 py-2 text-lg"
+			/>
+		</div>
+		<div>
+			<Label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+				>Slaptažodis</Label
+			>
+			<Input
+				id="password"
+				type="password"
+				bind:value={$password}
+				placeholder="********"
+				required
+				class="mt-1 block w-full px-4 py-2 text-lg"
+			/>
+		</div>
+		<div>
+			<Label
+				for="confirmPassword"
+				class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+				>Pakartokite slaptažodį</Label
+			>
+			<Input
+				id="confirmPassword"
+				type="password"
+				bind:value={$confirmPassword}
+				placeholder="********"
 				required
 				class="mt-1 block w-full px-4 py-2 text-lg"
 			/>
 		</div>
 		<div>
 			<Label for="terms" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-				I agree that my email address will be used for communicating by system admin. I confirm that
-				email address is correct. I understand that system admin can delete my account if not
-				receiving response by email 30 days after notice.
+				Sutinku, kad mano el. paštas bus naudojamas sistemos administratoriui su manimi susisiekti.
+				Patvirtinu, kad el. pašto adresas yra teisingas.
 			</Label>
 			<Checkbox id="terms" required bind:checked={$terms} class="mt-1 w-6 h-6 block" />
 		</div>
@@ -118,15 +146,12 @@
 		{#if $errorMessage}
 			<p class="text-red-600">{errorMessage}</p>
 		{/if}
-		<Button type="submit" class="w-full py-2 text-lg">Register</Button>
+		<Button type="submit" class="w-full py-2 text-lg">Registruotis</Button>
 	</form>
 	<Helper class="mt-4 text-center">
 		<p class="text-sm text-gray-600 dark:text-gray-400">
-			Already have an account? <a
-				href="/login"
-				class="text-blue-600 hover:underline dark:text-blue-400"
-			>
-				Login
+			Jau turite paskyrą? <a href="/login" class="text-blue-600 hover:underline dark:text-blue-400">
+				Prisijungti
 			</a>
 		</p>
 	</Helper>

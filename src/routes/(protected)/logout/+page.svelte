@@ -17,4 +17,4 @@
 	});
 </script>
 
-<h1>Logging out...</h1>
+<h1>Atsijungiama..</h1>
