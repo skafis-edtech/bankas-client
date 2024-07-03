@@ -11,7 +11,7 @@ export const registerUser = async (
 	username: string,
 	role: string
 ) => {
-	if (role !== ROLES.USER) {
+	if (role === ROLES.USER) {
 		const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 		const user = userCredential.user;
 
@@ -30,7 +30,7 @@ export const isUsernameAvailable = async (username: string) => {
 	const usersRef = collection(db, 'users');
 	const q = query(usersRef, where('username', '==', username));
 	const querySnapshot = await getDocs(q);
-	return querySnapshot.empty;
+	return querySnapshot.docs.length === 0;
 };
 
 export const loginUser = async (username: string, password: string) => {

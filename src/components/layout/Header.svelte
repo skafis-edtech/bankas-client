@@ -4,6 +4,12 @@
 	import { ROLES } from '$utils/constants';
 	import { Button, NavBrand, NavHamburger, NavLi, NavUl, Navbar } from 'flowbite-svelte';
 	import { HomeSolid, UserSolid } from 'flowbite-svelte-icons';
+
+	function popup() {
+		alert(
+			'Susisiekite naglis.suliokas@gmail.com, jei norite tapti administratoriumi ir peržiūrėti kitų pateiktas užduotis.'
+		);
+	}
 </script>
 
 <Navbar class="dark bg-gray-800 ">
@@ -29,11 +35,15 @@
 		{#if $currentUser}
 			{#if $currentUser.role === ROLES.ADMIN}
 				<NavLi on:click={() => goto('/review-dashboard')} class="text-right"
-					><Button>Peržiūrėti</Button></NavLi
+					><Button color="purple">Peržiūrėti</Button></NavLi
+				>
+			{:else}
+				<NavLi on:click={() => popup()} class="text-right"
+					><Button color="light">Peržiūrėti</Button></NavLi
 				>
 			{/if}
 			<NavLi on:click={() => goto('/submit-dashboard')} class="text-right"
-				><Button>Pateikti</Button></NavLi
+				><Button color="green">Pateikti</Button></NavLi
 			>
 			<NavLi class="text-right" on:click={() => goto('/logout')}><Button>Atsijungti</Button></NavLi>
 		{:else}
