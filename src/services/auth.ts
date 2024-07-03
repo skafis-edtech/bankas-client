@@ -3,6 +3,7 @@ import { auth, db } from '$services/firebaseConfig';
 import { ROLES } from '$utils/constants';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { doc, setDoc, query, where, collection, getDocs } from 'firebase/firestore';
+import { authApi } from './apiService';
 
 export const registerUser = async (
 	email: string,
@@ -50,19 +51,13 @@ export const logout = async () => {
 };
 
 export const verifyRecaptcha = async (token: string) => {
-	const secretKey = '6Lej_-wpAAAAAHR1zJxw4Ksh-JnzpZc75kInsKED';
-	const response = await fetch(
-		`https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${token}`,
-		{
-			method: 'POST'
-		}
-	);
-	return response.json();
+	const response = await authApi.validateRecaptcha(token);
+	return response.data;
 };
 
 export const renderRecaptha = (onRecaptchaSuccess: (token: string) => void) => {
 	grecaptcha.render('recaptcha', {
-		sitekey: '6Lej_-wpAAAAAM8JzHOHlC6MatWgHeYajYR8ThPp',
+		sitekey: '6LeorgYqAAAAAIjbt3GBfG2hMEZLQyKNoW2DEYsn',
 		callback: onRecaptchaSuccess
 	});
 };

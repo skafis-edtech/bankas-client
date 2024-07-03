@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { get } from 'svelte/store';
 import {
+	AuthControllerApi,
 	CategoryControllerApi,
 	ProblemControllerApi,
 	TestControllerApi,
@@ -13,16 +14,16 @@ const axiosInstance = axios.create({
 	baseURL: BASE_PATH
 });
 
-// Add a request interceptor to set the Authorization header dynamically
 axiosInstance.interceptors.request.use(
 	async (config) => {
-		// Wait for the token to be available
 		const token = await new Promise((resolve) => {
 			const unsubscribe = currentUser.subscribe((user) => {
 				if (user && user.idToken) {
 					resolve(user.idToken);
-					unsubscribe();
+				} else {
+					resolve(null); // Resolve with null immediately if no user is logged in
 				}
+				unsubscribe();
 			});
 		});
 		if (token) {
@@ -47,5 +48,6 @@ const categoryApi = new CategoryControllerApi(undefined, BASE_PATH, axiosInstanc
 const problemApi = new ProblemControllerApi(undefined, BASE_PATH, axiosInstance);
 const userApi = new UserControllerApi(undefined, BASE_PATH, axiosInstance);
 const testApi = new TestControllerApi(undefined, BASE_PATH, axiosInstance);
+const authApi = new AuthControllerApi(undefined, BASE_PATH, axiosInstance);
 
-export { categoryApi, problemApi, userApi, testApi };
+export { categoryApi, problemApi, userApi, testApi, authApi };
