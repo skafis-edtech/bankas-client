@@ -33,7 +33,6 @@
 
 <div class="flex flex-col my-8 container mx-auto">
 	<h1 class="text-2xl font-semibold text-center">Unikalus kodas</h1>
-	<p class="text-center">Įveskite unikalų užduoties SKF kodą (skaičius)</p>
 	<form on:submit|preventDefault={() => fetchStuff()} class="flex flex-col mb-8">
 		<Input
 			type="text"
@@ -49,6 +48,7 @@
 			required
 			placeholder="SKF-"
 			class="block px-4 py-2 text-lg w-80 m-auto my-4"
+			autocomplete="off"
 		/>
 		<Button class="m-auto text-center" type="submit">Rodyti</Button>
 	</form>
@@ -63,19 +63,21 @@
 			}}
 			problemMetaData={{
 				author: problemDisplayViewDto.author,
-				createdOn: problemDisplayViewDto.createdOn,
-				lastModifiedOn: problemDisplayViewDto.lastModifiedOn,
-				approvedBy: problemDisplayViewDto.approvedBy,
-				approvedOn: problemDisplayViewDto.approvedOn,
+
 				categoryName: problemCategory.name,
-				categoryDescription: problemCategory.description,
-				categoryAuthor: problemCategory.author,
-				categoryCreatedOn: problemCategory.createdOn,
-				categoryLastModifiedOn: problemCategory.lastModifiedOn,
-				categoryApprovedBy: problemCategory.approvedBy,
-				categoryApprovedOn: problemCategory.approvedOn
+				source: 'Dar neįgyvendinta...'
 			}}
 		/>
+		<div class="flex justify-end">
+			<Button
+				color="red"
+				class="w-28 mt-2"
+				on:click={() => {
+					$skfCode = 'SKF-';
+					fetchStuff();
+				}}>Uždaryti</Button
+			>
+		</div>
 	{/if}
 	{#if loading}
 		<p class="text-center">Kraunasi...</p>
