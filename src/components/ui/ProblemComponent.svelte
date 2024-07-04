@@ -8,7 +8,7 @@
 
 <Card class="min-w-full">
 	<div class="flex flex-col relative">
-		<h2 class="text-xl font-bold mb-6 text-left">{problemMainData.skfCode}</h2>
+		<h2 class="text-xl font-bold text-left">{problemMainData.skfCode}</h2>
 		<ProblemMeta {problemMetaData} />
 		{#if problemMainData.problemText}
 			<p class="mb-2 text-black text-left">{problemMainData.problemText}</p>
@@ -23,19 +23,23 @@
 			</div>
 		{/if}
 
-		<details>
-			<summary class="text-right">Žr. atsakymą</summary>
-			{#if problemMainData.answerText}
+		{#if problemMainData.answerText || problemMainData.answerImageSrc.length > 0}
+			<details>
+				<summary class="text-right">Žr. atsakymą</summary>
 				<p><strong>Atsakymas:</strong></p>
-				<p class="mb-2 text-black">{problemMainData.answerText}</p>
-			{/if}
-			{#if problemMainData.answerImageSrc.length > 0}
-				<img
-					src={problemMainData.answerImageSrc}
-					alt={`Užduoties ${problemMainData.skfCode} atsakymo paveikslėlis`}
-					class="max-w-full h-auto object-cover my-2"
-				/>
-			{/if}
-		</details>
+				{#if problemMainData.answerText}
+					<p class="mb-2 text-black">{problemMainData.answerText}</p>
+				{/if}
+				{#if problemMainData.answerImageSrc.length > 0}
+					<img
+						src={problemMainData.answerImageSrc}
+						alt={`Užduoties ${problemMainData.skfCode} atsakymo paveikslėlis`}
+						class="max-w-full h-auto object-cover"
+					/>
+				{/if}
+			</details>
+		{:else}
+			<p class="text-right">Atsakymas nėra pateiktas</p>
+		{/if}
 	</div>
 </Card>

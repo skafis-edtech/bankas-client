@@ -3,7 +3,7 @@
 	import { getNiceTimeString } from '$lib/utils';
 	import { categoryApi, problemApi } from '$services/apiService';
 	import type { Category, ProblemDisplayViewDto } from '$services/gen-client';
-	import { AccordionItem } from 'flowbite-svelte';
+	import { Accordion, AccordionItem } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 
 	let loading: boolean = true;
@@ -24,61 +24,34 @@
 	});
 </script>
 
-<AccordionItem class="bg-slate-200 my-4">
-	<span slot="header" class="text-black">{category.name}</span>
-	<p><strong>Aprašymas: </strong>{category.description}</p>
-	<p>
-		<strong>Autorius: </strong><a href="/user/{category.author}" class="underline"
-			>{category.author}</a
-		>
-	</p>
-	<p>
-		<strong>Sukurta: </strong>{getNiceTimeString(category.createdOn)}
-	</p>
-	<p>
-		<strong>Paskutinį kartą keista: </strong>{getNiceTimeString(category.lastModifiedOn)}
-	</p>
-	<p>
-		<strong>Patvirtino naudotojas: </strong>
-		<a href="/user/{category.approvedBy}" class="underline">{category.approvedBy}</a>
-	</p>
-	<p>
-		<strong>Patvirtinta: </strong>
-		{getNiceTimeString(category.approvedOn)}
-	</p>
-	{#if loading}
-		<p>Kraunasi...</p>
-	{:else if error}
-		<p>Klaida: {error}</p>
-	{:else}
-		<div class="container mx-auto">
-			{#each Object.entries(problems) as [id, problem]}
-				<div class="my-6">
-					<ProblemComponent
-						problemMainData={{
-							skfCode: problem.skfCode,
-							problemText: problem.problemText,
-							problemImageSrc: problem.problemImageSrc,
-							answerText: problem.answerText,
-							answerImageSrc: problem.answerImageSrc
-						}}
-						problemMetaData={{
-							author: problem.author,
-							createdOn: problem.createdOn,
-							lastModifiedOn: problem.lastModifiedOn,
-							approvedBy: problem.approvedBy,
-							approvedOn: problem.approvedOn,
-							categoryName: category.name,
-							categoryDescription: category.description,
-							categoryAuthor: category.author,
-							categoryCreatedOn: category.createdOn,
-							categoryLastModifiedOn: category.lastModifiedOn,
-							categoryApprovedBy: category.approvedBy,
-							categoryApprovedOn: category.approvedOn
-						}}
-					/>
-				</div>
-			{/each}
-		</div>
-	{/if}
-</AccordionItem>
+<Accordion>
+	<AccordionItem class="bg-slate-200 my-4">
+		<span slot="header" class="text-black">{category.name}</span>
+		{#if loading}
+			<p>Kraunasi...</p>
+		{:else if error}
+			<p>Klaida: {error}</p>
+		{:else}
+			<div class="container mx-auto">
+				{#each Object.entries(problems) as [id, problem]}
+					<div class="my-3">
+						<ProblemComponent
+							problemMainData={{
+								skfCode: problem.skfCode,
+								problemText: problem.problemText,
+								problemImageSrc: problem.problemImageSrc,
+								answerText: problem.answerText,
+								answerImageSrc: problem.answerImageSrc
+							}}
+							problemMetaData={{
+								author: problem.author,
+								categoryName: category.name,
+								source: 'Dar neįgyvendinta...'
+							}}
+						/>
+					</div>
+				{/each}
+			</div>
+		{/if}
+	</AccordionItem>
+</Accordion>

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import FindById from '$components/layout/FindById.svelte';
-	import { Accordion, Badge } from 'flowbite-svelte';
 	import CategoryComponent from '$components/layout/CategoryComponent.svelte';
 	import type { Category } from '$services/gen-client';
 	import { categoryApi, problemApi } from '$services/apiService';
@@ -39,20 +38,20 @@
 </script>
 
 <h1 class="text-4xl font-semibold my-4 text-center">Skafis užduočių bankas</h1>
-<Badge color="red" class="flex justify-center"
-	>DĖMESIO! Dabartinė šio tinklapio versija nėra stabili bei nėra išbaigta! Nekelkite ilgalaikių
-	duomenų</Badge
->
-
-<h3 class="text-xl font-semibold my-4 text-center">Užduočių: {numOfProblems || 'Kraunasi...'}</h3>
-<h3 class="text-xl font-semibold my-4 text-center">
-	Kategorijų: {numOfCategories || 'Kraunasi...'}
+<h3 class="text-md font-semibold my-4 text-center">
+	Mokytojų pasidalintos originalios užduotys surūšiuotos į temas (kategorijas)
 </h3>
 
+<h3 class="text-md font-semibold my-4 text-center">
+	Užduočių: {numOfProblems || 'Kraunasi...'} | Kategorijų: {numOfCategories || 'Kraunasi...'}
+</h3>
+
+<hr />
 <FindById />
+<hr />
 
 <div class="text-center">
-	<h1 class="text-2xl font-semibold mb-4">Kategorijos</h1>
+	<h1 class="text-2xl font-semibold my-4">Kategorijos</h1>
 	<p>
 		Norite įkelti savo užduotis ar patvirtinti pateiktas kitų? <a
 			class="text-blue-800 underline"
@@ -61,14 +60,12 @@
 	</p>
 </div>
 
-<Accordion>
-	{#if loading}
-		<p class="text-center">Kraunasi...</p>
-	{:else if error}
-		<p class="text-red-600 text-center">Klaida: {error}</p>
-	{:else}
-		{#each Object.entries(categories) as [id, category]}
-			<CategoryComponent {category} />
-		{/each}
-	{/if}
-</Accordion>
+{#if loading}
+	<p class="text-center">Kraunasi...</p>
+{:else if error}
+	<p class="text-red-600 text-center">Klaida: {error}</p>
+{:else}
+	{#each Object.entries(categories) as [id, category]}
+		<CategoryComponent {category} />
+	{/each}
+{/if}

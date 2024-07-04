@@ -19,17 +19,8 @@ declare global {
 
 		interface ProblemMetaData {
 			author: string;
-			createdOn: string;
-			lastModifiedOn: string;
-			approvedBy: string;
-			approvedOn: string;
 			categoryName: string;
-			categoryDescription: string;
-			categoryAuthor: string;
-			categoryCreatedOn: string;
-			categoryLastModifiedOn: string;
-			categoryApprovedBy: string;
-			categoryApprovedOn: string;
+			source: string;
 		}
 	}
 }
