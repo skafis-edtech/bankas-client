@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import FindById from '$components/layout/FindById.svelte';
-	import { Accordion, Badge } from 'flowbite-svelte';
 	import CategoryComponent from '$components/layout/CategoryComponent.svelte';
 	import type { Category } from '$services/gen-client';
 	import { categoryApi, problemApi } from '$services/apiService';
@@ -47,10 +46,12 @@
 	Užduočių: {numOfProblems || 'Kraunasi...'} | Kategorijų: {numOfCategories || 'Kraunasi...'}
 </h3>
 
+<hr />
 <FindById />
+<hr />
 
 <div class="text-center">
-	<h1 class="text-2xl font-semibold mb-4">Kategorijos</h1>
+	<h1 class="text-2xl font-semibold my-4">Kategorijos</h1>
 	<p>
 		Norite įkelti savo užduotis ar patvirtinti pateiktas kitų? <a
 			class="text-blue-800 underline"

@@ -6,8 +6,8 @@
 	import { writable } from 'svelte/store';
 	let skfCode = writable('SKF-');
 
-	let problemDisplayViewDto: ProblemDisplayViewDto;
-	let problemCategory: Category;
+	let problemDisplayViewDto: ProblemDisplayViewDto | null = null;
+	let problemCategory: Category | null = null;
 	let error = '';
 	let loading = false;
 
@@ -21,7 +21,7 @@
 		}
 
 		try {
-			const response = await categoryApi.getPublicCategory(problemDisplayViewDto.categoryId);
+			const response = await categoryApi.getPublicCategory(problemDisplayViewDto?.categoryId || '');
 			problemCategory = response.data;
 		} catch (e: any) {
 			error = e.message;
@@ -32,8 +32,12 @@
 </script>
 
 <div class="flex flex-col my-8 container mx-auto">
-	<h1 class="text-2xl font-semibold text-center">Unikalus kodas</h1>
-	<form on:submit|preventDefault={() => fetchStuff()} class="flex flex-col mb-8">
+	<p class="text-center text-sm my-0">Rodyti užduotį pagal SKF kodą</p>
+
+	<form
+		on:submit|preventDefault={() => fetchStuff()}
+		class="flex flex-row max-w-min justify-center items-center m-auto"
+	>
 		<Input
 			type="text"
 			id="skf-code"
@@ -47,12 +51,22 @@
 			}}
 			required
 			placeholder="SKF-"
-			class="block px-4 py-2 text-lg w-80 m-auto my-4"
+			class="block px-4 py-2 text-lg w-32 m-auto my-4"
 			autocomplete="off"
 		/>
-		<Button class="m-auto text-center" type="submit">Rodyti</Button>
+		<Button class="ml-3 py-3" type="submit">Rodyti</Button>
 	</form>
 	{#if problemDisplayViewDto && problemCategory}
+		<div class="flex justify-end">
+			<Button
+				color="red"
+				class="w-28 mb-2"
+				on:click={() => {
+					problemDisplayViewDto = null;
+					problemCategory = null;
+				}}>Uždaryti</Button
+			>
+		</div>
 		<ProblemComponent
 			problemMainData={{
 				skfCode: problemDisplayViewDto.skfCode,
@@ -63,21 +77,10 @@
 			}}
 			problemMetaData={{
 				author: problemDisplayViewDto.author,
-
 				categoryName: problemCategory.name,
 				source: 'Dar neįgyvendinta...'
 			}}
 		/>
-		<div class="flex justify-end">
-			<Button
-				color="red"
-				class="w-28 mt-2"
-				on:click={() => {
-					$skfCode = 'SKF-';
-					fetchStuff();
-				}}>Uždaryti</Button
-			>
-		</div>
 	{/if}
 	{#if loading}
 		<p class="text-center">Kraunasi...</p>
