@@ -1,7 +1,6 @@
 <script lang="ts">
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
-	import { getNiceTimeString } from '$lib/utils';
-	import { categoryApi, problemApi } from '$services/apiService';
+	import { problemApi } from '$services/apiService';
 	import type { Category, ProblemDisplayViewDto } from '$services/gen-client';
 	import { Accordion, AccordionItem } from 'flowbite-svelte';
 	import { onMount } from 'svelte';

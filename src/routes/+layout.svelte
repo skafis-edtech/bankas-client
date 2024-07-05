@@ -1,7 +1,42 @@
 <script lang="ts">
-	import Footer from '$components/layout/Footer.svelte';
-	import Header from '$components/layout/Header.svelte';
 	import '../app.css';
+	import { writable, type Writable } from 'svelte/store';
+	import { onDestroy, setContext } from 'svelte';
+	import { loginUser, logout } from '$services/auth';
+	import type { AuthContext, User } from '../types';
+	import { auth, db } from '$services/firebaseConfig';
+	import { doc, getDoc } from 'firebase/firestore';
+	import Header from '$components/layout/Header.svelte';
+	import Footer from '$components/layout/Footer.svelte';
+	import { setAuthToken } from '$services/apiService';
+
+	const userStore: Writable<User | null> = writable(null);
+
+	const firebaseUnsubscribe = auth.onAuthStateChanged(async (user) => {
+		if (user) {
+			const userDoc = await getDoc(doc(db, 'users', user.uid));
+			const idToken = await user.getIdToken();
+
+			if (userDoc.exists()) {
+				const userData = userDoc.data() as User;
+				userStore.set({
+					id: user.uid,
+					username: userData.username,
+					role: userData.role
+				});
+				setAuthToken(idToken);
+			} else {
+				throw new Error('User not found in database');
+			}
+		} else {
+			userStore.set(null);
+			setAuthToken(null);
+		}
+	});
+
+	setContext<AuthContext>('authContext', { user: userStore, login: loginUser, logout });
+
+	onDestroy(() => firebaseUnsubscribe());
 </script>
 
 <header>

@@ -17,7 +17,7 @@ test("should not allow a user to read users' data", async ({ page }) => {
 	let error = null;
 	try {
 		const docRef = doc(db, 'users');
-		const docSnap = await getDoc(docRef);
+		await getDoc(docRef);
 	} catch (e) {
 		error = e;
 	}

@@ -1,9 +1,12 @@
-<script>
+<script lang="ts">
 	import { goto } from '$app/navigation';
-	import { currentUser } from '$lib/stores';
 	import { ROLES } from '$utils/constants';
 	import { Button, NavBrand, NavHamburger, NavLi, NavUl, Navbar } from 'flowbite-svelte';
 	import { HomeSolid, UserSolid } from 'flowbite-svelte-icons';
+	import { getContext } from 'svelte';
+	import type { AuthContext } from '../../types';
+
+	const { user } = getContext('authContext') as AuthContext;
 
 	function popup() {
 		alert(
@@ -21,10 +24,10 @@
 	</NavBrand>
 	<NavHamburger class="text-white" />
 	<NavUl class="flex-nowrap items-center m0p0-inside-ul">
-		{#if $currentUser}
+		{#if $user}
 			<div class="flex flex-row gap-2">
-				<a href="/user/{$currentUser.username}" class="text-white self-center underline"
-					>{$currentUser.username}</a
+				<a href="/user/{$user.username}" class="text-white self-center underline"
+					>{$user.username}</a
 				>
 				<UserSolid class="h-6 w-6 text-white self-center" />
 			</div>
@@ -32,8 +35,8 @@
 		<NavLi class="text-right" on:click={() => goto('/')}
 			><Button><HomeSolid class="mr-2" />Pradžia</Button></NavLi
 		>
-		{#if $currentUser}
-			{#if $currentUser.role === ROLES.ADMIN}
+		{#if $user}
+			{#if $user.role === ROLES.ADMIN || $user.role === ROLES.SUPER_ADMIN}
 				<NavLi on:click={() => goto('/review-dashboard')} class="text-right"
 					><Button color="purple">Peržiūrėti</Button></NavLi
 				>
@@ -53,9 +56,3 @@
 		{/if}
 	</NavUl>
 </Navbar>
-
-<style>
-	:global(.m0p0-inside-ul ul) {
-		@apply p-0 m-0;
-	}
-</style>

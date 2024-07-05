@@ -1,20 +1,21 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { onMount } from 'svelte';
+	import { getContext, onMount } from 'svelte';
 	import { get } from 'svelte/store';
-	import { userApi } from '$services/apiService';
 	import { UserSolid } from 'flowbite-svelte-icons';
-	import { currentUser } from '$lib/stores';
 	import { Button } from 'flowbite-svelte';
-	import { goto } from '$app/navigation';
+	import type { AuthContext } from '../../../types';
+	import { userApi } from '$services/apiService';
 
-	let username: string;
-	let error: string = '';
-	let loading: boolean = true;
-	let bio: string = '';
+	const { user } = getContext('authContext') as AuthContext;
 
-	let editingState: boolean = false;
-	let editedBio: string = '';
+	let username;
+	let error = '';
+	let loading = true;
+	let bio = '';
+
+	let editingState = false;
+	let editedBio = '';
 
 	$: username = get(page).params.username;
 
@@ -75,7 +76,7 @@
 		</div>
 	</form>
 {/if}
-{#if username === $currentUser?.username && !editingState}
+{#if username === $user?.username && !editingState}
 	<div class="flex flex-row justify-center">
 		<Button on:click={() => startEditing()}>Redaguoti aprašymą (bio)</Button>
 	</div>
