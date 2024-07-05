@@ -7,10 +7,9 @@
 		type UnderReviewCategory
 	} from '$services/gen-client';
 	import { goto } from '$app/navigation';
-	import { categoryApi } from '$services/apiService';
-	import { currentUser } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import { EditOutline, PlusOutline, TrashBinSolid } from 'flowbite-svelte-icons';
+	import { categoryApi } from '$services/apiService';
 
 	export let category: Category | UnderReviewCategory;
 	export let operationDone: Writable<boolean>;

@@ -1,48 +1,57 @@
 <script lang="ts">
-	import { loginUser } from '$services/auth';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import { currentUser } from '$lib/stores';
 	import { ROLES } from '$utils/constants';
 	import { Button, Helper, Input, Label } from 'flowbite-svelte';
-	import { writable } from 'svelte/store';
+	import { getContext } from 'svelte';
+	import { derived } from 'svelte/store';
+	import type { AuthContext } from '../../types';
 
-	let username = writable('');
-	let password = writable('');
-	let errorMessage = writable('');
+	let username = '';
+	let password = '';
+	let errorMessage = '';
 
-	onMount(() => {
-		const unsubscribe = currentUser.subscribe(async (userState) => {
-			if (userState && userState.username) {
-				if (userState.role === ROLES.ADMIN) {
-					await goto('/review-dashboard');
-				} else if (userState.role === ROLES.USER) {
-					await goto('/submit-dashboard');
-				} else {
-					throw new Error('Unknown role' + userState.role);
-				}
-			}
-		});
+	const { user, login } = getContext('authContext') as AuthContext;
 
-		return () => unsubscribe();
+	const userLoaded = derived(user, ($user, set) => {
+		if ($user) {
+			set($user);
+		}
 	});
 
-	async function login() {
+	const redirectLoggedInUser = () => {
+		if ($user) {
+			if ($user.role === ROLES.ADMIN) {
+				goto('/review-dashboard');
+			} else if ($user.role === ROLES.USER) {
+				goto('/submit-dashboard');
+			} else if ($user.role === ROLES.SUPER_ADMIN) {
+				goto('/review-dashboard');
+			} else {
+				throw new Error('Unknown role: ' + $user.role);
+			}
+		}
+	};
+
+	onMount(() => {
+		userLoaded.subscribe(() => {
+			redirectLoggedInUser();
+		});
+	});
+
+	async function handleLogin() {
 		try {
-			await loginUser($username, $password);
-			currentUser.subscribe((user) => {
-				if (user && user.username) {
-					if (user.role === ROLES.ADMIN) {
-						goto('/review-dashboard');
-					} else if (user.role === ROLES.USER) {
-						goto('/submit-dashboard');
-					} else {
-						throw new Error('Unknown role' + user.role);
-					}
+			console.log('Attempting login...');
+			await login(username, password);
+			userLoaded.subscribe(($user) => {
+				if ($user) {
+					console.log('User logged in:', $user);
+					redirectLoggedInUser();
 				}
 			});
 		} catch (error) {
-			errorMessage.set('Prisijungimas nesėkmingas. Bandykite dar kartą.');
+			console.error('Login failed:', error);
+			errorMessage = 'Prisijungimas nesėkmingas. Bandykite dar kartą.';
 		}
 	}
 </script>
@@ -51,7 +60,7 @@
 	<h2 class="text-center mb-4 text-2xl font-semibold text-gray-700 dark:text-white">
 		Prisijungimas
 	</h2>
-	<form on:submit|preventDefault={login} class="space-y-6">
+	<form on:submit|preventDefault={handleLogin} class="space-y-6">
 		<div>
 			<Label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
 				Prisijungimo vardas
@@ -59,7 +68,7 @@
 			<Input
 				id="username"
 				type="text"
-				bind:value={$username}
+				bind:value={username}
 				placeholder="Prisijungimo vardas"
 				required
 				class="mt-1 block w-full px-4 py-2 text-lg"
@@ -72,20 +81,20 @@
 			<Input
 				id="password"
 				type="password"
-				bind:value={$password}
+				bind:value={password}
 				placeholder="Slaptažodis"
 				required
 				class="mt-1 block w-full px-4 py-2 text-lg"
 			/>
 		</div>
-		{#if $errorMessage}
-			<p class="text-red-600">{$errorMessage}</p>
+		{#if errorMessage}
+			<p class="text-red-600">{errorMessage}</p>
 		{/if}
 		<Button type="submit" class="w-full py-2 text-lg">Prisijungti</Button>
 	</form>
 	<Helper class="mt-4 text-center">
 		<p class="text-sm text-gray-600 dark:text-gray-400">
-			Pamiršote spaltažodį? Parašykite el. paštu sistemos administratoriui
+			Pamiršote slaptažodį? Parašykite el. paštu sistemos administratoriui
 			<a
 				href="mailto:naglis.suliokas@gmail.com"
 				class="text-blue-600 hover:underline dark:text-blue-400"

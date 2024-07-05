@@ -1,9 +1,7 @@
-import { currentUser } from '$lib/stores';
 import { auth, db } from '$services/firebaseConfig';
 import { ROLES } from '$utils/constants';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { doc, setDoc, query, where, collection, getDocs } from 'firebase/firestore';
-import { authApi } from './apiService';
 
 export const registerUser = async (
 	email: string,
@@ -47,21 +45,4 @@ export const loginUser = async (username: string, password: string) => {
 
 export const logout = async () => {
 	await signOut(auth);
-	currentUser.set(null);
-};
-
-export const verifyRecaptcha = async (token: string) => {
-	const response = await authApi.validateRecaptcha(token);
-	return response.data;
-};
-
-export const renderRecaptha = (onRecaptchaSuccess: (token: string) => void) => {
-	grecaptcha.render('recaptcha', {
-		sitekey: '6LeorgYqAAAAAIjbt3GBfG2hMEZLQyKNoW2DEYsn',
-		callback: onRecaptchaSuccess
-	});
-};
-
-export const recaptchaLoaded = (): boolean => {
-	return typeof grecaptcha !== 'undefined';
 };

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Card } from 'flowbite-svelte';
 	import ProblemMeta from './ProblemMeta.svelte';
+	import type { Components } from '../../types';
 
 	export let problemMainData: Components.ProblemMainData;
 	export let problemMetaData: Components.ProblemMetaData;

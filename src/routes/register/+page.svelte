@@ -3,6 +3,24 @@
 	import { goto } from '$app/navigation';
 	import { ROLES } from '$utils/constants';
 	import { Button, Checkbox, Helper, Input, Label } from 'flowbite-svelte';
+	import { getContext, onMount } from 'svelte';
+	import type { AuthContext } from '../../types';
+
+	const { user } = getContext('authContext') as AuthContext;
+
+	onMount(() => {
+		if ($user) {
+			if ($user.role === ROLES.ADMIN) {
+				goto('/review-dashboard');
+			} else if ($user.role === ROLES.USER) {
+				goto('/submit-dashboard');
+			} else if ($user.role === ROLES.SUPER_ADMIN) {
+				goto('/review-dashboard');
+			} else {
+				throw new Error('Unknown role' + $user.role);
+			}
+		}
+	});
 
 	let email = '';
 	let password = '';

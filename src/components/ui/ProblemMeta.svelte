@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { getNiceTimeString } from '$lib/utils';
-	import { Button, Dropdown, DropdownItem } from 'flowbite-svelte';
+	import { Button, Dropdown } from 'flowbite-svelte';
 	import { InfoCircleOutline } from 'flowbite-svelte-icons';
+	import type { Components } from '../../types';
 
 	export let problemMetaData: Components.ProblemMetaData;
 </script>

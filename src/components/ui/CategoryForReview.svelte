@@ -2,17 +2,14 @@
 	import { writable, type Writable } from 'svelte/store';
 	import { Accordion, AccordionItem, Badge, Button } from 'flowbite-svelte';
 	import {
-		CategoryControllerApi,
 		UnderReviewCategoryReviewStatusEnum,
 		type Category,
 		type UnderReviewCategory,
-		type UnderReviewProblem,
 		type UnderReviewProblemDisplayViewDto
 	} from '$services/gen-client';
 	import { categoryApi, problemApi } from '$services/apiService';
 	import { onMount } from 'svelte';
 	import ProblemComponent from './ProblemComponent.svelte';
-	import ProblemMeta from './ProblemMeta.svelte';
 
 	export let category: UnderReviewCategory | Category;
 	export let operationDone: Writable<boolean>;
@@ -158,17 +155,8 @@
 					}}
 					problemMetaData={{
 						author: problem.author,
-						createdOn: problem.createdOn,
-						lastModifiedOn: problem.lastModifiedOn,
-						approvedBy: '👻',
-						approvedOn: '😒',
 						categoryName: '👻',
-						categoryDescription: '🤐',
-						categoryAuthor: '🤫',
-						categoryCreatedOn: '🤭',
-						categoryLastModifiedOn: '🤔',
-						categoryApprovedBy: '🤨',
-						categoryApprovedOn: '🤯'
+						source: '👻'
 					}}
 				/>
 			{/each}
