@@ -26,7 +26,7 @@
 			} else if ($user.role === ROLES.USER) {
 				goto('/submit-dashboard');
 			} else if ($user.role === ROLES.SUPER_ADMIN) {
-				goto('/review-dashboard');
+				goto('/super-admin');
 			} else {
 				throw new Error('Unknown role: ' + $user.role);
 			}
