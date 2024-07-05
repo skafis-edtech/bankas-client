@@ -9,6 +9,7 @@
 	import Header from '$components/layout/Header.svelte';
 	import Footer from '$components/layout/Footer.svelte';
 	import { setAuthToken } from '$services/apiService';
+	import { goto } from '$app/navigation';
 
 	const userStore: Writable<User | null> = writable(null);
 
@@ -48,7 +49,9 @@
 <main>
 	<aside></aside>
 	<section><slot /></section>
-	<aside></aside>
+	<aside class="flex justify-end">
+		<div><button on:click={() => goto('/magic')}><p>:)</p></button></div>
+	</aside>
 </main>
 <footer><Footer /></footer>
 

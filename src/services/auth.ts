@@ -14,6 +14,8 @@ export const registerUser = async (
 		const user = userCredential.user;
 
 		await setDoc(doc(db, 'users', user.uid), {
+			id: user.uid,
+			bio: '',
 			username,
 			role,
 			email: user.email
