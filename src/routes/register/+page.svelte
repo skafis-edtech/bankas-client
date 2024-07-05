@@ -31,6 +31,10 @@
 	let terms = false;
 
 	async function register() {
+		if (/\s/.test(username)) {
+			errorMessage = 'Prisijungimo vardas negali turėti tarpų ("whitespace" simbolių)';
+			return;
+		}
 		if (password !== confirmPassword) {
 			errorMessage = 'Slaptažodžiai nesutampa';
 			return;
