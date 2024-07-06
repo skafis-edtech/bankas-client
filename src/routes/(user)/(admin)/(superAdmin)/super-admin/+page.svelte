@@ -15,14 +15,14 @@
 		<Button class="flex-grow" on:click={() => goto('/super-admin/manage-problems')}
 			>Manage firestore problems</Button
 		>
-		<Button class="flex-grow" on:click={() => goto('/super-admin/manage-users')}
-			>Manage firestore users (not now)</Button
+		<Button class="flex-grow" on:click={() => goto('/super-admin/manage-users')} disabled
+			>Manage firestore users</Button
 		>
-		<Button class="flex-grow" on:click={() => goto('/super-admin/manage-meta')}
-			>Manage firestore meta (now now)</Button
+		<Button class="flex-grow" on:click={() => goto('/super-admin/manage-meta')} disabled
+			>Manage firestore meta</Button
 		>
-		<Button class="flex-grow" on:click={() => goto('/super-admin/manage-storage')}
-			>Manage storage (not now)</Button
+		<Button class="flex-grow" on:click={() => goto('/super-admin/manage-storage')} disabled
+			>Manage storage</Button
 		>
 	</div>
 </div>

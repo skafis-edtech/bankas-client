@@ -359,37 +359,6 @@ export interface ProblemsForAuthor {
 /**
  * 
  * @export
- * @interface RecaptchaResponse
- */
-export interface RecaptchaResponse {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RecaptchaResponse
-     */
-    'success': boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof RecaptchaResponse
-     */
-    'challenge_ts'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RecaptchaResponse
-     */
-    'hostname'?: string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof RecaptchaResponse
-     */
-    'errorCodes'?: Array<string>;
-}
-/**
- * 
- * @export
  * @interface RejectMsgDto
  */
 export interface RejectMsgDto {
@@ -453,6 +422,12 @@ export interface Source {
      * @type {string}
      * @memberof Source
      */
+    'author': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Source
+     */
     'createdOn': string;
     /**
      * 
@@ -493,6 +468,12 @@ export interface SourcePostDto {
      * @type {string}
      * @memberof SourcePostDto
      */
+    'reviewStatus': SourcePostDtoReviewStatusEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof SourcePostDto
+     */
     'reviewedBy': string;
     /**
      * 
@@ -511,6 +492,12 @@ export interface SourcePostDto {
      * @type {string}
      * @memberof SourcePostDto
      */
+    'author': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SourcePostDto
+     */
     'createdOn': string;
     /**
      * 
@@ -519,6 +506,15 @@ export interface SourcePostDto {
      */
     'lastModifiedOn': string;
 }
+
+export const SourcePostDtoReviewStatusEnum = {
+    Pending: 'PENDING',
+    Rejected: 'REJECTED',
+    Approved: 'APPROVED'
+} as const;
+
+export type SourcePostDtoReviewStatusEnum = typeof SourcePostDtoReviewStatusEnum[keyof typeof SourcePostDtoReviewStatusEnum];
+
 /**
  * 
  * @export
@@ -796,113 +792,6 @@ export interface UserBioDto {
      */
     'bio': string;
 }
-
-/**
- * AuthControllerApi - axios parameter creator
- * @export
- */
-export const AuthControllerApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @param {string} token 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        validateRecaptcha: async (token: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'token' is not null or undefined
-            assertParamExists('validateRecaptcha', 'token', token)
-            const localVarPath = `/auth/validateRecaptcha`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            if (token !== undefined) {
-                localVarQueryParameter['token'] = token;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * AuthControllerApi - functional programming interface
- * @export
- */
-export const AuthControllerApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = AuthControllerApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @param {string} token 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async validateRecaptcha(token: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RecaptchaResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.validateRecaptcha(token, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AuthControllerApi.validateRecaptcha']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-    }
-};
-
-/**
- * AuthControllerApi - factory interface
- * @export
- */
-export const AuthControllerApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = AuthControllerApiFp(configuration)
-    return {
-        /**
-         * 
-         * @param {string} token 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        validateRecaptcha(token: string, options?: any): AxiosPromise<RecaptchaResponse> {
-            return localVarFp.validateRecaptcha(token, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * AuthControllerApi - object-oriented interface
- * @export
- * @class AuthControllerApi
- * @extends {BaseAPI}
- */
-export class AuthControllerApi extends BaseAPI {
-    /**
-     * 
-     * @param {string} token 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AuthControllerApi
-     */
-    public validateRecaptcha(token: string, options?: RawAxiosRequestConfig) {
-        return AuthControllerApiFp(this.configuration).validateRecaptcha(token, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
 
 /**
  * CategoryControllerApi - axios parameter creator
