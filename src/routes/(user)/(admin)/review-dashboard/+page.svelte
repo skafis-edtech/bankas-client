@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 	import type { Category, UnderReviewCategory } from '$services/gen-client';
 	import { writable } from 'svelte/store';
-	import { categoryApi } from '$services/apiService';
+	import { categoryApi, categoryOldApi } from '$services/apiService';
 
 	let loading = true;
 	let error = '';
@@ -15,13 +15,13 @@
 
 	onMount(async () => {
 		try {
-			const response = await categoryApi.getSubmittedCategories();
+			const response = await categoryOldApi.getSubmittedCategories();
 			underReviewCategories = response.data;
 		} catch (e: any) {
 			error = e.message;
 		}
 		try {
-			const response = await categoryApi.getAllPublicCategories();
+			const response = await categoryOldApi.getAllPublicCategories();
 			publicCategories = response.data;
 		} catch (e: any) {
 			error = e.message;

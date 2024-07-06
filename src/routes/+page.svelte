@@ -3,7 +3,7 @@
 	import FindById from '$components/layout/FindById.svelte';
 	import CategoryComponent from '$components/layout/CategoryComponent.svelte';
 	import type { Category } from '$services/gen-client';
-	import { categoryApi, problemApi } from '$services/apiService';
+	import { categoryApi, categoryOldApi, problemApi, problemOldApi } from '$services/apiService';
 
 	let loading: boolean = true;
 	let error: string | null = null;
@@ -15,7 +15,7 @@
 
 	onMount(async () => {
 		try {
-			const response = await categoryApi.getAllPublicCategories();
+			const response = await categoryOldApi.getAllPublicCategories();
 			categories = response.data;
 		} catch (e: any) {
 			error = e.message;
@@ -23,13 +23,13 @@
 			loading = false;
 		}
 		try {
-			const response = await problemApi.getPublicProblemsCount();
+			const response = await problemOldApi.getPublicProblemsCount();
 			numOfProblems = response.data.count;
 		} catch (e: any) {
 			error = e.message;
 		}
 		try {
-			const response = await categoryApi.getPublicCategoriesCount();
+			const response = await categoryOldApi.getPublicCategoriesCount();
 			numOfCategories = response.data.count;
 		} catch (e: any) {
 			error = e.message;

@@ -5,7 +5,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import type { ProblemPostDto } from '$services/gen-client';
-	import { problemApi } from '$services/apiService';
+	import { problemApi, problemOldApi } from '$services/apiService';
 
 	let categoryId: string;
 	$: categoryId = get(page).params.categoryId;
@@ -17,7 +17,8 @@
 		answerText: '',
 		categoryId: '',
 		problemImageUrl: '',
-		answerImageUrl: ''
+		answerImageUrl: '',
+		sourceId: ''
 	});
 	let problemImageFile: Writable<File | null> = writable(null);
 	let answerImageFile: Writable<File | null> = writable(null);
@@ -37,7 +38,7 @@
 		loading = true;
 		try {
 			// This is sketchy... Should be tested, but idk, I'm lazy... WOW SOME COMPLEX STUFF WITH MULTPART_FORM_DATA
-			const response = await problemApi.submitProblem(
+			const response = await problemOldApi.submitProblem(
 				data,
 				problemImage ? problemImage : undefined,
 				answerImage ? answerImage : undefined
