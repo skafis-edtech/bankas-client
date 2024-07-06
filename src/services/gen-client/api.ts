@@ -88,10 +88,10 @@ export interface CountDto {
 export interface FixMyUnderReviewProblemRequest {
     /**
      * 
-     * @type {ProblemPostDto}
+     * @type {ProblemPostDtoOld}
      * @memberof FixMyUnderReviewProblemRequest
      */
-    'problem': ProblemPostDto;
+    'problem': ProblemPostDtoOld;
     /**
      * 
      * @type {File}
@@ -256,13 +256,19 @@ export interface ProblemPostDto {
      * @type {string}
      * @memberof ProblemPostDto
      */
-    'problemImageUrl': string;
+    'skfCode': string;
     /**
      * 
      * @type {string}
      * @memberof ProblemPostDto
      */
-    'answerImageUrl': string;
+    'problemImagePath': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProblemPostDto
+     */
+    'answerImagePath': string;
     /**
      * 
      * @type {string}
@@ -285,6 +291,49 @@ export interface ProblemPostDto {
      * 
      * @type {string}
      * @memberof ProblemPostDto
+     */
+    'sourceId': string;
+}
+/**
+ * 
+ * @export
+ * @interface ProblemPostDtoOld
+ */
+export interface ProblemPostDtoOld {
+    /**
+     * 
+     * @type {string}
+     * @memberof ProblemPostDtoOld
+     */
+    'problemImageUrl': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProblemPostDtoOld
+     */
+    'answerImageUrl': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProblemPostDtoOld
+     */
+    'problemText': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProblemPostDtoOld
+     */
+    'answerText': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProblemPostDtoOld
+     */
+    'categoryId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProblemPostDtoOld
      */
     'sourceId': string;
 }
@@ -2787,13 +2836,13 @@ export const ProblemControllerOldApiAxiosParamCreator = function (configuration?
         /**
          *              **Logic**:             - If `problem.problemImageUrl` is a URL and `problemImageFile` is null, return `problemImagePath = problem.problemImage`.             - If `problem.problemImageUrl` is \"\" and `problemImageFile` is provided, upload the file and return `problemImagePath = \"problems/SKF-...\"`.             - If `problem.problemImageUrl` is \"\" and `problemImageFile` is null, return `problemImagePath = \"\"`.         
          * @summary USER. Careful! Complex file and text upload logic AND not easily testable file upload!
-         * @param {ProblemPostDto} problem 
+         * @param {ProblemPostDtoOld} problem 
          * @param {File} [problemImageFile] 
          * @param {File} [answerImageFile] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        submitProblem: async (problem: ProblemPostDto, problemImageFile?: File, answerImageFile?: File, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        submitProblem: async (problem: ProblemPostDtoOld, problemImageFile?: File, answerImageFile?: File, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'problem' is not null or undefined
             assertParamExists('submitProblem', 'problem', problem)
             const localVarPath = `/problemOld/submit`;
@@ -2969,13 +3018,13 @@ export const ProblemControllerOldApiFp = function(configuration?: Configuration)
         /**
          *              **Logic**:             - If `problem.problemImageUrl` is a URL and `problemImageFile` is null, return `problemImagePath = problem.problemImage`.             - If `problem.problemImageUrl` is \"\" and `problemImageFile` is provided, upload the file and return `problemImagePath = \"problems/SKF-...\"`.             - If `problem.problemImageUrl` is \"\" and `problemImageFile` is null, return `problemImagePath = \"\"`.         
          * @summary USER. Careful! Complex file and text upload logic AND not easily testable file upload!
-         * @param {ProblemPostDto} problem 
+         * @param {ProblemPostDtoOld} problem 
          * @param {File} [problemImageFile] 
          * @param {File} [answerImageFile] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async submitProblem(problem: ProblemPostDto, problemImageFile?: File, answerImageFile?: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UnderReviewProblem>> {
+        async submitProblem(problem: ProblemPostDtoOld, problemImageFile?: File, answerImageFile?: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UnderReviewProblem>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.submitProblem(problem, problemImageFile, answerImageFile, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProblemControllerOldApi.submitProblem']?.[localVarOperationServerIndex]?.url;
@@ -3084,13 +3133,13 @@ export const ProblemControllerOldApiFactory = function (configuration?: Configur
         /**
          *              **Logic**:             - If `problem.problemImageUrl` is a URL and `problemImageFile` is null, return `problemImagePath = problem.problemImage`.             - If `problem.problemImageUrl` is \"\" and `problemImageFile` is provided, upload the file and return `problemImagePath = \"problems/SKF-...\"`.             - If `problem.problemImageUrl` is \"\" and `problemImageFile` is null, return `problemImagePath = \"\"`.         
          * @summary USER. Careful! Complex file and text upload logic AND not easily testable file upload!
-         * @param {ProblemPostDto} problem 
+         * @param {ProblemPostDtoOld} problem 
          * @param {File} [problemImageFile] 
          * @param {File} [answerImageFile] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        submitProblem(problem: ProblemPostDto, problemImageFile?: File, answerImageFile?: File, options?: any): AxiosPromise<UnderReviewProblem> {
+        submitProblem(problem: ProblemPostDtoOld, problemImageFile?: File, answerImageFile?: File, options?: any): AxiosPromise<UnderReviewProblem> {
             return localVarFp.submitProblem(problem, problemImageFile, answerImageFile, options).then((request) => request(axios, basePath));
         },
     };
@@ -3214,14 +3263,14 @@ export class ProblemControllerOldApi extends BaseAPI {
     /**
      *              **Logic**:             - If `problem.problemImageUrl` is a URL and `problemImageFile` is null, return `problemImagePath = problem.problemImage`.             - If `problem.problemImageUrl` is \"\" and `problemImageFile` is provided, upload the file and return `problemImagePath = \"problems/SKF-...\"`.             - If `problem.problemImageUrl` is \"\" and `problemImageFile` is null, return `problemImagePath = \"\"`.         
      * @summary USER. Careful! Complex file and text upload logic AND not easily testable file upload!
-     * @param {ProblemPostDto} problem 
+     * @param {ProblemPostDtoOld} problem 
      * @param {File} [problemImageFile] 
      * @param {File} [answerImageFile] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProblemControllerOldApi
      */
-    public submitProblem(problem: ProblemPostDto, problemImageFile?: File, answerImageFile?: File, options?: RawAxiosRequestConfig) {
+    public submitProblem(problem: ProblemPostDtoOld, problemImageFile?: File, answerImageFile?: File, options?: RawAxiosRequestConfig) {
         return ProblemControllerOldApiFp(this.configuration).submitProblem(problem, problemImageFile, answerImageFile, options).then((request) => request(this.axios, this.basePath));
     }
 }

@@ -16,13 +16,13 @@
 			>Manage firestore problems</Button
 		>
 		<Button class="flex-grow" on:click={() => goto('/super-admin/manage-users')}
-			>Manage firestore users</Button
+			>Manage firestore users (not now)</Button
 		>
 		<Button class="flex-grow" on:click={() => goto('/super-admin/manage-meta')}
-			>Manage firestore meta</Button
+			>Manage firestore meta (now now)</Button
 		>
 		<Button class="flex-grow" on:click={() => goto('/super-admin/manage-storage')}
-			>Manage storage</Button
+			>Manage storage (not now)</Button
 		>
 	</div>
 </div>
