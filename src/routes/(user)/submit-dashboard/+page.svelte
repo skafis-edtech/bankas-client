@@ -5,7 +5,7 @@
 	import CategorySubmitted from '$components/ui/CategorySubmitted.svelte';
 	import { writable } from 'svelte/store';
 	import CategoryCreate from '$components/forms/CategoryCreate.svelte';
-	import { categoryApi } from '$services/apiService';
+	import { categoryApi, categoryOldApi } from '$services/apiService';
 
 	let loading = true;
 	let error = '';
@@ -19,13 +19,13 @@
 	async function fetchCategories() {
 		loading = true;
 		try {
-			const response = await categoryApi.getAllPublicCategories();
+			const response = await categoryOldApi.getAllPublicCategories();
 			allPublicCategories = response.data;
 		} catch (e: any) {
 			error = e.message;
 		}
 		try {
-			const response = await categoryApi.getMyUnderReviewCategories();
+			const response = await categoryOldApi.getMyUnderReviewCategories();
 			myUnderReviewCategories = response.data;
 		} catch (e: any) {
 			error = e.message;
