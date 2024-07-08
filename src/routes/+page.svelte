@@ -1,12 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import FindById from '$components/layout/FindById.svelte';
-	import CategoryComponent from '$components/layout/CategoryComponent.svelte';
 	import type { Category } from '$services/gen-client';
-	import { categoryApi, categoryOldApi, problemApi, problemOldApi } from '$services/apiService';
-
-	let loading: boolean = true;
-	let error: string | null = null;
+	import { categoryOldApi, problemOldApi } from '$services/apiService';
+	import CategoryWithProblems from '$components/layout/CategoryWithProblems.svelte';
+	import { Alert } from 'flowbite-svelte';
 
 	let categories: Category[] = [];
 
@@ -14,41 +12,40 @@
 	let numOfCategories: number | null = null;
 
 	onMount(async () => {
-		try {
-			const response = await categoryOldApi.getAllPublicCategories();
-			categories = response.data;
-		} catch (e: any) {
-			error = e.message;
-		} finally {
-			loading = false;
-		}
-		try {
-			const response = await problemOldApi.getPublicProblemsCount();
-			numOfProblems = response.data.count;
-		} catch (e: any) {
-			error = e.message;
-		}
-		try {
-			const response = await categoryOldApi.getPublicCategoriesCount();
-			numOfCategories = response.data.count;
-		} catch (e: any) {
-			error = e.message;
-		}
+		const [categoriesRes, problemsCountRes, categoriesCountRes] = await Promise.all([
+			categoryOldApi.getAllPublicCategories(),
+			problemOldApi.getPublicProblemsCount(),
+			categoryOldApi.getPublicCategoriesCount()
+		]);
+
+		categories = categoriesRes.data;
+		numOfProblems = problemsCountRes.data.count;
+		numOfCategories = categoriesCountRes.data.count;
 	});
 </script>
 
 <h1 class="text-4xl font-semibold my-4 text-center">Skafis užduočių bankas</h1>
+<div class="flex justify-center">
+	<Alert border color="red" class="w-fit"
+		>Dėmesio! Šis tinklapis nėra pilnai funkcionalus. Yra vykdomas tinklapio kūrimas.</Alert
+	>
+</div>
+
 <h3 class="text-md font-semibold my-4 text-center">
 	Mokytojų pasidalintos originalios užduotys surūšiuotos į temas (kategorijas)
 </h3>
 
 <h3 class="text-md font-semibold my-4 text-center">
-	Užduočių: {numOfProblems || 'Kraunasi...'} | Kategorijų: {numOfCategories || 'Kraunasi...'}
+	Užduočių: {numOfProblems || '...'} | Kategorijų: {numOfCategories || '...'}
 </h3>
 
-<hr />
+<div class="my-8">
+	<hr class="border-y-1 border-black" />
+</div>
 <FindById />
-<hr />
+<div class="my-8">
+	<hr class="border-y-1 border-black" />
+</div>
 
 <div class="text-center">
 	<h1 class="text-2xl font-semibold my-4">Kategorijos</h1>
@@ -60,12 +57,6 @@
 	</p>
 </div>
 
-{#if loading}
-	<p class="text-center">Kraunasi...</p>
-{:else if error}
-	<p class="text-red-600 text-center">Klaida: {error}</p>
-{:else}
-	{#each Object.entries(categories) as [id, category]}
-		<CategoryComponent {category} />
-	{/each}
-{/if}
+{#each Object.entries(categories) as [id, category]}
+	<CategoryWithProblems {category} />
+{/each}

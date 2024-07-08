@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
-	import { problemApi } from '$services/apiService';
+	import { problemApi, problemOldApi } from '$services/apiService';
 	import type { Category, ProblemDisplayViewDto } from '$services/gen-client';
 	import { Accordion, AccordionItem } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
@@ -12,14 +12,8 @@
 	export let category: Category;
 
 	onMount(async () => {
-		try {
-			const response = await problemApi.getPublicProblemsByCategory(category.id);
-			problems = response.data;
-		} catch (e: any) {
-			error = e.message;
-		} finally {
-			loading = false;
-		}
+		const response = await problemOldApi.getPublicProblemsByCategory(category.id);
+		problems = response.data;
 	});
 </script>
 
