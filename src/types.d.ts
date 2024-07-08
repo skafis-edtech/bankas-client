@@ -26,4 +26,18 @@ export namespace Components {
 		categoryName: string;
 		source: string;
 	}
+
+	interface SourceCreateFormData {
+		name: string;
+		description: string;
+	}
+
+	interface ProblemCreateFormData {
+		problemText: string;
+		answerText: string;
+		problemImageFile: File | null;
+		answerImageFile: File | null;
+		problemImageUrl: string;
+		answerImageUrl: string;
+	}
 }
