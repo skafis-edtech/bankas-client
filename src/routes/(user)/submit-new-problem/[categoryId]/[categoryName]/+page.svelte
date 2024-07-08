@@ -4,7 +4,7 @@
 	import { get, writable, type Writable } from 'svelte/store';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import type { ProblemPostDto } from '$services/gen-client';
+	import type { ProblemPostDto, ProblemPostDtoOld } from '$services/gen-client';
 	import { problemApi, problemOldApi } from '$services/apiService';
 
 	let categoryId: string;
@@ -12,7 +12,7 @@
 	let categoryName: string;
 	$: categoryName = get(page).params.categoryName;
 
-	let problemData: Writable<ProblemPostDto> = writable({
+	let problemData: Writable<ProblemPostDtoOld> = writable({
 		problemText: '',
 		answerText: '',
 		categoryId: '',

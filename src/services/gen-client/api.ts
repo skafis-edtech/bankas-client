@@ -88,10 +88,10 @@ export interface CountDto {
 export interface FixMyUnderReviewProblemRequest {
     /**
      * 
-     * @type {ProblemPostDto}
+     * @type {ProblemPostDtoOld}
      * @memberof FixMyUnderReviewProblemRequest
      */
-    'problem': ProblemPostDto;
+    'problem': ProblemPostDtoOld;
     /**
      * 
      * @type {File}
@@ -256,13 +256,19 @@ export interface ProblemPostDto {
      * @type {string}
      * @memberof ProblemPostDto
      */
-    'problemImageUrl': string;
+    'skfCode': string;
     /**
      * 
      * @type {string}
      * @memberof ProblemPostDto
      */
-    'answerImageUrl': string;
+    'problemImagePath': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProblemPostDto
+     */
+    'answerImagePath': string;
     /**
      * 
      * @type {string}
@@ -291,6 +297,49 @@ export interface ProblemPostDto {
 /**
  * 
  * @export
+ * @interface ProblemPostDtoOld
+ */
+export interface ProblemPostDtoOld {
+    /**
+     * 
+     * @type {string}
+     * @memberof ProblemPostDtoOld
+     */
+    'problemImageUrl': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProblemPostDtoOld
+     */
+    'answerImageUrl': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProblemPostDtoOld
+     */
+    'problemText': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProblemPostDtoOld
+     */
+    'answerText': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProblemPostDtoOld
+     */
+    'categoryId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProblemPostDtoOld
+     */
+    'sourceId': string;
+}
+/**
+ * 
+ * @export
  * @interface ProblemsForAuthor
  */
 export interface ProblemsForAuthor {
@@ -306,37 +355,6 @@ export interface ProblemsForAuthor {
      * @memberof ProblemsForAuthor
      */
     'approvedProblems': Array<ProblemDisplayViewDto>;
-}
-/**
- * 
- * @export
- * @interface RecaptchaResponse
- */
-export interface RecaptchaResponse {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RecaptchaResponse
-     */
-    'success': boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof RecaptchaResponse
-     */
-    'challenge_ts'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RecaptchaResponse
-     */
-    'hostname'?: string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof RecaptchaResponse
-     */
-    'errorCodes'?: Array<string>;
 }
 /**
  * 
@@ -404,6 +422,12 @@ export interface Source {
      * @type {string}
      * @memberof Source
      */
+    'author': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Source
+     */
     'createdOn': string;
     /**
      * 
@@ -444,6 +468,12 @@ export interface SourcePostDto {
      * @type {string}
      * @memberof SourcePostDto
      */
+    'reviewStatus': SourcePostDtoReviewStatusEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof SourcePostDto
+     */
     'reviewedBy': string;
     /**
      * 
@@ -462,6 +492,12 @@ export interface SourcePostDto {
      * @type {string}
      * @memberof SourcePostDto
      */
+    'author': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SourcePostDto
+     */
     'createdOn': string;
     /**
      * 
@@ -470,6 +506,15 @@ export interface SourcePostDto {
      */
     'lastModifiedOn': string;
 }
+
+export const SourcePostDtoReviewStatusEnum = {
+    Pending: 'PENDING',
+    Rejected: 'REJECTED',
+    Approved: 'APPROVED'
+} as const;
+
+export type SourcePostDtoReviewStatusEnum = typeof SourcePostDtoReviewStatusEnum[keyof typeof SourcePostDtoReviewStatusEnum];
+
 /**
  * 
  * @export
@@ -747,113 +792,6 @@ export interface UserBioDto {
      */
     'bio': string;
 }
-
-/**
- * AuthControllerApi - axios parameter creator
- * @export
- */
-export const AuthControllerApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @param {string} token 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        validateRecaptcha: async (token: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'token' is not null or undefined
-            assertParamExists('validateRecaptcha', 'token', token)
-            const localVarPath = `/auth/validateRecaptcha`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            if (token !== undefined) {
-                localVarQueryParameter['token'] = token;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * AuthControllerApi - functional programming interface
- * @export
- */
-export const AuthControllerApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = AuthControllerApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @param {string} token 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async validateRecaptcha(token: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RecaptchaResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.validateRecaptcha(token, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AuthControllerApi.validateRecaptcha']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-    }
-};
-
-/**
- * AuthControllerApi - factory interface
- * @export
- */
-export const AuthControllerApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = AuthControllerApiFp(configuration)
-    return {
-        /**
-         * 
-         * @param {string} token 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        validateRecaptcha(token: string, options?: any): AxiosPromise<RecaptchaResponse> {
-            return localVarFp.validateRecaptcha(token, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * AuthControllerApi - object-oriented interface
- * @export
- * @class AuthControllerApi
- * @extends {BaseAPI}
- */
-export class AuthControllerApi extends BaseAPI {
-    /**
-     * 
-     * @param {string} token 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AuthControllerApi
-     */
-    public validateRecaptcha(token: string, options?: RawAxiosRequestConfig) {
-        return AuthControllerApiFp(this.configuration).validateRecaptcha(token, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
 
 /**
  * CategoryControllerApi - axios parameter creator
@@ -2787,13 +2725,13 @@ export const ProblemControllerOldApiAxiosParamCreator = function (configuration?
         /**
          *              **Logic**:             - If `problem.problemImageUrl` is a URL and `problemImageFile` is null, return `problemImagePath = problem.problemImage`.             - If `problem.problemImageUrl` is \"\" and `problemImageFile` is provided, upload the file and return `problemImagePath = \"problems/SKF-...\"`.             - If `problem.problemImageUrl` is \"\" and `problemImageFile` is null, return `problemImagePath = \"\"`.         
          * @summary USER. Careful! Complex file and text upload logic AND not easily testable file upload!
-         * @param {ProblemPostDto} problem 
+         * @param {ProblemPostDtoOld} problem 
          * @param {File} [problemImageFile] 
          * @param {File} [answerImageFile] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        submitProblem: async (problem: ProblemPostDto, problemImageFile?: File, answerImageFile?: File, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        submitProblem: async (problem: ProblemPostDtoOld, problemImageFile?: File, answerImageFile?: File, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'problem' is not null or undefined
             assertParamExists('submitProblem', 'problem', problem)
             const localVarPath = `/problemOld/submit`;
@@ -2969,13 +2907,13 @@ export const ProblemControllerOldApiFp = function(configuration?: Configuration)
         /**
          *              **Logic**:             - If `problem.problemImageUrl` is a URL and `problemImageFile` is null, return `problemImagePath = problem.problemImage`.             - If `problem.problemImageUrl` is \"\" and `problemImageFile` is provided, upload the file and return `problemImagePath = \"problems/SKF-...\"`.             - If `problem.problemImageUrl` is \"\" and `problemImageFile` is null, return `problemImagePath = \"\"`.         
          * @summary USER. Careful! Complex file and text upload logic AND not easily testable file upload!
-         * @param {ProblemPostDto} problem 
+         * @param {ProblemPostDtoOld} problem 
          * @param {File} [problemImageFile] 
          * @param {File} [answerImageFile] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async submitProblem(problem: ProblemPostDto, problemImageFile?: File, answerImageFile?: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UnderReviewProblem>> {
+        async submitProblem(problem: ProblemPostDtoOld, problemImageFile?: File, answerImageFile?: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UnderReviewProblem>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.submitProblem(problem, problemImageFile, answerImageFile, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProblemControllerOldApi.submitProblem']?.[localVarOperationServerIndex]?.url;
@@ -3084,13 +3022,13 @@ export const ProblemControllerOldApiFactory = function (configuration?: Configur
         /**
          *              **Logic**:             - If `problem.problemImageUrl` is a URL and `problemImageFile` is null, return `problemImagePath = problem.problemImage`.             - If `problem.problemImageUrl` is \"\" and `problemImageFile` is provided, upload the file and return `problemImagePath = \"problems/SKF-...\"`.             - If `problem.problemImageUrl` is \"\" and `problemImageFile` is null, return `problemImagePath = \"\"`.         
          * @summary USER. Careful! Complex file and text upload logic AND not easily testable file upload!
-         * @param {ProblemPostDto} problem 
+         * @param {ProblemPostDtoOld} problem 
          * @param {File} [problemImageFile] 
          * @param {File} [answerImageFile] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        submitProblem(problem: ProblemPostDto, problemImageFile?: File, answerImageFile?: File, options?: any): AxiosPromise<UnderReviewProblem> {
+        submitProblem(problem: ProblemPostDtoOld, problemImageFile?: File, answerImageFile?: File, options?: any): AxiosPromise<UnderReviewProblem> {
             return localVarFp.submitProblem(problem, problemImageFile, answerImageFile, options).then((request) => request(axios, basePath));
         },
     };
@@ -3214,14 +3152,14 @@ export class ProblemControllerOldApi extends BaseAPI {
     /**
      *              **Logic**:             - If `problem.problemImageUrl` is a URL and `problemImageFile` is null, return `problemImagePath = problem.problemImage`.             - If `problem.problemImageUrl` is \"\" and `problemImageFile` is provided, upload the file and return `problemImagePath = \"problems/SKF-...\"`.             - If `problem.problemImageUrl` is \"\" and `problemImageFile` is null, return `problemImagePath = \"\"`.         
      * @summary USER. Careful! Complex file and text upload logic AND not easily testable file upload!
-     * @param {ProblemPostDto} problem 
+     * @param {ProblemPostDtoOld} problem 
      * @param {File} [problemImageFile] 
      * @param {File} [answerImageFile] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProblemControllerOldApi
      */
-    public submitProblem(problem: ProblemPostDto, problemImageFile?: File, answerImageFile?: File, options?: RawAxiosRequestConfig) {
+    public submitProblem(problem: ProblemPostDtoOld, problemImageFile?: File, answerImageFile?: File, options?: RawAxiosRequestConfig) {
         return ProblemControllerOldApiFp(this.configuration).submitProblem(problem, problemImageFile, answerImageFile, options).then((request) => request(this.axios, this.basePath));
     }
 }

@@ -1,10 +1,10 @@
 <script lang="ts">
 	import ImageUploadTextarea from '$components/ui/ImageUploadTextarea.svelte';
-	import type { ProblemPostDto } from '$services/gen-client';
+	import type { ProblemPostDto, ProblemPostDtoOld } from '$services/gen-client';
 	import { Card } from 'flowbite-svelte';
 	import { type Writable } from 'svelte/store';
 
-	export let problemData: Writable<ProblemPostDto>;
+	export let problemData: Writable<ProblemPostDtoOld>;
 	export let problemImageFile: Writable<File | null>;
 	export let answerImageFile: Writable<File | null>;
 </script>

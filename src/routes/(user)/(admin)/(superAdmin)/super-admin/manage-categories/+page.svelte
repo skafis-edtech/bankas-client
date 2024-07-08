@@ -1,18 +1,8 @@
 <script lang="ts">
 	import { categoryApi } from '$services/apiService';
+	import type { Category, CategoryPostDto } from '$services/gen-client';
 	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
-
-	interface Category {
-		id: string;
-		name: string;
-		description: string;
-	}
-
-	interface CategoryPostDto {
-		name: string;
-		description: string;
-	}
 
 	let categories = writable<Category[]>([]);
 	let newCategory: CategoryPostDto = { name: '', description: '' };
@@ -75,31 +65,6 @@
 {/if}
 
 <div class="max-w-2xl mx-auto p-4">
-	<h2 class="text-2xl font-semibold mb-4">Create Category</h2>
-	<form on:submit|preventDefault={createCategory}>
-		<div class="mb-4">
-			<label class="block text-sm font-medium text-gray-700" for="name">Name</label>
-			<input
-				id="name"
-				type="text"
-				bind:value={newCategory.name}
-				class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-			/>
-		</div>
-		<div class="mb-4">
-			<label class="block text-sm font-medium text-gray-700" for="description">Description</label>
-			<input
-				id="description"
-				type="text"
-				bind:value={newCategory.description}
-				class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-			/>
-		</div>
-		<button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Create</button>
-	</form>
-</div>
-
-<div class="max-w-2xl mx-auto p-4">
 	<h2 class="text-2xl font-semibold mb-4">Categories</h2>
 	{#each $categories as category (category.id)}
 		<div class="p-4 bg-white rounded shadow mb-4">
@@ -135,8 +100,9 @@
 			{:else}
 				<div class="flex justify-between items-center">
 					<div>
-						<h3 class="text-lg font-semibold">{category.name}</h3>
-						<p class="text-gray-600">{category.description}</p>
+						<h3 class="text-lg font-semibold">{category.id}</h3>
+						<p class="text-gray-600"><strong>Name: </strong>{category.name}</p>
+						<p class="text-gray-600"><strong>Description: </strong>{category.description}</p>
 					</div>
 					<div>
 						<button
@@ -152,4 +118,29 @@
 			{/if}
 		</div>
 	{/each}
+</div>
+
+<div class="max-w-2xl mx-auto p-4">
+	<h2 class="text-2xl font-semibold mb-4">Create Category</h2>
+	<form on:submit|preventDefault={createCategory}>
+		<div class="mb-4">
+			<label class="block text-sm font-medium text-gray-700" for="name">Name</label>
+			<input
+				id="name"
+				type="text"
+				bind:value={newCategory.name}
+				class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+			/>
+		</div>
+		<div class="mb-4">
+			<label class="block text-sm font-medium text-gray-700" for="description">Description</label>
+			<input
+				id="description"
+				type="text"
+				bind:value={newCategory.description}
+				class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+			/>
+		</div>
+		<button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Create</button>
+	</form>
 </div>
