@@ -50,8 +50,10 @@
 <main>
 	<aside></aside>
 	<section><slot /></section>
-	<aside class="flex justify-end">
-		<div><button on:click={() => goto('/magic')}><p>:)</p></button></div>
+	<aside>
+		<div class="fixed left-0 bottom-0">
+			<button on:click={() => goto('/magic')}><p>.</p></button>
+		</div>
 	</aside>
 </main>
 <footer><Footer /></footer>

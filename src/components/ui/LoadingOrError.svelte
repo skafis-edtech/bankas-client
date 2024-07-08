@@ -21,11 +21,15 @@
 </script>
 
 {#if errorMsg && loading}
-	<Alert color="red" class="w-fit fixed right-2 bottom-2" border>Klaida: {errorMsg}</Alert>
+	<Alert dismissable color="red" class="w-fit fixed right-2 bottom-2" border
+		>Klaida: {errorMsg}</Alert
+	>
 	<Alert color="blue" class="w-fit fixed right-2 bottom-20" border>Įkeliama...</Alert>
 {:else}
 	{#if errorMsg}
-		<Alert color="red" class="w-fit fixed right-2 bottom-2" border>Klaida: {errorMsg}</Alert>
+		<Alert dismissable color="red" class="w-fit fixed right-2 bottom-2" border
+			>Klaida: {errorMsg}</Alert
+		>
 	{/if}
 	{#if loading}
 		<Alert color="blue" class="w-fit fixed right-2 bottom-2" border>Įkeliama...</Alert>

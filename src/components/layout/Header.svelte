@@ -36,17 +36,23 @@
 			><Button><HomeSolid class="mr-2" />Pradžia</Button></NavLi
 		>
 		{#if $user}
+			{#if $user.role === ROLES.SUPER_ADMIN}
+				<NavLi on:click={() => goto('/super-admin')} class="text-right"
+					><Button color="red">Super admin</Button></NavLi
+				>
+			{/if}
 			{#if $user.role === ROLES.ADMIN || $user.role === ROLES.SUPER_ADMIN}
 				<NavLi on:click={() => goto('/review-dashboard')} class="text-right"
 					><Button color="purple">Peržiūrėti</Button></NavLi
 				>
 			{:else}
-				<NavLi on:click={() => popup()} class="text-right"
-					><Button color="light">Peržiūrėti</Button></NavLi
-				>
+				<NavLi on:click={popup} class="text-right"><Button color="light">Peržiūrėti</Button></NavLi>
 			{/if}
 			<NavLi on:click={() => goto('/submit-dashboard')} class="text-right"
 				><Button color="green">Pateikti</Button></NavLi
+			>
+			<NavLi on:click={() => goto('/sort-dashboard')} class="text-right"
+				><Button color="blue">Rūšiuoti</Button></NavLi
 			>
 			<NavLi class="text-right" on:click={() => goto('/logout')}><Button>Atsijungti</Button></NavLi>
 		{:else}

@@ -52,16 +52,25 @@
 	}
 </script>
 
-<h1 class="text-4xl font-semibold my-4 text-center">Užduočių įkėlimas</h1>
-<h1 class="text-2xl font-semibold my-4 text-center">Kategorija: {categoryName}</h1>
+<h1 class="text-4xl font-semibold my-4 text-center">Užduočių rinkinio (šaltinio) įkėlimas</h1>
+<h3 class="text-lg text-red-600 text-center">Progresas nėra išsaugomas automatiškai!</h3>
 <p class="text-justify">
-	By clicking "Submit for review" you confirm that you upload only original problems, created by you
-	(which will wave your copyright rights and make it royalty-free) or problems that are already
-	royalty-free. It will be reviewed by admins and if it's approved, it will be public for everyone
-	to see and use (together with your username, but not email).
+	Spausdami mygtuką "Pateikti peržiūrai" Jūs patvirtinate, kad įkeliate tik Jūsų sukurtas
+	originalias užduotis arba užduotis, kurios jau yra pasiekiamos viešai. Pateikdami savo užduotis
+	atsisakote turtinių autorinių teisių į šias užduotis, leidžiate užduotimis naudotis bet kam.
+	Pateikdami kitų autorių užduotis patvirtinate, kad tie autoriai yra atsisakę turtinių autorinių
+	teisių bei taip pat leidžia naudotis užduotimis bet kam. Peržiūrėtos ir patvirtintos užduotys bus
+	paviešintos kartu su Jūsų prisijungimo vardu, bet ne el. paštu.
 </p>
 
-<Button on:click={() => goto('/submit-dashboard')} class="ml-4">Grįžti</Button>
+<Button
+	on:click={() => {
+		if (confirm('Duomenys nebus išsaugoti. Ar tikrai norite grįžti?')) {
+			goto('/submit-dashboard');
+		}
+	}}
+	class="ml-4">Grįžti</Button
+>
 <ProblemCreate bind:problemData bind:problemImageFile bind:answerImageFile />
 <Button on:click={() => submitProblem()}>Submit problem</Button>
 {#if loading}
