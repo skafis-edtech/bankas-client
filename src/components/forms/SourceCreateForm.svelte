@@ -1,8 +1,8 @@
 <script lang="ts">
+	import type { SourceSubmitDto } from '$services/gen-client';
 	import { Card, Input, Label } from 'flowbite-svelte';
-	import type { Components } from '../../types';
 
-	export let sourceData: Components.SourceCreateFormData;
+	export let sourceData: SourceSubmitDto;
 </script>
 
 <Card class="max-w-md mx-auto my-6 min-w-full p-6 bg-white rounded-lg shadow-md dark:bg-gray-800">

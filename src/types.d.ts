@@ -27,11 +27,6 @@ export namespace Components {
 		source: string;
 	}
 
-	interface SourceCreateFormData {
-		name: string;
-		description: string;
-	}
-
 	interface ProblemCreateFormData {
 		problemText: string;
 		answerText: string;

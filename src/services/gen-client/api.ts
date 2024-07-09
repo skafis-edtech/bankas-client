@@ -108,6 +108,19 @@ export interface FixMyUnderReviewProblemRequest {
 /**
  * 
  * @export
+ * @interface IdDto
+ */
+export interface IdDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof IdDto
+     */
+    'id': string;
+}
+/**
+ * 
+ * @export
  * @interface Problem
  */
 export interface Problem {
@@ -340,6 +353,37 @@ export interface ProblemPostDtoOld {
 /**
  * 
  * @export
+ * @interface ProblemSubmitDto
+ */
+export interface ProblemSubmitDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof ProblemSubmitDto
+     */
+    'problemImageUrl': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProblemSubmitDto
+     */
+    'answerImageUrl': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProblemSubmitDto
+     */
+    'problemText': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProblemSubmitDto
+     */
+    'answerText': string;
+}
+/**
+ * 
+ * @export
  * @interface ProblemsForAuthor
  */
 export interface ProblemsForAuthor {
@@ -515,6 +559,25 @@ export const SourcePostDtoReviewStatusEnum = {
 
 export type SourcePostDtoReviewStatusEnum = typeof SourcePostDtoReviewStatusEnum[keyof typeof SourcePostDtoReviewStatusEnum];
 
+/**
+ * 
+ * @export
+ * @interface SourceSubmitDto
+ */
+export interface SourceSubmitDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof SourceSubmitDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SourceSubmitDto
+     */
+    'description': string;
+}
 /**
  * 
  * @export
@@ -792,6 +855,223 @@ export interface UserBioDto {
      */
     'bio': string;
 }
+
+/**
+ * ApprovalControllerApi - axios parameter creator
+ * @export
+ */
+export const ApprovalControllerApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Doesn\'t work from swagger... responds with 415. Submit problem data with images for approval. Returns the ID of the created problem.
+         * @summary USER. Submit problem data with images
+         * @param {string} sourceId 
+         * @param {ProblemSubmitDto} problem 
+         * @param {File} [problemImageFile] 
+         * @param {File} [answerImageFile] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        submitProblem1: async (sourceId: string, problem: ProblemSubmitDto, problemImageFile?: File, answerImageFile?: File, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sourceId' is not null or undefined
+            assertParamExists('submitProblem1', 'sourceId', sourceId)
+            // verify required parameter 'problem' is not null or undefined
+            assertParamExists('submitProblem1', 'problem', problem)
+            const localVarPath = `/approval/submit/problem/{sourceId}`
+                .replace(`{${"sourceId"}}`, encodeURIComponent(String(sourceId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+            const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+            if (problem !== undefined) { 
+                localVarFormParams.append('problem', new Blob([JSON.stringify(problem)], { type: "application/json", }));
+            }
+    
+            if (problemImageFile !== undefined) { 
+                localVarFormParams.append('problemImageFile', problemImageFile as any);
+            }
+    
+            if (answerImageFile !== undefined) { 
+                localVarFormParams.append('answerImageFile', answerImageFile as any);
+            }
+    
+    
+            localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = localVarFormParams;
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Submit source data for approval. Returns the ID of the created source.
+         * @summary USER. Submit source data
+         * @param {SourceSubmitDto} sourceSubmitDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        submitSourceData: async (sourceSubmitDto: SourceSubmitDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sourceSubmitDto' is not null or undefined
+            assertParamExists('submitSourceData', 'sourceSubmitDto', sourceSubmitDto)
+            const localVarPath = `/approval/submit/source`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(sourceSubmitDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * ApprovalControllerApi - functional programming interface
+ * @export
+ */
+export const ApprovalControllerApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = ApprovalControllerApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Doesn\'t work from swagger... responds with 415. Submit problem data with images for approval. Returns the ID of the created problem.
+         * @summary USER. Submit problem data with images
+         * @param {string} sourceId 
+         * @param {ProblemSubmitDto} problem 
+         * @param {File} [problemImageFile] 
+         * @param {File} [answerImageFile] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async submitProblem1(sourceId: string, problem: ProblemSubmitDto, problemImageFile?: File, answerImageFile?: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<IdDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.submitProblem1(sourceId, problem, problemImageFile, answerImageFile, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ApprovalControllerApi.submitProblem1']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Submit source data for approval. Returns the ID of the created source.
+         * @summary USER. Submit source data
+         * @param {SourceSubmitDto} sourceSubmitDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async submitSourceData(sourceSubmitDto: SourceSubmitDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<IdDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.submitSourceData(sourceSubmitDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ApprovalControllerApi.submitSourceData']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * ApprovalControllerApi - factory interface
+ * @export
+ */
+export const ApprovalControllerApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = ApprovalControllerApiFp(configuration)
+    return {
+        /**
+         * Doesn\'t work from swagger... responds with 415. Submit problem data with images for approval. Returns the ID of the created problem.
+         * @summary USER. Submit problem data with images
+         * @param {string} sourceId 
+         * @param {ProblemSubmitDto} problem 
+         * @param {File} [problemImageFile] 
+         * @param {File} [answerImageFile] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        submitProblem1(sourceId: string, problem: ProblemSubmitDto, problemImageFile?: File, answerImageFile?: File, options?: any): AxiosPromise<IdDto> {
+            return localVarFp.submitProblem1(sourceId, problem, problemImageFile, answerImageFile, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Submit source data for approval. Returns the ID of the created source.
+         * @summary USER. Submit source data
+         * @param {SourceSubmitDto} sourceSubmitDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        submitSourceData(sourceSubmitDto: SourceSubmitDto, options?: any): AxiosPromise<IdDto> {
+            return localVarFp.submitSourceData(sourceSubmitDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * ApprovalControllerApi - object-oriented interface
+ * @export
+ * @class ApprovalControllerApi
+ * @extends {BaseAPI}
+ */
+export class ApprovalControllerApi extends BaseAPI {
+    /**
+     * Doesn\'t work from swagger... responds with 415. Submit problem data with images for approval. Returns the ID of the created problem.
+     * @summary USER. Submit problem data with images
+     * @param {string} sourceId 
+     * @param {ProblemSubmitDto} problem 
+     * @param {File} [problemImageFile] 
+     * @param {File} [answerImageFile] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApprovalControllerApi
+     */
+    public submitProblem1(sourceId: string, problem: ProblemSubmitDto, problemImageFile?: File, answerImageFile?: File, options?: RawAxiosRequestConfig) {
+        return ApprovalControllerApiFp(this.configuration).submitProblem1(sourceId, problem, problemImageFile, answerImageFile, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Submit source data for approval. Returns the ID of the created source.
+     * @summary USER. Submit source data
+     * @param {SourceSubmitDto} sourceSubmitDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApprovalControllerApi
+     */
+    public submitSourceData(sourceSubmitDto: SourceSubmitDto, options?: RawAxiosRequestConfig) {
+        return ApprovalControllerApiFp(this.configuration).submitSourceData(sourceSubmitDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
 
 /**
  * CategoryControllerApi - axios parameter creator

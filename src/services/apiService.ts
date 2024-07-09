@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {
+	ApprovalControllerApi,
 	CategoryControllerApi,
 	CategoryControllerOldApi,
 	ProblemControllerApi,
@@ -52,10 +53,20 @@ export const setAuthToken = (token: string | null) => {
 const categoryApi = new CategoryControllerApi(undefined, BASE_PATH, axiosInstance);
 const problemApi = new ProblemControllerApi(undefined, BASE_PATH, axiosInstance);
 const sourceApi = new SourceControllerApi(undefined, BASE_PATH, axiosInstance);
+const approvalApi = new ApprovalControllerApi(undefined, BASE_PATH, axiosInstance);
 
 const categoryOldApi = new CategoryControllerOldApi(undefined, BASE_PATH, axiosInstance);
 const problemOldApi = new ProblemControllerOldApi(undefined, BASE_PATH, axiosInstance);
 const userApi = new UserControllerApi(undefined, BASE_PATH, axiosInstance);
 const testApi = new TestControllerApi(undefined, BASE_PATH, axiosInstance);
 
-export { categoryApi, categoryOldApi, problemOldApi, problemApi, sourceApi, userApi, testApi };
+export {
+	categoryApi,
+	categoryOldApi,
+	problemOldApi,
+	problemApi,
+	sourceApi,
+	userApi,
+	testApi,
+	approvalApi
+};
