@@ -1,14 +1,15 @@
 <script lang="ts">
-	import { Label } from 'flowbite-svelte';
+	import { Button, Input, Label } from 'flowbite-svelte';
+	import { CloseOutline, TrashBinOutline, XSolid } from 'flowbite-svelte-icons';
 
 	export let value: string | undefined;
 	export let imageFile: File | null | undefined;
-
-	let uploadedImage: string | undefined;
-
+	export let imageUrl: string | undefined;
 	export let label: string;
 	export let id: string;
 	export let textareaClass: string = '';
+
+	let uploadedImage: string | undefined;
 
 	let isDragOver: boolean = false;
 
@@ -72,7 +73,7 @@
 		{id}
 		bind:value
 		placeholder="Įveskite tekstą ir/arba nutempkite arba įklijuokite paveikslėlį..."
-		class={`mt-1 block px-4 py-2 w-full text-lg text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${isDragOver ? 'bg-blue-100' : ''} ${textareaClass}`}
+		class={`mt-1 block px-4 py-2 w-full text-lg text-gray-900 bg-gray-50 rounded-lg border focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${isDragOver ? 'bg-blue-100' : ''} ${textareaClass}`}
 		on:input={handleInput}
 		on:dragover={handleDragOver}
 		on:dragleave={handleDragLeave}
@@ -80,10 +81,24 @@
 		on:paste={handlePaste}
 	></textarea>
 	{#if uploadedImage}
-		<div class="mt-2">
-			<img src={uploadedImage} alt="Uploaded" class="max-w-full h-auto rounded-lg border" />
+		<div class="my-6 relative w-fit border-black border-2">
+			<Button
+				color="red"
+				on:click={() => (uploadedImage = undefined)}
+				class="absolute top-[-15px] right-[-12px] w-5 h-5 bg-red-600 rounded-full flex items-center justify-center text-white hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-blue-300 p-0"
+				><CloseOutline class="w-full h-full p-0 m-0" /></Button
+			>
+			<img src={uploadedImage} alt="Uploaded" class="max-w-full h-auto" loading="lazy" />
 		</div>
 	{/if}
+	<div>
+		<Input
+			type="text"
+			bind:value={imageUrl}
+			placeholder="... arba įveskite paveikslėlio nuorodą..."
+			class="mt-1 block w-full px-4 py-2 text-lg"
+		/>
+	</div>
 </div>
 
 <style>

@@ -31,7 +31,7 @@
 	});
 </script>
 
-<h1 class="text-4xl font-semibold my-4 text-center">Uždavinių peržiūra</h1>
+<h1 class="text-4xl font-semibold my-4 text-center">Užduočių peržiūra</h1>
 {#if loading}
 	<p class="text-center">Kraunasi...</p>
 {/if}

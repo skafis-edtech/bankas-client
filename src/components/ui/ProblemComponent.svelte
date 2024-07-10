@@ -19,6 +19,7 @@
 				<img
 					src={problemMainData.problemImageSrc}
 					alt={`Užduoties ${problemMainData.skfCode} paveikslėlis`}
+					loading="lazy"
 					class="max-w-full h-auto object-cover text-left"
 				/>
 			</div>
@@ -35,6 +36,7 @@
 					<img
 						src={problemMainData.answerImageSrc}
 						alt={`Užduoties ${problemMainData.skfCode} atsakymo paveikslėlis`}
+						loading="lazy"
 						class="max-w-full h-auto object-cover"
 					/>
 				{/if}
