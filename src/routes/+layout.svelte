@@ -10,7 +10,7 @@
 	import Footer from '$components/layout/Footer.svelte';
 	import { setAuthToken } from '$services/apiService';
 	import { goto } from '$app/navigation';
-	import LoadingOrError from '$components/ui/LoadingOrError.svelte';
+	import GlobalAlert from '$components/ui/GlobalAlert.svelte';
 
 	const userStore: Writable<User | null> = writable(null);
 
@@ -57,7 +57,7 @@
 	</aside>
 </main>
 <footer><Footer /></footer>
-<LoadingOrError />
+<GlobalAlert />
 
 <style lang="scss">
 	header {

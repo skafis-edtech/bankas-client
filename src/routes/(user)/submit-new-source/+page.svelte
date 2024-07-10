@@ -7,8 +7,11 @@
 	import { PlusOutline, TrashBinSolid } from 'flowbite-svelte-icons';
 	import { approvalApi } from '$services/apiService';
 	import type { SourceSubmitDto } from '$services/gen-client';
+	import { successStore } from '$lib/stores';
 
 	let sourceId: string | null = null;
+	let isSourceSubmitted = false;
+	let isProblemSubmitted = [false];
 
 	let sourceData: SourceSubmitDto = {
 		name: '',
@@ -29,8 +32,9 @@
 	async function submitSource() {
 		console.log(sourceData, problems);
 		const idResponse = await approvalApi.submitSourceData(sourceData);
+		isSourceSubmitted = true;
 		sourceId = idResponse.data.id;
-		alert('Šaltinis pateiktas sėkmingai');
+		successStore.set('Šaltinis pateiktas sėkmingai');
 	}
 
 	async function submitProblem(index: number) {
@@ -49,12 +53,37 @@
 			problems[index].problemImageFile!!,
 			problems[index].answerImageFile!!
 		);
-		alert('Užduotis pateikta sėkmingai');
+		isProblemSubmitted[index] = true;
+		successStore.set('Užduotis pateikta sėkmingai');
+	}
+
+	function addProblem() {
+		problems = [
+			...problems,
+			{
+				problemText: '',
+				problemImageFile: null,
+				problemImageUrl: '',
+				answerText: '',
+				answerImageFile: null,
+				answerImageUrl: ''
+			}
+		];
+		isProblemSubmitted = [...isProblemSubmitted, false];
+	}
+
+	function removeProblem(index: number) {
+		problems = problems.filter((_, i) => i !== index);
+		isProblemSubmitted = isProblemSubmitted.filter((_, i) => i !== index);
 	}
 </script>
 
 <h1 class="text-4xl font-semibold my-4 text-center">Užduočių rinkinio įkėlimas</h1>
-<h3 class="text-lg text-red-600 text-center">Progresas nėra išsaugomas automatiškai!</h3>
+<div class="flex flex-row justify-between mx-4">
+	<Button on:click={() => goto('/submit-dashboard')} class="w-16">Grįžti</Button>
+	<h3 class="text-lg text-red-600 text-center">Progresas nėra išsaugomas automatiškai!</h3>
+	<div class="w-16"></div>
+</div>
 <p class="text-justify mx-4 my-4">
 	Spausdami mygtukus "Pateikti peržiūrai" Jūs patvirtinate, kad įkeliate tik savo sukurtas
 	originalias užduotis arba užduotis, kurios jau yra pasiekiamos viešai. Pateikdami savo užduotis
@@ -66,42 +95,31 @@
 
 <div class="relative">
 	<SourceCreateForm {sourceData} />
-	<Button color="purple" on:click={submitSource} class="w-fit absolute right-2 bottom-2"
-		>Pateikti peržiūrai</Button
+	<Button
+		disabled={isSourceSubmitted}
+		color="purple"
+		on:click={submitSource}
+		class="w-fit absolute right-2 bottom-2">Pateikti peržiūrai</Button
 	>
 </div>
 
-<p class="text-center">
+<p class="text-center mb-4">
 	Darydami ekrano nuotraukas rinkitės kiek įmanoma didesnį mastelį, kad būtų geresnė kokybė
 </p>
 
 {#each problems as problem, i}
 	<div class="relative">
-		<Button
-			color="red"
-			on:click={() => (problems = problems.filter((_, index) => index !== i))}
-			class="w-10 h-10 absolute right-2 top-2"><TrashBinSolid /></Button
+		<Button color="red" on:click={() => removeProblem(i)} class="w-10 h-10 absolute right-2 top-2"
+			><TrashBinSolid /></Button
 		>
 		<ProblemCreateForm problemData={problem} index={i} />
-		<Button color="purple" on:click={() => submitProblem(i)} class="w-fit absolute right-2 bottom-2"
-			>Pateikti peržiūrai</Button
+		<Button
+			disabled={isProblemSubmitted[i]}
+			color="purple"
+			on:click={() => submitProblem(i)}
+			class="w-fit absolute right-2 bottom-2">Pateikti peržiūrai</Button
 		>
 	</div>
 {/each}
 
-<Button
-	color="green"
-	on:click={() =>
-		(problems = [
-			...problems,
-			{
-				problemText: '',
-				problemImageFile: null,
-				problemImageUrl: '',
-				answerText: '',
-				answerImageFile: null,
-				answerImageUrl: ''
-			}
-		])}
-	class="w-full"><PlusOutline /></Button
->
+<Button color="green" on:click={addProblem} class="w-full"><PlusOutline /></Button>
