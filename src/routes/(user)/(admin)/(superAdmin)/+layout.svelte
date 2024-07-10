@@ -3,13 +3,19 @@
 	import { getContext, onMount } from 'svelte';
 	import type { AuthContext } from '../../../../types';
 	import { ROLES } from '$utils/constants';
+	import { authInitialized } from '$lib/stores';
 
 	const { user } = getContext('authContext') as AuthContext;
 
 	onMount(() => {
-		if (!$user || ![ROLES.SUPER_ADMIN].includes($user.role)) {
-			goto('/login');
-		}
+		const unsubscribe = authInitialized.subscribe((initialized) => {
+			if (initialized) {
+				if (!$user || ![ROLES.SUPER_ADMIN].includes($user.role)) {
+					goto('/login');
+				}
+				unsubscribe();
+			}
+		});
 	});
 </script>
 

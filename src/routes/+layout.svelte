@@ -11,6 +11,7 @@
 	import { setAuthToken } from '$services/apiService';
 	import { goto } from '$app/navigation';
 	import GlobalAlert from '$components/ui/GlobalAlert.svelte';
+	import { authInitialized } from '$lib/stores';
 
 	const userStore: Writable<User | null> = writable(null);
 
@@ -34,6 +35,7 @@
 			userStore.set(null);
 			setAuthToken(null);
 		}
+		authInitialized.set(true);
 	});
 
 	setContext<AuthContext>('authContext', { user: userStore, login: loginUser, logout });

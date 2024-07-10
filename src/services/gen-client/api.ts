@@ -863,6 +863,40 @@ export interface UserBioDto {
 export const ApprovalControllerApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * Get all sources submitted by the current user.
+         * @summary USER. Get my sources
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMySources: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/approval/sources/my`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Doesn\'t work from swagger... responds with 415. Submit problem data with images for approval. Returns the ID of the created problem.
          * @summary USER. Submit problem data with images
          * @param {string} sourceId 
@@ -972,6 +1006,18 @@ export const ApprovalControllerApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = ApprovalControllerApiAxiosParamCreator(configuration)
     return {
         /**
+         * Get all sources submitted by the current user.
+         * @summary USER. Get my sources
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMySources(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Source>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMySources(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ApprovalControllerApi.getMySources']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Doesn\'t work from swagger... responds with 415. Submit problem data with images for approval. Returns the ID of the created problem.
          * @summary USER. Submit problem data with images
          * @param {string} sourceId 
@@ -1011,6 +1057,15 @@ export const ApprovalControllerApiFactory = function (configuration?: Configurat
     const localVarFp = ApprovalControllerApiFp(configuration)
     return {
         /**
+         * Get all sources submitted by the current user.
+         * @summary USER. Get my sources
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMySources(options?: any): AxiosPromise<Array<Source>> {
+            return localVarFp.getMySources(options).then((request) => request(axios, basePath));
+        },
+        /**
          * Doesn\'t work from swagger... responds with 415. Submit problem data with images for approval. Returns the ID of the created problem.
          * @summary USER. Submit problem data with images
          * @param {string} sourceId 
@@ -1043,6 +1098,17 @@ export const ApprovalControllerApiFactory = function (configuration?: Configurat
  * @extends {BaseAPI}
  */
 export class ApprovalControllerApi extends BaseAPI {
+    /**
+     * Get all sources submitted by the current user.
+     * @summary USER. Get my sources
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApprovalControllerApi
+     */
+    public getMySources(options?: RawAxiosRequestConfig) {
+        return ApprovalControllerApiFp(this.configuration).getMySources(options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Doesn\'t work from swagger... responds with 415. Submit problem data with images for approval. Returns the ID of the created problem.
      * @summary USER. Submit problem data with images

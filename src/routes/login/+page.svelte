@@ -6,12 +6,15 @@
 	import { getContext } from 'svelte';
 	import { derived } from 'svelte/store';
 	import type { AuthContext } from '../../types';
+	import { page } from '$app/stores';
 
 	let username = '';
 	let password = '';
 	let errorMessage = '';
 
 	const { user, login } = getContext('authContext') as AuthContext;
+
+	const redirectUrl: string | null = $page.url.searchParams.get('redirect');
 
 	const userLoaded = derived(user, ($user, set) => {
 		if ($user) {
@@ -21,7 +24,9 @@
 
 	const redirectLoggedInUser = () => {
 		if ($user) {
-			if ($user.role === ROLES.ADMIN) {
+			if (redirectUrl) {
+				goto(redirectUrl);
+			} else if ($user.role === ROLES.ADMIN) {
 				goto('/review-dashboard');
 			} else if ($user.role === ROLES.USER) {
 				goto('/submit-dashboard');
