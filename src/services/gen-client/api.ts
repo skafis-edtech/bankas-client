@@ -869,7 +869,7 @@ export const ApprovalControllerApiAxiosParamCreator = function (configuration?: 
          * @throws {RequiredError}
          */
         getMySources: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/approval/sources/my`;
+            const localVarPath = `/approval/mySources`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;

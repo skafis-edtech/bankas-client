@@ -1,21 +1,28 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { getContext, onMount } from 'svelte';
+	import { getContext, onDestroy, onMount } from 'svelte';
 	import type { AuthContext } from '../../../types';
 	import { ROLES } from '$utils/constants';
 	import { authInitialized } from '$lib/stores';
 
 	const { user } = getContext('authContext') as AuthContext;
 
+	let unsubscribe: () => void;
+
 	onMount(() => {
-		const unsubscribe = authInitialized.subscribe((initialized) => {
+		unsubscribe = authInitialized.subscribe((initialized) => {
 			if (initialized) {
 				if (!$user || ![ROLES.ADMIN, ROLES.SUPER_ADMIN].includes($user.role)) {
-					goto('/login');
+					goto(`/login?redirect=${window.location.pathname}`);
 				}
-				unsubscribe();
 			}
 		});
+	});
+
+	onDestroy(() => {
+		if (unsubscribe) {
+			unsubscribe();
+		}
 	});
 </script>
 

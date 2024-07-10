@@ -1,13 +1,15 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { getContext, onMount } from 'svelte';
 	import FindById from '$components/layout/FindById.svelte';
 	import type { Category } from '$services/gen-client';
 	import { categoryOldApi, problemOldApi } from '$services/apiService';
 	import CategoryWithProblems from '$components/layout/CategoryWithProblems.svelte';
 	import { Alert } from 'flowbite-svelte';
+	import type { AuthContext } from '../types';
+
+	const { user } = getContext('authContext') as AuthContext;
 
 	let categories: Category[] = [];
-
 	let numOfProblems: number | null = null;
 	let numOfCategories: number | null = null;
 
@@ -48,13 +50,15 @@
 </div>
 
 <div class="text-center">
-	<h1 class="text-2xl font-semibold my-4">Kategorijos</h1>
-	<p>
-		Norite įkelti savo užduotis ar patvirtinti pateiktas kitų? <a
-			class="text-blue-800 underline"
-			href="/register">Registruokitės!</a
-		>
-	</p>
+	<h1 class="text-2xl font-semibold my-6">Kategorijos</h1>
+	{#if !$user}
+		<p>
+			Norite įkelti savo užduotis ar patvirtinti pateiktas kitų? <a
+				class="text-blue-800 underline"
+				href="/register">Registruokitės!</a
+			>
+		</p>
+	{/if}
 </div>
 
 {#each Object.entries(categories) as [id, category]}
