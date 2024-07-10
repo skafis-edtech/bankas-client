@@ -27,36 +27,11 @@
 		problems = response.data;
 		isLoaded.set(true);
 	}
-
-	function handleDelete(id: string) {
-		console.log('This will delete source with id:', id);
-	}
 </script>
 
 <Accordion>
 	<AccordionItem bind:open={isOpen} class="bg-slate-200 my-4">
-		<span slot="header" class="text-black"
-			>{source.name}
-			{#if source.reviewStatus === SourceReviewStatusEnum.Pending}
-				<Badge color="yellow" class="ml-2">Peržiūrima</Badge>
-			{/if}
-			{#if source.reviewStatus === SourceReviewStatusEnum.Rejected}
-				<Badge color="red" class="ml-2">Atmesta</Badge>
-			{/if}
-			{#if source.reviewStatus === SourceReviewStatusEnum.Approved}
-				<Badge color="green" class="ml-2">Patvirtinta</Badge>
-			{/if}
-			<Button
-				color="red"
-				on:click={() => alert('Neįgyvendinta. Kvies funkciją handleDelete(source.id)')}
-				class="p-2 mx-1"><TrashBinSolid /></Button
-			>
-			<Button
-				color="yellow"
-				on:click={() => alert('Neįgyvendinta. Keliaus į puslapį /edit-source/${source.id}')}
-				class="p-2 mx-1"><EditOutline /></Button
-			>
-		</span>
+		<span slot="header" class="text-black">{source.name} </span>
 		<div class="container mx-auto">
 			{#each problems as problem (problem.id)}
 				<div class="my-3">
