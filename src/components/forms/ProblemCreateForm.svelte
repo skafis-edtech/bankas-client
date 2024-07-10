@@ -11,7 +11,7 @@
 	<h2 class="text-center text-2xl font-semibold text-gray-700 dark:text-white">
 		Užduotis {index + 1}
 	</h2>
-	<div class="flex flex-col relative">
+	<div class="flex flex-col relative mb-8">
 		<ImageUploadTextarea
 			bind:value={problemData.problemText}
 			bind:imageFile={problemData.problemImageFile}

@@ -9,7 +9,7 @@
 	<h2 class="text-center text-2xl font-semibold text-gray-700 dark:text-white">
 		Šaltinio informacija
 	</h2>
-	<div class="space-y-6 my-4">
+	<div class="space-y-6 mt-4 mb-8">
 		<div>
 			<Label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
 				Pavadinimas
