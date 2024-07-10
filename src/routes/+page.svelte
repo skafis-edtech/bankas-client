@@ -27,11 +27,11 @@
 </script>
 
 <h1 class="text-4xl font-semibold my-4 text-center">Skafis užduočių bankas</h1>
-<div class="flex justify-center">
+<!-- <div class="flex justify-center">
 	<Alert border color="red" class="w-fit"
 		>Dėmesio! Šis tinklapis nėra pilnai funkcionalus. Yra vykdomas tinklapio kūrimas.</Alert
 	>
-</div>
+</div> -->
 
 <h3 class="text-md font-semibold my-4 text-center">
 	Mokytojų pasidalintos originalios užduotys surūšiuotos į temas (kategorijas)

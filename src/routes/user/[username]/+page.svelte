@@ -10,8 +10,6 @@
 	const { user } = getContext('authContext') as AuthContext;
 
 	let username;
-	let error = '';
-	let loading = true;
 	let bio = '';
 
 	let editingState = false;
@@ -20,14 +18,8 @@
 	$: username = get(page).params.username;
 
 	onMount(async () => {
-		try {
-			const response = await userApi.getBio(username);
-			bio = response.data.bio;
-		} catch (e: any) {
-			error = e.message;
-		} finally {
-			loading = false;
-		}
+		const response = await userApi.getBio(username);
+		bio = response.data.bio;
 	});
 
 	function startEditing() {
@@ -40,15 +32,9 @@
 	}
 
 	async function saveEdit() {
-		userApi
-			.updateBio({ bio: editedBio })
-			.then(() => {
-				editingState = false;
-				bio = editedBio;
-			})
-			.catch((e: any) => {
-				error = e.message;
-			});
+		await userApi.updateBio({ bio: editedBio });
+		editingState = false;
+		bio = editedBio;
 	}
 </script>
 
@@ -58,14 +44,8 @@
 	<UserSolid class="h-6 w-6 self-center" />
 </div>
 
-{#if loading}
-	<p class="text-center">Kraunasi...</p>
-{/if}
-{#if error}
-	<p class="text-red-600 text-center">Klaida: {error}</p>
-{/if}
 {#if !editingState}
-	<h3 class="text-lg font-semibold my-4 text-center">{bio}</h3>
+	<h3 class="text-lg font-semibold my-4 text-center text-wrap break-words max-w-full">{bio}</h3>
 {:else}
 	<form class="flex flex-col items-center" on:submit={() => saveEdit()}>
 		<textarea bind:value={editedBio} class="h-32 w-10/12 p-2 border border-gray-300 rounded-md mb-4"
