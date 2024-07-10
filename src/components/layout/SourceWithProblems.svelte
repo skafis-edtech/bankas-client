@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
-	import { problemOldApi } from '$services/apiService';
+	import { approvalApi } from '$services/apiService';
 	import {
 		SourceReviewStatusEnum,
 		type ProblemDisplayViewDto,
@@ -22,11 +22,10 @@
 	}
 
 	async function loadProblems() {
-		alert('This will load problems for source with id: ' + source.id);
-		// if (!isOpen || $isLoaded) return;
-		// const response = await problemOldApi.getPublicProblemsByCategory(category.id);
-		// problems = response.data;
-		// isLoaded.set(true);
+		if (!isOpen || $isLoaded) return;
+		const response = await approvalApi.getProblemsBySource(source.id);
+		problems = response.data;
+		isLoaded.set(true);
 	}
 
 	function handleDelete(id: string) {
@@ -47,11 +46,15 @@
 			{#if source.reviewStatus === SourceReviewStatusEnum.Approved}
 				<Badge color="green" class="ml-2">Patvirtinta</Badge>
 			{/if}
-			<Button color="red" on:click={() => handleDelete(source.id)} class="p-2 mx-1"
-				><TrashBinSolid /></Button
+			<Button
+				color="red"
+				on:click={() => alert('Neįgyvendinta. Kvies funkciją handleDelete(source.id)')}
+				class="p-2 mx-1"><TrashBinSolid /></Button
 			>
-			<Button color="yellow" on:click={() => goto(`/edit-source/${source.id}`)} class="p-2 mx-1"
-				><EditOutline /></Button
+			<Button
+				color="yellow"
+				on:click={() => alert('Neįgyvendinta. Keliaus į puslapį /edit-source/${source.id}')}
+				class="p-2 mx-1"><EditOutline /></Button
 			>
 		</span>
 		<div class="container mx-auto">
@@ -59,14 +62,14 @@
 				<div class="my-3">
 					<ProblemComponent
 						problemMainData={{
-							skfCode: problem.skfCode,
+							skfCode: problem.skfCode === '' ? problem.id : problem.skfCode,
 							problemText: problem.problemText,
 							problemImageSrc: problem.problemImageSrc,
 							answerText: problem.answerText,
 							answerImageSrc: problem.answerImageSrc
 						}}
 						problemMetaData={{
-							author: problem.author,
+							author: source.author,
 							categoryName: 'Dar neįgyvendinta...',
 							source: source.name
 						}}

@@ -38,7 +38,7 @@
 							answerImageSrc: problem.answerImageSrc
 						}}
 						problemMetaData={{
-							author: problem.author,
+							author: 'Dar neįgyvendinta...',
 							categoryName: category.name,
 							source: 'Dar neįgyvendinta...'
 						}}
