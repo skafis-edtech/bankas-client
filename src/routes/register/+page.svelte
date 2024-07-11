@@ -67,7 +67,7 @@
 	<form on:submit|preventDefault={register} class="space-y-6">
 		<div>
 			<Label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-				>El. paštas</Label
+				>El. paštas (nebus matomas kitiems)</Label
 			>
 			<Input
 				id="email"
@@ -80,7 +80,7 @@
 		</div>
 		<div>
 			<Label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-				>Prisijungimo vardas</Label
+				>Prisijungimo vardas (bus matomas visiems)</Label
 			>
 			<Input
 				id="username"
