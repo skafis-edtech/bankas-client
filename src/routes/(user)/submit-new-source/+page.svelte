@@ -42,7 +42,7 @@
 			alert('Pirma pateikite šaltinį');
 			return;
 		}
-		await approvalApi.submitProblem1(
+		await approvalApi.submitProblem(
 			sourceId,
 			{
 				problemText: problems[index].problemText,

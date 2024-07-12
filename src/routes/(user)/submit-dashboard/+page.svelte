@@ -17,7 +17,13 @@
 
 <h1 class="text-4xl font-semibold my-4 text-center">Užduočių pateikimas</h1>
 {#each sources as source (source.id)}
-	<SourceManageBar reviewStatus={source.reviewStatus} />
+	<SourceManageBar
+		reviewStatus={source.reviewStatus}
+		sourceId={source.id}
+		reviewMessage={source.reviewMessage}
+		reviewedOn={source.reviewedOn}
+		reviewedBy={source.reviewedBy}
+	/>
 	<SourceWithProblems {source} />
 {/each}
 <Button color="green" on:click={() => goto('/submit-new-source')} class="w-full"

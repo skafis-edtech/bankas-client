@@ -513,44 +513,6 @@ export interface UserBioDto {
 export const ApprovalControllerApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Delete source with all problems by ID.
-         * @summary USER but owning. Delete source with all problems
-         * @param {string} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        _delete: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('_delete', 'id', id)
-            const localVarPath = `/approval/source/delete/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
          * Approve source with problems by source ID.
          * @summary ADMIN. Approve source with problems
          * @param {string} sourceId 
@@ -605,6 +567,44 @@ export const ApprovalControllerApiAxiosParamCreator = function (configuration?: 
             // verify required parameter 'id' is not null or undefined
             assertParamExists('deleteProblem1', 'id', id)
             const localVarPath = `/approval/problem/delete/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Delete source with all problems by ID.
+         * @summary USER but owning. Delete source with all problems
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteSource1: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deleteSource1', 'id', id)
+            const localVarPath = `/approval/source/delete/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -944,19 +944,6 @@ export const ApprovalControllerApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = ApprovalControllerApiAxiosParamCreator(configuration)
     return {
         /**
-         * Delete source with all problems by ID.
-         * @summary USER but owning. Delete source with all problems
-         * @param {string} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async _delete(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator._delete(id, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ApprovalControllerApi._delete']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
          * Approve source with problems by source ID.
          * @summary ADMIN. Approve source with problems
          * @param {string} sourceId 
@@ -981,6 +968,19 @@ export const ApprovalControllerApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteProblem1(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApprovalControllerApi.deleteProblem1']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Delete source with all problems by ID.
+         * @summary USER but owning. Delete source with all problems
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteSource1(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteSource1(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ApprovalControllerApi.deleteSource1']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -1090,16 +1090,6 @@ export const ApprovalControllerApiFactory = function (configuration?: Configurat
     const localVarFp = ApprovalControllerApiFp(configuration)
     return {
         /**
-         * Delete source with all problems by ID.
-         * @summary USER but owning. Delete source with all problems
-         * @param {string} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        _delete(id: string, options?: any): AxiosPromise<void> {
-            return localVarFp._delete(id, options).then((request) => request(axios, basePath));
-        },
-        /**
          * Approve source with problems by source ID.
          * @summary ADMIN. Approve source with problems
          * @param {string} sourceId 
@@ -1119,6 +1109,16 @@ export const ApprovalControllerApiFactory = function (configuration?: Configurat
          */
         deleteProblem1(id: string, options?: any): AxiosPromise<void> {
             return localVarFp.deleteProblem1(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Delete source with all problems by ID.
+         * @summary USER but owning. Delete source with all problems
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteSource1(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteSource1(id, options).then((request) => request(axios, basePath));
         },
         /**
          * Get all sources submitted by the current user.
@@ -1206,18 +1206,6 @@ export const ApprovalControllerApiFactory = function (configuration?: Configurat
  */
 export class ApprovalControllerApi extends BaseAPI {
     /**
-     * Delete source with all problems by ID.
-     * @summary USER but owning. Delete source with all problems
-     * @param {string} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ApprovalControllerApi
-     */
-    public _delete(id: string, options?: RawAxiosRequestConfig) {
-        return ApprovalControllerApiFp(this.configuration)._delete(id, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
      * Approve source with problems by source ID.
      * @summary ADMIN. Approve source with problems
      * @param {string} sourceId 
@@ -1240,6 +1228,18 @@ export class ApprovalControllerApi extends BaseAPI {
      */
     public deleteProblem1(id: string, options?: RawAxiosRequestConfig) {
         return ApprovalControllerApiFp(this.configuration).deleteProblem1(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Delete source with all problems by ID.
+     * @summary USER but owning. Delete source with all problems
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApprovalControllerApi
+     */
+    public deleteSource1(id: string, options?: RawAxiosRequestConfig) {
+        return ApprovalControllerApiFp(this.configuration).deleteSource1(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1843,9 +1843,9 @@ export const ProblemControllerApiAxiosParamCreator = function (configuration?: C
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProblemById1: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getProblemById: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
-            assertParamExists('getProblemById1', 'id', id)
+            assertParamExists('getProblemById', 'id', id)
             const localVarPath = `/problem/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -2001,10 +2001,10 @@ export const ProblemControllerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getProblemById1(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Problem>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getProblemById1(id, options);
+        async getProblemById(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Problem>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getProblemById(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ProblemControllerApi.getProblemById1']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ProblemControllerApi.getProblemById']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -2073,8 +2073,8 @@ export const ProblemControllerApiFactory = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProblemById1(id: string, options?: any): AxiosPromise<Problem> {
-            return localVarFp.getProblemById1(id, options).then((request) => request(axios, basePath));
+        getProblemById(id: string, options?: any): AxiosPromise<Problem> {
+            return localVarFp.getProblemById(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2143,8 +2143,8 @@ export class ProblemControllerApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ProblemControllerApi
      */
-    public getProblemById1(id: string, options?: RawAxiosRequestConfig) {
-        return ProblemControllerApiFp(this.configuration).getProblemById1(id, options).then((request) => request(this.axios, this.basePath));
+    public getProblemById(id: string, options?: RawAxiosRequestConfig) {
+        return ProblemControllerApiFp(this.configuration).getProblemById(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2283,15 +2283,15 @@ export const PublicControllerApiAxiosParamCreator = function (configuration?: Co
         },
         /**
          * 
-         * @param {string} problemId 
+         * @param {string} skfCode 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProblemById: async (problemId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'problemId' is not null or undefined
-            assertParamExists('getProblemById', 'problemId', problemId)
-            const localVarPath = `/public/problem/{problemId}`
-                .replace(`{${"problemId"}}`, encodeURIComponent(String(problemId)));
+        getProblemBySkfCode: async (skfCode: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'skfCode' is not null or undefined
+            assertParamExists('getProblemBySkfCode', 'skfCode', skfCode)
+            const localVarPath = `/public/problem/{skfCode}`
+                .replace(`{${"skfCode"}}`, encodeURIComponent(String(skfCode)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2508,14 +2508,14 @@ export const PublicControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} problemId 
+         * @param {string} skfCode 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getProblemById(problemId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProblemDisplayViewDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getProblemById(problemId, options);
+        async getProblemBySkfCode(skfCode: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProblemDisplayViewDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getProblemBySkfCode(skfCode, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['PublicControllerApi.getProblemById']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['PublicControllerApi.getProblemBySkfCode']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -2602,12 +2602,12 @@ export const PublicControllerApiFactory = function (configuration?: Configuratio
         },
         /**
          * 
-         * @param {string} problemId 
+         * @param {string} skfCode 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProblemById(problemId: string, options?: any): AxiosPromise<ProblemDisplayViewDto> {
-            return localVarFp.getProblemById(problemId, options).then((request) => request(axios, basePath));
+        getProblemBySkfCode(skfCode: string, options?: any): AxiosPromise<ProblemDisplayViewDto> {
+            return localVarFp.getProblemBySkfCode(skfCode, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2687,13 +2687,13 @@ export class PublicControllerApi extends BaseAPI {
 
     /**
      * 
-     * @param {string} problemId 
+     * @param {string} skfCode 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PublicControllerApi
      */
-    public getProblemById(problemId: string, options?: RawAxiosRequestConfig) {
-        return PublicControllerApiFp(this.configuration).getProblemById(problemId, options).then((request) => request(this.axios, this.basePath));
+    public getProblemBySkfCode(skfCode: string, options?: RawAxiosRequestConfig) {
+        return PublicControllerApiFp(this.configuration).getProblemBySkfCode(skfCode, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

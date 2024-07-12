@@ -2,6 +2,7 @@
 	import { Button, Dropdown } from 'flowbite-svelte';
 	import { InfoCircleOutline } from 'flowbite-svelte-icons';
 	import type { Components } from '../../types';
+	import AuthorLink from './AuthorLink.svelte';
 
 	export let problemMetaData: Components.ProblemMetaData;
 </script>
@@ -10,9 +11,7 @@
 <Dropdown class="p-4 w-96">
 	<ul>
 		<li>
-			<strong>Autorius: </strong><a href="/user/{problemMetaData.author}" class="underline"
-				>{problemMetaData.author}</a
-			>
+			<strong>Autorius: </strong><AuthorLink author={problemMetaData.author} />
 		</li>
 		<li><strong>Kategorija: </strong> {problemMetaData.categoryName} (bus # nuoroda)</li>
 		<li><strong>Šaltinis: </strong> {problemMetaData.source} (bus nuoroda)</li>

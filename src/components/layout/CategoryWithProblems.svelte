@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
-	import { problemOldApi } from '$services/apiService';
+	import { publicApi } from '$services/apiService';
 	import type { Category, ProblemDisplayViewDto } from '$services/gen-client';
 	import { Accordion, AccordionItem } from 'flowbite-svelte';
 	import { writable } from 'svelte/store';
@@ -17,7 +17,7 @@
 
 	async function loadProblems() {
 		if (!isOpen || $isLoaded) return;
-		const response = await problemOldApi.getPublicProblemsByCategory(category.id);
+		const response = await publicApi.getProblemsByCategory(category.id);
 		problems = response.data;
 		isLoaded.set(true);
 	}
@@ -26,6 +26,7 @@
 <Accordion>
 	<AccordionItem bind:open={isOpen} class="bg-slate-200 my-4">
 		<span slot="header" class="text-black">{category.name}</span>
+		<div>{category.description}</div>
 		<div class="container mx-auto">
 			{#each problems as problem (problem.id)}
 				<div class="my-3">

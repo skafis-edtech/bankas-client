@@ -2,10 +2,9 @@
 	import { getContext, onMount } from 'svelte';
 	import FindById from '$components/layout/FindById.svelte';
 	import type { Category } from '$services/gen-client';
-	import { categoryOldApi, problemOldApi } from '$services/apiService';
 	import CategoryWithProblems from '$components/layout/CategoryWithProblems.svelte';
-	import { Alert } from 'flowbite-svelte';
 	import type { AuthContext } from '../types';
+	import { publicApi } from '$services/apiService';
 
 	const { user } = getContext('authContext') as AuthContext;
 
@@ -15,9 +14,9 @@
 
 	onMount(async () => {
 		const [categoriesRes, problemsCountRes, categoriesCountRes] = await Promise.all([
-			categoryOldApi.getAllPublicCategories(),
-			problemOldApi.getPublicProblemsCount(),
-			categoryOldApi.getPublicCategoriesCount()
+			publicApi.getCategories(),
+			publicApi.getProblemsCount(),
+			publicApi.getCategoriesCount()
 		]);
 
 		categories = categoriesRes.data;

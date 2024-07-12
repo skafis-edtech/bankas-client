@@ -1,14 +1,8 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
 	import { approvalApi } from '$services/apiService';
-	import {
-		SourceReviewStatusEnum,
-		type ProblemDisplayViewDto,
-		type Source
-	} from '$services/gen-client';
+	import { type ProblemDisplayViewDto, type Source } from '$services/gen-client';
 	import { Accordion, AccordionItem, Badge, Button } from 'flowbite-svelte';
-	import { EditOutline, TrashBinSolid } from 'flowbite-svelte-icons';
 	import { writable } from 'svelte/store';
 
 	export let source: Source;
