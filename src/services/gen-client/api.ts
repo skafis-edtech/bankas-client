@@ -2262,10 +2262,6 @@ export const PublicControllerApiAxiosParamCreator = function (configuration?: Co
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -2294,10 +2290,6 @@ export const PublicControllerApiAxiosParamCreator = function (configuration?: Co
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -2332,10 +2324,6 @@ export const PublicControllerApiAxiosParamCreator = function (configuration?: Co
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -2368,10 +2356,6 @@ export const PublicControllerApiAxiosParamCreator = function (configuration?: Co
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -2406,10 +2390,6 @@ export const PublicControllerApiAxiosParamCreator = function (configuration?: Co
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -2438,10 +2418,6 @@ export const PublicControllerApiAxiosParamCreator = function (configuration?: Co
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -2472,10 +2448,6 @@ export const PublicControllerApiAxiosParamCreator = function (configuration?: Co
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -2488,7 +2460,8 @@ export const PublicControllerApiAxiosParamCreator = function (configuration?: Co
             };
         },
         /**
-         * 
+         * Get source by ID. Returns source entity.
+         * @summary PUBLIC if approved, USER if owned, ADMIN else
          * @param {string} sourceId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2545,10 +2518,6 @@ export const PublicControllerApiAxiosParamCreator = function (configuration?: Co
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -2652,7 +2621,8 @@ export const PublicControllerApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Get source by ID. Returns source entity.
+         * @summary PUBLIC if approved, USER if owned, ADMIN else
          * @param {string} sourceId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2745,7 +2715,8 @@ export const PublicControllerApiFactory = function (configuration?: Configuratio
             return localVarFp.getProblemsUnsorted(options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Get source by ID. Returns source entity.
+         * @summary PUBLIC if approved, USER if owned, ADMIN else
          * @param {string} sourceId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2846,7 +2817,8 @@ export class PublicControllerApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Get source by ID. Returns source entity.
+     * @summary PUBLIC if approved, USER if owned, ADMIN else
      * @param {string} sourceId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
