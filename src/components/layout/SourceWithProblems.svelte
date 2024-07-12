@@ -32,7 +32,7 @@
 		<p>
 			<AuthorLink author={source.author} />
 		</p>
-		<p>sukurta: {getNiceTimeString(source.reviewedOn)}</p>
+		<p>sukurta: {getNiceTimeString(source.createdOn)}</p>
 		<p>pakeista: {getNiceTimeString(source.lastModifiedOn)}</p>
 		<div class="container mx-auto">
 			{#each problems as problem (problem.id)}

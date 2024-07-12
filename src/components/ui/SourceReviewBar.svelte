@@ -38,11 +38,13 @@
 	async function reject() {
 		approvalApi.reject(sourceId, { reviewMessage: newMessage });
 		successStore.set('Sėkmingai atmesta');
+		bgForBar = 'bg-slate-400';
 	}
 
 	async function approve() {
 		approvalApi.approve(sourceId, { reviewMessage: newMessage });
 		successStore.set('Sėkmingai patvirtinta');
+		bgForBar = 'bg-slate-300';
 	}
 </script>
 

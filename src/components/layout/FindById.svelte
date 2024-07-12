@@ -55,12 +55,9 @@
 				problemText: problemDisplayViewDto.problemText,
 				problemImageSrc: problemDisplayViewDto.problemImageSrc,
 				answerText: problemDisplayViewDto.answerText,
-				answerImageSrc: problemDisplayViewDto.answerImageSrc
-			}}
-			problemMetaData={{
-				author: 'Dar neįgyvendinta...',
-				categoryName: 'Dar neįgyvendinta...',
-				source: 'Dar neįgyvendinta...'
+				answerImageSrc: problemDisplayViewDto.answerImageSrc,
+				categoryId: problemDisplayViewDto.categoryId,
+				sourceId: problemDisplayViewDto.sourceId
 			}}
 		/>
 	{/if}
