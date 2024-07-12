@@ -705,6 +705,40 @@ export const ApprovalControllerApiAxiosParamCreator = function (configuration?: 
             };
         },
         /**
+         * Get all sources submitted for approval (or already approved).
+         * @summary ADMIN. Get all sources
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSources: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/approval/sources`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Reject source with problems by source ID.
          * @summary ADMIN. Reject source with problems
          * @param {string} sourceId 
@@ -1009,6 +1043,18 @@ export const ApprovalControllerApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Get all sources submitted for approval (or already approved).
+         * @summary ADMIN. Get all sources
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSources(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Source>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSources(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ApprovalControllerApi.getSources']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Reject source with problems by source ID.
          * @summary ADMIN. Reject source with problems
          * @param {string} sourceId 
@@ -1140,6 +1186,15 @@ export const ApprovalControllerApiFactory = function (configuration?: Configurat
             return localVarFp.getProblemsBySource(sourceId, options).then((request) => request(axios, basePath));
         },
         /**
+         * Get all sources submitted for approval (or already approved).
+         * @summary ADMIN. Get all sources
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSources(options?: any): AxiosPromise<Array<Source>> {
+            return localVarFp.getSources(options).then((request) => request(axios, basePath));
+        },
+        /**
          * Reject source with problems by source ID.
          * @summary ADMIN. Reject source with problems
          * @param {string} sourceId 
@@ -1263,6 +1318,17 @@ export class ApprovalControllerApi extends BaseAPI {
      */
     public getProblemsBySource(sourceId: string, options?: RawAxiosRequestConfig) {
         return ApprovalControllerApiFp(this.configuration).getProblemsBySource(sourceId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get all sources submitted for approval (or already approved).
+     * @summary ADMIN. Get all sources
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApprovalControllerApi
+     */
+    public getSources(options?: RawAxiosRequestConfig) {
+        return ApprovalControllerApiFp(this.configuration).getSources(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2390,6 +2456,39 @@ export const PublicControllerApiAxiosParamCreator = function (configuration?: Co
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getProblemsUnsorted: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/public/problemsUnsorted`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} sourceId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2543,6 +2642,17 @@ export const PublicControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getProblemsUnsorted(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProblemDisplayViewDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getProblemsUnsorted(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PublicControllerApi.getProblemsUnsorted']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {string} sourceId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2625,6 +2735,14 @@ export const PublicControllerApiFactory = function (configuration?: Configuratio
          */
         getProblemsCount(options?: any): AxiosPromise<CountDto> {
             return localVarFp.getProblemsCount(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getProblemsUnsorted(options?: any): AxiosPromise<Array<ProblemDisplayViewDto>> {
+            return localVarFp.getProblemsUnsorted(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2715,6 +2833,16 @@ export class PublicControllerApi extends BaseAPI {
      */
     public getProblemsCount(options?: RawAxiosRequestConfig) {
         return PublicControllerApiFp(this.configuration).getProblemsCount(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PublicControllerApi
+     */
+    public getProblemsUnsorted(options?: RawAxiosRequestConfig) {
+        return PublicControllerApiFp(this.configuration).getProblemsUnsorted(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

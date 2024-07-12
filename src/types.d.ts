@@ -19,6 +19,8 @@ export namespace Components {
 		problemImageSrc: string;
 		answerText: string;
 		answerImageSrc: string;
+		categoryId: string;
+		sourceId: string;
 	}
 
 	interface ProblemMetaData {

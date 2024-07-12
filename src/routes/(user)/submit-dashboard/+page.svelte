@@ -3,7 +3,7 @@
 	import SourceWithProblems from '$components/layout/SourceWithProblems.svelte';
 	import SourceManageBar from '$components/ui/SourceManageBar.svelte';
 	import { approvalApi } from '$services/apiService';
-	import type { Source } from '$services/gen-client';
+	import type { Source, SourceReviewStatusEnum } from '$services/gen-client';
 	import { Button } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 
@@ -11,7 +11,19 @@
 
 	onMount(async () => {
 		const response = await approvalApi.getMySources();
-		sources = response.data;
+		const groupedSources: Record<SourceReviewStatusEnum, Source[]> = {
+			REJECTED: [],
+			PENDING: [],
+			APPROVED: []
+		};
+		response.data.forEach((source) => {
+			const reviewStatus = source.reviewStatus;
+			if (!groupedSources[reviewStatus]) {
+				groupedSources[reviewStatus] = [];
+			}
+			groupedSources[reviewStatus].push(source);
+		});
+		sources = Object.values(groupedSources).flat() as Source[];
 	});
 </script>
 

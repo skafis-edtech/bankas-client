@@ -58,3 +58,10 @@
 {#each Object.entries(categories) as [id, category]}
 	<CategoryWithProblems {category} />
 {/each}
+<CategoryWithProblems
+	category={{
+		id: '',
+		name: 'Nesurūšiuota',
+		description: 'Užduotys, kurios yra patvirtintos, tačiau dar nepriskirtos jokiai kategorijai.'
+	}}
+/>

@@ -80,9 +80,19 @@
 
 <h1 class="text-4xl font-semibold my-4 text-center">Užduočių rinkinio įkėlimas</h1>
 <div class="flex flex-row justify-between mx-4">
-	<Button on:click={() => goto('/submit-dashboard')} class="w-16">Grįžti</Button>
-	<h3 class="text-lg text-red-600 text-center">Progresas nėra išsaugomas automatiškai!</h3>
-	<div class="w-16"></div>
+	<div class="w-28">
+		<Button on:click={() => goto('/submit-dashboard')} class="w-16">Grįžti</Button>
+	</div>
+	<div>
+		<h3 class="text-lg text-red-600 text-center">Progresas nėra išsaugomas automatiškai!</h3>
+		<h3 class="text-lg text-blue-600 text-center">
+			Vos pateikę užduotis galite jas rūšiuoti į kategorijas!
+		</h3>
+	</div>
+
+	<div class="w-28">
+		<Button color="blue" on:click={() => goto('/sort-dashboard')} class="w-28">Rūšiuoti</Button>
+	</div>
 </div>
 <p class="text-justify mx-4 my-4">
 	Spausdami mygtukus "Pateikti peržiūrai" Jūs patvirtinate, kad įkeliate tik savo sukurtas

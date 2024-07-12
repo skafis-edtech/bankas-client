@@ -1,13 +1,15 @@
 <script lang="ts">
+	import AuthorLink from '$components/ui/AuthorLink.svelte';
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
 	import { publicApi } from '$services/apiService';
-	import type { Category, ProblemDisplayViewDto } from '$services/gen-client';
+	import type { Category, ProblemDisplayViewDto, Source } from '$services/gen-client';
 	import { Accordion, AccordionItem } from 'flowbite-svelte';
 	import { writable } from 'svelte/store';
 
 	export let category: Category;
 
 	let problems: ProblemDisplayViewDto[] = [];
+
 	let isLoaded = writable(false);
 	let isOpen = false;
 
@@ -17,8 +19,14 @@
 
 	async function loadProblems() {
 		if (!isOpen || $isLoaded) return;
-		const response = await publicApi.getProblemsByCategory(category.id);
-		problems = response.data;
+		if (category.id === '') {
+			const response = await publicApi.getProblemsUnsorted();
+			problems = response.data;
+		} else {
+			const response = await publicApi.getProblemsByCategory(category.id);
+			problems = response.data;
+		}
+
 		isLoaded.set(true);
 	}
 </script>
@@ -26,7 +34,7 @@
 <Accordion>
 	<AccordionItem bind:open={isOpen} class="bg-slate-200 my-4">
 		<span slot="header" class="text-black">{category.name}</span>
-		<div>{category.description}</div>
+		<h3 class="text-xl">{category.description}</h3>
 		<div class="container mx-auto">
 			{#each problems as problem (problem.id)}
 				<div class="my-3">
@@ -36,12 +44,9 @@
 							problemText: problem.problemText,
 							problemImageSrc: problem.problemImageSrc,
 							answerText: problem.answerText,
-							answerImageSrc: problem.answerImageSrc
-						}}
-						problemMetaData={{
-							author: 'Dar neįgyvendinta...',
-							categoryName: category.name,
-							source: 'Dar neįgyvendinta...'
+							answerImageSrc: problem.answerImageSrc,
+							categoryId: problem.categoryId,
+							sourceId: problem.sourceId
 						}}
 					/>
 				</div>
