@@ -3,6 +3,7 @@
 	import { writable } from 'svelte/store';
 	import type { Problem, ProblemPostDto } from '$services/gen-client';
 	import { problemApi } from '$services/apiService';
+	import { Button } from 'flowbite-svelte';
 
 	let problems = writable<Problem[]>([]);
 	let newProblem: ProblemPostDto = {
@@ -69,6 +70,16 @@
 		}
 	};
 
+	const initMeta = async () => {
+		try {
+			await problemApi.initMeta();
+			alert('Succ');
+		} catch (error) {
+			errorMessage = 'Failed to set meta';
+			console.error(error);
+		}
+	};
+
 	onMount(fetchProblems);
 </script>
 
@@ -79,6 +90,10 @@
 		{errorMessage}
 	</div>
 {/if}
+
+<Button on:click={initMeta} class="bg-blue-500 text-white px-4 py-2 rounded"
+	>Set SKF-0 to the meta repo</Button
+>
 
 <div class="max-w-2xl mx-auto p-4">
 	<h2 class="text-2xl font-semibold mb-4">Problems</h2>
