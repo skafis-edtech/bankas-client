@@ -42,8 +42,10 @@
 		<div class="flex flex-col gap-2">
 			{#if $user}
 				<div class="flex flex-row gap-2">
-					<a href="/user/{$user.username}" class="text-white self-center underline"
-						>{$user.username}</a
+					<a
+						href="/user/{$user.username}"
+						on:click={() => (hidden1 = true)}
+						class="text-white self-center underline">{$user.username}</a
 					>
 					<UserSolid class="h-6 w-6 text-white self-center" />
 				</div>

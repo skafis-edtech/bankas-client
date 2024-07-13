@@ -6,7 +6,6 @@ import {
 	PublicControllerApi,
 	SortControllerApi,
 	SourceControllerApi,
-	TestControllerApi,
 	UserControllerApi
 } from './gen-client/api';
 import { BASE_PATH } from './gen-client/base';
@@ -57,6 +56,5 @@ const approvalApi = new ApprovalControllerApi(undefined, BASE_PATH, axiosInstanc
 const sortApi = new SortControllerApi(undefined, BASE_PATH, axiosInstance);
 const publicApi = new PublicControllerApi(undefined, BASE_PATH, axiosInstance);
 const userApi = new UserControllerApi(undefined, BASE_PATH, axiosInstance);
-const testApi = new TestControllerApi(undefined, BASE_PATH, axiosInstance);
 
-export { categoryApi, problemApi, sourceApi, approvalApi, sortApi, publicApi, userApi, testApi };
+export { categoryApi, problemApi, sourceApi, approvalApi, sortApi, publicApi, userApi };

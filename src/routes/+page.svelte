@@ -5,6 +5,7 @@
 	import CategoryWithProblems from '$components/layout/CategoryWithProblems.svelte';
 	import type { AuthContext } from '../types';
 	import { publicApi } from '$services/apiService';
+	import HorizontalLine from '$components/ui/HorizontalLine.svelte';
 
 	const { user } = getContext('authContext') as AuthContext;
 
@@ -35,13 +36,11 @@
 	Užduočių: {numOfProblems || '...'} | Kategorijų: {numOfCategories || '...'}
 </h3>
 
-<div class="my-8">
-	<hr class="border-y-1 border-black" />
-</div>
+<HorizontalLine />
+
 <FindById />
-<div class="my-8">
-	<hr class="border-y-1 border-black" />
-</div>
+
+<HorizontalLine />
 
 <div class="text-center">
 	<h1 class="text-2xl font-semibold my-6">Kategorijos</h1>

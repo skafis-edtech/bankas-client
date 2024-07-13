@@ -927,7 +927,7 @@ export const ApprovalControllerApiAxiosParamCreator = function (configuration?: 
         },
         /**
          * Update problem data by ID. Images: if it was problems/uuid.png and sends KEEP_FILE_THE_SAME, then nothing with files. If string doesn\'t start with problems/ TODO TODO:...- check the sent file - if there is any, upload it, if there\'s not - the image got deleted, or it wasn\'t there at all
-         * @summary USER but owning. Update problem data. NOT IMPLEMENTED YET!!!!!
+         * @summary NOT IMPLEMENTED YET!!!! USER but owning. Update problem data. NOT IMPLEMENTED YET!!!!!
          * @param {string} id 
          * @param {UpdateProblem1Request} [updateProblem1Request] 
          * @param {*} [options] Override http request option.
@@ -1113,7 +1113,7 @@ export const ApprovalControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * Update problem data by ID. Images: if it was problems/uuid.png and sends KEEP_FILE_THE_SAME, then nothing with files. If string doesn\'t start with problems/ TODO TODO:...- check the sent file - if there is any, upload it, if there\'s not - the image got deleted, or it wasn\'t there at all
-         * @summary USER but owning. Update problem data. NOT IMPLEMENTED YET!!!!!
+         * @summary NOT IMPLEMENTED YET!!!! USER but owning. Update problem data. NOT IMPLEMENTED YET!!!!!
          * @param {string} id 
          * @param {UpdateProblem1Request} [updateProblem1Request] 
          * @param {*} [options] Override http request option.
@@ -1241,7 +1241,7 @@ export const ApprovalControllerApiFactory = function (configuration?: Configurat
         },
         /**
          * Update problem data by ID. Images: if it was problems/uuid.png and sends KEEP_FILE_THE_SAME, then nothing with files. If string doesn\'t start with problems/ TODO TODO:...- check the sent file - if there is any, upload it, if there\'s not - the image got deleted, or it wasn\'t there at all
-         * @summary USER but owning. Update problem data. NOT IMPLEMENTED YET!!!!!
+         * @summary NOT IMPLEMENTED YET!!!! USER but owning. Update problem data. NOT IMPLEMENTED YET!!!!!
          * @param {string} id 
          * @param {UpdateProblem1Request} [updateProblem1Request] 
          * @param {*} [options] Override http request option.
@@ -1386,7 +1386,7 @@ export class ApprovalControllerApi extends BaseAPI {
 
     /**
      * Update problem data by ID. Images: if it was problems/uuid.png and sends KEEP_FILE_THE_SAME, then nothing with files. If string doesn\'t start with problems/ TODO TODO:...- check the sent file - if there is any, upload it, if there\'s not - the image got deleted, or it wasn\'t there at all
-     * @summary USER but owning. Update problem data. NOT IMPLEMENTED YET!!!!!
+     * @summary NOT IMPLEMENTED YET!!!! USER but owning. Update problem data. NOT IMPLEMENTED YET!!!!!
      * @param {string} id 
      * @param {UpdateProblem1Request} [updateProblem1Request] 
      * @param {*} [options] Override http request option.
@@ -2986,49 +2986,7 @@ export const SortControllerApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * Sort a problem into a category. Returns problem firestore entity.
-         * @summary ADMIN. Sort a not owned problem into a category
-         * @param {string} problemId 
-         * @param {string} categoryId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        sortNotMyProblem: async (problemId: string, categoryId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'problemId' is not null or undefined
-            assertParamExists('sortNotMyProblem', 'problemId', problemId)
-            // verify required parameter 'categoryId' is not null or undefined
-            assertParamExists('sortNotMyProblem', 'categoryId', categoryId)
-            const localVarPath = `/sort/sortNotMy/{problemId}/{categoryId}`
-                .replace(`{${"problemId"}}`, encodeURIComponent(String(problemId)))
-                .replace(`{${"categoryId"}}`, encodeURIComponent(String(categoryId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Sort a problem into a category. Returns problem firestore entity.
-         * @summary USER. Sort a problem into a category
+         * @summary USER owned or ADMIN. Sort a problem into a category
          * @param {string} problemId 
          * @param {string} categoryId 
          * @param {*} [options] Override http request option.
@@ -3039,7 +2997,7 @@ export const SortControllerApiAxiosParamCreator = function (configuration?: Conf
             assertParamExists('sortProblem', 'problemId', problemId)
             // verify required parameter 'categoryId' is not null or undefined
             assertParamExists('sortProblem', 'categoryId', categoryId)
-            const localVarPath = `/sort/sortMy/{problemId}/{categoryId}`
+            const localVarPath = `/sort/sort/{problemId}/{categoryId}`
                 .replace(`{${"problemId"}}`, encodeURIComponent(String(problemId)))
                 .replace(`{${"categoryId"}}`, encodeURIComponent(String(categoryId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -3128,21 +3086,7 @@ export const SortControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * Sort a problem into a category. Returns problem firestore entity.
-         * @summary ADMIN. Sort a not owned problem into a category
-         * @param {string} problemId 
-         * @param {string} categoryId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async sortNotMyProblem(problemId: string, categoryId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Problem>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.sortNotMyProblem(problemId, categoryId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['SortControllerApi.sortNotMyProblem']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Sort a problem into a category. Returns problem firestore entity.
-         * @summary USER. Sort a problem into a category
+         * @summary USER owned or ADMIN. Sort a problem into a category
          * @param {string} problemId 
          * @param {string} categoryId 
          * @param {*} [options] Override http request option.
@@ -3202,18 +3146,7 @@ export const SortControllerApiFactory = function (configuration?: Configuration,
         },
         /**
          * Sort a problem into a category. Returns problem firestore entity.
-         * @summary ADMIN. Sort a not owned problem into a category
-         * @param {string} problemId 
-         * @param {string} categoryId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        sortNotMyProblem(problemId: string, categoryId: string, options?: any): AxiosPromise<Problem> {
-            return localVarFp.sortNotMyProblem(problemId, categoryId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Sort a problem into a category. Returns problem firestore entity.
-         * @summary USER. Sort a problem into a category
+         * @summary USER owned or ADMIN. Sort a problem into a category
          * @param {string} problemId 
          * @param {string} categoryId 
          * @param {*} [options] Override http request option.
@@ -3278,20 +3211,7 @@ export class SortControllerApi extends BaseAPI {
 
     /**
      * Sort a problem into a category. Returns problem firestore entity.
-     * @summary ADMIN. Sort a not owned problem into a category
-     * @param {string} problemId 
-     * @param {string} categoryId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SortControllerApi
-     */
-    public sortNotMyProblem(problemId: string, categoryId: string, options?: RawAxiosRequestConfig) {
-        return SortControllerApiFp(this.configuration).sortNotMyProblem(problemId, categoryId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Sort a problem into a category. Returns problem firestore entity.
-     * @summary USER. Sort a problem into a category
+     * @summary USER owned or ADMIN. Sort a problem into a category
      * @param {string} problemId 
      * @param {string} categoryId 
      * @param {*} [options] Override http request option.
@@ -3688,107 +3608,6 @@ export class SourceControllerApi extends BaseAPI {
      */
     public updateSource(id: string, sourcePostDto: SourcePostDto, options?: RawAxiosRequestConfig) {
         return SourceControllerApiFp(this.configuration).updateSource(id, sourcePostDto, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-
-/**
- * TestControllerApi - axios parameter creator
- * @export
- */
-export const TestControllerApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        test: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/test/getUserId`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * TestControllerApi - functional programming interface
- * @export
- */
-export const TestControllerApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = TestControllerApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async test(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.test(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TestControllerApi.test']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-    }
-};
-
-/**
- * TestControllerApi - factory interface
- * @export
- */
-export const TestControllerApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = TestControllerApiFp(configuration)
-    return {
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        test(options?: any): AxiosPromise<string> {
-            return localVarFp.test(options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * TestControllerApi - object-oriented interface
- * @export
- * @class TestControllerApi
- * @extends {BaseAPI}
- */
-export class TestControllerApi extends BaseAPI {
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TestControllerApi
-     */
-    public test(options?: RawAxiosRequestConfig) {
-        return TestControllerApiFp(this.configuration).test(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
