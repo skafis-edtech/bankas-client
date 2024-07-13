@@ -6,7 +6,7 @@
 	export let problem: ProblemDisplayViewDto;
 	export let shadeColorStr: string;
 	export let onClick: () => void;
-	export let isClicked = false;
+	export let isClicked: boolean = false;
 </script>
 
 <button

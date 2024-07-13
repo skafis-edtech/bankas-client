@@ -2337,6 +2337,39 @@ export const PublicControllerApiAxiosParamCreator = function (configuration?: Co
         },
         /**
          * 
+         * @param {string} categoryId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCategoryProblemCount: async (categoryId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'categoryId' is not null or undefined
+            assertParamExists('getCategoryProblemCount', 'categoryId', categoryId)
+            const localVarPath = `/public/categoryProblemCount/{categoryId}`
+                .replace(`{${"categoryId"}}`, encodeURIComponent(String(categoryId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} skfCode 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2530,6 +2563,35 @@ export const PublicControllerApiAxiosParamCreator = function (configuration?: Co
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getUnsortedProblemsCount: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/public/unsortedProblemsCount`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -2572,6 +2634,18 @@ export const PublicControllerApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getCategoryById(categoryId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PublicControllerApi.getCategoryById']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} categoryId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCategoryProblemCount(categoryId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CountDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCategoryProblemCount(categoryId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PublicControllerApi.getCategoryProblemCount']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -2645,6 +2719,17 @@ export const PublicControllerApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['PublicControllerApi.getSourcesByAuthor']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getUnsortedProblemsCount(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CountDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getUnsortedProblemsCount(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PublicControllerApi.getUnsortedProblemsCount']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -2679,6 +2764,15 @@ export const PublicControllerApiFactory = function (configuration?: Configuratio
          */
         getCategoryById(categoryId: string, options?: any): AxiosPromise<Category> {
             return localVarFp.getCategoryById(categoryId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} categoryId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCategoryProblemCount(categoryId: string, options?: any): AxiosPromise<CountDto> {
+            return localVarFp.getCategoryProblemCount(categoryId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2733,6 +2827,14 @@ export const PublicControllerApiFactory = function (configuration?: Configuratio
         getSourcesByAuthor(authorUsername: string, options?: any): AxiosPromise<Array<Source>> {
             return localVarFp.getSourcesByAuthor(authorUsername, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getUnsortedProblemsCount(options?: any): AxiosPromise<CountDto> {
+            return localVarFp.getUnsortedProblemsCount(options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -2772,6 +2874,17 @@ export class PublicControllerApi extends BaseAPI {
      */
     public getCategoryById(categoryId: string, options?: RawAxiosRequestConfig) {
         return PublicControllerApiFp(this.configuration).getCategoryById(categoryId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} categoryId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PublicControllerApi
+     */
+    public getCategoryProblemCount(categoryId: string, options?: RawAxiosRequestConfig) {
+        return PublicControllerApiFp(this.configuration).getCategoryProblemCount(categoryId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2837,6 +2950,16 @@ export class PublicControllerApi extends BaseAPI {
      */
     public getSourcesByAuthor(authorUsername: string, options?: RawAxiosRequestConfig) {
         return PublicControllerApiFp(this.configuration).getSourcesByAuthor(authorUsername, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PublicControllerApi
+     */
+    public getUnsortedProblemsCount(options?: RawAxiosRequestConfig) {
+        return PublicControllerApiFp(this.configuration).getUnsortedProblemsCount(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

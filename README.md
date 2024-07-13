@@ -1,6 +1,6 @@
 # bankas.skafis.lt
 
-Problems for school bank (repository).
+Problems for content bank (school problem repository).
 
 uses API. https://api.bankas.skafis.lt/v3/api-docs
 
@@ -24,25 +24,11 @@ pnpm dev
 
 gen services and models from openapi docs - pnpm genapi
 
+run backend locally - docker compose up -d, don't forget to change BASE_URL in src/services/gen-client/base.ts file, also create .env file from .env.template and put the path to firebase-admin.json file (to access firebase)
+
 ## prod
 
 branches: main & dev
 
-- dev - for dev and test.
-- main - when merged/pushed deploys to firebase (github actions)
-
-## stuff/process/logs
-
-### 2024-06-18
-
-I have backend!!! (some kind of)
-
-Versions will be only after I make the basic upload & review stuff. This will be v1.0.0 which will be used for all the demos to get money and attention. Then I am going to start using CHANGELOG - next versions will have fully functional backend - i.e. with authetication management and with captcha management.
-
-Now openapi-generator. It takes openapi docs and generates services and models from it for typescript frontend.
-
-### 2024-07-05
-
-This is very good article to understand svelte store/context/props stuff:
-
-https://stackoverflow.com/questions/67663671/understanding-context-in-svelte-convert-from-react-context
+- dev - for dev and test, when PR to main created, deploys temp on firebase via gh actions to some random link.
+- main - when PR merged to main, deploys to firebase via gh actions to https://bankas.skafis.lt

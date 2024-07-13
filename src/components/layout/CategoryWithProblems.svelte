@@ -4,11 +4,23 @@
 	import { publicApi } from '$services/apiService';
 	import type { Category, ProblemDisplayViewDto, Source } from '$services/gen-client';
 	import { Accordion, AccordionItem } from 'flowbite-svelte';
+	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
 
 	export let category: Category;
 
 	let problems: ProblemDisplayViewDto[] = [];
+	let problemCount: number | null = null;
+
+	onMount(async () => {
+		if (category.id !== '') {
+			const response = await publicApi.getCategoryProblemCount(category.id);
+			problemCount = response.data.count;
+		} else {
+			const response = await publicApi.getUnsortedProblemsCount();
+			problemCount = response.data.count;
+		}
+	});
 
 	let isLoaded = writable(false);
 	let isOpen = false;
@@ -33,7 +45,7 @@
 
 <Accordion>
 	<AccordionItem bind:open={isOpen} class="bg-slate-200 my-4">
-		<span slot="header" class="text-black">{category.name}</span>
+		<span slot="header" class="text-black">{category.name} ({problemCount})</span>
 		<h3 class="text-xl">{category.description}</h3>
 		<div class="container mx-auto">
 			{#each problems as problem (problem.id)}
