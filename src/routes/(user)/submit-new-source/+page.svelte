@@ -179,8 +179,15 @@
 	{/each}
 </div>
 
+<p class="text-center mb-2">
+	Darydami ekrano nuotraukas rinkitės kiek įmanoma didesnį mastelį, kad būtų geresnė kokybė. (Galite
+	naudotis Win+Shift+S komanda ir tuomet įklijuoti naudojantis Ctrl+V)
+</p>
 <p class="text-center mb-4">
-	Darydami ekrano nuotraukas rinkitės kiek įmanoma didesnį mastelį, kad būtų geresnė kokybė
+	Formules galite generuoti čia, naudojantis LaTex sintakse (nukopijuokite paveikslėlio nuorodą arba
+	nutempkite paveikslėlį): <a href="https://latex.codecogs.com/eqneditor/editor.php" target="_blank"
+		>https://latex.codecogs.com/eqneditor/editor.php</a
+	>
 </p>
 
 {#each problems as problem, i}
