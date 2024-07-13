@@ -6,11 +6,14 @@
 	import type { AuthContext, User } from '../types';
 	import { auth, db } from '$services/firebaseConfig';
 	import { doc, getDoc } from 'firebase/firestore';
-	import Header from '$components/layout/Header.svelte';
+	import Header from '$components/layout/HeaderMobile.svelte';
 	import Footer from '$components/layout/Footer.svelte';
 	import { setAuthToken } from '$services/apiService';
 	import { goto } from '$app/navigation';
-	import LoadingOrError from '$components/ui/LoadingOrError.svelte';
+	import GlobalAlert from '$components/ui/GlobalAlert.svelte';
+	import { authInitialized } from '$lib/stores';
+	import HeaderDesktop from '$components/layout/HeaderDesktop.svelte';
+	import HeaderMobile from '$components/layout/HeaderMobile.svelte';
 
 	const userStore: Writable<User | null> = writable(null);
 
@@ -34,6 +37,7 @@
 			userStore.set(null);
 			setAuthToken(null);
 		}
+		authInitialized.set(true);
 	});
 
 	setContext<AuthContext>('authContext', { user: userStore, login: loginUser, logout });
@@ -42,7 +46,8 @@
 </script>
 
 <header>
-	<Header />
+	<div class="block md:hidden"><HeaderMobile /></div>
+	<div class="hidden md:block"><HeaderDesktop /></div>
 	<p class="text-sm text-center my-2">
 		Naudodamiesi šiuo tinklapiu jūs sutinkate su Google Analytics slapukų naudojimu.
 	</p>
@@ -57,7 +62,7 @@
 	</aside>
 </main>
 <footer><Footer /></footer>
-<LoadingOrError />
+<GlobalAlert />
 
 <style lang="scss">
 	header {

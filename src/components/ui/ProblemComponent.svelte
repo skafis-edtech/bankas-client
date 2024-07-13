@@ -4,13 +4,12 @@
 	import type { Components } from '../../types';
 
 	export let problemMainData: Components.ProblemMainData;
-	export let problemMetaData: Components.ProblemMetaData;
 </script>
 
 <Card class="min-w-full">
 	<div class="flex flex-col relative">
 		<h2 class="text-xl font-bold text-left">{problemMainData.skfCode}</h2>
-		<ProblemMeta {problemMetaData} />
+		<ProblemMeta categoryId={problemMainData.categoryId} sourceId={problemMainData.sourceId} />
 		{#if problemMainData.problemText}
 			<p class="mb-2 text-black text-left">{problemMainData.problemText}</p>
 		{/if}

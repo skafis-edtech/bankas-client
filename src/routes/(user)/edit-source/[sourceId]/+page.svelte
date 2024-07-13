@@ -1,62 +1,60 @@
 <script lang="ts">
 	import { Button } from 'flowbite-svelte';
 	import { goto } from '$app/navigation';
-	import type { Components } from '../../../types';
 	import SourceCreateForm from '$components/forms/SourceCreateForm.svelte';
 	import ProblemCreateForm from '$components/forms/ProblemCreateForm.svelte';
 	import { CloseOutline, PlusOutline } from 'flowbite-svelte-icons';
-	import { approvalApi } from '$services/apiService';
-	import type { ProblemDisplayViewDto, SourceSubmitDto } from '$services/gen-client';
+	import { approvalApi, publicApi } from '$services/apiService';
+	import type { ProblemDisplayViewDto, Source, SourceSubmitDto } from '$services/gen-client';
 	import { successStore } from '$lib/stores';
+	import type { Components } from '../../../../types';
+	import { page } from '$app/stores';
+	import { get } from 'svelte/store';
+	import { onMount } from 'svelte';
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
 
-	let sourceId: string | null = null;
-	let isSourceSubmitted = false;
-	let isProblemSubmitted = [false];
-
-	let submittedSource: SourceSubmitDto;
-	let submittedProblems: ProblemDisplayViewDto[] = [];
+	let sourceId: string;
+	$: sourceId = get(page).params.sourceId;
 
 	let isSourceDataChanged = false;
 	$: {
 		isSourceDataChanged =
-			submittedSource?.name !== sourceData?.name ||
-			submittedSource?.description !== sourceData?.description;
+			oldSourceData?.name !== sourceData?.name ||
+			oldSourceData?.description !== sourceData?.description;
 	}
+
+	let oldSourceData: Source;
+	let oldProblems: ProblemDisplayViewDto[] = [];
+
+	onMount(async () => {
+		const sourceResponse = await publicApi.getSourceById1(sourceId);
+		oldSourceData = sourceResponse.data;
+		sourceData = {
+			name: oldSourceData.name,
+			description: oldSourceData.description
+		};
+
+		const problemsResponse = await approvalApi.getProblemsBySource(sourceId);
+		oldProblems = problemsResponse.data;
+	});
+
+	let isProblemSubmitted = [false];
 
 	let sourceData: SourceSubmitDto = {
 		name: '',
 		description: ''
 	};
 
-	let problems: Components.ProblemCreateFormData[] = [
-		{
-			problemText: '',
-			problemImageFile: null,
-			problemImageUrl: '',
-			answerText: '',
-			answerImageFile: null,
-			answerImageUrl: ''
-		}
-	];
+	let problems: Components.ProblemCreateFormData[] = [];
 
-	async function submitSource() {
-		console.log(sourceData, problems);
-		const idResponse = await approvalApi.submitSourceData(sourceData);
-		isSourceSubmitted = true;
-		sourceId = idResponse.data.id;
-		successStore.set('Šaltinis pateiktas sėkmingai');
-		submittedSource = {
-			name: sourceData.name,
-			description: sourceData.description
-		};
+	async function updateSource() {
+		await approvalApi.update(sourceId, sourceData);
+		successStore.set('Šaltinis sėkmingai pakeistas');
+		const sourceResponse = await publicApi.getSourceById1(sourceId);
+		oldSourceData = sourceResponse.data;
 	}
 
 	async function submitProblem(index: number) {
-		if (!sourceId) {
-			alert('Pirma pateikite šaltinį');
-			return;
-		}
 		await approvalApi.submitProblem(
 			sourceId,
 			{
@@ -70,10 +68,10 @@
 		);
 		isProblemSubmitted[index] = true;
 		successStore.set('Užduotis pateikta sėkmingai');
-		const problemsResponse = await approvalApi.getProblemsBySource(sourceId);
-		submittedProblems = problemsResponse.data;
 		problems = problems.filter((_, i) => i !== index);
 		isProblemSubmitted = isProblemSubmitted.filter((_, i) => i !== index);
+		const problemsResponse = await approvalApi.getProblemsBySource(sourceId);
+		oldProblems = problemsResponse.data;
 	}
 
 	function addProblem() {
@@ -96,33 +94,22 @@
 		isProblemSubmitted = isProblemSubmitted.filter((_, i) => i !== index);
 	}
 
-	function updateSource() {
-		approvalApi.update(sourceId!!, sourceData);
-		successStore.set('Šaltinis sėkmingai pakeistas');
-		submittedSource = {
-			name: sourceData.name,
-			description: sourceData.description
-		};
-	}
-
 	async function deleteProblem(problemId: string) {
 		await approvalApi.deleteProblem1(problemId);
 		successStore.set('Užduotis ištrinta sėkmingai');
-		const problemsResponse = await approvalApi.getProblemsBySource(sourceId!!);
-		submittedProblems = problemsResponse.data;
+		const problemsResponse = await approvalApi.getProblemsBySource(sourceId);
+		oldProblems = problemsResponse.data;
 	}
 </script>
 
-<h1 class="text-4xl font-semibold my-4 text-center">Užduočių rinkinio įkėlimas</h1>
+<h1 class="text-4xl font-semibold my-4 text-center">Užduočių rinkinio redagavimas</h1>
 <div class="flex flex-row justify-between mx-4">
 	<div class="w-28">
 		<Button on:click={() => goto('/submit-dashboard')} class="w-16">Grįžti</Button>
 	</div>
 	<div>
 		<h3 class="text-lg text-red-600 text-center">Progresas nėra išsaugomas automatiškai!</h3>
-		<h3 class="text-lg text-blue-600 text-center">
-			Vos pateikę užduotis galite jas rūšiuoti į kategorijas!
-		</h3>
+		<h3 class="text-lg text-blue-600 text-center">Užduotis galite rūšiuoti į kategorijas!</h3>
 	</div>
 
 	<div class="w-28">
@@ -130,32 +117,26 @@
 	</div>
 </div>
 <p class="text-justify mx-4 my-4">
-	Spausdami mygtukus "Pateikti peržiūrai" arba "Pateikti pakeitimą peržiūrai" Jūs patvirtinate, kad
-	įkeliate tik savo sukurtas originalias užduotis arba užduotis, kurios jau yra pasiekiamos viešai.
-	Pateikdami savo užduotis atsisakote turtinių autorinių teisių į šias užduotis, leidžiate
-	užduotimis naudotis bet kam. Pateikdami kitų autorių užduotis patvirtinate, kad tie autoriai yra
-	atsisakę turtinių autorinių teisių bei taip pat leidžia naudotis užduotimis bet kam. Peržiūrėtos
-	ir patvirtintos užduotys bus paviešintos kartu su Jūsų prisijungimo vardu, bet ne el. paštu.
+	Spausdami mygtukus "Pateikti pakeitimą peržiūrai" Jūs patvirtinate, kad įkeliate tik savo sukurtas
+	originalias užduotis arba užduotis, kurios jau yra pasiekiamos viešai. Pateikdami savo užduotis
+	atsisakote turtinių autorinių teisių į šias užduotis, leidžiate užduotimis naudotis bet kam.
+	Pateikdami kitų autorių užduotis patvirtinate, kad tie autoriai yra atsisakę turtinių autorinių
+	teisių bei taip pat leidžia naudotis užduotimis bet kam. Peržiūrėtos ir patvirtintos užduotys bus
+	paviešintos kartu su Jūsų prisijungimo vardu, bet ne el. paštu.
 </p>
 
 <div class="relative">
 	<SourceCreateForm bind:sourceData />
-	{#if isSourceSubmitted}
-		<Button
-			disabled={!isSourceDataChanged}
-			color="yellow"
-			on:click={updateSource}
-			class="w-fit absolute right-2 bottom-2">Pateikti pakeitimą peržiūrai</Button
-		>
-	{:else}
-		<Button color="purple" on:click={submitSource} class="w-fit absolute right-2 bottom-2"
-			>Pateikti peržiūrai</Button
-		>
-	{/if}
+	<Button
+		disabled={!isSourceDataChanged}
+		color="yellow"
+		on:click={updateSource}
+		class="w-fit absolute right-2 bottom-2">Pateikti pakeitimą peržiūrai</Button
+	>
 </div>
 
 <div class="container mx-auto">
-	{#each submittedProblems as problem}
+	{#each oldProblems as problem}
 		<div class="relative my-3 p-4 border rounded-md">
 			<Button
 				color="red"
@@ -188,7 +169,7 @@
 		<Button
 			color="primary"
 			on:click={() => removeProblem(i)}
-			class="w-10 h-10 absolute right-2 top-2"><CloseOutline /></Button
+			class="w-fit h-10 absolute right-2 top-2"><CloseOutline /></Button
 		>
 		<ProblemCreateForm problemData={problem} index={i} />
 		<Button

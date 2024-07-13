@@ -18,7 +18,7 @@
 		<Button class="flex-grow" on:click={() => goto('/super-admin/manage-users')} disabled
 			>Manage firestore users</Button
 		>
-		<Button class="flex-grow" on:click={() => goto('/super-admin/manage-meta')} disabled
+		<Button class="flex-grow" on:click={() => goto('/super-admin/manage-meta')}
 			>Manage firestore meta</Button
 		>
 		<Button class="flex-grow" on:click={() => goto('/super-admin/manage-storage')} disabled

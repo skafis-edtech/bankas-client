@@ -177,6 +177,7 @@
 						<p class="text-gray-600"><strong>answerImagePath: </strong>{problem.answerImagePath}</p>
 						<p class="text-gray-600"><strong>categoryId: </strong>{problem.categoryId}</p>
 						<p class="text-gray-600"><strong>sourceId: </strong>{problem.sourceId}</p>
+						<p class="text-gray-600"><strong>isAproved: </strong>{problem.isApproved}</p>
 					</div>
 					<div>
 						<button
