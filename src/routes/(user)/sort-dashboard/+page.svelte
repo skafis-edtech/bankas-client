@@ -138,6 +138,9 @@
 		</Button>
 	{/each}
 	<Button on:click={skipProblem}>PRALEISTI</Button>
+	<p class="text-white">
+		Nerandate tinkamos kategorijos? Susisiekite el. paštu naglis.suliokas@gmail.com
+	</p>
 </div>
 
 <div>
