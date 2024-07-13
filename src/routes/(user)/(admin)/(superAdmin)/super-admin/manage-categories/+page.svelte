@@ -33,7 +33,7 @@
 	const updateCategory = async () => {
 		try {
 			if (editCategory) {
-				await categoryApi.updateCategory1(editCategory.id, editCategory);
+				await categoryApi.updateCategory(editCategory.id, editCategory);
 				editCategory = null;
 				fetchCategories();
 			}
