@@ -1,6 +1,9 @@
 <script lang="ts">
+	import MarkdownInput from '$components/forms/MarkdownInput.svelte';
+	import MarkdownDisplay from '$components/ui/MarkdownDisplay.svelte';
 	import { categoryApi } from '$services/apiService';
 	import type { Category, CategoryPostDto } from '$services/gen-client';
+	import { Markdown } from 'carta-md';
 	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
 
@@ -83,12 +86,7 @@
 						<label class="block text-sm font-medium text-gray-700" for="description"
 							>Description</label
 						>
-						<input
-							id="description"
-							type="text"
-							bind:value={editCategory.description}
-							class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-						/>
+						<MarkdownInput bind:value={editCategory.description} />
 					</div>
 					<button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Update</button>
 					<button
@@ -101,7 +99,8 @@
 				<div class="flex justify-between items-center">
 					<div>
 						<h3 class="text-lg font-semibold mb-3">{category.name}</h3>
-						<p class="text-gray-600"><strong>Description: </strong>{category.description}</p>
+						<p class="text-gray-600"><strong>Description: </strong></p>
+						<MarkdownDisplay value={category.description} />
 						<p class="text-gray-600"><strong>ID: </strong>{category.id}</p>
 					</div>
 					<div>
@@ -134,12 +133,7 @@
 		</div>
 		<div class="mb-4">
 			<label class="block text-sm font-medium text-gray-700" for="description">Description</label>
-			<input
-				id="description"
-				type="text"
-				bind:value={newCategory.description}
-				class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-			/>
+			<MarkdownInput bind:value={newCategory.description} />
 		</div>
 		<button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Create</button>
 	</form>

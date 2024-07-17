@@ -1,6 +1,6 @@
 .carta-wrapper .carta-container .carta-input {
-    max-height: 100px;
-    height: 100px;
+    max-height: 200px;
+    height: 200px;
 }
 
 .carta-input {
@@ -9,6 +9,23 @@
 
 .carta-renderer {
 	scrollbar-width: none;
-	max-height: 100px;
-    height: 100px;
+	max-height: 200px;
+    height: 200px;
+}
+
+@media screen and (max-width: 768px) {
+    .carta-wrapper .carta-container .carta-input {
+        max-height: 350px;
+        height: 350px;
+    }
+    
+    .carta-input {
+        scrollbar-width: none;
+    }
+    
+    .carta-renderer {
+        scrollbar-width: none;
+        max-height: 350px;
+        height: 350px;
+    }
 }

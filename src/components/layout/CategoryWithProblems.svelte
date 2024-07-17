@@ -1,5 +1,6 @@
 <script lang="ts">
 	import AuthorLink from '$components/ui/AuthorLink.svelte';
+	import MarkdownDisplay from '$components/ui/MarkdownDisplay.svelte';
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
 	import { publicApi } from '$services/apiService';
 	import type { Category, ProblemDisplayViewDto, Source } from '$services/gen-client';
@@ -57,7 +58,8 @@
 			<p class="ml-auto text-right mr-2"><strong>({problemCount})</strong></p>
 		</span>
 
-		<h5 class="text-xl">{category.description}</h5>
+		<MarkdownDisplay value={category.description} />
+
 		<div class="container mx-auto">
 			{#each problems as problem (problem.id)}
 				<div class="my-3">

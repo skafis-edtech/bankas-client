@@ -1,5 +1,6 @@
 <script lang="ts">
 	import AuthorLink from '$components/ui/AuthorLink.svelte';
+	import MarkdownDisplay from '$components/ui/MarkdownDisplay.svelte';
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
 	import { getNiceTimeString } from '$lib/utils';
 	import { approvalApi } from '$services/apiService';
@@ -28,7 +29,7 @@
 <Accordion>
 	<AccordionItem bind:open={isOpen} class="bg-slate-200 mb-4">
 		<span slot="header" class="text-black"><p>{source.name}</p></span>
-		<h3 class="text-xl">{source.description}</h3>
+		<MarkdownDisplay value={source.description} />
 		<p>
 			<AuthorLink author={source.author} />
 		</p>

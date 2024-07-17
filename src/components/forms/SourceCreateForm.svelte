@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { SourceSubmitDto } from '$services/gen-client';
 	import { Card, Input, Label } from 'flowbite-svelte';
+	import MarkdownInput from './MarkdownInput.svelte';
 
 	export let sourceData: SourceSubmitDto;
 </script>
@@ -26,13 +27,9 @@
 			<Label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
 				Aprašymas
 			</Label>
-			<textarea
-				id="description"
-				rows="4"
-				class="mt-1 block px-4 py-2 w-full text-lg text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-				placeholder="Šaltinio aprašymas"
-				bind:value={sourceData.description}
-			></textarea>
+			<div id="description">
+				<MarkdownInput bind:value={sourceData.description} />
+			</div>
 		</div>
 	</div>
 </Card>
