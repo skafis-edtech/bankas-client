@@ -24,7 +24,7 @@
 			bind:value={problemData.answerText}
 			bind:imageFile={problemData.answerImageFile}
 			bind:imageUrl={problemData.answerImageUrl}
-			label="Atsakymas"
+			label="Atsakymas bei kiti komentarai"
 			id="answer"
 			textareaClass="border-gray-300"
 		/>

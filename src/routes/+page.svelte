@@ -6,12 +6,15 @@
 	import type { AuthContext } from '../types';
 	import { publicApi } from '$services/apiService';
 	import HorizontalLine from '$components/ui/HorizontalLine.svelte';
+	import { Search } from 'flowbite-svelte';
 
 	const { user } = getContext('authContext') as AuthContext;
 
 	let categories: Category[] = [];
 	let numOfProblems: number | null = null;
 	let numOfCategories: number | null = null;
+
+	let searchValue = '';
 
 	onMount(async () => {
 		const [categoriesRes, problemsCountRes, categoriesCountRes] = await Promise.all([
@@ -29,7 +32,10 @@
 <h1 class="text-4xl font-semibold my-4 text-center">Skafis užduočių bankas</h1>
 
 <h3 class="text-md font-semibold my-4 text-center">
-	Mokytojų pasidalintos originalios užduotys surūšiuotos į temas (kategorijas)
+	Mokytojų pasidalintos originalios užduotys surūšiuotos į temas (kategorijas) pagal BUP nuo
+	2024/2025 m. m. (<a href="https://www.emokykla.lt/bendrosios-programos/visos-bendrosios-programos"
+		>https://www.emokykla.lt/bendrosios-programos/visos-bendrosios-programos</a
+	>)
 </h3>
 
 <h3 class="text-md font-semibold my-4 text-center">
@@ -54,8 +60,12 @@
 	{/if}
 </div>
 
+<Search placeholder="Ieškoti" bind:value={searchValue} />
+
 {#each Object.entries(categories) as [id, category]}
-	<CategoryWithProblems {category} />
+	{#if category.name.toLowerCase().includes(searchValue.toLowerCase())}
+		<CategoryWithProblems {category} {searchValue} />
+	{/if}
 {/each}
 <CategoryWithProblems
 	category={{

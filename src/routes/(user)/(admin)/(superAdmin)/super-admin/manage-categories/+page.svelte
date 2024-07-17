@@ -100,9 +100,9 @@
 			{:else}
 				<div class="flex justify-between items-center">
 					<div>
-						<h3 class="text-lg font-semibold">{category.id}</h3>
-						<p class="text-gray-600"><strong>Name: </strong>{category.name}</p>
+						<h3 class="text-lg font-semibold mb-3">{category.name}</h3>
 						<p class="text-gray-600"><strong>Description: </strong>{category.description}</p>
+						<p class="text-gray-600"><strong>ID: </strong>{category.id}</p>
 					</div>
 					<div>
 						<button

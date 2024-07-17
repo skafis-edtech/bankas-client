@@ -6,7 +6,7 @@
 	let loading: boolean = false;
 	let errorMsg: string | null = null;
 	let successMsg: string | null = null;
-	let successTimeout: NodeJS.Timeout;
+	let successTimeout: NodeJS.Timeout | null = null;
 
 	const unsubscribeLoading = loadingStore.subscribe((value) => {
 		loading = value;
@@ -17,8 +17,10 @@
 	});
 
 	const unsubscribeSuccess = successStore.subscribe((value) => {
+		if (successTimeout) {
+			clearTimeout(successTimeout);
+		}
 		successMsg = value;
-		clearTimeout(successTimeout);
 		if (value) {
 			successTimeout = setTimeout(() => {
 				successMsg = null;
@@ -31,7 +33,9 @@
 		unsubscribeLoading();
 		unsubscribeError();
 		unsubscribeSuccess();
-		clearTimeout(successTimeout);
+		if (successTimeout) {
+			clearTimeout(successTimeout);
+		}
 	});
 </script>
 
