@@ -1,5 +1,9 @@
 <script lang="ts">
 	import '../app.css';
+	import '../reset.css';
+	import 'katex/dist/katex.css';
+	import 'carta-md/default.css';
+	import '../MarkdownInput.css';
 	import { writable, type Writable } from 'svelte/store';
 	import { onDestroy, setContext } from 'svelte';
 	import { loginUser, logout } from '$services/auth';
@@ -63,7 +67,7 @@
 <footer><Footer /></footer>
 <GlobalAlert />
 
-<style lang="scss">
+<style>
 	header {
 		height: 95px;
 	}

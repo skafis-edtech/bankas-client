@@ -2,6 +2,7 @@
 	import { Card } from 'flowbite-svelte';
 	import ProblemMeta from './ProblemMeta.svelte';
 	import type { Components } from '../../types';
+	import MarkdownDisplay from './MarkdownDisplay.svelte';
 
 	export let problemMainData: Components.ProblemMainData;
 </script>
@@ -11,7 +12,7 @@
 		<h2 class="text-xl font-bold text-left">{problemMainData.skfCode}</h2>
 		<ProblemMeta categoryId={problemMainData.categoryId} sourceId={problemMainData.sourceId} />
 		{#if problemMainData.problemText}
-			<p class="mb-2 text-black text-left">{problemMainData.problemText}</p>
+			<MarkdownDisplay value={problemMainData.problemText} />
 		{/if}
 		{#if problemMainData.problemImageSrc.length > 0}
 			<div class="p-2">

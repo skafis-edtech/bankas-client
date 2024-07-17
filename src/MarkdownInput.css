@@ -1,0 +1,14 @@
+.carta-wrapper .carta-container .carta-input {
+    max-height: 100px;
+    height: 100px;
+}
+
+.carta-input {
+    scrollbar-width: none;
+}
+
+.carta-renderer {
+	scrollbar-width: none;
+	max-height: 100px;
+    height: 100px;
+}

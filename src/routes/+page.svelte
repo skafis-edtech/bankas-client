@@ -39,16 +39,16 @@
 
 <h1 class="text-4xl font-semibold my-4 text-center">Skafis užduočių bankas</h1>
 
-<h3 class="text-md font-semibold my-4 text-center">
+<h5 class="text-md font-semibold my-4 text-center">
 	Mokytojų pasidalintos originalios užduotys surūšiuotos į temas (kategorijas) pagal BUP nuo
 	2024/2025 m. m. (<a href="https://www.emokykla.lt/bendrosios-programos/visos-bendrosios-programos"
 		>https://www.emokykla.lt/bendrosios-programos/visos-bendrosios-programos</a
 	>)
-</h3>
+</h5>
 
-<h3 class="text-md font-semibold my-4 text-center">
+<h4 class="text-md font-semibold my-4 text-center">
 	Užduočių: {numOfProblems || '...'} | Kategorijų: {numOfCategories || '...'}
-</h3>
+</h4>
 
 <HorizontalLine />
 
@@ -57,7 +57,7 @@
 <HorizontalLine />
 
 <div class="text-center">
-	<h1 class="text-2xl font-semibold my-6">Kategorijos</h1>
+	<h1 class="text-2xl font-semibold my-3">Kategorijos</h1>
 	{#if !$user}
 		<p>
 			Norite įkelti savo užduotis ar patvirtinti pateiktas kitų? <a
@@ -68,7 +68,7 @@
 	{/if}
 </div>
 
-<Search placeholder="Ieškoti" bind:value={searchValue} />
+<Search class="my-3" placeholder="Ieškoti" bind:value={searchValue} />
 
 {#each Object.entries(categories) as [id, category]}
 	{#if category.name.toLowerCase().includes(searchValue.toLowerCase())}

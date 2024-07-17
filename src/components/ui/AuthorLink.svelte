@@ -2,4 +2,4 @@
 	export let author: string;
 </script>
 
-<a href="/user/{author}" class="underline">{author}</a>
+<a href="/user/{author}">{author}</a>

@@ -27,7 +27,7 @@
 
 <Accordion>
 	<AccordionItem bind:open={isOpen} class="bg-slate-200 mb-4">
-		<span slot="header" class="text-black">{source.name} </span>
+		<span slot="header" class="text-black"><p>{source.name}</p></span>
 		<h3 class="text-xl">{source.description}</h3>
 		<p>
 			<AuthorLink author={source.author} />

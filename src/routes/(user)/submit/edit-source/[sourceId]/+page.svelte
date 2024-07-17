@@ -115,29 +115,27 @@
 	}
 </script>
 
-<h1 class="text-4xl font-semibold my-4 text-center">Užduočių rinkinio redagavimas</h1>
 <div class="flex flex-row justify-between mx-4">
 	<div class="w-28">
-		<Button on:click={() => goto('/submit/dashboard')} class="w-16">Grįžti</Button>
+		<Button on:click={() => goto('/submit/dashboard')} class="w-16 my-2">Grįžti</Button>
 	</div>
-	<div>
-		<h3 class="text-lg text-red-600 text-center">Progresas nėra išsaugomas automatiškai!</h3>
-		<h3 class="text-lg text-blue-600 text-center">
-			Vos pateikę užduotis galite jas rūšiuoti į kategorijas!
-		</h3>
-	</div>
+	<h1 class="text-4xl font-semibold my-4 text-center">Užduočių rinkinio redagavimas</h1>
+	<div class="w-28"></div>
+</div>
 
-	<div class="w-28">
-		<Button color="blue" on:click={() => goto('/sort-dashboard')} class="w-28">Rūšiuoti</Button>
-	</div>
+<div>
+	<h3 class="text-lg text-red-600 text-center">Progresas nėra išsaugomas automatiškai!</h3>
+	<h3 class="text-lg text-blue-600 text-center">
+		Vos pateikę užduotis galite jas <a href="/sort-dashboard">rūšiuoti</a> į kategorijas!
+	</h3>
 </div>
 <p class="text-justify mx-4 my-4">
-	Spausdami mygtukus "Pateikti peržiūrai" arba "Pateikti pakeitimą peržiūrai" Jūs patvirtinate, kad
-	įkeliate tik savo sukurtas originalias užduotis arba užduotis, kurios jau yra pasiekiamos viešai.
-	Pateikdami savo užduotis atsisakote turtinių autorinių teisių į šias užduotis, leidžiate
-	užduotimis naudotis bet kam. Pateikdami kitų autorių užduotis patvirtinate, kad tie autoriai yra
-	atsisakę turtinių autorinių teisių bei taip pat leidžia naudotis užduotimis bet kam. Peržiūrėtos
-	ir patvirtintos užduotys bus paviešintos kartu su Jūsų prisijungimo vardu, bet ne el. paštu.
+	Spausdami mygtukus "Pateikti peržiūrai" Jūs patvirtinate, kad įkeliate tik savo sukurtas
+	originalias užduotis arba užduotis, kurios jau yra pasiekiamos viešai. Pateikdami savo užduotis
+	atsisakote turtinių autorinių teisių į šias užduotis, leidžiate užduotimis naudotis bet kam.
+	Pateikdami kitų autorių užduotis patvirtinate, kad tie autoriai yra atsisakę turtinių autorinių
+	teisių bei taip pat leidžia naudotis užduotimis bet kam. Peržiūrėtos ir patvirtintos užduotys bus
+	paviešintos kartu su Jūsų prisijungimo vardu, bet ne el. paštu.
 </p>
 
 <div class="relative">
@@ -188,6 +186,13 @@
 		href="https://latex.codecogs.com/eqneditor/editor.php"
 		target="_blank">https://latex.codecogs.com/eqneditor/editor.php</a
 	>
+</p>
+<p>
+	Tekstas rašomas markdown sintakse. Svarbiausia - naujai eilutei reikia dviejų Enter, galite rašyti
+	LaTex formules. Daugiau galite paskaityti čia: <a
+		href="https://www.markdownguide.org/cheat-sheet/">https://www.markdownguide.org/cheat-sheet/</a
+	>. Taip pat formules galite įkelti kaip paveikslėlius, naudodamiesi
+	https://latex.codecogs.com/eqneditor/editor.php
 </p>
 
 <div class="relative">

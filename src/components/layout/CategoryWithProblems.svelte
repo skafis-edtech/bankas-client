@@ -47,17 +47,17 @@
 <Accordion>
 	<AccordionItem bind:open={isOpen} class="bg-slate-200 my-4">
 		<span slot="header" class="text-black flex justify-between items-center w-full">
-			<div>
+			<p>
 				{#if searchValue}
 					{@html category.name.replace(new RegExp(searchValue, 'gi'), '<mark>$&</mark>')}
 				{:else}
 					{category.name}
 				{/if}
-			</div>
-			<div class="ml-auto text-right mr-2"><strong>({problemCount})</strong></div>
+			</p>
+			<p class="ml-auto text-right mr-2"><strong>({problemCount})</strong></p>
 		</span>
 
-		<h3 class="text-xl">{category.description}</h3>
+		<h5 class="text-xl">{category.description}</h5>
 		<div class="container mx-auto">
 			{#each problems as problem (problem.id)}
 				<div class="my-3">

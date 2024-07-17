@@ -5,3 +5,23 @@
 .m0p0-inside-ul ul {
 	@apply p-0 m-0;
 }
+
+details > summary {
+    list-style-type: '⊕ ';
+}
+
+details[open] > summary {
+    list-style-type: '⊖ ';
+}
+
+details[open] > summary {
+    margin-bottom: 0.5rem;
+}
+
+a {
+	@apply underline;
+}
+
+:global(.carta-font-code) {
+	font-size: 1.1rem;
+}

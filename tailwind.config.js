@@ -10,18 +10,16 @@ export default {
 		extend: {
 			colors: {
 				primary: {
-					50: '#FFF5F2',
-					100: '#FFF1EE',
-					200: '#FFE4DE',
-					300: '#FFD5CC',
-					400: '#FFBCAD',
-					500: '#FE795D',
-					600: '#EF562F',
 					700: '#EB4F27',
-					800: '#CC4522',
-					900: '#A5371B'
 				}
 			}
 		}
-	}
+	},
+	/* 
+	 Stuff below removes all the default styles so that freshly made h1 and p tags would have at least a bit difference :D
+	 For now the solution is reset.css file 
+	 */
+	// corePlugins: {
+	// 	preflight: false,
+	// },
 };

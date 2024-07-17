@@ -2,4 +2,4 @@
 	export let categoryName: string;
 </script>
 
-<a href="/?search={categoryName}" class="underline">{categoryName}</a>
+<a href="/?search={categoryName}">{categoryName}</a>

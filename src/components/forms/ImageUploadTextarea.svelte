@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Button, Input, Label } from 'flowbite-svelte';
 	import { CloseOutline, TrashBinOutline, XSolid } from 'flowbite-svelte-icons';
+	import MarkdownInput from './MarkdownInput.svelte';
 
 	export let value: string | undefined;
 	export let imageFile: File | null | undefined;
@@ -69,17 +70,20 @@
 	<Label for={id} class="block text-sm font-medium text-gray-700 dark:text-gray-300">
 		{label}
 	</Label>
-	<textarea
-		{id}
-		bind:value
-		placeholder="Įveskite tekstą ir/arba nutempkite arba įklijuokite paveikslėlį..."
-		class={`mt-1 block px-4 py-2 w-full text-lg text-gray-900 bg-gray-50 rounded-lg border focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${isDragOver ? 'bg-blue-100' : ''} ${textareaClass}`}
-		on:input={handleInput}
-		on:dragover={handleDragOver}
-		on:dragleave={handleDragLeave}
-		on:drop={handleDrop}
-		on:paste={handlePaste}
-	></textarea>
+	<div class="relative">
+		<div
+			role="textbox"
+			tabindex="0"
+			class={`mt-1 absolute top-0 left-0 block px-4 py-2 w-full text-lg text-gray-900 bg-gray-50 rounded-lg border focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${isDragOver ? 'bg-blue-100' : ''} ${textareaClass}`}
+			on:input={handleInput}
+			on:dragover={handleDragOver}
+			on:dragleave={handleDragLeave}
+			on:drop={handleDrop}
+			on:paste={handlePaste}
+		></div>
+		<MarkdownInput bind:value />
+	</div>
+
 	{#if uploadedImage}
 		<div class="my-6 relative w-fit border-black border-2">
 			<Button
