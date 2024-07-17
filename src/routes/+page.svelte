@@ -6,8 +6,19 @@
 	import type { AuthContext } from '../types';
 	import { publicApi } from '$services/apiService';
 	import HorizontalLine from '$components/ui/HorizontalLine.svelte';
+	import { Search } from 'flowbite-svelte';
+	import { page } from '$app/stores';
 
 	const { user } = getContext('authContext') as AuthContext;
+	const searchUrlStr: string = $page.url.searchParams.get('search') || '';
+
+	let searchValue = '';
+	$: searchValue = searchUrlStr;
+
+	page.subscribe(($page) => {
+		const searchUrlStr: string = $page.url.searchParams.get('search') || '';
+		searchValue = searchUrlStr;
+	});
 
 	let categories: Category[] = [];
 	let numOfProblems: number | null = null;
@@ -28,13 +39,16 @@
 
 <h1 class="text-4xl font-semibold my-4 text-center">Skafis užduočių bankas</h1>
 
-<h3 class="text-md font-semibold my-4 text-center">
-	Mokytojų pasidalintos originalios užduotys surūšiuotos į temas (kategorijas)
-</h3>
+<h5 class="text-md font-semibold my-4 text-center">
+	Mokytojų pasidalintos originalios užduotys surūšiuotos į temas (kategorijas) pagal BUP nuo
+	2024/2025 m. m. (<a href="https://www.emokykla.lt/bendrosios-programos/visos-bendrosios-programos"
+		>https://www.emokykla.lt/bendrosios-programos/visos-bendrosios-programos</a
+	>)
+</h5>
 
-<h3 class="text-md font-semibold my-4 text-center">
+<h4 class="text-md font-semibold my-4 text-center">
 	Užduočių: {numOfProblems || '...'} | Kategorijų: {numOfCategories || '...'}
-</h3>
+</h4>
 
 <HorizontalLine />
 
@@ -43,7 +57,7 @@
 <HorizontalLine />
 
 <div class="text-center">
-	<h1 class="text-2xl font-semibold my-6">Kategorijos</h1>
+	<h1 class="text-2xl font-semibold my-3">Kategorijos</h1>
 	{#if !$user}
 		<p>
 			Norite įkelti savo užduotis ar patvirtinti pateiktas kitų? <a
@@ -54,13 +68,20 @@
 	{/if}
 </div>
 
+<Search class="my-3" placeholder="Ieškoti" bind:value={searchValue} />
+
 {#each Object.entries(categories) as [id, category]}
-	<CategoryWithProblems {category} />
+	{#if category.name.toLowerCase().includes(searchValue.toLowerCase())}
+		<CategoryWithProblems {category} {searchValue} />
+	{/if}
 {/each}
-<CategoryWithProblems
-	category={{
-		id: '',
-		name: 'Nesurūšiuota',
-		description: 'Užduotys, kurios yra patvirtintos, tačiau dar nepriskirtos jokiai kategorijai.'
-	}}
-/>
+{#if 'Nesurūšiuota'.toLowerCase().includes(searchValue.toLowerCase())}
+	<CategoryWithProblems
+		category={{
+			id: '',
+			name: 'Nesurūšiuota',
+			description: 'Užduotys, kurios yra patvirtintos, tačiau dar nepriskirtos jokiai kategorijai.'
+		}}
+		{searchValue}
+	/>
+{/if}

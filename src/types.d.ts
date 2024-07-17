@@ -30,6 +30,7 @@ export namespace Components {
 	}
 
 	interface ProblemCreateFormData {
+		sourceListNr: number;
 		problemText: string;
 		answerText: string;
 		problemImageFile: File | null;

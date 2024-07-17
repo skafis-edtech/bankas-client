@@ -4,9 +4,11 @@ Problems for content bank (school problem repository).
 
 uses API. https://api.bankas.skafis.lt/v3/api-docs
 
+uses Carta MD for rich text input: https://beartocode.github.io/carta/introduction
+
 ## Tech
 
-- svelte, vite, typescript, pnpm
+- svelte, vite, typescript
 - firebase auth
 - firebase storage
 - firebase firestore
@@ -15,14 +17,15 @@ uses API. https://api.bankas.skafis.lt/v3/api-docs
 - svelte flowbite icons
 - github actions
 - openapi-generator-cli
+- carta-md
 
 ## Dev
 
-pnpm install
+npm install
 
-pnpm dev
+npm run dev
 
-gen services and models from openapi docs - pnpm genapi
+gen services and models from openapi docs - npm run genapi
 
 run backend locally - docker compose up -d, don't forget to change BASE_URL in src/services/gen-client/base.ts file, also create .env file from .env.template and put the path to firebase-admin.json file (to access firebase)
 

@@ -38,6 +38,6 @@
 	/>
 	<SourceWithProblems {source} />
 {/each}
-<Button color="green" on:click={() => goto('/submit-new-source')} class="w-full"
+<Button color="green" on:click={() => goto('/submit/new-source')} class="w-full"
 	>Pridėti užduočių rinkinį</Button
 >

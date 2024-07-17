@@ -4,6 +4,7 @@
 	import AuthorLink from './AuthorLink.svelte';
 	import { writable } from 'svelte/store';
 	import { publicApi } from '$services/apiService';
+	import CategoryLink from './CategoryLink.svelte';
 
 	export let categoryId: string;
 	export let sourceId: string;
@@ -44,7 +45,7 @@
 		<li>
 			<strong>Autorius: </strong><AuthorLink {author} />
 		</li>
-		<li><strong>Kategorija: </strong> {categoryName}</li>
+		<li><strong>Kategorija: </strong><CategoryLink {categoryName} /></li>
 		<li><strong>Šaltinis: </strong> {sourceName}</li>
 	</ul>
 </Dropdown>

@@ -107,6 +107,12 @@ export interface Problem {
     'id': string;
     /**
      * 
+     * @type {number}
+     * @memberof Problem
+     */
+    'sourceListNr': number;
+    /**
+     * 
      * @type {string}
      * @memberof Problem
      */
@@ -168,6 +174,12 @@ export interface ProblemDisplayViewDto {
     'id': string;
     /**
      * 
+     * @type {number}
+     * @memberof ProblemDisplayViewDto
+     */
+    'sourceListNr': number;
+    /**
+     * 
      * @type {string}
      * @memberof ProblemDisplayViewDto
      */
@@ -223,6 +235,12 @@ export interface ProblemPostDto {
     'skfCode': string;
     /**
      * 
+     * @type {number}
+     * @memberof ProblemPostDto
+     */
+    'sourceListNr': number;
+    /**
+     * 
      * @type {string}
      * @memberof ProblemPostDto
      */
@@ -264,6 +282,12 @@ export interface ProblemPostDto {
  * @interface ProblemSubmitDto
  */
 export interface ProblemSubmitDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof ProblemSubmitDto
+     */
+    'sourceListNr': number;
     /**
      * 
      * @type {string}

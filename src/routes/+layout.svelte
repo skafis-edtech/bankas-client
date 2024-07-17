@@ -1,12 +1,15 @@
 <script lang="ts">
 	import '../app.css';
+	import '../reset.css';
+	import 'katex/dist/katex.css';
+	import 'carta-md/default.css';
+	import '../MarkdownInput.css';
 	import { writable, type Writable } from 'svelte/store';
 	import { onDestroy, setContext } from 'svelte';
 	import { loginUser, logout } from '$services/auth';
 	import type { AuthContext, User } from '../types';
 	import { auth, db } from '$services/firebaseConfig';
 	import { doc, getDoc } from 'firebase/firestore';
-	import Header from '$components/layout/HeaderMobile.svelte';
 	import Footer from '$components/layout/Footer.svelte';
 	import { setAuthToken } from '$services/apiService';
 	import { goto } from '$app/navigation';
@@ -64,7 +67,7 @@
 <footer><Footer /></footer>
 <GlobalAlert />
 
-<style lang="scss">
+<style>
 	header {
 		height: 95px;
 	}

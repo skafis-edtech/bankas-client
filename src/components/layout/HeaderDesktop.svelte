@@ -48,7 +48,7 @@
 			{:else}
 				<NavLi on:click={popup} class="text-right"><Button color="light">Peržiūrėti</Button></NavLi>
 			{/if}
-			<NavLi on:click={() => goto('/submit-dashboard')} class="text-right"
+			<NavLi on:click={() => goto('/submit/dashboard')} class="text-right"
 				><Button color="green">Pateikti</Button></NavLi
 			>
 			<NavLi on:click={() => goto('/sort-dashboard')} class="text-right"
