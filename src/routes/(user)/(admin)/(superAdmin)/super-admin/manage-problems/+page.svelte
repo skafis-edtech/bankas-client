@@ -6,6 +6,7 @@
 
 	let problems = writable<Problem[]>([]);
 	let newProblem: ProblemPostDto = {
+		sourceListNr: 0,
 		skfCode: '',
 		problemImagePath: '',
 		answerImagePath: '',
@@ -31,6 +32,7 @@
 		try {
 			await problemApi.createProblem(newProblem);
 			newProblem = {
+				sourceListNr: 0,
 				skfCode: '',
 				problemImagePath: '',
 				answerImagePath: '',
@@ -86,6 +88,17 @@
 		<div class="p-4 bg-white rounded shadow mb-4">
 			{#if editProblem && editProblem.id === problem.id}
 				<form on:submit|preventDefault={updateProblem}>
+					<div class="mb-4">
+						<label class="block text-sm font-medium text-gray-700" for="srcListNr"
+							>Source List Number</label
+						>
+						<input
+							id="srcListNr"
+							type="text"
+							bind:value={editProblem.sourceListNr}
+							class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+						/>
+					</div>
 					<div class="mb-4">
 						<label class="block text-sm font-medium text-gray-700" for="skfcode">SKF code</label>
 						<input
@@ -168,6 +181,7 @@
 				<div class="flex justify-between items-center">
 					<div>
 						<h3 class="text-lg font-semibold">{problem.id}</h3>
+						<p class="text-gray-600"><strong>sourceListNr: </strong>{problem.sourceListNr}</p>
 						<p class="text-gray-600"><strong>skfCode: </strong>{problem.skfCode}</p>
 						<p class="text-gray-600"><strong>problemText: </strong>{problem.problemText}</p>
 						<p class="text-gray-600">
@@ -198,6 +212,17 @@
 <div class="max-w-2xl mx-auto p-4">
 	<h2 class="text-2xl font-semibold mb-4">Create Problem</h2>
 	<form on:submit|preventDefault={createProblem}>
+		<div class="mb-4">
+			<label class="block text-sm font-medium text-gray-700" for="srcListNr"
+				>Source List Number</label
+			>
+			<input
+				id="srcListNr"
+				type="text"
+				bind:value={newProblem.sourceListNr}
+				class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+			/>
+		</div>
 		<div class="mb-4">
 			<label class="block text-sm font-medium text-gray-700" for="skfcode">SKF code</label>
 			<input

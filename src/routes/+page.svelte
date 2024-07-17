@@ -7,14 +7,22 @@
 	import { publicApi } from '$services/apiService';
 	import HorizontalLine from '$components/ui/HorizontalLine.svelte';
 	import { Search } from 'flowbite-svelte';
+	import { page } from '$app/stores';
 
 	const { user } = getContext('authContext') as AuthContext;
+	const searchUrlStr: string = $page.url.searchParams.get('search') || '';
+
+	let searchValue = '';
+	$: searchValue = searchUrlStr;
+
+	page.subscribe(($page) => {
+		const searchUrlStr: string = $page.url.searchParams.get('search') || '';
+		searchValue = searchUrlStr;
+	});
 
 	let categories: Category[] = [];
 	let numOfProblems: number | null = null;
 	let numOfCategories: number | null = null;
-
-	let searchValue = '';
 
 	onMount(async () => {
 		const [categoriesRes, problemsCountRes, categoriesCountRes] = await Promise.all([
@@ -67,10 +75,13 @@
 		<CategoryWithProblems {category} {searchValue} />
 	{/if}
 {/each}
-<CategoryWithProblems
-	category={{
-		id: '',
-		name: 'Nesurūšiuota',
-		description: 'Užduotys, kurios yra patvirtintos, tačiau dar nepriskirtos jokiai kategorijai.'
-	}}
-/>
+{#if 'Nesurūšiuota'.toLowerCase().includes(searchValue.toLowerCase())}
+	<CategoryWithProblems
+		category={{
+			id: '',
+			name: 'Nesurūšiuota',
+			description: 'Užduotys, kurios yra patvirtintos, tačiau dar nepriskirtos jokiai kategorijai.'
+		}}
+		{searchValue}
+	/>
+{/if}

@@ -13,7 +13,7 @@
 			if ($user.role === ROLES.ADMIN) {
 				goto('/review-dashboard');
 			} else if ($user.role === ROLES.USER) {
-				goto('/submit-dashboard');
+				goto('/submit/dashboard');
 			} else if ($user.role === ROLES.SUPER_ADMIN) {
 				goto('/review-dashboard');
 			} else {

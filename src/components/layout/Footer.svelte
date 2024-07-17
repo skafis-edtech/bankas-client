@@ -8,4 +8,4 @@
 		>npw.lt
 	</a>
 </p>
-<p>v1.0.0 - Paskutinį kartą atnaujinta: 2024-07-13</p>
+<p>v1.0.0+ - Paskutinį kartą atnaujinta: 2024-07-17</p>

@@ -6,7 +6,6 @@
 	import type { AuthContext, User } from '../types';
 	import { auth, db } from '$services/firebaseConfig';
 	import { doc, getDoc } from 'firebase/firestore';
-	import Header from '$components/layout/HeaderMobile.svelte';
 	import Footer from '$components/layout/Footer.svelte';
 	import { setAuthToken } from '$services/apiService';
 	import { goto } from '$app/navigation';

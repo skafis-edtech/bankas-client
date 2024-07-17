@@ -38,7 +38,7 @@
 	{#if reviewStatus === SourceReviewStatusEnum.Approved}
 		<Badge color="green" class="ml-2">Patvirtinta</Badge>
 	{/if}
-	<Button color="primary" on:click={() => goto(`/edit-source/${sourceId}`)} class="p-2 mx-1"
+	<Button color="primary" on:click={() => goto(`/submit/edit-source/${sourceId}`)} class="p-2 mx-1"
 		><EditOutline /></Button
 	>
 	{#if reviewMessage !== ''}

@@ -86,7 +86,7 @@
 				<Button
 					on:click={() => {
 						hidden1 = true;
-						goto('/submit-dashboard');
+						goto('/submit/dashboard');
 					}}
 					color="green">Pateikti</Button
 				>
