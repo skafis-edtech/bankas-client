@@ -14,7 +14,6 @@
 		<ImageUploadTextarea
 			bind:value={problemData.problemText}
 			bind:imageFile={problemData.problemImageFile}
-			bind:imageUrl={problemData.problemImageUrl}
 			label="Klausimas"
 			id="question"
 			textareaClass="border-black dark:border-white border-2 h-32"
@@ -24,7 +23,6 @@
 			<ImageUploadTextarea
 				bind:value={problemData.answerText}
 				bind:imageFile={problemData.answerImageFile}
-				bind:imageUrl={problemData.answerImageUrl}
 				label="Atsakymas bei kiti komentarai"
 				id="answer"
 				textareaClass="border-gray-300"

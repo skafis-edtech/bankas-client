@@ -58,7 +58,7 @@
 			<p class="ml-auto text-right mr-2"><strong>({problemCount})</strong></p>
 		</span>
 
-		<MarkdownDisplay value={category.description} />
+		<div class="text-black"><MarkdownDisplay value={category.description} /></div>
 
 		<div class="container mx-auto">
 			{#each problems as problem (problem.id)}
