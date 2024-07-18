@@ -5,7 +5,6 @@
 
 	export let value: string | undefined;
 	export let imageFile: File | null | undefined;
-	export let imageUrl: string | undefined;
 	export let label: string;
 	export let id: string;
 	export let textareaClass: string = '';
@@ -67,21 +66,20 @@
 </script>
 
 <div class="my-2">
-	<Label for={id} class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+	<p class="block text-sm font-medium text-gray-700 dark:text-gray-300">
 		{label}
-	</Label>
+	</p>
 	<div class="relative">
-		<div
-			role="textbox"
-			tabindex="0"
-			class={`mt-1 absolute top-0 left-0 block px-4 py-2 w-full text-lg text-gray-900 bg-gray-50 rounded-lg border focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${isDragOver ? 'bg-blue-100' : ''} ${textareaClass}`}
+		<MarkdownInput bind:value />
+		<textarea
+			placeholder="Įveskite tekstą ir/arba nutempkite arba įklijuokite paveikslėlį..."
+			class={`mt-1 block px-4 py-2 w-full text-lg text-gray-900 bg-gray-50 rounded-lg border focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${isDragOver ? 'bg-blue-200' : ''} ${textareaClass}`}
 			on:input={handleInput}
 			on:dragover={handleDragOver}
 			on:dragleave={handleDragLeave}
 			on:drop={handleDrop}
 			on:paste={handlePaste}
-		></div>
-		<MarkdownInput bind:value />
+		></textarea>
 	</div>
 
 	{#if uploadedImage}
@@ -95,18 +93,4 @@
 			<img src={uploadedImage} alt="Uploaded" class="max-w-full h-auto" loading="lazy" />
 		</div>
 	{/if}
-	<div>
-		<Input
-			type="text"
-			bind:value={imageUrl}
-			placeholder="... arba įveskite paveikslėlio nuorodą..."
-			class="mt-1 block w-full px-4 py-2 text-lg"
-		/>
-	</div>
 </div>
-
-<style>
-	.bg-blue-100 {
-		background-color: #49bfff; /* light bluish color */
-	}
-</style>
