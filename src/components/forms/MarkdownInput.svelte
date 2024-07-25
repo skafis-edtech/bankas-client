@@ -26,4 +26,9 @@
 	});
 </script>
 
-<MarkdownEditor mode="tabs" placeholder="Čia galite rašyti markdown! 🚀" {carta} bind:value />
+<MarkdownEditor
+	mode="tabs"
+	placeholder="Čia galite rašyti ir markdown bei LaTex sintakse!"
+	{carta}
+	bind:value
+/>

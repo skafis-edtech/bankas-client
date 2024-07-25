@@ -30,7 +30,7 @@
 	mode="tabs"
 	disableToolbar
 	selectedTab="preview"
-	placeholder="Čia galite rašyti markdown! 🚀"
+	placeholder="This shouldn't be displayed"
 	{carta}
 	{value}
 />
