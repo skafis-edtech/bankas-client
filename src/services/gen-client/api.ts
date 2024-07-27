@@ -361,7 +361,7 @@ export interface Source {
      * @type {string}
      * @memberof Source
      */
-    'reviewedBy': string;
+    'reviewedById': string;
     /**
      * 
      * @type {string}
@@ -379,7 +379,7 @@ export interface Source {
      * @type {string}
      * @memberof Source
      */
-    'author': string;
+    'authorId': string;
     /**
      * 
      * @type {string}
@@ -401,6 +401,82 @@ export const SourceReviewStatusEnum = {
 } as const;
 
 export type SourceReviewStatusEnum = typeof SourceReviewStatusEnum[keyof typeof SourceReviewStatusEnum];
+
+/**
+ * 
+ * @export
+ * @interface SourceDisplayDto
+ */
+export interface SourceDisplayDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof SourceDisplayDto
+     */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SourceDisplayDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SourceDisplayDto
+     */
+    'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SourceDisplayDto
+     */
+    'reviewStatus': SourceDisplayDtoReviewStatusEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof SourceDisplayDto
+     */
+    'reviewedByUsername': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SourceDisplayDto
+     */
+    'reviewedOn': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SourceDisplayDto
+     */
+    'reviewMessage': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SourceDisplayDto
+     */
+    'authorUsername': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SourceDisplayDto
+     */
+    'createdOn': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SourceDisplayDto
+     */
+    'lastModifiedOn': string;
+}
+
+export const SourceDisplayDtoReviewStatusEnum = {
+    Pending: 'PENDING',
+    Rejected: 'REJECTED',
+    Approved: 'APPROVED'
+} as const;
+
+export type SourceDisplayDtoReviewStatusEnum = typeof SourceDisplayDtoReviewStatusEnum[keyof typeof SourceDisplayDtoReviewStatusEnum];
 
 /**
  * 
@@ -431,7 +507,7 @@ export interface SourcePostDto {
      * @type {string}
      * @memberof SourcePostDto
      */
-    'reviewedBy': string;
+    'reviewedById': string;
     /**
      * 
      * @type {string}
@@ -449,7 +525,7 @@ export interface SourcePostDto {
      * @type {string}
      * @memberof SourcePostDto
      */
-    'author': string;
+    'authorId': string;
     /**
      * 
      * @type {string}
@@ -2725,7 +2801,7 @@ export const PublicControllerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSourceById1(sourceId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Source>> {
+        async getSourceById1(sourceId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SourceDisplayDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getSourceById1(sourceId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PublicControllerApi.getSourceById1']?.[localVarOperationServerIndex]?.url;
@@ -2839,7 +2915,7 @@ export const PublicControllerApiFactory = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSourceById1(sourceId: string, options?: any): AxiosPromise<Source> {
+        getSourceById1(sourceId: string, options?: any): AxiosPromise<SourceDisplayDto> {
             return localVarFp.getSourceById1(sourceId, options).then((request) => request(axios, basePath));
         },
         /**
