@@ -293,18 +293,6 @@ export interface ProblemSubmitDto {
      * @type {string}
      * @memberof ProblemSubmitDto
      */
-    'problemImageUrl': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProblemSubmitDto
-     */
-    'answerImageUrl': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProblemSubmitDto
-     */
     'problemText': string;
     /**
      * 
@@ -1085,7 +1073,7 @@ export const ApprovalControllerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async approve(sourceId: string, reviewMsgDto: ReviewMsgDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Source>> {
+        async approve(sourceId: string, reviewMsgDto: ReviewMsgDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SourceDisplayDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.approve(sourceId, reviewMsgDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApprovalControllerApi.approve']?.[localVarOperationServerIndex]?.url;
@@ -1123,7 +1111,7 @@ export const ApprovalControllerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getMySources(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Source>>> {
+        async getMySources(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SourceDisplayDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getMySources(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApprovalControllerApi.getMySources']?.[localVarOperationServerIndex]?.url;
@@ -1148,7 +1136,7 @@ export const ApprovalControllerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSources(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Source>>> {
+        async getSources(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SourceDisplayDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getSources(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApprovalControllerApi.getSources']?.[localVarOperationServerIndex]?.url;
@@ -1162,7 +1150,7 @@ export const ApprovalControllerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async reject(sourceId: string, reviewMsgDto: ReviewMsgDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Source>> {
+        async reject(sourceId: string, reviewMsgDto: ReviewMsgDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SourceDisplayDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.reject(sourceId, reviewMsgDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApprovalControllerApi.reject']?.[localVarOperationServerIndex]?.url;
@@ -1205,7 +1193,7 @@ export const ApprovalControllerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async update(id: string, sourceSubmitDto: SourceSubmitDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Source>> {
+        async update(id: string, sourceSubmitDto: SourceSubmitDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SourceDisplayDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.update(id, sourceSubmitDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApprovalControllerApi.update']?.[localVarOperationServerIndex]?.url;
@@ -1243,7 +1231,7 @@ export const ApprovalControllerApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        approve(sourceId: string, reviewMsgDto: ReviewMsgDto, options?: any): AxiosPromise<Source> {
+        approve(sourceId: string, reviewMsgDto: ReviewMsgDto, options?: any): AxiosPromise<SourceDisplayDto> {
             return localVarFp.approve(sourceId, reviewMsgDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1272,7 +1260,7 @@ export const ApprovalControllerApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMySources(options?: any): AxiosPromise<Array<Source>> {
+        getMySources(options?: any): AxiosPromise<Array<SourceDisplayDto>> {
             return localVarFp.getMySources(options).then((request) => request(axios, basePath));
         },
         /**
@@ -1291,7 +1279,7 @@ export const ApprovalControllerApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSources(options?: any): AxiosPromise<Array<Source>> {
+        getSources(options?: any): AxiosPromise<Array<SourceDisplayDto>> {
             return localVarFp.getSources(options).then((request) => request(axios, basePath));
         },
         /**
@@ -1302,7 +1290,7 @@ export const ApprovalControllerApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        reject(sourceId: string, reviewMsgDto: ReviewMsgDto, options?: any): AxiosPromise<Source> {
+        reject(sourceId: string, reviewMsgDto: ReviewMsgDto, options?: any): AxiosPromise<SourceDisplayDto> {
             return localVarFp.reject(sourceId, reviewMsgDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1336,7 +1324,7 @@ export const ApprovalControllerApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update(id: string, sourceSubmitDto: SourceSubmitDto, options?: any): AxiosPromise<Source> {
+        update(id: string, sourceSubmitDto: SourceSubmitDto, options?: any): AxiosPromise<SourceDisplayDto> {
             return localVarFp.update(id, sourceSubmitDto, options).then((request) => request(axios, basePath));
         },
         /**

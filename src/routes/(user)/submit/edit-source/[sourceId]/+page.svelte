@@ -3,9 +3,12 @@
 	import { goto } from '$app/navigation';
 	import SourceCreateForm from '$components/forms/SourceCreateForm.svelte';
 	import ProblemCreateForm from '$components/forms/ProblemCreateForm.svelte';
-	import { CloseOutline, PlusOutline } from 'flowbite-svelte-icons';
 	import { approvalApi, publicApi } from '$services/apiService';
-	import type { ProblemDisplayViewDto, Source, SourceSubmitDto } from '$services/gen-client';
+	import type {
+		ProblemDisplayViewDto,
+		SourceDisplayDto,
+		SourceSubmitDto
+	} from '$services/gen-client';
 	import { successStore } from '$lib/stores';
 	import type { Components } from '../../../../../types';
 	import { page } from '$app/stores';
@@ -16,7 +19,7 @@
 	let sourceId: string;
 	$: sourceId = get(page).params.sourceId;
 
-	let oldSourceData: Source;
+	let oldSourceData: SourceDisplayDto;
 	let submittedProblems: ProblemDisplayViewDto[] = [];
 
 	let sourceData: SourceSubmitDto = {
@@ -27,10 +30,8 @@
 		sourceListNr: 0,
 		problemText: '',
 		problemImageFile: null,
-		problemImageUrl: '',
 		answerText: '',
-		answerImageFile: null,
-		answerImageUrl: ''
+		answerImageFile: null
 	};
 
 	let isSourceDataChanged = false;
@@ -57,10 +58,8 @@
 			sourceListNr: nextSourceListNr,
 			problemText: '',
 			problemImageFile: null,
-			problemImageUrl: '',
 			answerText: '',
-			answerImageFile: null,
-			answerImageUrl: ''
+			answerImageFile: null
 		};
 	});
 
@@ -77,9 +76,7 @@
 			{
 				sourceListNr: newProblem.sourceListNr,
 				problemText: newProblem.problemText,
-				problemImageUrl: newProblem.problemImageUrl,
-				answerText: newProblem.answerText,
-				answerImageUrl: newProblem.answerImageUrl
+				answerText: newProblem.answerText
 			},
 			newProblem.problemImageFile!!,
 			newProblem.answerImageFile!!
@@ -94,10 +91,8 @@
 			sourceListNr: nextSourceListNr,
 			problemText: '',
 			problemImageFile: null,
-			problemImageUrl: '',
 			answerText: '',
-			answerImageFile: null,
-			answerImageUrl: ''
+			answerImageFile: null
 		};
 	}
 
@@ -179,20 +174,19 @@
 	Darydami ekrano nuotraukas rinkitės kiek įmanoma didesnį mastelį, kad būtų geresnė kokybė. (Galite
 	naudotis Win+Shift+S komanda ir tuomet įklijuoti naudojantis Ctrl+V)
 </p>
+
 <p class="text-center mb-4">
-	Formules galite generuoti čia, naudojantis LaTex sintakse (nukopijuokite paveikslėlio nuorodą arba
-	nutempkite paveikslėlį): <a
+	Tekstas rašomas markdown sintakse. Svarbiausia - naujai eilutei reikia dviejų Enter, galite rašyti
+	LaTex formules. Daugiau galite paskaityti čia: <a
+		href="https://www.markdownguide.org/cheat-sheet/">https://www.markdownguide.org/cheat-sheet/</a
+	>
+</p>
+<p class="text-center mb-4">
+	Pagalba rašant formules: <a
 		class="underline"
 		href="https://latex.codecogs.com/eqneditor/editor.php"
 		target="_blank">https://latex.codecogs.com/eqneditor/editor.php</a
 	>
-</p>
-<p>
-	Tekstas rašomas markdown sintakse. Svarbiausia - naujai eilutei reikia dviejų Enter, galite rašyti
-	LaTex formules. Daugiau galite paskaityti čia: <a
-		href="https://www.markdownguide.org/cheat-sheet/">https://www.markdownguide.org/cheat-sheet/</a
-	>. Taip pat formules galite įkelti kaip paveikslėlius, naudodamiesi
-	https://latex.codecogs.com/eqneditor/editor.php
 </p>
 
 <div class="relative">

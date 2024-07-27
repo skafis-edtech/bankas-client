@@ -34,7 +34,7 @@
 		sourceId={source.id}
 		reviewMessage={source.reviewMessage}
 		reviewedOn={source.reviewedOn}
-		reviewedBy={source.reviewedBy}
+		reviewedBy={source.reviewedByUsername}
 	/>
 	<SourceWithProblems {source} />
 {/each}
