@@ -12,12 +12,14 @@
 	import { successStore } from '$lib/stores';
 	import type { Components } from '../../../../../types';
 	import { page } from '$app/stores';
-	import { get } from 'svelte/store';
 	import { onMount } from 'svelte';
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
+	import MultipleFileUploadModal from '$components/ui/MultipleFileUploadModal.svelte';
+	import { CloseOutline, PlusOutline } from 'flowbite-svelte-icons';
 
+	let isDropModalOpen = false;
 	let sourceId: string;
-	$: sourceId = get(page).params.sourceId;
+	$: sourceId = $page.params.sourceId;
 
 	let oldSourceData: SourceDisplayDto;
 	let submittedProblems: ProblemDisplayViewDto[] = [];
@@ -26,13 +28,8 @@
 		name: '',
 		description: ''
 	};
-	let newProblem: Components.ProblemCreateFormData = {
-		sourceListNr: 0,
-		problemText: '',
-		problemImageFile: null,
-		answerText: '',
-		answerImageFile: null
-	};
+
+	let newProblems: Components.ProblemCreateFormData[] = [];
 
 	let isSourceDataChanged = false;
 	$: {
@@ -54,13 +51,15 @@
 
 		const nextSourceListNr = submittedProblems[submittedProblems.length - 1]?.sourceListNr + 1 || 1;
 
-		newProblem = {
-			sourceListNr: nextSourceListNr,
-			problemText: '',
-			problemImageFile: null,
-			answerText: '',
-			answerImageFile: null
-		};
+		newProblems = [
+			{
+				sourceListNr: nextSourceListNr,
+				problemText: '',
+				problemImageFile: null,
+				answerText: '',
+				answerImageFile: null
+			}
+		];
 	});
 
 	async function updateSource() {
@@ -70,30 +69,38 @@
 		oldSourceData = sourceResponse.data;
 	}
 
-	async function submitProblem() {
+	async function submitProblem(index: number) {
 		await approvalApi.submitProblem(
 			sourceId,
 			{
-				sourceListNr: newProblem.sourceListNr,
-				problemText: newProblem.problemText,
-				answerText: newProblem.answerText
+				sourceListNr: newProblems[index].sourceListNr,
+				problemText: newProblems[index].problemText,
+				answerText: newProblems[index].answerText
 			},
-			newProblem.problemImageFile!!,
-			newProblem.answerImageFile!!
+			newProblems[index].problemImageFile!!,
+			newProblems[index].answerImageFile!!
 		);
 		successStore.set('Užduotis pateikta sėkmingai');
+
+		removeProblem(index);
+
 		const problemsResponse = await approvalApi.getProblemsBySource(sourceId);
 		submittedProblems = problemsResponse.data;
 
-		const nextSourceListNr = submittedProblems[submittedProblems.length - 1].sourceListNr + 1;
+		if (newProblems.length === 0) {
+			const nextSourceListNr =
+				submittedProblems[submittedProblems.length - 1]?.sourceListNr + 1 || 1;
 
-		newProblem = {
-			sourceListNr: nextSourceListNr,
-			problemText: '',
-			problemImageFile: null,
-			answerText: '',
-			answerImageFile: null
-		};
+			newProblems = [
+				{
+					sourceListNr: nextSourceListNr,
+					problemText: '',
+					problemImageFile: null,
+					answerText: '',
+					answerImageFile: null
+				}
+			];
+		}
 	}
 
 	async function deleteProblem(problemId: string) {
@@ -107,6 +114,23 @@
 		await approvalApi.deleteSource1(sourceId);
 		successStore.set('Šaltinis ištrintas sėkmingai');
 		goto('/submit/dashboard');
+	}
+
+	function removeProblem(index: number) {
+		newProblems = newProblems.filter((_, i) => i !== index);
+	}
+
+	function addProblem() {
+		newProblems = [
+			...newProblems,
+			{
+				sourceListNr: newProblems[newProblems.length - 1].sourceListNr + 1,
+				problemText: '',
+				problemImageFile: null,
+				answerText: '',
+				answerImageFile: null
+			}
+		];
 	}
 </script>
 
@@ -170,6 +194,17 @@
 	{/each}
 </div>
 
+<div class="flex flex-row justify-center">
+	<Button color="green" on:click={() => (isDropModalOpen = true)} class="w-fit mx-auto my-4"
+		>Supildyti automatiškai įkeliant paveikslėlių grupę</Button
+	>
+</div>
+<!-- <MultipleFileUploadModal
+	bind:open={isDropModalOpen}
+	bind:value={groupedUploadedFiles}
+	onSubmit={fillInFileListFromGroupedUpload}
+/> -->
+
 <p class="text-center mb-2">
 	Darydami ekrano nuotraukas rinkitės kiek įmanoma didesnį mastelį, kad būtų geresnė kokybė. (Galite
 	naudotis Win+Shift+S komanda ir tuomet įklijuoti naudojantis Ctrl+V)
@@ -189,9 +224,22 @@
 	>
 </p>
 
-<div class="relative">
-	<ProblemCreateForm problemData={newProblem} />
-	<Button color="purple" on:click={submitProblem} class="w-fit absolute right-2 bottom-2"
-		>Pateikti peržiūrai</Button
-	>
-</div>
+{#each newProblems as problem, i}
+	<div class="relative">
+		{#if newProblems.length > 1}
+			<Button
+				color="primary"
+				on:click={() => removeProblem(i)}
+				class="w-10 h-10 absolute right-2 top-2"><CloseOutline /></Button
+			>
+		{/if}
+		<ProblemCreateForm problemData={problem} />
+		<Button color="purple" on:click={() => submitProblem(i)} class="w-fit absolute right-2 bottom-2"
+			>Pateikti peržiūrai</Button
+		>
+	</div>
+{/each}
+
+{#if newProblems.length > 0}
+	<Button color="green" on:click={addProblem} class="w-full"><PlusOutline /></Button>
+{/if}
