@@ -19,7 +19,7 @@ export namespace Components {
 		problemImageSrc: string;
 		answerText: string;
 		answerImageSrc: string;
-		categoryId: string;
+		categories: string[];
 		sourceId: string;
 	}
 

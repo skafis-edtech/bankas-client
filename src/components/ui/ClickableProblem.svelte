@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ProblemDisplayViewDto } from '$services/gen-client';
-	import { Alert, Badge } from 'flowbite-svelte';
+	import { Badge } from 'flowbite-svelte';
 	import ProblemComponent from './ProblemComponent.svelte';
 
 	export let problem: ProblemDisplayViewDto;
@@ -40,7 +40,7 @@
 			problemImageSrc: problem.problemImageSrc,
 			answerText: problem.answerText,
 			answerImageSrc: problem.answerImageSrc,
-			categoryId: problem.categoryId,
+			categories: problem.categories,
 			sourceId: problem.sourceId
 		}}
 	/>

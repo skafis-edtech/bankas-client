@@ -218,7 +218,7 @@
 					problemImageSrc: problem.problemImageSrc,
 					answerText: problem.answerText,
 					answerImageSrc: problem.answerImageSrc,
-					categoryId: problem.categoryId,
+					categories: problem.categories,
 					sourceId: problem.sourceId
 				}}
 			/>
@@ -270,6 +270,4 @@
 	</div>
 {/each}
 
-{#if newProblems.length > 0}
-	<Button color="green" on:click={addProblem} class="w-full"><PlusOutline /></Button>
-{/if}
+<Button color="green" on:click={addProblem} class="w-full"><PlusOutline /></Button>

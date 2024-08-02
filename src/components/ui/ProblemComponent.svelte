@@ -10,7 +10,7 @@
 <Card class="min-w-full">
 	<div class="flex flex-col relative">
 		<h2 class="text-xl font-bold text-left">{problemMainData.skfCode}</h2>
-		<ProblemMeta categoryId={problemMainData.categoryId} sourceId={problemMainData.sourceId} />
+		<ProblemMeta categories={problemMainData.categories} sourceId={problemMainData.sourceId} />
 		{#if problemMainData.problemText || problemMainData.problemImageSrc.length > 0}
 			<MarkdownDisplay
 				value={problemMainData.problemText +

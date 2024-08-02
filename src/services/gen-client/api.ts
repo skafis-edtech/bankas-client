@@ -51,6 +51,19 @@ export interface Category {
 /**
  * 
  * @export
+ * @interface CategoryListDto
+ */
+export interface CategoryListDto {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof CategoryListDto
+     */
+    'categories': Array<string>;
+}
+/**
+ * 
+ * @export
  * @interface CategoryPostDto
  */
 export interface CategoryPostDto {
@@ -143,10 +156,10 @@ export interface Problem {
     'answerImagePath': string;
     /**
      * 
-     * @type {string}
+     * @type {Array<string>}
      * @memberof Problem
      */
-    'categoryId': string;
+    'categories': Array<string>;
     /**
      * 
      * @type {string}
@@ -210,10 +223,10 @@ export interface ProblemDisplayViewDto {
     'answerImageSrc': string;
     /**
      * 
-     * @type {string}
+     * @type {Array<string>}
      * @memberof ProblemDisplayViewDto
      */
-    'categoryId': string;
+    'categories': Array<string>;
     /**
      * 
      * @type {string}
@@ -265,10 +278,10 @@ export interface ProblemPostDto {
     'answerText': string;
     /**
      * 
-     * @type {string}
+     * @type {Array<string>}
      * @memberof ProblemPostDto
      */
-    'categoryId': string;
+    'categories': Array<string>;
     /**
      * 
      * @type {string}
@@ -3199,18 +3212,17 @@ export const SortControllerApiAxiosParamCreator = function (configuration?: Conf
          * Sort a problem into a category. Returns problem firestore entity.
          * @summary USER owned or ADMIN. Sort a problem into a category
          * @param {string} problemId 
-         * @param {string} categoryId 
+         * @param {CategoryListDto} categoryListDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        sortProblem: async (problemId: string, categoryId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        sortProblem: async (problemId: string, categoryListDto: CategoryListDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'problemId' is not null or undefined
             assertParamExists('sortProblem', 'problemId', problemId)
-            // verify required parameter 'categoryId' is not null or undefined
-            assertParamExists('sortProblem', 'categoryId', categoryId)
-            const localVarPath = `/sort/sort/{problemId}/{categoryId}`
-                .replace(`{${"problemId"}}`, encodeURIComponent(String(problemId)))
-                .replace(`{${"categoryId"}}`, encodeURIComponent(String(categoryId)));
+            // verify required parameter 'categoryListDto' is not null or undefined
+            assertParamExists('sortProblem', 'categoryListDto', categoryListDto)
+            const localVarPath = `/sort/sort/{problemId}`
+                .replace(`{${"problemId"}}`, encodeURIComponent(String(problemId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3228,9 +3240,12 @@ export const SortControllerApiAxiosParamCreator = function (configuration?: Conf
 
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(categoryListDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3299,12 +3314,12 @@ export const SortControllerApiFp = function(configuration?: Configuration) {
          * Sort a problem into a category. Returns problem firestore entity.
          * @summary USER owned or ADMIN. Sort a problem into a category
          * @param {string} problemId 
-         * @param {string} categoryId 
+         * @param {CategoryListDto} categoryListDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async sortProblem(problemId: string, categoryId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Problem>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.sortProblem(problemId, categoryId, options);
+        async sortProblem(problemId: string, categoryListDto: CategoryListDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Problem>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.sortProblem(problemId, categoryListDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['SortControllerApi.sortProblem']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -3359,12 +3374,12 @@ export const SortControllerApiFactory = function (configuration?: Configuration,
          * Sort a problem into a category. Returns problem firestore entity.
          * @summary USER owned or ADMIN. Sort a problem into a category
          * @param {string} problemId 
-         * @param {string} categoryId 
+         * @param {CategoryListDto} categoryListDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        sortProblem(problemId: string, categoryId: string, options?: any): AxiosPromise<Problem> {
-            return localVarFp.sortProblem(problemId, categoryId, options).then((request) => request(axios, basePath));
+        sortProblem(problemId: string, categoryListDto: CategoryListDto, options?: any): AxiosPromise<Problem> {
+            return localVarFp.sortProblem(problemId, categoryListDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -3424,13 +3439,13 @@ export class SortControllerApi extends BaseAPI {
      * Sort a problem into a category. Returns problem firestore entity.
      * @summary USER owned or ADMIN. Sort a problem into a category
      * @param {string} problemId 
-     * @param {string} categoryId 
+     * @param {CategoryListDto} categoryListDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SortControllerApi
      */
-    public sortProblem(problemId: string, categoryId: string, options?: RawAxiosRequestConfig) {
-        return SortControllerApiFp(this.configuration).sortProblem(problemId, categoryId, options).then((request) => request(this.axios, this.basePath));
+    public sortProblem(problemId: string, categoryListDto: CategoryListDto, options?: RawAxiosRequestConfig) {
+        return SortControllerApiFp(this.configuration).sortProblem(problemId, categoryListDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
