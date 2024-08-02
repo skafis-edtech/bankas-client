@@ -14,6 +14,7 @@
 		<ImageUploadTextarea
 			bind:value={problemData.problemText}
 			bind:imageFile={problemData.problemImageFile}
+			bind:tempImageDisplay={problemData.tempProblemImageDisplay}
 			label="Klausimas"
 		/>
 		<details>
@@ -21,6 +22,7 @@
 			<ImageUploadTextarea
 				bind:value={problemData.answerText}
 				bind:imageFile={problemData.answerImageFile}
+				bind:tempImageDisplay={problemData.tempAnswerImageDisplay}
 				label="Atsakymas bei kiti komentarai"
 			/>
 		</details>

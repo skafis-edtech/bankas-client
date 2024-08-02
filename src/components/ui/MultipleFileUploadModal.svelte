@@ -1,50 +1,71 @@
 <script lang="ts">
-	import { Dropzone, Modal } from 'flowbite-svelte';
+	import { Button, Dropzone, Modal } from 'flowbite-svelte';
 
-	export let value: string[] = [];
-	export let open = false;
+	export let open = true;
+	export let groupedUpload: { listNr: number; file: File | null; display: string }[] = [];
+	export let onSubmit: () => void;
 
-	const dropHandle = (event: DragEvent): void => {
-		value = [];
+	const isImage = (file: File): boolean => {
+		return file.type.startsWith('image/');
+	};
+
+	const dropHandle = async (event: DragEvent): Promise<void> => {
 		event.preventDefault();
+		const newGroupedUpload: { listNr: number; file: File | null; display: string }[] = [];
 		if (event.dataTransfer?.items) {
-			[...event.dataTransfer.items].forEach((item) => {
+			for (const item of event.dataTransfer.items) {
 				if (item.kind === 'file') {
 					const file = item.getAsFile();
-					if (file) {
-						value.push(file.name);
-						value = value;
+					if (file && isImage(file)) {
+						const src = await readFileAsDataURL(file);
+						const listNr = parseInt(file.name);
+						newGroupedUpload.push({ listNr, file, display: src });
+					} else {
+						console.log('Not a file or not an image');
 					}
 				}
-			});
+			}
 		} else if (event.dataTransfer?.files) {
-			[...event.dataTransfer.files].forEach((file) => {
-				value.push(file.name);
-				value = value;
-			});
+			for (const file of event.dataTransfer.files) {
+				if (isImage(file)) {
+					const src = await readFileAsDataURL(file);
+					const listNr = parseInt(file.name);
+					newGroupedUpload.push({ listNr, file, display: src });
+				} else {
+					console.log('Not an image');
+				}
+			}
 		}
+		groupedUpload = newGroupedUpload;
 	};
 
-	const handleChange = (event: Event): void => {
+	const handleChange = async (event: Event): Promise<void> => {
 		const input = event.target as HTMLInputElement;
-		const files = input.files;
-		if (files && files.length > 0) {
-			value.push(files[0].name);
-			value = value;
+		const fileList = input.files;
+		if (fileList) {
+			const newGroupedUpload: { listNr: number; file: File | null; display: string }[] = [];
+			for (const file of fileList) {
+				if (isImage(file)) {
+					const src = await readFileAsDataURL(file);
+					const listNr = parseInt(file.name);
+					newGroupedUpload.push({ listNr, file, display: src });
+				} else {
+					console.log('Not an image');
+				}
+			}
+			groupedUpload = newGroupedUpload;
 		}
 	};
 
-	const showFiles = (files: string[]): string => {
-		if (files.length === 1) return files[0];
-		let concat = '';
-		files.forEach((file) => {
-			concat += file;
-			concat += ', ';
+	const readFileAsDataURL = (file: File): Promise<string> => {
+		return new Promise((resolve, reject) => {
+			const reader = new FileReader();
+			reader.onload = (event: ProgressEvent<FileReader>) => {
+				resolve(event.target?.result as string);
+			};
+			reader.onerror = reject;
+			reader.readAsDataURL(file);
 		});
-
-		if (concat.length > 40) concat = concat.slice(0, 40);
-		concat += '...';
-		return concat;
 	};
 </script>
 
@@ -55,28 +76,29 @@
 	</h2>
 	<Dropzone
 		id="dropzone"
+		multiple
 		on:drop={dropHandle}
 		on:dragover={(event) => {
 			event.preventDefault();
 		}}
 		on:change={handleChange}
 	>
-		<svg
-			aria-hidden="true"
-			class="mb-3 w-10 h-10 text-gray-400"
-			fill="none"
-			stroke="currentColor"
-			viewBox="0 0 24 24"
-			xmlns="http://www.w3.org/2000/svg"
-		>
-			<path
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				stroke-width="2"
-				d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-			/>
-		</svg>
-		{#if value.length === 0}
+		{#if groupedUpload.length === 0}
+			<svg
+				aria-hidden="true"
+				class="mb-3 w-10 h-10 text-gray-400"
+				fill="none"
+				stroke="currentColor"
+				viewBox="0 0 24 24"
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+				/>
+			</svg>
 			<p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
 				<span class="font-semibold">Click to upload</span> or drag and drop
 			</p>
@@ -84,7 +106,13 @@
 				SVG, PNG, JPG, GIF, ... (each MAX 1 MB)
 			</p>
 		{:else}
-			<p>{showFiles(value)}</p>
+			<div class="flex flex-wrap">
+				{#each groupedUpload as upload}
+					<img src={upload.display} alt="Uploaded" class="w-40 h-auto mt-2" />
+				{/each}
+			</div>
 		{/if}
 	</Dropzone>
+
+	<Button color="green" on:click={onSubmit}>Sukelti užduotis</Button>
 </Modal>

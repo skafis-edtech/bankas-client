@@ -35,5 +35,7 @@ export namespace Components {
 		answerText: string;
 		problemImageFile: File | null;
 		answerImageFile: File | null;
+		tempProblemImageDisplay: string | undefined;
+		tempAnswerImageDisplay: string | undefined;
 	}
 }

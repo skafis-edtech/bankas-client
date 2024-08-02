@@ -17,7 +17,6 @@
 	import MultipleFileUploadModal from '$components/ui/MultipleFileUploadModal.svelte';
 	import { CloseOutline, PlusOutline } from 'flowbite-svelte-icons';
 
-	let isDropModalOpen = false;
 	let sourceId: string;
 	$: sourceId = $page.params.sourceId;
 
@@ -55,9 +54,11 @@
 			{
 				sourceListNr: nextSourceListNr,
 				problemText: '',
-				problemImageFile: null,
 				answerText: '',
-				answerImageFile: null
+				problemImageFile: null,
+				answerImageFile: null,
+				tempProblemImageDisplay: undefined,
+				tempAnswerImageDisplay: undefined
 			}
 		];
 	});
@@ -70,6 +71,11 @@
 	}
 
 	async function submitProblem(index: number) {
+		if (!newProblems[index].problemText && !newProblems[index].problemImageFile) {
+			console.log(newProblems[index]);
+			alert('Užduotis turi turėti tekstą arba paveikslėlį');
+			return;
+		}
 		await approvalApi.submitProblem(
 			sourceId,
 			{
@@ -95,15 +101,20 @@
 				{
 					sourceListNr: nextSourceListNr,
 					problemText: '',
-					problemImageFile: null,
 					answerText: '',
-					answerImageFile: null
+					problemImageFile: null,
+					answerImageFile: null,
+					tempProblemImageDisplay: undefined,
+					tempAnswerImageDisplay: undefined
 				}
 			];
 		}
 	}
 
 	async function deleteProblem(problemId: string) {
+		if (!confirm('Ar tikrai norite ištrinti šią užduotį?')) {
+			return;
+		}
 		await approvalApi.deleteProblem1(problemId);
 		successStore.set('Užduotis ištrinta sėkmingai');
 		const problemsResponse = await approvalApi.getProblemsBySource(sourceId);
@@ -111,6 +122,9 @@
 	}
 
 	async function deleteSource() {
+		if (!confirm('Ar tikrai norite ištrinti šaltinį?')) {
+			return;
+		}
 		await approvalApi.deleteSource1(sourceId);
 		successStore.set('Šaltinis ištrintas sėkmingai');
 		goto('/submit/dashboard');
@@ -126,11 +140,29 @@
 			{
 				sourceListNr: newProblems[newProblems.length - 1].sourceListNr + 1,
 				problemText: '',
-				problemImageFile: null,
 				answerText: '',
-				answerImageFile: null
+				problemImageFile: null,
+				answerImageFile: null,
+				tempProblemImageDisplay: undefined,
+				tempAnswerImageDisplay: undefined
 			}
 		];
+	}
+
+	/* MultipleFileUploadModal */
+	let isDropModalOpen = false;
+	let groupedUpload: { listNr: number; file: File | null; display: string }[] = [];
+	function fillInFileListFromGroupedUpload() {
+		isDropModalOpen = false;
+		newProblems = groupedUpload.map((upload) => ({
+			sourceListNr: upload.listNr,
+			problemText: '',
+			answerText: '',
+			problemImageFile: upload.file,
+			answerImageFile: null,
+			tempProblemImageDisplay: upload.display,
+			tempAnswerImageDisplay: undefined
+		}));
 	}
 </script>
 
@@ -196,14 +228,14 @@
 
 <div class="flex flex-row justify-center">
 	<Button color="green" on:click={() => (isDropModalOpen = true)} class="w-fit mx-auto my-4"
-		>Supildyti automatiškai įkeliant paveikslėlių grupę</Button
+		>Supildyti automatiškai įkeliant paveikslėlių grupę (nepateiktos užduotys panaikinamos)</Button
 	>
 </div>
-<!-- <MultipleFileUploadModal
+<MultipleFileUploadModal
 	bind:open={isDropModalOpen}
-	bind:value={groupedUploadedFiles}
+	bind:groupedUpload
 	onSubmit={fillInFileListFromGroupedUpload}
-/> -->
+/>
 
 <p class="text-center mb-2">
 	Darydami ekrano nuotraukas rinkitės kiek įmanoma didesnį mastelį, kad būtų geresnė kokybė. (Galite
@@ -226,13 +258,11 @@
 
 {#each newProblems as problem, i}
 	<div class="relative">
-		{#if newProblems.length > 1}
-			<Button
-				color="primary"
-				on:click={() => removeProblem(i)}
-				class="w-10 h-10 absolute right-2 top-2"><CloseOutline /></Button
-			>
-		{/if}
+		<Button
+			color="primary"
+			on:click={() => removeProblem(i)}
+			class="w-10 h-10 absolute right-2 top-2"><CloseOutline /></Button
+		>
 		<ProblemCreateForm problemData={problem} />
 		<Button color="purple" on:click={() => submitProblem(i)} class="w-fit absolute right-2 bottom-2"
 			>Pateikti peržiūrai</Button
