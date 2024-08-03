@@ -6,8 +6,9 @@
 	import type { AuthContext } from '../types';
 	import { publicApi } from '$services/apiService';
 	import HorizontalLine from '$components/ui/HorizontalLine.svelte';
-	import { Search } from 'flowbite-svelte';
+	import { Button, Search } from 'flowbite-svelte';
 	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 
 	const { user } = getContext('authContext') as AuthContext;
 	const searchUrlStr: string = $page.url.searchParams.get('search') || '';
@@ -40,15 +41,18 @@
 <h1 class="text-4xl font-semibold my-4 text-center">Skafis užduočių bankas</h1>
 
 <h5 class="text-md font-semibold my-4 text-center">
-	Mokytojų pasidalintos originalios užduotys surūšiuotos į temas (kategorijas) pagal BUP nuo
-	2024/2025 m. m. (<a href="https://www.emokykla.lt/bendrosios-programos/visos-bendrosios-programos"
-		>https://www.emokykla.lt/bendrosios-programos/visos-bendrosios-programos</a
-	>)
+	Mokytojų pasidalintos originalios bei kitos viešos užduotys surūšiuotos į temas (kategorijas).
 </h5>
 
 <h4 class="text-md font-semibold my-4 text-center">
 	Užduočių: {numOfProblems || '...'} | Kategorijų: {numOfCategories || '...'}
 </h4>
+<Button
+	color="alternative"
+	on:click={() => {
+		goto('/snipping-tool');
+	}}>Karpymo įrankis</Button
+>
 
 <HorizontalLine />
 

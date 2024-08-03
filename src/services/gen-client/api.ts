@@ -51,6 +51,19 @@ export interface Category {
 /**
  * 
  * @export
+ * @interface CategoryListDto
+ */
+export interface CategoryListDto {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof CategoryListDto
+     */
+    'categories': Array<string>;
+}
+/**
+ * 
+ * @export
  * @interface CategoryPostDto
  */
 export interface CategoryPostDto {
@@ -143,10 +156,10 @@ export interface Problem {
     'answerImagePath': string;
     /**
      * 
-     * @type {string}
+     * @type {Array<string>}
      * @memberof Problem
      */
-    'categoryId': string;
+    'categories': Array<string>;
     /**
      * 
      * @type {string}
@@ -210,10 +223,10 @@ export interface ProblemDisplayViewDto {
     'answerImageSrc': string;
     /**
      * 
-     * @type {string}
+     * @type {Array<string>}
      * @memberof ProblemDisplayViewDto
      */
-    'categoryId': string;
+    'categories': Array<string>;
     /**
      * 
      * @type {string}
@@ -265,10 +278,10 @@ export interface ProblemPostDto {
     'answerText': string;
     /**
      * 
-     * @type {string}
+     * @type {Array<string>}
      * @memberof ProblemPostDto
      */
-    'categoryId': string;
+    'categories': Array<string>;
     /**
      * 
      * @type {string}
@@ -288,18 +301,6 @@ export interface ProblemSubmitDto {
      * @memberof ProblemSubmitDto
      */
     'sourceListNr': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProblemSubmitDto
-     */
-    'problemImageUrl': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProblemSubmitDto
-     */
-    'answerImageUrl': string;
     /**
      * 
      * @type {string}
@@ -361,7 +362,7 @@ export interface Source {
      * @type {string}
      * @memberof Source
      */
-    'reviewedBy': string;
+    'reviewedById': string;
     /**
      * 
      * @type {string}
@@ -379,7 +380,7 @@ export interface Source {
      * @type {string}
      * @memberof Source
      */
-    'author': string;
+    'authorId': string;
     /**
      * 
      * @type {string}
@@ -401,6 +402,82 @@ export const SourceReviewStatusEnum = {
 } as const;
 
 export type SourceReviewStatusEnum = typeof SourceReviewStatusEnum[keyof typeof SourceReviewStatusEnum];
+
+/**
+ * 
+ * @export
+ * @interface SourceDisplayDto
+ */
+export interface SourceDisplayDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof SourceDisplayDto
+     */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SourceDisplayDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SourceDisplayDto
+     */
+    'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SourceDisplayDto
+     */
+    'reviewStatus': SourceDisplayDtoReviewStatusEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof SourceDisplayDto
+     */
+    'reviewedByUsername': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SourceDisplayDto
+     */
+    'reviewedOn': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SourceDisplayDto
+     */
+    'reviewMessage': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SourceDisplayDto
+     */
+    'authorUsername': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SourceDisplayDto
+     */
+    'createdOn': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SourceDisplayDto
+     */
+    'lastModifiedOn': string;
+}
+
+export const SourceDisplayDtoReviewStatusEnum = {
+    Pending: 'PENDING',
+    Rejected: 'REJECTED',
+    Approved: 'APPROVED'
+} as const;
+
+export type SourceDisplayDtoReviewStatusEnum = typeof SourceDisplayDtoReviewStatusEnum[keyof typeof SourceDisplayDtoReviewStatusEnum];
 
 /**
  * 
@@ -431,7 +508,7 @@ export interface SourcePostDto {
      * @type {string}
      * @memberof SourcePostDto
      */
-    'reviewedBy': string;
+    'reviewedById': string;
     /**
      * 
      * @type {string}
@@ -449,7 +526,7 @@ export interface SourcePostDto {
      * @type {string}
      * @memberof SourcePostDto
      */
-    'author': string;
+    'authorId': string;
     /**
      * 
      * @type {string}
@@ -1009,7 +1086,7 @@ export const ApprovalControllerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async approve(sourceId: string, reviewMsgDto: ReviewMsgDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Source>> {
+        async approve(sourceId: string, reviewMsgDto: ReviewMsgDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SourceDisplayDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.approve(sourceId, reviewMsgDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApprovalControllerApi.approve']?.[localVarOperationServerIndex]?.url;
@@ -1047,7 +1124,7 @@ export const ApprovalControllerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getMySources(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Source>>> {
+        async getMySources(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SourceDisplayDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getMySources(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApprovalControllerApi.getMySources']?.[localVarOperationServerIndex]?.url;
@@ -1072,7 +1149,7 @@ export const ApprovalControllerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSources(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Source>>> {
+        async getSources(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SourceDisplayDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getSources(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApprovalControllerApi.getSources']?.[localVarOperationServerIndex]?.url;
@@ -1086,7 +1163,7 @@ export const ApprovalControllerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async reject(sourceId: string, reviewMsgDto: ReviewMsgDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Source>> {
+        async reject(sourceId: string, reviewMsgDto: ReviewMsgDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SourceDisplayDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.reject(sourceId, reviewMsgDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApprovalControllerApi.reject']?.[localVarOperationServerIndex]?.url;
@@ -1129,7 +1206,7 @@ export const ApprovalControllerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async update(id: string, sourceSubmitDto: SourceSubmitDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Source>> {
+        async update(id: string, sourceSubmitDto: SourceSubmitDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SourceDisplayDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.update(id, sourceSubmitDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApprovalControllerApi.update']?.[localVarOperationServerIndex]?.url;
@@ -1167,7 +1244,7 @@ export const ApprovalControllerApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        approve(sourceId: string, reviewMsgDto: ReviewMsgDto, options?: any): AxiosPromise<Source> {
+        approve(sourceId: string, reviewMsgDto: ReviewMsgDto, options?: any): AxiosPromise<SourceDisplayDto> {
             return localVarFp.approve(sourceId, reviewMsgDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1196,7 +1273,7 @@ export const ApprovalControllerApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMySources(options?: any): AxiosPromise<Array<Source>> {
+        getMySources(options?: any): AxiosPromise<Array<SourceDisplayDto>> {
             return localVarFp.getMySources(options).then((request) => request(axios, basePath));
         },
         /**
@@ -1215,7 +1292,7 @@ export const ApprovalControllerApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSources(options?: any): AxiosPromise<Array<Source>> {
+        getSources(options?: any): AxiosPromise<Array<SourceDisplayDto>> {
             return localVarFp.getSources(options).then((request) => request(axios, basePath));
         },
         /**
@@ -1226,7 +1303,7 @@ export const ApprovalControllerApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        reject(sourceId: string, reviewMsgDto: ReviewMsgDto, options?: any): AxiosPromise<Source> {
+        reject(sourceId: string, reviewMsgDto: ReviewMsgDto, options?: any): AxiosPromise<SourceDisplayDto> {
             return localVarFp.reject(sourceId, reviewMsgDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1260,7 +1337,7 @@ export const ApprovalControllerApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update(id: string, sourceSubmitDto: SourceSubmitDto, options?: any): AxiosPromise<Source> {
+        update(id: string, sourceSubmitDto: SourceSubmitDto, options?: any): AxiosPromise<SourceDisplayDto> {
             return localVarFp.update(id, sourceSubmitDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2725,7 +2802,7 @@ export const PublicControllerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSourceById1(sourceId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Source>> {
+        async getSourceById1(sourceId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SourceDisplayDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getSourceById1(sourceId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PublicControllerApi.getSourceById1']?.[localVarOperationServerIndex]?.url;
@@ -2839,7 +2916,7 @@ export const PublicControllerApiFactory = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSourceById1(sourceId: string, options?: any): AxiosPromise<Source> {
+        getSourceById1(sourceId: string, options?: any): AxiosPromise<SourceDisplayDto> {
             return localVarFp.getSourceById1(sourceId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3135,18 +3212,17 @@ export const SortControllerApiAxiosParamCreator = function (configuration?: Conf
          * Sort a problem into a category. Returns problem firestore entity.
          * @summary USER owned or ADMIN. Sort a problem into a category
          * @param {string} problemId 
-         * @param {string} categoryId 
+         * @param {CategoryListDto} categoryListDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        sortProblem: async (problemId: string, categoryId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        sortProblem: async (problemId: string, categoryListDto: CategoryListDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'problemId' is not null or undefined
             assertParamExists('sortProblem', 'problemId', problemId)
-            // verify required parameter 'categoryId' is not null or undefined
-            assertParamExists('sortProblem', 'categoryId', categoryId)
-            const localVarPath = `/sort/sort/{problemId}/{categoryId}`
-                .replace(`{${"problemId"}}`, encodeURIComponent(String(problemId)))
-                .replace(`{${"categoryId"}}`, encodeURIComponent(String(categoryId)));
+            // verify required parameter 'categoryListDto' is not null or undefined
+            assertParamExists('sortProblem', 'categoryListDto', categoryListDto)
+            const localVarPath = `/sort/sort/{problemId}`
+                .replace(`{${"problemId"}}`, encodeURIComponent(String(problemId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3164,9 +3240,12 @@ export const SortControllerApiAxiosParamCreator = function (configuration?: Conf
 
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(categoryListDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3235,12 +3314,12 @@ export const SortControllerApiFp = function(configuration?: Configuration) {
          * Sort a problem into a category. Returns problem firestore entity.
          * @summary USER owned or ADMIN. Sort a problem into a category
          * @param {string} problemId 
-         * @param {string} categoryId 
+         * @param {CategoryListDto} categoryListDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async sortProblem(problemId: string, categoryId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Problem>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.sortProblem(problemId, categoryId, options);
+        async sortProblem(problemId: string, categoryListDto: CategoryListDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Problem>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.sortProblem(problemId, categoryListDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['SortControllerApi.sortProblem']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -3295,12 +3374,12 @@ export const SortControllerApiFactory = function (configuration?: Configuration,
          * Sort a problem into a category. Returns problem firestore entity.
          * @summary USER owned or ADMIN. Sort a problem into a category
          * @param {string} problemId 
-         * @param {string} categoryId 
+         * @param {CategoryListDto} categoryListDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        sortProblem(problemId: string, categoryId: string, options?: any): AxiosPromise<Problem> {
-            return localVarFp.sortProblem(problemId, categoryId, options).then((request) => request(axios, basePath));
+        sortProblem(problemId: string, categoryListDto: CategoryListDto, options?: any): AxiosPromise<Problem> {
+            return localVarFp.sortProblem(problemId, categoryListDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -3360,13 +3439,13 @@ export class SortControllerApi extends BaseAPI {
      * Sort a problem into a category. Returns problem firestore entity.
      * @summary USER owned or ADMIN. Sort a problem into a category
      * @param {string} problemId 
-     * @param {string} categoryId 
+     * @param {CategoryListDto} categoryListDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SortControllerApi
      */
-    public sortProblem(problemId: string, categoryId: string, options?: RawAxiosRequestConfig) {
-        return SortControllerApiFp(this.configuration).sortProblem(problemId, categoryId, options).then((request) => request(this.axios, this.basePath));
+    public sortProblem(problemId: string, categoryListDto: CategoryListDto, options?: RawAxiosRequestConfig) {
+        return SortControllerApiFp(this.configuration).sortProblem(problemId, categoryListDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

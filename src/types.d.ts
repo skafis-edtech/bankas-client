@@ -19,7 +19,7 @@ export namespace Components {
 		problemImageSrc: string;
 		answerText: string;
 		answerImageSrc: string;
-		categoryId: string;
+		categories: string[];
 		sourceId: string;
 	}
 
@@ -35,5 +35,7 @@ export namespace Components {
 		answerText: string;
 		problemImageFile: File | null;
 		answerImageFile: File | null;
+		tempProblemImageDisplay: string | undefined;
+		tempAnswerImageDisplay: string | undefined;
 	}
 }

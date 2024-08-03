@@ -3,35 +3,32 @@
 	import { goto } from '$app/navigation';
 	import SourceCreateForm from '$components/forms/SourceCreateForm.svelte';
 	import ProblemCreateForm from '$components/forms/ProblemCreateForm.svelte';
-	import { CloseOutline, PlusOutline } from 'flowbite-svelte-icons';
 	import { approvalApi, publicApi } from '$services/apiService';
-	import type { ProblemDisplayViewDto, Source, SourceSubmitDto } from '$services/gen-client';
+	import type {
+		ProblemDisplayViewDto,
+		SourceDisplayDto,
+		SourceSubmitDto
+	} from '$services/gen-client';
 	import { successStore } from '$lib/stores';
 	import type { Components } from '../../../../../types';
 	import { page } from '$app/stores';
-	import { get } from 'svelte/store';
 	import { onMount } from 'svelte';
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
+	import MultipleFileUploadModal from '$components/ui/MultipleFileUploadModal.svelte';
+	import { CloseOutline, PlusOutline } from 'flowbite-svelte-icons';
 
 	let sourceId: string;
-	$: sourceId = get(page).params.sourceId;
+	$: sourceId = $page.params.sourceId;
 
-	let oldSourceData: Source;
+	let oldSourceData: SourceDisplayDto;
 	let submittedProblems: ProblemDisplayViewDto[] = [];
 
 	let sourceData: SourceSubmitDto = {
 		name: '',
 		description: ''
 	};
-	let newProblem: Components.ProblemCreateFormData = {
-		sourceListNr: 0,
-		problemText: '',
-		problemImageFile: null,
-		problemImageUrl: '',
-		answerText: '',
-		answerImageFile: null,
-		answerImageUrl: ''
-	};
+
+	let newProblems: Components.ProblemCreateFormData[] = [];
 
 	let isSourceDataChanged = false;
 	$: {
@@ -53,15 +50,17 @@
 
 		const nextSourceListNr = submittedProblems[submittedProblems.length - 1]?.sourceListNr + 1 || 1;
 
-		newProblem = {
-			sourceListNr: nextSourceListNr,
-			problemText: '',
-			problemImageFile: null,
-			problemImageUrl: '',
-			answerText: '',
-			answerImageFile: null,
-			answerImageUrl: ''
-		};
+		newProblems = [
+			{
+				sourceListNr: nextSourceListNr,
+				problemText: '',
+				answerText: '',
+				problemImageFile: null,
+				answerImageFile: null,
+				tempProblemImageDisplay: undefined,
+				tempAnswerImageDisplay: undefined
+			}
+		];
 	});
 
 	async function updateSource() {
@@ -71,37 +70,51 @@
 		oldSourceData = sourceResponse.data;
 	}
 
-	async function submitProblem() {
+	async function submitProblem(index: number) {
+		if (!newProblems[index].problemText && !newProblems[index].problemImageFile) {
+			console.log(newProblems[index]);
+			alert('Užduotis turi turėti tekstą arba paveikslėlį');
+			return;
+		}
 		await approvalApi.submitProblem(
 			sourceId,
 			{
-				sourceListNr: newProblem.sourceListNr,
-				problemText: newProblem.problemText,
-				problemImageUrl: newProblem.problemImageUrl,
-				answerText: newProblem.answerText,
-				answerImageUrl: newProblem.answerImageUrl
+				sourceListNr: newProblems[index].sourceListNr,
+				problemText: newProblems[index].problemText,
+				answerText: newProblems[index].answerText
 			},
-			newProblem.problemImageFile!!,
-			newProblem.answerImageFile!!
+			newProblems[index].problemImageFile!!,
+			newProblems[index].answerImageFile!!
 		);
 		successStore.set('Užduotis pateikta sėkmingai');
+
+		removeProblem(index);
+
 		const problemsResponse = await approvalApi.getProblemsBySource(sourceId);
 		submittedProblems = problemsResponse.data;
 
-		const nextSourceListNr = submittedProblems[submittedProblems.length - 1].sourceListNr + 1;
+		if (newProblems.length === 0) {
+			const nextSourceListNr =
+				submittedProblems[submittedProblems.length - 1]?.sourceListNr + 1 || 1;
 
-		newProblem = {
-			sourceListNr: nextSourceListNr,
-			problemText: '',
-			problemImageFile: null,
-			problemImageUrl: '',
-			answerText: '',
-			answerImageFile: null,
-			answerImageUrl: ''
-		};
+			newProblems = [
+				{
+					sourceListNr: nextSourceListNr,
+					problemText: '',
+					answerText: '',
+					problemImageFile: null,
+					answerImageFile: null,
+					tempProblemImageDisplay: undefined,
+					tempAnswerImageDisplay: undefined
+				}
+			];
+		}
 	}
 
 	async function deleteProblem(problemId: string) {
+		if (!confirm('Ar tikrai norite ištrinti šią užduotį?')) {
+			return;
+		}
 		await approvalApi.deleteProblem1(problemId);
 		successStore.set('Užduotis ištrinta sėkmingai');
 		const problemsResponse = await approvalApi.getProblemsBySource(sourceId);
@@ -109,9 +122,47 @@
 	}
 
 	async function deleteSource() {
+		if (!confirm('Ar tikrai norite ištrinti šaltinį?')) {
+			return;
+		}
 		await approvalApi.deleteSource1(sourceId);
 		successStore.set('Šaltinis ištrintas sėkmingai');
 		goto('/submit/dashboard');
+	}
+
+	function removeProblem(index: number) {
+		newProblems = newProblems.filter((_, i) => i !== index);
+	}
+
+	function addProblem() {
+		newProblems = [
+			...newProblems,
+			{
+				sourceListNr: newProblems[newProblems.length - 1].sourceListNr + 1,
+				problemText: '',
+				answerText: '',
+				problemImageFile: null,
+				answerImageFile: null,
+				tempProblemImageDisplay: undefined,
+				tempAnswerImageDisplay: undefined
+			}
+		];
+	}
+
+	/* MultipleFileUploadModal */
+	let isDropModalOpen = false;
+	let groupedUpload: { listNr: number; file: File | null; display: string }[] = [];
+	function fillInFileListFromGroupedUpload() {
+		isDropModalOpen = false;
+		newProblems = groupedUpload.map((upload) => ({
+			sourceListNr: upload.listNr,
+			problemText: '',
+			answerText: '',
+			problemImageFile: upload.file,
+			answerImageFile: null,
+			tempProblemImageDisplay: upload.display,
+			tempAnswerImageDisplay: undefined
+		}));
 	}
 </script>
 
@@ -167,7 +218,7 @@
 					problemImageSrc: problem.problemImageSrc,
 					answerText: problem.answerText,
 					answerImageSrc: problem.answerImageSrc,
-					categoryId: problem.categoryId,
+					categories: problem.categories,
 					sourceId: problem.sourceId
 				}}
 			/>
@@ -175,29 +226,48 @@
 	{/each}
 </div>
 
+<div class="flex flex-row justify-center">
+	<Button color="green" on:click={() => (isDropModalOpen = true)} class="w-fit mx-auto my-4"
+		>Supildyti automatiškai įkeliant paveikslėlių grupę (nepateiktos užduotys panaikinamos)</Button
+	>
+</div>
+<MultipleFileUploadModal
+	bind:open={isDropModalOpen}
+	bind:groupedUpload
+	onSubmit={fillInFileListFromGroupedUpload}
+/>
+
 <p class="text-center mb-2">
 	Darydami ekrano nuotraukas rinkitės kiek įmanoma didesnį mastelį, kad būtų geresnė kokybė. (Galite
 	naudotis Win+Shift+S komanda ir tuomet įklijuoti naudojantis Ctrl+V)
 </p>
+
 <p class="text-center mb-4">
-	Formules galite generuoti čia, naudojantis LaTex sintakse (nukopijuokite paveikslėlio nuorodą arba
-	nutempkite paveikslėlį): <a
+	Tekstas rašomas markdown sintakse. Svarbiausia - naujai eilutei reikia dviejų Enter, galite rašyti
+	LaTex formules. Daugiau galite paskaityti čia: <a
+		href="https://www.markdownguide.org/cheat-sheet/">https://www.markdownguide.org/cheat-sheet/</a
+	>
+</p>
+<p class="text-center mb-4">
+	Pagalba rašant formules: <a
 		class="underline"
 		href="https://latex.codecogs.com/eqneditor/editor.php"
 		target="_blank">https://latex.codecogs.com/eqneditor/editor.php</a
 	>
 </p>
-<p>
-	Tekstas rašomas markdown sintakse. Svarbiausia - naujai eilutei reikia dviejų Enter, galite rašyti
-	LaTex formules. Daugiau galite paskaityti čia: <a
-		href="https://www.markdownguide.org/cheat-sheet/">https://www.markdownguide.org/cheat-sheet/</a
-	>. Taip pat formules galite įkelti kaip paveikslėlius, naudodamiesi
-	https://latex.codecogs.com/eqneditor/editor.php
-</p>
 
-<div class="relative">
-	<ProblemCreateForm problemData={newProblem} />
-	<Button color="purple" on:click={submitProblem} class="w-fit absolute right-2 bottom-2"
-		>Pateikti peržiūrai</Button
-	>
-</div>
+{#each newProblems as problem, i}
+	<div class="relative">
+		<Button
+			color="primary"
+			on:click={() => removeProblem(i)}
+			class="w-10 h-10 absolute right-2 top-2"><CloseOutline /></Button
+		>
+		<ProblemCreateForm problemData={problem} />
+		<Button color="purple" on:click={() => submitProblem(i)} class="w-fit absolute right-2 bottom-2"
+			>Pateikti peržiūrai</Button
+		>
+	</div>
+{/each}
+
+<Button color="green" on:click={addProblem} class="w-full"><PlusOutline /></Button>

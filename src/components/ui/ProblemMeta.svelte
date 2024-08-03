@@ -6,10 +6,10 @@
 	import { publicApi } from '$services/apiService';
 	import CategoryLink from './CategoryLink.svelte';
 
-	export let categoryId: string;
+	export let categories: string[];
 	export let sourceId: string;
 
-	let categoryName = '...';
+	let categoriesNames = ['...'];
 	let sourceName = '...';
 	let author = '...';
 
@@ -22,16 +22,20 @@
 
 	async function loadStuff() {
 		if (!isOpen || $isLoaded) return;
-		if (categoryId !== '') {
-			const response = await publicApi.getCategoryById(categoryId);
-			categoryName = response.data.name;
+
+		if (categories && categories.length > 0) {
+			categoriesNames = [];
+			for (const categoryId of categories) {
+				const response = await publicApi.getCategoryById(categoryId);
+				categoriesNames.push(response.data.name);
+			}
 		} else {
-			categoryName = 'Nesurūšiuota';
+			categoriesNames = ['Nesurūšiuota'];
 		}
 
 		const response = await publicApi.getSourceById1(sourceId);
 		sourceName = response.data.name;
-		author = response.data.author;
+		author = response.data.authorUsername;
 
 		isLoaded.set(true);
 	}
@@ -45,7 +49,14 @@
 		<li>
 			<strong>Autorius: </strong><AuthorLink {author} />
 		</li>
-		<li><strong>Kategorija: </strong><CategoryLink {categoryName} /></li>
+		<li>
+			<strong>Kategorijos: </strong>
+			<ul>
+				{#each categoriesNames as categoryName}
+					<li><CategoryLink {categoryName} /></li>
+				{/each}
+			</ul>
+		</li>
 		<li><strong>Šaltinis: </strong> {sourceName}</li>
 	</ul>
 </Dropdown>

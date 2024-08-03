@@ -9,10 +9,10 @@
 		name: '',
 		description: '',
 		reviewStatus: SourceReviewStatusEnum.Pending,
-		reviewedBy: '',
+		reviewedById: '',
 		reviewedOn: '',
 		reviewMessage: '',
-		author: '',
+		authorId: '',
 		createdOn: '',
 		lastModifiedOn: ''
 	};
@@ -36,10 +36,10 @@
 				name: '',
 				description: '',
 				reviewStatus: SourceReviewStatusEnum.Pending,
-				reviewedBy: '',
+				reviewedById: '',
 				reviewedOn: '',
 				reviewMessage: '',
-				author: '',
+				authorId: '',
 				createdOn: '',
 				lastModifiedOn: ''
 			};
@@ -130,7 +130,7 @@
 						<input
 							id="reviewedBy"
 							type="text"
-							bind:value={editSource.reviewedBy}
+							bind:value={editSource.reviewedById}
 							class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
 						/>
 					</div>
@@ -161,7 +161,7 @@
 						<input
 							id="author"
 							type="text"
-							bind:value={editSource.author}
+							bind:value={editSource.authorId}
 							class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
 						/>
 					</div>
@@ -200,10 +200,10 @@
 						<p class="text-gray-600"><strong>Name: </strong>{source.name}</p>
 						<p class="text-gray-600"><strong>Description: </strong>{source.description}</p>
 						<p class="text-gray-600"><strong>Review Status: </strong>{source.reviewStatus}</p>
-						<p class="text-gray-600"><strong>Reviewed By: </strong>{source.reviewedBy}</p>
+						<p class="text-gray-600"><strong>Reviewed By: </strong>{source.reviewedById}</p>
 						<p class="text-gray-600"><strong>Reviewed On: </strong>{source.reviewedOn}</p>
 						<p class="text-gray-600"><strong>Review Message: </strong>{source.reviewMessage}</p>
-						<p class="text-gray-600"><strong>Author: </strong>{source.author}</p>
+						<p class="text-gray-600"><strong>Author: </strong>{source.authorId}</p>
 						<p class="text-gray-600"><strong>Created On: </strong>{source.createdOn}</p>
 						<p class="text-gray-600"><strong>Last Modified On: </strong>{source.lastModifiedOn}</p>
 					</div>
@@ -261,7 +261,7 @@
 			<input
 				id="reviewedBy"
 				type="text"
-				bind:value={newSource.reviewedBy}
+				bind:value={newSource.reviewedById}
 				class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
 			/>
 		</div>
@@ -290,7 +290,7 @@
 			<input
 				id="author"
 				type="text"
-				bind:value={newSource.author}
+				bind:value={newSource.authorId}
 				class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
 			/>
 		</div>

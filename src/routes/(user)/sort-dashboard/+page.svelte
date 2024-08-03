@@ -7,6 +7,7 @@
 	import ClickableProblem from '$components/ui/ClickableProblem.svelte';
 	import { ROLES } from '$utils/constants';
 	import { successStore } from '$lib/stores';
+	import ChooseCategories from '$components/ui/ChooseCategories.svelte';
 	const { user } = getContext('authContext') as AuthContext;
 
 	let categories: Category[] = [];
@@ -106,12 +107,6 @@
 		}
 	}
 
-	async function sortProblem(categoryId: string) {
-		await sortApi.sortProblem(selectedProblemId, categoryId);
-		successStore.set('Užduotis sėkmingai surūšiuota');
-		skipProblem();
-	}
-
 	function skipProblem() {
 		allProblems = allProblems.filter((p) => p.problem.id !== selectedProblemId);
 		if (allProblems.length > 0) {
@@ -126,22 +121,13 @@
 <h1 class="text-4xl font-semibold my-4 text-center">Užduočių rūšiavimas</h1>
 <h3 class="text-lg text-green-500 text-center">Rūšiavimas išsisaugo automatiškai</h3>
 
-<div class=" flex fixed bottom-4 z-10 gap-4 flex-wrap bg-black p-4 rounded-md">
-	{#each categories as category}
-		<Button
-			color={allProblems.find((p) => p.problem.id === selectedProblemId)?.problem.categoryId ===
-			category.id
-				? 'blue'
-				: 'light'}
-			on:click={() => sortProblem(category.id)}
-			>{category.name}
-		</Button>
-	{/each}
-	<Button on:click={skipProblem}>PRALEISTI</Button>
-	<p class="text-white w-fit">
-		Nerandate tinkamos kategorijos? Susisiekite el. paštu naglis.suliokas@gmail.com
-	</p>
-</div>
+<ChooseCategories
+	{categories}
+	currentProblemCategories={allProblems.find((p) => p.problem.id === selectedProblemId)?.problem
+		.categories || []}
+	{skipProblem}
+	currentProblemId={selectedProblemId}
+/>
 
 <div>
 	{#each allProblems as { problem, shadeColor }}

@@ -4,11 +4,11 @@
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
 	import { getNiceTimeString } from '$lib/utils';
 	import { approvalApi } from '$services/apiService';
-	import { type ProblemDisplayViewDto, type Source } from '$services/gen-client';
+	import { type ProblemDisplayViewDto, type SourceDisplayDto } from '$services/gen-client';
 	import { Accordion, AccordionItem } from 'flowbite-svelte';
 	import { writable } from 'svelte/store';
 
-	export let source: Source;
+	export let source: SourceDisplayDto;
 
 	let problems: ProblemDisplayViewDto[] = [];
 	let isLoaded = writable(false);
@@ -31,7 +31,7 @@
 		<span slot="header" class="text-black"><p>{source.name}</p></span>
 		<MarkdownDisplay value={source.description} />
 		<p>
-			<AuthorLink author={source.author} />
+			<AuthorLink author={source.authorUsername} />
 		</p>
 		<p>sukurta: {getNiceTimeString(source.createdOn)}</p>
 		<p>pakeista: {getNiceTimeString(source.lastModifiedOn)}</p>
