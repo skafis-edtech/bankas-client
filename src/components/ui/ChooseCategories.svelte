@@ -3,6 +3,7 @@
 	import { sortApi } from '$services/apiService';
 	import type { Category } from '$services/gen-client';
 	import { Button, Checkbox } from 'flowbite-svelte';
+	import { Search } from 'flowbite-svelte';
 
 	export let categories: Category[] = [];
 	export let currentProblemId: string;
@@ -11,6 +12,7 @@
 
 	let selectedCategories: string[] = [];
 	let isConfirmNeeded: boolean = false;
+	let filterValue = 'BUP. Matematika. 11 kl.';
 
 	$: {
 		selectedCategories = currentProblemCategories;
@@ -36,37 +38,46 @@
 </script>
 
 <div
-	class="flex fixed top-16 left-0 w-72 z-10 gap-4 flex-wrap bg-black p-4 rounded-md overflow-scroll h-[calc(100%-4rem)]"
+	class="flex flex-col fixed top-16 left-0 w-80 z-10 gap-4 bg-black p-4 rounded-md overflow-scroll h-[calc(100%-4rem)]"
 >
 	<Button size="sm" color="yellow" on:click={skipProblem}>PRALEISTI</Button>
 	{#if isConfirmNeeded}
 		<Button size="sm" color="red" on:click={sortProblem}>ĮRAŠYTI</Button>
+	{:else}
+		<div class="text-white text-xs">
+			Paspaudus mygtuką priskiriama viena kategorija. Rinkitės daugiau kategorijų naudodamiesi
+			žymėjimo langeliais
+		</div>
 	{/if}
-	{#each categories as category}
-		<Button
-			size="sm"
-			color={selectedCategories.includes(category.id) ? 'blue' : 'light'}
-			on:click={() => {
-				if (isConfirmNeeded) {
-					alert(
-						'Yra pažymėtų kategorijų, dabar naudokitės žymėjimo langeliais ir mygtuku "ĮRAŠYTI"'
-					);
-				} else {
-					selectedCategories = [category.id];
-					sortProblem();
-				}
-			}}
-			>{category.name}<Checkbox
-				on:click={(event) => {
-					event.stopPropagation();
-					toggleCategory(category.id);
+	<Search class="my-3 py-0" placeholder="Filtras" bind:value={filterValue} />
+	<div class="flex flex-col gap-4">
+		{#each categories.filter((category) => category.name.includes(filterValue)) as category}
+			<Button
+				size="sm"
+				color={selectedCategories.includes(category.id) ? 'blue' : 'light'}
+				on:click={() => {
+					if (isConfirmNeeded) {
+						alert(
+							'Yra pažymėtų kategorijų, dabar naudokitės žymėjimo langeliais ir mygtuku "ĮRAŠYTI"'
+						);
+					} else {
+						selectedCategories = [category.id];
+						sortProblem();
+					}
 				}}
-				checked={selectedCategories.includes(category.id)}
-				class="h-6 w-6"
-			/>
-		</Button>
-	{/each}
-
+			>
+				{category.name.replace(filterValue, '')}
+				<Checkbox
+					on:click={(event) => {
+						event.stopPropagation();
+						toggleCategory(category.id);
+					}}
+					checked={selectedCategories.includes(category.id)}
+					class="h-8 w-8"
+				/>
+			</Button>
+		{/each}
+	</div>
 	<p class="text-white w-fit">
 		Nerandate tinkamos kategorijos? Susisiekite el. paštu naglis.suliokas@gmail.com
 	</p>
