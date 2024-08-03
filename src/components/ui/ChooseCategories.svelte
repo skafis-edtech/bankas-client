@@ -4,6 +4,7 @@
 	import type { Category } from '$services/gen-client';
 	import { Button, Checkbox } from 'flowbite-svelte';
 	import { Search } from 'flowbite-svelte';
+	import DraggableDiv from './DraggableDiv.svelte';
 
 	export let categories: Category[] = [];
 	export let currentProblemId: string;
@@ -37,22 +38,26 @@
 	}
 </script>
 
-<div
-	class="flex flex-col fixed top-16 left-0 w-80 z-10 gap-4 bg-black p-4 rounded-md overflow-scroll h-[calc(100%-4rem)]"
->
-	<Button size="sm" color="yellow" on:click={skipProblem}>PRALEISTI</Button>
-	{#if isConfirmNeeded}
-		<Button size="sm" color="red" on:click={sortProblem}>ĮRAŠYTI</Button>
-	{:else}
-		<div class="text-white text-xs">
-			Paspaudus mygtuką priskiriama viena kategorija. Rinkitės daugiau kategorijų naudodamiesi
-			žymėjimo langeliais
+<DraggableDiv>
+	<div class="flex flex-col items-end gap-2">
+		<Button size="sm" color="yellow" class="max-w-96" on:click={skipProblem}>PRALEISTI</Button>
+		<div class="min-h-8">
+			{#if isConfirmNeeded}
+				<Button size="sm" color="red" class="max-w-96 w-64" on:click={sortProblem}>ĮRAŠYTI</Button>
+			{:else}
+				<p class="text-white text-xs">
+					Paspaudus mygtuką priskiriama viena kategorija. Rinkitės daugiau kategorijų naudodamiesi
+					žymėjimo langeliais
+				</p>
+			{/if}
 		</div>
-	{/if}
-	<Search class="my-3 py-0" placeholder="Filtras" bind:value={filterValue} />
-	<div class="flex flex-col gap-4">
+		<div><Search class="my-3 py-0 max-w-96" placeholder="Filtras" bind:value={filterValue} /></div>
+	</div>
+
+	<div class="flex gap-4 flex-row flex-wrap">
 		{#each categories.filter((category) => category.name.includes(filterValue)) as category}
 			<Button
+				class="min-w-80"
 				size="sm"
 				color={selectedCategories.includes(category.id) ? 'blue' : 'light'}
 				on:click={() => {
@@ -81,4 +86,4 @@
 	<p class="text-white w-fit">
 		Nerandate tinkamos kategorijos? Susisiekite el. paštu naglis.suliokas@gmail.com
 	</p>
-</div>
+</DraggableDiv>
