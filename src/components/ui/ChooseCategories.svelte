@@ -13,7 +13,7 @@
 
 	let selectedCategories: string[] = [];
 	let isConfirmNeeded: boolean = false;
-	let filterValue = 'BUP. Matematika. 11 kl.';
+	let filterValue = 'BUP. Matematika. ';
 
 	$: {
 		selectedCategories = currentProblemCategories;
