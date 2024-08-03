@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { Button, Dropzone, Modal } from 'flowbite-svelte';
 
 	export let open = true;
@@ -74,6 +75,11 @@
 		Įkelkite paveikslėlius, užvardintus pradžioje numeriu, pvz. "1-failas.png", "2kitasfailas.jpg",
 		"3.png"
 	</h2>
+	<h3>
+		Uždavinių failų karpymą ir vardinimą galite palengvinti naudodamiesi tinklapio <Button
+			on:click={() => goto('/snipping-tool')}>KARPYMO ĮRANKIU</Button
+		>
+	</h3>
 	<Dropzone
 		id="dropzone"
 		multiple
