@@ -127,7 +127,6 @@
 	{skipProblem}
 	currentProblemId={selectedProblemId}
 />
-
 <div>
 	{#each allProblems as { problem, shadeColor }}
 		<ClickableProblem
