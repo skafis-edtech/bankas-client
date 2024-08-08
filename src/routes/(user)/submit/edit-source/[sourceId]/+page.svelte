@@ -38,43 +38,6 @@
 			oldSourceData?.description !== sourceData?.description;
 	}
 
-	let isProblemEditModalOpen = false;
-	let editModalProblem: Components.ProblemEditData = {
-		id: '',
-		sourceListNr: 0,
-		problemText: '',
-		answerText: '',
-		problemImageSrc: '',
-		answerImageSrc: ''
-	};
-
-	function openEditModal(problemId: string) {
-		const problemForEdit = submittedProblems.find((problem) => problem.id === problemId);
-		if (problemForEdit) {
-			editModalProblem = {
-				id: problemId,
-				sourceListNr: problemForEdit.sourceListNr || 0,
-				problemText: problemForEdit.problemText || '',
-				answerText: problemForEdit.answerText || '',
-				problemImageSrc: problemForEdit.problemImageSrc || '',
-				answerImageSrc: problemForEdit.answerImageSrc || ''
-			};
-			isProblemEditModalOpen = true;
-		}
-	}
-
-	function closeEditModal() {
-		isProblemEditModalOpen = false;
-		editModalProblem = {
-			id: '',
-			sourceListNr: 0,
-			problemText: '',
-			answerText: '',
-			problemImageSrc: '',
-			answerImageSrc: ''
-		};
-	}
-
 	onMount(async () => {
 		const sourceResponse = await publicApi.getSourceById1(sourceId);
 		oldSourceData = sourceResponse.data;
@@ -202,6 +165,51 @@
 			tempAnswerImageDisplay: undefined
 		}));
 	}
+
+	/* Edit modal */
+	let isProblemEditModalOpen = false;
+	$: if (!isProblemEditModalOpen) {
+		approvalApi.getProblemsBySource(sourceId).then((problemsResponse) => {
+			submittedProblems = problemsResponse.data;
+		});
+	}
+	let editModalProblem: Components.ProblemEditData = {
+		id: '',
+		sourceListNr: 0,
+		problemText: '',
+		answerText: '',
+		problemImageSrc: '',
+		answerImageSrc: ''
+	};
+	let editModalProblemImageTempDisplay = '';
+	let editModalAnswerImageTempDisplay = '';
+
+	function openEditModal(problemId: string) {
+		const problemForEdit = submittedProblems.find((problem) => problem.id === problemId);
+		if (problemForEdit) {
+			editModalProblem = {
+				id: problemId,
+				sourceListNr: problemForEdit.sourceListNr || 0,
+				problemText: problemForEdit.problemText || '',
+				answerText: problemForEdit.answerText || '',
+				problemImageSrc: problemForEdit.problemImageSrc || '',
+				answerImageSrc: problemForEdit.answerImageSrc || ''
+			};
+			isProblemEditModalOpen = true;
+		}
+	}
+
+	function closeEditModal() {
+		isProblemEditModalOpen = false;
+		editModalProblem = {
+			id: '',
+			sourceListNr: 0,
+			problemText: '',
+			answerText: '',
+			problemImageSrc: '',
+			answerImageSrc: ''
+		};
+	}
 </script>
 
 <div class="flex flex-row justify-between mx-4">
@@ -274,6 +282,8 @@
 	bind:open={isProblemEditModalOpen}
 	bind:problem={editModalProblem}
 	on:close={closeEditModal}
+	bind:problemImageTempDisplay={editModalProblemImageTempDisplay}
+	bind:answerImageTempDisplay={editModalAnswerImageTempDisplay}
 />
 
 <div class="flex flex-row justify-center">
