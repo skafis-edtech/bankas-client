@@ -44,6 +44,7 @@
 	"type": "module",
 	"dependencies": {
 		"@cartamd/plugin-math": "^4.0.4",
+		"@cartamd/plugin-tikz": "^4.1.8",
 		"@sveltejs/adapter-static": "^3.0.1",
 		"autoprefixer": "^10.4.19",
 		"axios": "^1.7.2",

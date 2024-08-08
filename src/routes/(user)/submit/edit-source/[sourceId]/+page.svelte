@@ -303,8 +303,8 @@
 </p>
 
 <p class="text-center mb-4">
-	Tekstas rašomas markdown sintakse. Svarbiausia - naujai eilutei reikia dviejų Enter, galite rašyti
-	LaTex formules. Daugiau galite paskaityti čia: <a
+	Tekstas rašomas Markdown sintakse. Svarbiausia - naujai eilutei reikia dviejų Enter, galite rašyti
+	LaTex (katex) formules bei Tikz diagramas. Daugiau galite paskaityti čia: <a
 		href="https://www.markdownguide.org/cheat-sheet/">https://www.markdownguide.org/cheat-sheet/</a
 	>
 </p>

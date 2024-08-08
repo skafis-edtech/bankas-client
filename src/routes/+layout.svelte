@@ -4,6 +4,8 @@
 	import 'katex/dist/katex.css';
 	import 'carta-md/default.css';
 	import '../MarkdownInput.css';
+	import '@cartamd/plugin-tikz/fonts.css';
+
 	import { writable, type Writable } from 'svelte/store';
 	import { onDestroy, setContext } from 'svelte';
 	import { loginUser, logout } from '$services/auth';
