@@ -6,12 +6,15 @@
 	export let groupedUpload: { listNr: number; file: File | null; display: string }[] = [];
 	export let onSubmit: () => void;
 
+	let isDragging = false;
+
 	const isImage = (file: File): boolean => {
 		return file.type.startsWith('image/');
 	};
 
 	const dropHandle = async (event: DragEvent): Promise<void> => {
 		event.preventDefault();
+		isDragging = false;
 		const newGroupedUpload: { listNr: number; file: File | null; display: string }[] = [];
 		if (event.dataTransfer?.items) {
 			for (const item of event.dataTransfer.items) {
@@ -83,11 +86,14 @@
 	<Dropzone
 		id="dropzone"
 		multiple
+		on:dragover={() => (isDragging = true)}
+		on:dragleave={() => (isDragging = false)}
 		on:drop={dropHandle}
 		on:dragover={(event) => {
 			event.preventDefault();
 		}}
 		on:change={handleChange}
+		class="relative"
 	>
 		{#if groupedUpload.length === 0}
 			<svg
@@ -118,6 +124,9 @@
 				{/each}
 			</div>
 		{/if}
+		<!-- {#if isDragging}
+			<div class="absolute top-0 left-0 w-full h-full bg-blue-400 z-10"></div>
+		{/if} -->
 	</Dropzone>
 
 	<Button color="green" on:click={onSubmit}>Sukelti užduotis</Button>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button } from 'flowbite-svelte';
+	import { Accordion, AccordionItem, Button } from 'flowbite-svelte';
 	import { goto } from '$app/navigation';
 	import SourceCreateForm from '$components/forms/SourceCreateForm.svelte';
 	import ProblemCreateForm from '$components/forms/ProblemCreateForm.svelte';
@@ -30,6 +30,7 @@
 	};
 
 	let newProblems: Components.ProblemCreateFormData[] = [];
+	$: newProblems = [...newProblems].sort((a, b) => a.sourceListNr - b.sourceListNr);
 
 	let isSourceDataChanged = false;
 	$: {
@@ -246,38 +247,44 @@
 	>
 </div>
 
-<div class="container mx-auto">
-	{#each submittedProblems as problem}
-		<div class="relative my-3">
-			<div>Užduotis {problem.sourceListNr}</div>
-			<Button
-				color="red"
-				on:click={() => deleteProblem(problem.id)}
-				class="absolute top-10 right-20 z-10"
-			>
-				Ištrinti
-			</Button>
-			<Button
-				color="yellow"
-				on:click={() => openEditModal(problem.id)}
-				class="absolute top-10 right-48 z-10"
-			>
-				Redaguoti
-			</Button>
-			<ProblemComponent
-				problemMainData={{
-					skfCode: problem.skfCode === '' ? problem.id : problem.skfCode,
-					problemText: problem.problemText,
-					problemImageSrc: problem.problemImageSrc,
-					answerText: problem.answerText,
-					answerImageSrc: problem.answerImageSrc,
-					categories: problem.categories,
-					sourceId: problem.sourceId
-				}}
-			/>
+<Accordion>
+	<AccordionItem open>
+		<span slot="header">Pateiktos užduotys (galite suskleisti)</span>
+		<div class="container mx-auto">
+			{#each submittedProblems as problem}
+				<div class="relative my-3">
+					<div>Užduotis {problem.sourceListNr}</div>
+					<Button
+						color="red"
+						on:click={() => deleteProblem(problem.id)}
+						class="absolute top-10 right-20 z-10"
+					>
+						Ištrinti
+					</Button>
+					<Button
+						color="yellow"
+						on:click={() => openEditModal(problem.id)}
+						class="absolute top-10 right-48 z-10"
+					>
+						Redaguoti
+					</Button>
+					<ProblemComponent
+						problemMainData={{
+							skfCode: problem.skfCode === '' ? problem.id : problem.skfCode,
+							problemText: problem.problemText,
+							problemImageSrc: problem.problemImageSrc,
+							answerText: problem.answerText,
+							answerImageSrc: problem.answerImageSrc,
+							categories: problem.categories,
+							sourceId: problem.sourceId
+						}}
+					/>
+				</div>
+			{/each}
 		</div>
-	{/each}
-</div>
+	</AccordionItem>
+</Accordion>
+
 <EditProblemModal
 	bind:open={isProblemEditModalOpen}
 	bind:problem={editModalProblem}
