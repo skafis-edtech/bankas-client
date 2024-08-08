@@ -38,4 +38,13 @@ export namespace Components {
 		tempProblemImageDisplay: string | undefined;
 		tempAnswerImageDisplay: string | undefined;
 	}
+
+	interface ProblemEditData {
+		id: string;
+		sourceListNr: number;
+		problemText: string;
+		answerText: string;
+		problemImageSrc: string;
+		answerImageSrc: string;
+	}
 }

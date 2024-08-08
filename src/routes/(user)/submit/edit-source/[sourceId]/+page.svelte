@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button } from 'flowbite-svelte';
+	import { Accordion, AccordionItem, Button } from 'flowbite-svelte';
 	import { goto } from '$app/navigation';
 	import SourceCreateForm from '$components/forms/SourceCreateForm.svelte';
 	import ProblemCreateForm from '$components/forms/ProblemCreateForm.svelte';
@@ -16,6 +16,7 @@
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
 	import MultipleFileUploadModal from '$components/ui/MultipleFileUploadModal.svelte';
 	import { CloseOutline, PlusOutline } from 'flowbite-svelte-icons';
+	import EditProblemModal from '$components/ui/EditProblemModal.svelte';
 
 	let sourceId: string;
 	$: sourceId = $page.params.sourceId;
@@ -29,6 +30,7 @@
 	};
 
 	let newProblems: Components.ProblemCreateFormData[] = [];
+	$: newProblems = [...newProblems].sort((a, b) => a.sourceListNr - b.sourceListNr);
 
 	let isSourceDataChanged = false;
 	$: {
@@ -164,6 +166,51 @@
 			tempAnswerImageDisplay: undefined
 		}));
 	}
+
+	/* Edit modal */
+	let isProblemEditModalOpen = false;
+	$: if (!isProblemEditModalOpen) {
+		approvalApi.getProblemsBySource(sourceId).then((problemsResponse) => {
+			submittedProblems = problemsResponse.data;
+		});
+	}
+	let editModalProblem: Components.ProblemEditData = {
+		id: '',
+		sourceListNr: 0,
+		problemText: '',
+		answerText: '',
+		problemImageSrc: '',
+		answerImageSrc: ''
+	};
+	let editModalProblemImageTempDisplay = '';
+	let editModalAnswerImageTempDisplay = '';
+
+	function openEditModal(problemId: string) {
+		const problemForEdit = submittedProblems.find((problem) => problem.id === problemId);
+		if (problemForEdit) {
+			editModalProblem = {
+				id: problemId,
+				sourceListNr: problemForEdit.sourceListNr || 0,
+				problemText: problemForEdit.problemText || '',
+				answerText: problemForEdit.answerText || '',
+				problemImageSrc: problemForEdit.problemImageSrc || '',
+				answerImageSrc: problemForEdit.answerImageSrc || ''
+			};
+			isProblemEditModalOpen = true;
+		}
+	}
+
+	function closeEditModal() {
+		isProblemEditModalOpen = false;
+		editModalProblem = {
+			id: '',
+			sourceListNr: 0,
+			problemText: '',
+			answerText: '',
+			problemImageSrc: '',
+			answerImageSrc: ''
+		};
+	}
 </script>
 
 <div class="flex flex-row justify-between mx-4">
@@ -182,11 +229,11 @@
 </div>
 <p class="text-justify mx-4 my-4">
 	Spausdami mygtukus "Pateikti peržiūrai" Jūs patvirtinate, kad įkeliate tik savo sukurtas
-	originalias užduotis arba užduotis, kurios jau yra pasiekiamos viešai. Pateikdami savo užduotis
-	atsisakote turtinių autorinių teisių į šias užduotis, leidžiate užduotimis naudotis bet kam.
-	Pateikdami kitų autorių užduotis patvirtinate, kad tie autoriai yra atsisakę turtinių autorinių
-	teisių bei taip pat leidžia naudotis užduotimis bet kam. Peržiūrėtos ir patvirtintos užduotys bus
-	paviešintos kartu su Jūsų prisijungimo vardu, bet ne el. paštu.
+	originalias užduotis arba užduotis, kurios jau yra teisėtai pasiekiamos viešai. Pateikdami savo
+	užduotis atsisakote turtinių autorinių teisių į šias užduotis, leidžiate užduotimis naudotis bet
+	kam. Pateikdami kitų autorių užduotis patvirtinate, kad tie autoriai yra atsisakę turtinių
+	autorinių teisių bei taip pat leidžia naudotis užduotimis bet kam. Peržiūrėtos ir patvirtintos
+	užduotys bus paviešintos kartu su Jūsų prisijungimo vardu, bet ne el. paštu.
 </p>
 
 <div class="relative">
@@ -200,31 +247,51 @@
 	>
 </div>
 
-<div class="container mx-auto">
-	{#each submittedProblems as problem}
-		<div class="relative my-3">
-			<div>Užduotis {problem.sourceListNr}</div>
-			<Button
-				color="red"
-				on:click={() => deleteProblem(problem.id)}
-				class="absolute top-10 right-20 z-10"
-			>
-				Ištrinti
-			</Button>
-			<ProblemComponent
-				problemMainData={{
-					skfCode: problem.skfCode === '' ? problem.id : problem.skfCode,
-					problemText: problem.problemText,
-					problemImageSrc: problem.problemImageSrc,
-					answerText: problem.answerText,
-					answerImageSrc: problem.answerImageSrc,
-					categories: problem.categories,
-					sourceId: problem.sourceId
-				}}
-			/>
+<Accordion>
+	<AccordionItem open>
+		<span slot="header">Pateiktos užduotys (galite suskleisti)</span>
+		<div class="container mx-auto">
+			{#each submittedProblems as problem}
+				<div class="relative my-3">
+					<div>Užduotis {problem.sourceListNr}</div>
+					<Button
+						color="red"
+						on:click={() => deleteProblem(problem.id)}
+						class="absolute top-10 right-20 z-10"
+					>
+						Ištrinti
+					</Button>
+					<Button
+						color="yellow"
+						on:click={() => openEditModal(problem.id)}
+						class="absolute top-10 right-48 z-10"
+					>
+						Redaguoti
+					</Button>
+					<ProblemComponent
+						problemMainData={{
+							skfCode: problem.skfCode === '' ? problem.id : problem.skfCode,
+							problemText: problem.problemText,
+							problemImageSrc: problem.problemImageSrc,
+							answerText: problem.answerText,
+							answerImageSrc: problem.answerImageSrc,
+							categories: problem.categories,
+							sourceId: problem.sourceId
+						}}
+					/>
+				</div>
+			{/each}
 		</div>
-	{/each}
-</div>
+	</AccordionItem>
+</Accordion>
+
+<EditProblemModal
+	bind:open={isProblemEditModalOpen}
+	bind:problem={editModalProblem}
+	on:close={closeEditModal}
+	bind:problemImageTempDisplay={editModalProblemImageTempDisplay}
+	bind:answerImageTempDisplay={editModalAnswerImageTempDisplay}
+/>
 
 <div class="flex flex-row justify-center">
 	<Button color="green" on:click={() => (isDropModalOpen = true)} class="w-fit mx-auto my-4"
@@ -243,8 +310,8 @@
 </p>
 
 <p class="text-center mb-4">
-	Tekstas rašomas markdown sintakse. Svarbiausia - naujai eilutei reikia dviejų Enter, galite rašyti
-	LaTex formules. Daugiau galite paskaityti čia: <a
+	Tekstas rašomas Markdown sintakse. Svarbiausia - naujai eilutei reikia dviejų Enter, galite rašyti
+	LaTex (katex) formules bei Tikz diagramas. Daugiau galite paskaityti čia: <a
 		href="https://www.markdownguide.org/cheat-sheet/">https://www.markdownguide.org/cheat-sheet/</a
 	>
 </p>

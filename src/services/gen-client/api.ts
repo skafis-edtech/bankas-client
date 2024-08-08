@@ -109,6 +109,19 @@ export interface IdDto {
 /**
  * 
  * @export
+ * @interface ImageSrcDto
+ */
+export interface ImageSrcDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof ImageSrcDto
+     */
+    'src': string;
+}
+/**
+ * 
+ * @export
  * @interface Problem
  */
 export interface Problem {
@@ -317,6 +330,31 @@ export interface ProblemSubmitDto {
 /**
  * 
  * @export
+ * @interface ProblemTextsDto
+ */
+export interface ProblemTextsDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof ProblemTextsDto
+     */
+    'sourceListNr': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProblemTextsDto
+     */
+    'problemText': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProblemTextsDto
+     */
+    'answerText': string;
+}
+/**
+ * 
+ * @export
  * @interface ReviewMsgDto
  */
 export interface ReviewMsgDto {
@@ -362,19 +400,7 @@ export interface Source {
      * @type {string}
      * @memberof Source
      */
-    'reviewedById': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Source
-     */
-    'reviewedOn': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Source
-     */
-    'reviewMessage': string;
+    'reviewHistory': string;
     /**
      * 
      * @type {string}
@@ -438,19 +464,7 @@ export interface SourceDisplayDto {
      * @type {string}
      * @memberof SourceDisplayDto
      */
-    'reviewedByUsername': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SourceDisplayDto
-     */
-    'reviewedOn': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SourceDisplayDto
-     */
-    'reviewMessage': string;
+    'reviewHistory': string;
     /**
      * 
      * @type {string}
@@ -508,19 +522,7 @@ export interface SourcePostDto {
      * @type {string}
      * @memberof SourcePostDto
      */
-    'reviewedById': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SourcePostDto
-     */
-    'reviewedOn': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SourcePostDto
-     */
-    'reviewMessage': string;
+    'reviewHistory': string;
     /**
      * 
      * @type {string}
@@ -567,31 +569,6 @@ export interface SourceSubmitDto {
      * @memberof SourceSubmitDto
      */
     'description': string;
-}
-/**
- * 
- * @export
- * @interface UpdateProblem1Request
- */
-export interface UpdateProblem1Request {
-    /**
-     * 
-     * @type {ProblemSubmitDto}
-     * @memberof UpdateProblem1Request
-     */
-    'problem': ProblemSubmitDto;
-    /**
-     * 
-     * @type {File}
-     * @memberof UpdateProblem1Request
-     */
-    'problemImageFile'?: File;
-    /**
-     * 
-     * @type {File}
-     * @memberof UpdateProblem1Request
-     */
-    'answerImageFile'?: File;
 }
 /**
  * 
@@ -658,6 +635,44 @@ export const ApprovalControllerApiAxiosParamCreator = function (configuration?: 
             };
         },
         /**
+         * Delete answer image by ID.
+         * @summary USER but owning. Delete answer image
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteAnswerImage: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deleteAnswerImage', 'id', id)
+            const localVarPath = `/approval/problem/answerImage/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Delete problem by ID.
          * @summary USER but owning. Delete problem
          * @param {string} id 
@@ -667,7 +682,45 @@ export const ApprovalControllerApiAxiosParamCreator = function (configuration?: 
         deleteProblem1: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('deleteProblem1', 'id', id)
-            const localVarPath = `/approval/problem/delete/{id}`
+            const localVarPath = `/approval/problem/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Delete problem image by ID.
+         * @summary USER but owning. Delete problem image
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteProblemImage: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deleteProblemImage', 'id', id)
+            const localVarPath = `/approval/problem/problemImage/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -705,7 +758,7 @@ export const ApprovalControllerApiAxiosParamCreator = function (configuration?: 
         deleteSource1: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('deleteSource1', 'id', id)
-            const localVarPath = `/approval/source/delete/{id}`
+            const localVarPath = `/approval/source/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -995,7 +1048,7 @@ export const ApprovalControllerApiAxiosParamCreator = function (configuration?: 
             assertParamExists('update', 'id', id)
             // verify required parameter 'sourceSubmitDto' is not null or undefined
             assertParamExists('update', 'sourceSubmitDto', sourceSubmitDto)
-            const localVarPath = `/approval/source/update/{id}`
+            const localVarPath = `/approval/source/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1027,17 +1080,19 @@ export const ApprovalControllerApiAxiosParamCreator = function (configuration?: 
             };
         },
         /**
-         * Update problem data by ID. Images: if it was problems/uuid.png and sends KEEP_FILE_THE_SAME, then nothing with files. If string doesn\'t start with problems/ TODO TODO:...- check the sent file - if there is any, upload it, if there\'s not - the image got deleted, or it wasn\'t there at all
-         * @summary NOT IMPLEMENTED YET!!!! USER but owning. Update problem data. NOT IMPLEMENTED YET!!!!!
+         * Update problem texts by ID.
+         * @summary USER but owning. Update problem texts
          * @param {string} id 
-         * @param {UpdateProblem1Request} [updateProblem1Request] 
+         * @param {ProblemTextsDto} problemTextsDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateProblem1: async (id: string, updateProblem1Request?: UpdateProblem1Request, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateProblemTexts: async (id: string, problemTextsDto: ProblemTextsDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
-            assertParamExists('updateProblem1', 'id', id)
-            const localVarPath = `/approval/problem/update/{id}`
+            assertParamExists('updateProblemTexts', 'id', id)
+            // verify required parameter 'problemTextsDto' is not null or undefined
+            assertParamExists('updateProblemTexts', 'problemTextsDto', problemTextsDto)
+            const localVarPath = `/approval/problem/texts/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1061,7 +1116,105 @@ export const ApprovalControllerApiAxiosParamCreator = function (configuration?: 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updateProblem1Request, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(problemTextsDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Upload answer image by ID.
+         * @summary USER but owning. Upload answer image
+         * @param {string} id 
+         * @param {File} answerImageFile 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadAnswerImage: async (id: string, answerImageFile: File, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('uploadAnswerImage', 'id', id)
+            // verify required parameter 'answerImageFile' is not null or undefined
+            assertParamExists('uploadAnswerImage', 'answerImageFile', answerImageFile)
+            const localVarPath = `/approval/problem/answerImage/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+            const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+            if (answerImageFile !== undefined) { 
+                localVarFormParams.append('answerImageFile', answerImageFile as any);
+            }
+    
+    
+            localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = localVarFormParams;
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Upload problem image by ID.
+         * @summary USER but owning. Upload problem image
+         * @param {string} id 
+         * @param {File} problemImageFile 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadProblemImage: async (id: string, problemImageFile: File, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('uploadProblemImage', 'id', id)
+            // verify required parameter 'problemImageFile' is not null or undefined
+            assertParamExists('uploadProblemImage', 'problemImageFile', problemImageFile)
+            const localVarPath = `/approval/problem/problemImage/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+            const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+            if (problemImageFile !== undefined) { 
+                localVarFormParams.append('problemImageFile', problemImageFile as any);
+            }
+    
+    
+            localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = localVarFormParams;
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1093,6 +1246,19 @@ export const ApprovalControllerApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Delete answer image by ID.
+         * @summary USER but owning. Delete answer image
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteAnswerImage(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteAnswerImage(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ApprovalControllerApi.deleteAnswerImage']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Delete problem by ID.
          * @summary USER but owning. Delete problem
          * @param {string} id 
@@ -1103,6 +1269,19 @@ export const ApprovalControllerApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteProblem1(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApprovalControllerApi.deleteProblem1']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Delete problem image by ID.
+         * @summary USER but owning. Delete problem image
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteProblemImage(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteProblemImage(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ApprovalControllerApi.deleteProblemImage']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -1213,17 +1392,45 @@ export const ApprovalControllerApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Update problem data by ID. Images: if it was problems/uuid.png and sends KEEP_FILE_THE_SAME, then nothing with files. If string doesn\'t start with problems/ TODO TODO:...- check the sent file - if there is any, upload it, if there\'s not - the image got deleted, or it wasn\'t there at all
-         * @summary NOT IMPLEMENTED YET!!!! USER but owning. Update problem data. NOT IMPLEMENTED YET!!!!!
+         * Update problem texts by ID.
+         * @summary USER but owning. Update problem texts
          * @param {string} id 
-         * @param {UpdateProblem1Request} [updateProblem1Request] 
+         * @param {ProblemTextsDto} problemTextsDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateProblem1(id: string, updateProblem1Request?: UpdateProblem1Request, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Problem>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateProblem1(id, updateProblem1Request, options);
+        async updateProblemTexts(id: string, problemTextsDto: ProblemTextsDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateProblemTexts(id, problemTextsDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ApprovalControllerApi.updateProblem1']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ApprovalControllerApi.updateProblemTexts']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Upload answer image by ID.
+         * @summary USER but owning. Upload answer image
+         * @param {string} id 
+         * @param {File} answerImageFile 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async uploadAnswerImage(id: string, answerImageFile: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImageSrcDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadAnswerImage(id, answerImageFile, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ApprovalControllerApi.uploadAnswerImage']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Upload problem image by ID.
+         * @summary USER but owning. Upload problem image
+         * @param {string} id 
+         * @param {File} problemImageFile 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async uploadProblemImage(id: string, problemImageFile: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImageSrcDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadProblemImage(id, problemImageFile, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ApprovalControllerApi.uploadProblemImage']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -1248,6 +1455,16 @@ export const ApprovalControllerApiFactory = function (configuration?: Configurat
             return localVarFp.approve(sourceId, reviewMsgDto, options).then((request) => request(axios, basePath));
         },
         /**
+         * Delete answer image by ID.
+         * @summary USER but owning. Delete answer image
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteAnswerImage(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteAnswerImage(id, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Delete problem by ID.
          * @summary USER but owning. Delete problem
          * @param {string} id 
@@ -1256,6 +1473,16 @@ export const ApprovalControllerApiFactory = function (configuration?: Configurat
          */
         deleteProblem1(id: string, options?: any): AxiosPromise<void> {
             return localVarFp.deleteProblem1(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Delete problem image by ID.
+         * @summary USER but owning. Delete problem image
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteProblemImage(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteProblemImage(id, options).then((request) => request(axios, basePath));
         },
         /**
          * Delete source with all problems by ID.
@@ -1341,15 +1568,37 @@ export const ApprovalControllerApiFactory = function (configuration?: Configurat
             return localVarFp.update(id, sourceSubmitDto, options).then((request) => request(axios, basePath));
         },
         /**
-         * Update problem data by ID. Images: if it was problems/uuid.png and sends KEEP_FILE_THE_SAME, then nothing with files. If string doesn\'t start with problems/ TODO TODO:...- check the sent file - if there is any, upload it, if there\'s not - the image got deleted, or it wasn\'t there at all
-         * @summary NOT IMPLEMENTED YET!!!! USER but owning. Update problem data. NOT IMPLEMENTED YET!!!!!
+         * Update problem texts by ID.
+         * @summary USER but owning. Update problem texts
          * @param {string} id 
-         * @param {UpdateProblem1Request} [updateProblem1Request] 
+         * @param {ProblemTextsDto} problemTextsDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateProblem1(id: string, updateProblem1Request?: UpdateProblem1Request, options?: any): AxiosPromise<Problem> {
-            return localVarFp.updateProblem1(id, updateProblem1Request, options).then((request) => request(axios, basePath));
+        updateProblemTexts(id: string, problemTextsDto: ProblemTextsDto, options?: any): AxiosPromise<void> {
+            return localVarFp.updateProblemTexts(id, problemTextsDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Upload answer image by ID.
+         * @summary USER but owning. Upload answer image
+         * @param {string} id 
+         * @param {File} answerImageFile 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadAnswerImage(id: string, answerImageFile: File, options?: any): AxiosPromise<ImageSrcDto> {
+            return localVarFp.uploadAnswerImage(id, answerImageFile, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Upload problem image by ID.
+         * @summary USER but owning. Upload problem image
+         * @param {string} id 
+         * @param {File} problemImageFile 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadProblemImage(id: string, problemImageFile: File, options?: any): AxiosPromise<ImageSrcDto> {
+            return localVarFp.uploadProblemImage(id, problemImageFile, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1375,6 +1624,18 @@ export class ApprovalControllerApi extends BaseAPI {
     }
 
     /**
+     * Delete answer image by ID.
+     * @summary USER but owning. Delete answer image
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApprovalControllerApi
+     */
+    public deleteAnswerImage(id: string, options?: RawAxiosRequestConfig) {
+        return ApprovalControllerApiFp(this.configuration).deleteAnswerImage(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Delete problem by ID.
      * @summary USER but owning. Delete problem
      * @param {string} id 
@@ -1384,6 +1645,18 @@ export class ApprovalControllerApi extends BaseAPI {
      */
     public deleteProblem1(id: string, options?: RawAxiosRequestConfig) {
         return ApprovalControllerApiFp(this.configuration).deleteProblem1(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Delete problem image by ID.
+     * @summary USER but owning. Delete problem image
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApprovalControllerApi
+     */
+    public deleteProblemImage(id: string, options?: RawAxiosRequestConfig) {
+        return ApprovalControllerApiFp(this.configuration).deleteProblemImage(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1486,16 +1759,42 @@ export class ApprovalControllerApi extends BaseAPI {
     }
 
     /**
-     * Update problem data by ID. Images: if it was problems/uuid.png and sends KEEP_FILE_THE_SAME, then nothing with files. If string doesn\'t start with problems/ TODO TODO:...- check the sent file - if there is any, upload it, if there\'s not - the image got deleted, or it wasn\'t there at all
-     * @summary NOT IMPLEMENTED YET!!!! USER but owning. Update problem data. NOT IMPLEMENTED YET!!!!!
+     * Update problem texts by ID.
+     * @summary USER but owning. Update problem texts
      * @param {string} id 
-     * @param {UpdateProblem1Request} [updateProblem1Request] 
+     * @param {ProblemTextsDto} problemTextsDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ApprovalControllerApi
      */
-    public updateProblem1(id: string, updateProblem1Request?: UpdateProblem1Request, options?: RawAxiosRequestConfig) {
-        return ApprovalControllerApiFp(this.configuration).updateProblem1(id, updateProblem1Request, options).then((request) => request(this.axios, this.basePath));
+    public updateProblemTexts(id: string, problemTextsDto: ProblemTextsDto, options?: RawAxiosRequestConfig) {
+        return ApprovalControllerApiFp(this.configuration).updateProblemTexts(id, problemTextsDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Upload answer image by ID.
+     * @summary USER but owning. Upload answer image
+     * @param {string} id 
+     * @param {File} answerImageFile 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApprovalControllerApi
+     */
+    public uploadAnswerImage(id: string, answerImageFile: File, options?: RawAxiosRequestConfig) {
+        return ApprovalControllerApiFp(this.configuration).uploadAnswerImage(id, answerImageFile, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Upload problem image by ID.
+     * @summary USER but owning. Upload problem image
+     * @param {string} id 
+     * @param {File} problemImageFile 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApprovalControllerApi
+     */
+    public uploadProblemImage(id: string, problemImageFile: File, options?: RawAxiosRequestConfig) {
+        return ApprovalControllerApiFp(this.configuration).uploadProblemImage(id, problemImageFile, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

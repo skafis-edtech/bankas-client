@@ -1,20 +1,31 @@
-.carta-input, .carta-renderer {
-    scrollbar-width: none;
+.carta-input,
+.carta-renderer {
+	scrollbar-width: none;
 }
 
 .carta-renderer {
-    max-height: fit-content !important;
-    height: fit-content !important;
+	max-height: fit-content !important;
+	height: fit-content !important;
 }
 
 .carta-input {
-    max-height: 200px;
-    height: 200px;
+	max-height: 200px;
+	height: 200px;
 }
 
 @media screen and (max-width: 768px) {
-    .carta-input {
-        max-height: 350px;
-        height: 350px;
-    }
+	.carta-input {
+		max-height: 350px;
+		height: 350px;
+	}
 }
+
+/* .scale-container {
+	position: relative;
+}
+
+.katex-html > .base {
+	transform: scale(1.2); 
+	transform-origin: top left; 
+}
+*/

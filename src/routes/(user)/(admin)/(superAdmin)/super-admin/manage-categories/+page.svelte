@@ -3,7 +3,6 @@
 	import MarkdownDisplay from '$components/ui/MarkdownDisplay.svelte';
 	import { categoryApi } from '$services/apiService';
 	import type { Category, CategoryPostDto } from '$services/gen-client';
-	import { Markdown } from 'carta-md';
 	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
 

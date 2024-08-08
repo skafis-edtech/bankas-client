@@ -58,7 +58,7 @@
 			<p class="ml-auto text-right mr-2"><strong>({problemCount})</strong></p>
 		</span>
 
-		<div class="text-black"><MarkdownDisplay value={category.description} /></div>
+		<MarkdownDisplay value={category.description} />
 
 		<div class="container mx-auto">
 			{#each problems as problem (problem.id)}
@@ -70,7 +70,7 @@
 							problemImageSrc: problem.problemImageSrc,
 							answerText: problem.answerText,
 							answerImageSrc: problem.answerImageSrc,
-							categoryId: problem.categoryId,
+							categories: problem.categories,
 							sourceId: problem.sourceId
 						}}
 					/>
