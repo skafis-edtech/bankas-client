@@ -3,7 +3,7 @@
 	import SourceWithProblems from '$components/layout/SourceWithProblems.svelte';
 	import SourceManageBar from '$components/ui/SourceManageBar.svelte';
 	import { approvalApi } from '$services/apiService';
-	import type { Source, SourceDisplayDto, SourceReviewStatusEnum } from '$services/gen-client';
+	import type { SourceDisplayDto, SourceReviewStatusEnum } from '$services/gen-client';
 	import { Button } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 
@@ -32,9 +32,7 @@
 	<SourceManageBar
 		reviewStatus={source.reviewStatus}
 		sourceId={source.id}
-		reviewMessage={source.reviewMessage}
-		reviewedOn={source.reviewedOn}
-		reviewedBy={source.reviewedByUsername}
+		reviewHistory={source.reviewHistory}
 	/>
 	<SourceWithProblems {source} />
 {/each}

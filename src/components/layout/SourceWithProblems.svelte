@@ -30,27 +30,29 @@
 	<AccordionItem bind:open={isOpen} class="bg-slate-200 mb-4">
 		<span slot="header" class="text-black"><p>{source.name}</p></span>
 		<MarkdownDisplay value={source.description} />
-		<p>
-			<AuthorLink author={source.authorUsername} />
-		</p>
-		<p>sukurta: {getNiceTimeString(source.createdOn)}</p>
-		<p>pakeista: {getNiceTimeString(source.lastModifiedOn)}</p>
-		<div class="container mx-auto">
-			{#each problems as problem (problem.id)}
-				<div class="my-3">
-					<ProblemComponent
-						problemMainData={{
-							skfCode: problem.skfCode === '' ? problem.id : problem.skfCode,
-							problemText: problem.problemText,
-							problemImageSrc: problem.problemImageSrc,
-							answerText: problem.answerText,
-							answerImageSrc: problem.answerImageSrc,
-							categoryId: problem.categoryId,
-							sourceId: problem.sourceId
-						}}
-					/>
-				</div>
-			{/each}
-		</div>
-	</AccordionItem>
+		<div>
+			<p>
+				<AuthorLink author={source.authorUsername} />
+			</p>
+			<p>sukurta: {getNiceTimeString(source.createdOn)}</p>
+			<p>pakeista: {getNiceTimeString(source.lastModifiedOn)}</p>
+			<div class="container mx-auto">
+				{#each problems as problem (problem.id)}
+					<div class="my-3">
+						<ProblemComponent
+							problemMainData={{
+								skfCode: problem.skfCode === '' ? problem.id : problem.skfCode,
+								problemText: problem.problemText,
+								problemImageSrc: problem.problemImageSrc,
+								answerText: problem.answerText,
+								answerImageSrc: problem.answerImageSrc,
+								categories: problem.categories,
+								sourceId: problem.sourceId
+							}}
+						/>
+					</div>
+				{/each}
+			</div>
+		</div></AccordionItem
+	>
 </Accordion>

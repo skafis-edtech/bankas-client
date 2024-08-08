@@ -26,11 +26,13 @@
 	});
 </script>
 
-<MarkdownEditor
-	mode="tabs"
-	disableToolbar
-	selectedTab="preview"
-	placeholder="This shouldn't be displayed"
-	{carta}
-	{value}
-/>
+<div class="text-black scale-container">
+	<MarkdownEditor
+		mode="tabs"
+		disableToolbar
+		selectedTab="preview"
+		placeholder="This shouldn't be displayed"
+		{carta}
+		{value}
+	/>
+</div>

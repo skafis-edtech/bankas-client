@@ -4,10 +4,9 @@
 	import { Button } from 'flowbite-svelte';
 	import { getContext, onMount } from 'svelte';
 	import type { AuthContext } from '../../../types';
-	import ClickableProblem from '$components/ui/ClickableProblem.svelte';
 	import { ROLES } from '$utils/constants';
-	import { successStore } from '$lib/stores';
 	import ChooseCategories from '$components/ui/ChooseCategories.svelte';
+	import ClickableProblem from '../../../components/ui/ClickableProblem.svelte';
 	const { user } = getContext('authContext') as AuthContext;
 
 	let categories: Category[] = [];

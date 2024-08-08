@@ -182,11 +182,11 @@
 </div>
 <p class="text-justify mx-4 my-4">
 	Spausdami mygtukus "Pateikti peržiūrai" Jūs patvirtinate, kad įkeliate tik savo sukurtas
-	originalias užduotis arba užduotis, kurios jau yra pasiekiamos viešai. Pateikdami savo užduotis
-	atsisakote turtinių autorinių teisių į šias užduotis, leidžiate užduotimis naudotis bet kam.
-	Pateikdami kitų autorių užduotis patvirtinate, kad tie autoriai yra atsisakę turtinių autorinių
-	teisių bei taip pat leidžia naudotis užduotimis bet kam. Peržiūrėtos ir patvirtintos užduotys bus
-	paviešintos kartu su Jūsų prisijungimo vardu, bet ne el. paštu.
+	originalias užduotis arba užduotis, kurios jau yra teisėtai pasiekiamos viešai. Pateikdami savo
+	užduotis atsisakote turtinių autorinių teisių į šias užduotis, leidžiate užduotimis naudotis bet
+	kam. Pateikdami kitų autorių užduotis patvirtinate, kad tie autoriai yra atsisakę turtinių
+	autorinių teisių bei taip pat leidžia naudotis užduotimis bet kam. Peržiūrėtos ir patvirtintos
+	užduotys bus paviešintos kartu su Jūsų prisijungimo vardu, bet ne el. paštu.
 </p>
 
 <div class="relative">
@@ -210,6 +210,13 @@
 				class="absolute top-10 right-20 z-10"
 			>
 				Ištrinti
+			</Button>
+			<Button
+				color="yellow"
+				on:click={() => alert('This will edit')}
+				class="absolute top-10 right-48 z-10"
+			>
+				Redaguoti
 			</Button>
 			<ProblemComponent
 				problemMainData={{

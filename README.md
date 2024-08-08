@@ -4,20 +4,16 @@ Problems for content bank (school problem repository).
 
 uses API. https://api.bankas.skafis.lt/v3/api-docs
 
-uses Carta MD for rich text input: https://beartocode.github.io/carta/introduction
-
 ## Tech
 
 - svelte, vite, typescript
-- firebase auth
-- firebase storage
-- firebase firestore
+- firebase auth, storage, firestore, hosting
 - google analytics
-- svelte flowbite components
-- svelte flowbite icons
+- [svelte flowbite components](https://flowbite-svelte.com/docs/components/accordion)
+- [svelte flowbite icons](https://flowbite-svelte.com/icons/outline-icons)
 - github actions
-- openapi-generator-cli
-- carta-md
+- [openapi-generator-cli](https://openapi-generator.tech)
+- [carta-md](https://beartocode.github.io/carta/introduction)
 
 ## Dev
 

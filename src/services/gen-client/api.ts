@@ -362,19 +362,7 @@ export interface Source {
      * @type {string}
      * @memberof Source
      */
-    'reviewedById': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Source
-     */
-    'reviewedOn': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Source
-     */
-    'reviewMessage': string;
+    'reviewHistory': string;
     /**
      * 
      * @type {string}
@@ -438,19 +426,7 @@ export interface SourceDisplayDto {
      * @type {string}
      * @memberof SourceDisplayDto
      */
-    'reviewedByUsername': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SourceDisplayDto
-     */
-    'reviewedOn': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SourceDisplayDto
-     */
-    'reviewMessage': string;
+    'reviewHistory': string;
     /**
      * 
      * @type {string}
@@ -508,19 +484,7 @@ export interface SourcePostDto {
      * @type {string}
      * @memberof SourcePostDto
      */
-    'reviewedById': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SourcePostDto
-     */
-    'reviewedOn': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SourcePostDto
-     */
-    'reviewMessage': string;
+    'reviewHistory': string;
     /**
      * 
      * @type {string}

@@ -1,34 +1,29 @@
 <script lang="ts">
 	import { SourceReviewStatusEnum } from '$services/gen-client';
-	import { Badge, Button, Indicator, Input, Popover } from 'flowbite-svelte';
+	import { Badge, Button, Input, Popover } from 'flowbite-svelte';
 	import { CheckCircleSolid, CloseCircleSolid, MessageDotsOutline } from 'flowbite-svelte-icons';
-	import AuthorLink from './AuthorLink.svelte';
-	import { getNiceTimeString } from '$lib/utils';
 	import { approvalApi } from '$services/apiService';
 	import { successStore } from '$lib/stores';
+	import { getNiceTimeString } from '$lib/utils';
+	import AuthorLink from './AuthorLink.svelte';
 
 	export let reviewStatus: SourceReviewStatusEnum;
 	export let sourceId: string;
-	export let reviewMessage: string;
-	export let reviewedBy: string;
-	export let reviewedOn: string;
+	export let reviewHistory: string;
+
+	let id = `button-${Math.random().toString(36).substring(2, 9)}`;
 
 	let newMessage = '';
 
-	let messageTitle = '';
 	let bgForBar = '';
 	let placeholder = '';
 	if (reviewStatus === SourceReviewStatusEnum.Pending) {
-		messageTitle = 'Ankstesniojo peržiūrėjimo žinutė';
 		bgForBar = 'bg-yellow-400';
-		placeholder = 'Žinutė autoriui...';
+		placeholder = 'Čia galite parašyti žinutę...';
 	} else if (reviewStatus === SourceReviewStatusEnum.Rejected) {
-		messageTitle = 'Atmetimo žinutė';
 		bgForBar = 'bg-slate-400';
-		placeholder =
-			'Galite peržiūrėti ir papildyti kito peržiūrėtojo pastabas. Žinutė bus pilnai perrašyta...';
+		placeholder = 'Galite peržiūrėti ir papildyti kito peržiūrėtojo pastabas savomis...';
 	} else if (reviewStatus === SourceReviewStatusEnum.Approved) {
-		messageTitle = 'Patvirtinimo žinutė';
 		bgForBar = 'bg-slate-300';
 		placeholder = 'Nieko nereikia daryti. Nebent norite atšaukti patvirtinimą...';
 	} else {
@@ -58,14 +53,21 @@
 	{#if reviewStatus === SourceReviewStatusEnum.Approved}
 		<Badge color="green" class="ml-2">Jau patvirtinta</Badge>
 	{/if}
-	{#if reviewMessage !== ''}
-		<Button id="b1" color="blue" class="p-2 mx-1 relative"><MessageDotsOutline /></Button>
-		<Popover class="w-64 text-sm font-light " title={messageTitle} triggeredBy="#b1"
-			><p>
-				{getNiceTimeString(reviewedOn)}
-				<AuthorLink author={reviewedBy} /> rašė:
-			</p>
-			<p>{reviewMessage}</p>
+	{#if reviewHistory !== ''}
+		<Button {id} color="blue" class="p-2 mx-1 relative"><MessageDotsOutline /></Button>
+		<Popover class="w-64 text-sm font-light " triggeredBy={`#${id}`} trigger="click">
+			{#each reviewHistory.split('\\n').map((review) => {
+				const [dateTime, author, ...messageParts] = review.split(' ');
+				const message = messageParts.join(' ').replace('rašė:', '');
+				return { dateTime, author, message };
+			}) as review}
+				<p>
+					{getNiceTimeString(review.dateTime)}
+					<AuthorLink author={review.author} />
+					rašė:
+					<strong>{review.message}</strong>
+				</p>
+			{/each}
 		</Popover>
 	{/if}
 	<Input type="text" {placeholder} bind:value={newMessage} />
