@@ -3,8 +3,9 @@
 	import type { Components } from '../../types';
 	import MarkdownInput from '$components/forms/MarkdownInput.svelte';
 	import SmallFileUpload from '$components/forms/SmallFileUpload.svelte';
-	import { onMount } from 'svelte';
 	import { CloseOutline } from 'flowbite-svelte-icons';
+	import { approvalApi } from '$services/apiService';
+	import { successStore } from '$lib/stores';
 
 	export let open: boolean;
 	export let problem: Components.ProblemEditData;
@@ -14,33 +15,49 @@
 	let problemImageFile: File | null = null;
 	let answerImageFile: File | null = null;
 
-	function updateProblemTexts() {
-		alert('PUT /approval/problem/texts' + problem.id);
-		console.log(problem);
+	async function updateProblemTexts() {
+		await approvalApi.updateProblemTexts(problem.id, {
+			sourceListNr: problem.sourceListNr,
+			problemText: problem.problemText,
+			answerText: problem.answerText
+		});
+		successStore.set('Atnaujinti tekstai');
 	}
 
-	function deleteProblemImage() {
+	async function deleteProblemImage() {
 		problem.problemImageSrc = '';
-		alert('DELETE /approval/problem/problemImage/' + problem.id);
+		await approvalApi.deleteProblemImage(problem.id);
+		successStore.set('Ištrintas užduoties paveiksliukas 🤨');
 	}
 
-	function deleteAnswerImage() {
+	async function deleteAnswerImage() {
 		problem.answerImageSrc = '';
-		alert('DELETE /approval/problem/answerImage/' + problem.id);
+		await approvalApi.deleteAnswerImage(problem.id);
+		successStore.set('Ištrintas atsakymo paveiksliukas 😁');
 	}
 
-	function uploadProblemImage() {
+	async function uploadProblemImage() {
+		if (!problemImageFile) {
+			alert('No file to upload');
+			return;
+		}
+		const response = await approvalApi.uploadProblemImage(problem.id, problemImageFile);
 		problemImageFile = null;
 		problemImageTempDisplay = '';
-		alert('POST /approval/problem/problemImage/' + problem.id);
-		problem.problemImageSrc = 'https://via.placeholder.com/400x150';
+		problem.problemImageSrc = response.data.src;
+		successStore.set('Įkeltas užduoties paveiksliukas 😎');
 	}
 
-	function uploadAnswerImage() {
+	async function uploadAnswerImage() {
+		if (!answerImageFile) {
+			alert('No file to upload');
+			return;
+		}
+		const response = await approvalApi.uploadAnswerImage(problem.id, answerImageFile);
 		answerImageFile = null;
 		answerImageTempDisplay = '';
-		alert('POST /approval/problem/answerImage/' + problem.id);
-		problem.answerImageSrc = 'https://via.placeholder.com/400x150';
+		problem.answerImageSrc = response.data.src;
+		successStore.set('Įkeltas atsakymo paveiksliukas 😎');
 	}
 </script>
 
@@ -56,7 +73,9 @@
 			<MarkdownInput bind:value={problem.answerText} />
 			<Button class="mt-4" color="primary" size="lg" on:click={updateProblemTexts}>Išsaugoti</Button
 			>
-			<Button class="mt-4" color="alternative" size="lg">Atšaukti</Button>
+			<Button class="mt-4" color="alternative" size="lg" on:click={() => (open = false)}
+				>Uždaryti</Button
+			>
 		</div>
 
 		<div class="my-8 border-2 p-4">
