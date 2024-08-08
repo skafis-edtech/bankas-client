@@ -16,6 +16,7 @@
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
 	import MultipleFileUploadModal from '$components/ui/MultipleFileUploadModal.svelte';
 	import { CloseOutline, PlusOutline } from 'flowbite-svelte-icons';
+	import EditProblemModal from '$components/ui/EditProblemModal.svelte';
 
 	let sourceId: string;
 	$: sourceId = $page.params.sourceId;
@@ -35,6 +36,43 @@
 		isSourceDataChanged =
 			oldSourceData?.name !== sourceData?.name ||
 			oldSourceData?.description !== sourceData?.description;
+	}
+
+	let isProblemEditModalOpen = false;
+	let editModalProblem: Components.ProblemEditData = {
+		id: '',
+		sourceListNr: 0,
+		problemText: '',
+		answerText: '',
+		problemImageSrc: '',
+		answerImageSrc: ''
+	};
+
+	function openEditModal(problemId: string) {
+		const problemForEdit = submittedProblems.find((problem) => problem.id === problemId);
+		if (problemForEdit) {
+			editModalProblem = {
+				id: problemId,
+				sourceListNr: problemForEdit.sourceListNr || 0,
+				problemText: problemForEdit.problemText || '',
+				answerText: problemForEdit.answerText || '',
+				problemImageSrc: problemForEdit.problemImageSrc || '',
+				answerImageSrc: problemForEdit.answerImageSrc || ''
+			};
+			isProblemEditModalOpen = true;
+		}
+	}
+
+	function closeEditModal() {
+		isProblemEditModalOpen = false;
+		editModalProblem = {
+			id: '',
+			sourceListNr: 0,
+			problemText: '',
+			answerText: '',
+			problemImageSrc: '',
+			answerImageSrc: ''
+		};
 	}
 
 	onMount(async () => {
@@ -213,7 +251,7 @@
 			</Button>
 			<Button
 				color="yellow"
-				on:click={() => alert('This will edit')}
+				on:click={() => openEditModal(problem.id)}
 				class="absolute top-10 right-48 z-10"
 			>
 				Redaguoti
@@ -232,6 +270,11 @@
 		</div>
 	{/each}
 </div>
+<EditProblemModal
+	bind:open={isProblemEditModalOpen}
+	bind:problem={editModalProblem}
+	on:close={closeEditModal}
+/>
 
 <div class="flex flex-row justify-center">
 	<Button color="green" on:click={() => (isDropModalOpen = true)} class="w-fit mx-auto my-4"
