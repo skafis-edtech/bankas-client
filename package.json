@@ -50,6 +50,7 @@
 		"axios": "^1.7.2",
 		"carta-md": "^4.3.3",
 		"firebase": "^10.12.2",
+		"firebase-admin": "^12.3.1",
 		"firebase-tools": "^13.10.2",
 		"isomorphic-dompurify": "^2.13.0",
 		"katex": "^0.16.11",
