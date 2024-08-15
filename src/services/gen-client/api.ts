@@ -2649,6 +2649,35 @@ export const PublicControllerApiAxiosParamCreator = function (configuration?: Co
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        getApprovedSources: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/public/approvedSources`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         getCategories: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/public/categories`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -3007,6 +3036,17 @@ export const PublicControllerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        async getApprovedSources(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SourceDisplayDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getApprovedSources(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PublicControllerApi.getApprovedSources']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         async getCategories(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Category>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getCategories(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -3113,7 +3153,7 @@ export const PublicControllerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSourcesByAuthor(authorUsername: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Source>>> {
+        async getSourcesByAuthor(authorUsername: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SourceDisplayDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getSourcesByAuthor(authorUsername, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PublicControllerApi.getSourcesByAuthor']?.[localVarOperationServerIndex]?.url;
@@ -3140,6 +3180,14 @@ export const PublicControllerApiFp = function(configuration?: Configuration) {
 export const PublicControllerApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = PublicControllerApiFp(configuration)
     return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getApprovedSources(options?: any): AxiosPromise<Array<SourceDisplayDto>> {
+            return localVarFp.getApprovedSources(options).then((request) => request(axios, basePath));
+        },
         /**
          * 
          * @param {*} [options] Override http request option.
@@ -3224,7 +3272,7 @@ export const PublicControllerApiFactory = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSourcesByAuthor(authorUsername: string, options?: any): AxiosPromise<Array<Source>> {
+        getSourcesByAuthor(authorUsername: string, options?: any): AxiosPromise<Array<SourceDisplayDto>> {
             return localVarFp.getSourcesByAuthor(authorUsername, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3245,6 +3293,16 @@ export const PublicControllerApiFactory = function (configuration?: Configuratio
  * @extends {BaseAPI}
  */
 export class PublicControllerApi extends BaseAPI {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PublicControllerApi
+     */
+    public getApprovedSources(options?: RawAxiosRequestConfig) {
+        return PublicControllerApiFp(this.configuration).getApprovedSources(options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {*} [options] Override http request option.

@@ -3,13 +3,22 @@
 	import { getContext, onMount } from 'svelte';
 	import { get } from 'svelte/store';
 	import { UserSolid } from 'flowbite-svelte-icons';
-	import { Button, Mark } from 'flowbite-svelte';
+	import { Button, Mark, Search } from 'flowbite-svelte';
 	import type { AuthContext } from '../../../types';
-	import { userApi } from '$services/apiService';
+	import { publicApi, userApi } from '$services/apiService';
 	import MarkdownDisplay from '$components/ui/MarkdownDisplay.svelte';
 	import MarkdownInput from '$components/forms/MarkdownInput.svelte';
+	import type { SourceDisplayDto } from '$services/gen-client';
+	import SourceWithProblems from '$components/layout/SourceWithProblems.svelte';
 
-	const { user } = getContext('authContext') as AuthContext;
+	let authContext: AuthContext | undefined;
+	let user: AuthContext['user'] | undefined;
+	try {
+		authContext = getContext('authContext') as AuthContext;
+		user = authContext?.user;
+	} catch (e) {
+		console.error('Failed to get auth context:', e);
+	}
 
 	let username;
 	let bio = '';
@@ -17,11 +26,28 @@
 	let editingState = false;
 	let editedBio = '';
 
+	let searchValue = '';
+
+	let sources: SourceDisplayDto[] = [];
+
 	$: username = get(page).params.username;
 
 	onMount(async () => {
-		const response = await userApi.getBio(username);
-		bio = response.data.bio;
+		try {
+			const response = await userApi.getBio(username);
+			bio = response.data.bio || ''; // Ensure bio is a string
+		} catch (e) {
+			console.error('Failed to load bio:', e);
+			bio = '';
+		}
+
+		try {
+			const sourcesRes = await publicApi.getSourcesByAuthor(username);
+			sources = sourcesRes.data;
+		} catch (e) {
+			console.error('Failed to load sources:', e);
+			sources = [];
+		}
 	});
 
 	function startEditing() {
@@ -34,9 +60,13 @@
 	}
 
 	async function saveEdit() {
-		await userApi.updateBio({ bio: editedBio });
-		editingState = false;
-		bio = editedBio;
+		try {
+			await userApi.updateBio({ bio: editedBio });
+			editingState = false;
+			bio = editedBio;
+		} catch (e) {
+			console.error('Failed to save bio:', e);
+		}
 	}
 </script>
 
@@ -47,9 +77,13 @@
 </div>
 
 {#if !editingState}
-	<MarkdownDisplay value={bio} />
+	{#if bio}
+		<MarkdownDisplay value={bio} />
+	{:else}
+		<p>Nėra bio informacijos</p>
+	{/if}
 {:else}
-	<form on:submit={() => saveEdit()}>
+	<form on:submit={saveEdit}>
 		<MarkdownInput bind:value={editedBio} />
 		<div class="flex flex-row gap-8 justify-center">
 			<Button color="light" on:click={cancelEdit}>Atšaukti</Button>
@@ -59,6 +93,18 @@
 {/if}
 {#if username === $user?.username && !editingState}
 	<div class="flex flex-row justify-center">
-		<Button on:click={() => startEditing()}>Redaguoti aprašymą (bio)</Button>
+		<Button on:click={startEditing}>Redaguoti aprašymą (bio)</Button>
 	</div>
+{/if}
+<h1 class="text-4xl font-semibold my-4 text-center">Šaltiniai</h1>
+{#if sources.length === 0}
+	<p class="text-center">Nėra šaltinių</p>
+{:else}
+	<Search class="my-3" placeholder="Ieškoti" bind:value={searchValue} />
+
+	{#each sources as source}
+		{#if source.name.toLowerCase().includes(searchValue.toLowerCase())}
+			<SourceWithProblems {source} {searchValue} />
+		{/if}
+	{/each}
 {/if}

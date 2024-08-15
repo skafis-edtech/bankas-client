@@ -5,7 +5,7 @@
 	import { Button, Checkbox, Popover } from 'flowbite-svelte';
 	import { Search } from 'flowbite-svelte';
 	import DraggableDiv from './DraggableDiv.svelte';
-	import MarkdownDisplay from './MarkdownDisplay.svelte';
+	import MarkdownDisplay from '../MarkdownDisplay.svelte';
 
 	export let categories: Category[] = [];
 	export let currentProblemId: string;

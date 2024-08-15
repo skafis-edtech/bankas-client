@@ -9,6 +9,7 @@
 	import { writable } from 'svelte/store';
 
 	export let source: SourceDisplayDto;
+	export let searchValue: string;
 
 	let problems: ProblemDisplayViewDto[] = [];
 	let isLoaded = writable(false);
@@ -28,14 +29,23 @@
 
 <Accordion>
 	<AccordionItem bind:open={isOpen} class="bg-slate-200 mb-4">
-		<span slot="header" class="text-black"><p>{source.name}</p></span>
+		<span slot="header" class="text-black flex justify-between items-center w-full">
+			<p>
+				{#if searchValue}
+					{@html source.name.replace(new RegExp(searchValue, 'gi'), '<mark>$&</mark>')}
+				{:else}
+					{source.name}
+				{/if}
+			</p>
+			<p class="ml-auto text-right mr-2"><strong>({source.authorUsername})</strong></p>
+		</span>
 		<MarkdownDisplay value={source.description} />
 		<div>
 			<p>
-				<AuthorLink author={source.authorUsername} />
+				Autorius: <AuthorLink author={source.authorUsername} />
 			</p>
-			<p>sukurta: {getNiceTimeString(source.createdOn)}</p>
-			<p>pakeista: {getNiceTimeString(source.lastModifiedOn)}</p>
+			<p>Sukurta: {getNiceTimeString(source.createdOn)}</p>
+			<p>Pakeista: {getNiceTimeString(source.lastModifiedOn)}</p>
 			<div class="container mx-auto">
 				{#each problems as problem (problem.id)}
 					<div class="my-3">
