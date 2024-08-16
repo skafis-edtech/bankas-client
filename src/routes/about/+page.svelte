@@ -10,5 +10,34 @@
 	sistema)
 </p>
 
+<h2 class="text-2xl font-semibold my-4">MB Skafis</h2>
+<p>
+	Neseniai įkurta įmonė MB Skafis, jos piniginis šaltinis bus tik savanoriškos paramos (su viltimi,
+	kad ateityje parems kokia valdžia). Savanoriškos paramos bus išskirstytos administratoriams
+	(ateityje galimai ir kitiems, kuriantiems užduotis). Užduočių turtinių autorinių teisių MB Skafis
+	nepasisavina, tačiau autoriai leidžia:
+</p>
+<ol>
+	<li>keisti</li>
+	<li>...</li>
+</ol>
+
 <h2 class="text-2xl font-semibold my-4">Ypatingas ačiū</h2>
-<p>...</p>
+<p>Ačiū visiems, kad prisidedate ir keliate užduotis bei ypatingas ačiū administratoriams:</p>
+<ol>
+	<li>...</li>
+	<li>...</li>
+</ol>
+<p>
+	Tinklapio kodas: <a href="https://github.com/nagissul/bankas-skafis"
+		>https://github.com/naglissul/bankas-skafis</a
+	>
+	ir
+	<a href="https://github.com/nagissul/bankas-skafis-api"
+		>https://github.com/naglissul/bankas-skafis-api</a
+	>
+</p>
+<p>
+	Tinklaraštis ir kiti projektai:
+	<a target="_blank" rel="noopener noreferrer" href="https://www.npw.lt">npw.lt </a>
+</p>

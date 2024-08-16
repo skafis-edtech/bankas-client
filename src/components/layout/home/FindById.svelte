@@ -56,7 +56,7 @@
 				problemImageSrc: problemDisplayViewDto.problemImageSrc,
 				answerText: problemDisplayViewDto.answerText,
 				answerImageSrc: problemDisplayViewDto.answerImageSrc,
-				categoryId: problemDisplayViewDto.categoryId,
+				categories: problemDisplayViewDto.categories,
 				sourceId: problemDisplayViewDto.sourceId
 			}}
 		/>

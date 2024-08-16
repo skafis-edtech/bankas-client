@@ -1,3 +1,7 @@
+<script>
+	import CategoryListPageable from '$components/layout/home/CategoryListPageable.svelte';
+</script>
+
 <div class="flex flex-col my-auto">
 	<h1 class="text-4xl font-semibold my-4 text-center font-serif text-blue-700">
 		Wow! Atradai slaptą puslapį! 🎉

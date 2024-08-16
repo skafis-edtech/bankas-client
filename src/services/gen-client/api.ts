@@ -2675,10 +2675,13 @@ export const PublicControllerApiAxiosParamCreator = function (configuration?: Co
         },
         /**
          * 
+         * @param {number} [page] 
+         * @param {number} [size] 
+         * @param {string} [search] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCategories: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getCategories: async (page?: number, size?: number, search?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/public/categories`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2690,6 +2693,18 @@ export const PublicControllerApiAxiosParamCreator = function (configuration?: Co
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (size !== undefined) {
+                localVarQueryParameter['size'] = size;
+            }
+
+            if (search !== undefined) {
+                localVarQueryParameter['search'] = search;
+            }
 
 
     
@@ -3044,11 +3059,14 @@ export const PublicControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {number} [page] 
+         * @param {number} [size] 
+         * @param {string} [search] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getCategories(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Category>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getCategories(options);
+        async getCategories(page?: number, size?: number, search?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Category>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCategories(page, size, search, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PublicControllerApi.getCategories']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -3190,11 +3208,14 @@ export const PublicControllerApiFactory = function (configuration?: Configuratio
         },
         /**
          * 
+         * @param {number} [page] 
+         * @param {number} [size] 
+         * @param {string} [search] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCategories(options?: any): AxiosPromise<Array<Category>> {
-            return localVarFp.getCategories(options).then((request) => request(axios, basePath));
+        getCategories(page?: number, size?: number, search?: string, options?: any): AxiosPromise<Array<Category>> {
+            return localVarFp.getCategories(page, size, search, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3305,12 +3326,15 @@ export class PublicControllerApi extends BaseAPI {
 
     /**
      * 
+     * @param {number} [page] 
+     * @param {number} [size] 
+     * @param {string} [search] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PublicControllerApi
      */
-    public getCategories(options?: RawAxiosRequestConfig) {
-        return PublicControllerApiFp(this.configuration).getCategories(options).then((request) => request(this.axios, this.basePath));
+    public getCategories(page?: number, size?: number, search?: string, options?: RawAxiosRequestConfig) {
+        return PublicControllerApiFp(this.configuration).getCategories(page, size, search, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

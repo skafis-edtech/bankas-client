@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { getContext, onMount } from 'svelte';
-	import FindById from '$components/layout/FindById.svelte';
-	import type { Category, SourceDisplayDto } from '$services/gen-client';
-	import CategoryWithProblems from '$components/layout/CategoryWithProblems.svelte';
+	import FindById from '$components/layout/home/FindById.svelte';
+	import type { SourceDisplayDto } from '$services/gen-client';
 	import type { AuthContext } from '../types';
-	import { approvalApi, publicApi } from '$services/apiService';
+	import { publicApi } from '$services/apiService';
 	import HorizontalLine from '$components/ui/HorizontalLine.svelte';
 	import { Button, Search, TabItem, Tabs } from 'flowbite-svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import SourceWithProblems from '$components/layout/SourceWithProblems.svelte';
+	import CategoryListPageable from '$components/layout/home/CategoryListPageable.svelte';
 
 	const { user } = getContext('authContext') as AuthContext;
 
@@ -29,9 +29,9 @@
 		searchSourcesValue = searchSourcesUrlStr;
 	});
 
-	let categories: Category[] = [];
 	let sources: SourceDisplayDto[] = [];
 	let numOfProblems: number | null = null;
+	let sourcesLoaded = false;
 
 	onMount(async () => {
 		const problemsCountRes = await publicApi.getProblemsCount();
@@ -39,19 +39,14 @@
 
 		if (tab === 'sources' || !tab) {
 			await loadSources();
-		} else if (tab === 'categories') {
-			await loadCategories();
 		}
 	});
 
-	async function loadCategories() {
-		const categoriesRes = await publicApi.getCategories();
-		categories = categoriesRes.data;
-	}
-
 	async function loadSources() {
+		if (sourcesLoaded) return;
 		const sourcesRes = await publicApi.getApprovedSources();
 		sources = sourcesRes.data;
+		sourcesLoaded = true;
 	}
 </script>
 
@@ -102,30 +97,13 @@
 			{/if}
 		{/each}
 	</TabItem>
-	<TabItem open={tab === 'categories'} title="Kategorijos" on:click={loadCategories}>
+	<TabItem open={tab === 'categories'} title="Kategorijos">
 		<div class="text-center">
 			<h1 class="text-2xl font-semibold my-3">Kategorijos</h1>
 			<p>Šiuo metu kategorijos dar kuriamos ...</p>
 		</div>
 		{#if $user}
-			<Search class="my-3" placeholder="Ieškoti" bind:value={searchCategoriesValue} />
-
-			{#each Object.entries(categories) as [id, category]}
-				{#if category.name.toLowerCase().includes(searchCategoriesValue.toLowerCase())}
-					<CategoryWithProblems {category} searchValue={searchCategoriesValue} />
-				{/if}
-			{/each}
-			{#if 'Nesurūšiuota'.toLowerCase().includes(searchCategoriesValue.toLowerCase())}
-				<CategoryWithProblems
-					category={{
-						id: '',
-						name: 'Nesurūšiuota',
-						description:
-							'Užduotys, kurios yra patvirtintos, tačiau dar nepriskirtos jokiai kategorijai.'
-					}}
-					searchValue={searchCategoriesValue}
-				/>
-			{/if}
+			<CategoryListPageable searchValue={searchCategoriesValue} />
 		{/if}
 	</TabItem>
 </Tabs>
