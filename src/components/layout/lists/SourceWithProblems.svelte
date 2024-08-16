@@ -5,25 +5,29 @@
 	import { getNiceTimeString } from '$lib/utils';
 	import { approvalApi } from '$services/apiService';
 	import { type ProblemDisplayViewDto, type SourceDisplayDto } from '$services/gen-client';
-	import { Accordion, AccordionItem } from 'flowbite-svelte';
+	import { Accordion, AccordionItem, Button, Skeleton } from 'flowbite-svelte';
 	import { writable } from 'svelte/store';
 
 	export let source: SourceDisplayDto;
 	export let searchValue: string;
 
-	let problems: ProblemDisplayViewDto[] = [];
+	let problems: (ProblemDisplayViewDto | null)[] = [];
 	let isLoaded = writable(false);
 	let isOpen = false;
 
-	$: if (isOpen) {
+	const pageSize = 5;
+	let page = 0;
+
+	$: if (isOpen || !$isLoaded) {
 		loadProblems();
+		isLoaded.set(true);
 	}
 
 	async function loadProblems() {
-		if (!isOpen || $isLoaded) return;
-		const response = await approvalApi.getProblemsBySource(source.id);
-		problems = response.data;
-		isLoaded.set(true);
+		problems = [...problems, ...Array.from({ length: pageSize }, () => null)];
+		const response = await approvalApi.getProblemsBySource(source.id, page, pageSize);
+		problems.splice(problems.length - pageSize, pageSize, ...response.data);
+		page++;
 	}
 </script>
 
@@ -47,22 +51,27 @@
 			<p>Sukurta: {getNiceTimeString(source.createdOn)}</p>
 			<p>Pakeista: {getNiceTimeString(source.lastModifiedOn)}</p>
 			<div class="container mx-auto">
-				{#each problems as problem (problem.id)}
-					<div class="my-3">
-						<ProblemComponent
-							problemMainData={{
-								skfCode: problem.skfCode === '' ? problem.id : problem.skfCode,
-								problemText: problem.problemText,
-								problemImageSrc: problem.problemImageSrc,
-								answerText: problem.answerText,
-								answerImageSrc: problem.answerImageSrc,
-								categories: problem.categories,
-								sourceId: problem.sourceId
-							}}
-						/>
-					</div>
+				{#each problems as problem (problem?.id || Math.random())}
+					{#if problem === null}
+						<Skeleton size="xxl" class="my-3" />
+					{:else}
+						<div class="my-3">
+							<ProblemComponent
+								problemMainData={{
+									skfCode: problem.skfCode === '' ? problem.id : problem.skfCode,
+									problemText: problem.problemText,
+									problemImageSrc: problem.problemImageSrc,
+									answerText: problem.answerText,
+									answerImageSrc: problem.answerImageSrc,
+									categories: problem.categories,
+									sourceId: problem.sourceId
+								}}
+							/>
+						</div>
+					{/if}
 				{/each}
 			</div>
+			<Button on:click={loadProblems} class="w-full">Rodyti daugiau</Button>
 		</div></AccordionItem
 	>
 </Accordion>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import SourceWithProblems from '$components/layout/SourceWithProblems.svelte';
+	import SourceWithProblems from '$components/layout/lists/SourceWithProblems.svelte';
 	import SourceManageBar from '$components/ui/SourceManageBar.svelte';
 	import { approvalApi } from '$services/apiService';
 	import type { SourceDisplayDto, SourceReviewStatusEnum } from '$services/gen-client';
@@ -28,6 +28,9 @@
 </script>
 
 <h1 class="text-4xl font-semibold my-4 text-center">Užduočių pateikimas</h1>
+<Button color="green" on:click={() => goto('/submit/new-source')} class="w-full my-4"
+	>Pridėti šaltinį (užduočių rinkinį)</Button
+>
 {#each sources as source (source.id)}
 	<SourceManageBar
 		reviewStatus={source.reviewStatus}
@@ -36,6 +39,3 @@
 	/>
 	<SourceWithProblems {source} />
 {/each}
-<Button color="green" on:click={() => goto('/submit/new-source')} class="w-full"
-	>Pridėti užduočių rinkinį</Button
->

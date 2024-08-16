@@ -152,7 +152,8 @@
 <h1 class="text-4xl font-semibold my-4 text-center">Karpymo įrankis</h1>
 <h3 class="text-lg text-center">
 	Įkelkite užduočių sąrašų paveiksliukus, iš eilės pažymėkite stačiakampiais, atsisiųskite
-	sunumeruotus paveiksliukus, pateikite automatizavimui užduočių pateikimo puslapyje.
+	sunumeruotus paveiksliukus, pateikite automatizavimui užduočių pateikimo puslapyje. Įrankis turi
+	trūkumų.
 </h3>
 
 <div class="p-6">

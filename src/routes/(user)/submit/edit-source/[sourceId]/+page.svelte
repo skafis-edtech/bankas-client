@@ -217,23 +217,25 @@
 	<div class="w-28">
 		<Button on:click={() => goto('/submit/dashboard')} class="w-16 my-2">Grįžti</Button>
 	</div>
-	<h1 class="text-4xl font-semibold my-4 text-center">Užduočių rinkinio redagavimas</h1>
+	<h1 class="text-4xl font-semibold my-4 text-center">
+		Šaltinio pildymas užduotimis (redagavimas)
+	</h1>
 	<div class="w-28"></div>
 </div>
 
 <div>
-	<h3 class="text-lg text-red-600 text-center">Progresas nėra išsaugomas automatiškai!</h3>
-	<h3 class="text-lg text-blue-600 text-center">
+	<!-- <h3 class="text-lg text-red-600 text-center">Progresas nėra išsaugomas automatiškai!</h3> -->
+	<!-- <h3 class="text-lg text-blue-600 text-center">
 		Vos pateikę užduotis galite jas <a href="/sort-dashboard">rūšiuoti</a> į kategorijas!
-	</h3>
+	</h3> -->
 </div>
+<p class="text-justify mx-4 my-4">Užduotys</p>
 <p class="text-justify mx-4 my-4">
 	Spausdami mygtukus "Pateikti peržiūrai" Jūs patvirtinate, kad įkeliate tik savo sukurtas
-	originalias užduotis arba užduotis, kurios jau yra teisėtai pasiekiamos viešai. Pateikdami savo
+	originalias užduotis (kitais atvejais kreipkitės el. paštu info@skafis.lt). Pateikdami savo
 	užduotis atsisakote turtinių autorinių teisių į šias užduotis, leidžiate užduotimis naudotis bet
-	kam. Pateikdami kitų autorių užduotis patvirtinate, kad tie autoriai yra atsisakę turtinių
-	autorinių teisių bei taip pat leidžia naudotis užduotimis bet kam. Peržiūrėtos ir patvirtintos
-	užduotys bus paviešintos kartu su Jūsų prisijungimo vardu, bet ne el. paštu.
+	kam. Peržiūrėtos ir patvirtintos užduotys bus paviešintos kartu su Jūsų prisijungimo vardu, bet ne
+	el. paštu.
 </p>
 
 <div class="relative">

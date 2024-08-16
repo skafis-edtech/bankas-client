@@ -822,12 +822,14 @@ export const ApprovalControllerApiAxiosParamCreator = function (configuration?: 
         },
         /**
          * Get all problems submitted for the source.
-         * @summary Either USER with it\'s problems, or ADMIN, or PUBLIC && source.reviewStatus === ReviewStatus.APPROVED. Get problems by source
+         * @summary Either USER with it\'s problems, or ADMIN, or PUBLIC && source.reviewStatus === ReviewStatus.APPROVED.
          * @param {string} sourceId 
+         * @param {number} [page] 
+         * @param {number} [size] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProblemsBySource: async (sourceId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getProblemsBySource: async (sourceId: string, page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'sourceId' is not null or undefined
             assertParamExists('getProblemsBySource', 'sourceId', sourceId)
             const localVarPath = `/approval/problemsBySource/{sourceId}`
@@ -846,6 +848,14 @@ export const ApprovalControllerApiAxiosParamCreator = function (configuration?: 
             // authentication bearerAuth required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (size !== undefined) {
+                localVarQueryParameter['size'] = size;
+            }
 
 
     
@@ -1311,13 +1321,15 @@ export const ApprovalControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * Get all problems submitted for the source.
-         * @summary Either USER with it\'s problems, or ADMIN, or PUBLIC && source.reviewStatus === ReviewStatus.APPROVED. Get problems by source
+         * @summary Either USER with it\'s problems, or ADMIN, or PUBLIC && source.reviewStatus === ReviewStatus.APPROVED.
          * @param {string} sourceId 
+         * @param {number} [page] 
+         * @param {number} [size] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getProblemsBySource(sourceId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProblemDisplayViewDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getProblemsBySource(sourceId, options);
+        async getProblemsBySource(sourceId: string, page?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProblemDisplayViewDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getProblemsBySource(sourceId, page, size, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApprovalControllerApi.getProblemsBySource']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1505,13 +1517,15 @@ export const ApprovalControllerApiFactory = function (configuration?: Configurat
         },
         /**
          * Get all problems submitted for the source.
-         * @summary Either USER with it\'s problems, or ADMIN, or PUBLIC && source.reviewStatus === ReviewStatus.APPROVED. Get problems by source
+         * @summary Either USER with it\'s problems, or ADMIN, or PUBLIC && source.reviewStatus === ReviewStatus.APPROVED.
          * @param {string} sourceId 
+         * @param {number} [page] 
+         * @param {number} [size] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProblemsBySource(sourceId: string, options?: any): AxiosPromise<Array<ProblemDisplayViewDto>> {
-            return localVarFp.getProblemsBySource(sourceId, options).then((request) => request(axios, basePath));
+        getProblemsBySource(sourceId: string, page?: number, size?: number, options?: any): AxiosPromise<Array<ProblemDisplayViewDto>> {
+            return localVarFp.getProblemsBySource(sourceId, page, size, options).then((request) => request(axios, basePath));
         },
         /**
          * Get all sources submitted for approval (or already approved).
@@ -1684,14 +1698,16 @@ export class ApprovalControllerApi extends BaseAPI {
 
     /**
      * Get all problems submitted for the source.
-     * @summary Either USER with it\'s problems, or ADMIN, or PUBLIC && source.reviewStatus === ReviewStatus.APPROVED. Get problems by source
+     * @summary Either USER with it\'s problems, or ADMIN, or PUBLIC && source.reviewStatus === ReviewStatus.APPROVED.
      * @param {string} sourceId 
+     * @param {number} [page] 
+     * @param {number} [size] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ApprovalControllerApi
      */
-    public getProblemsBySource(sourceId: string, options?: RawAxiosRequestConfig) {
-        return ApprovalControllerApiFp(this.configuration).getProblemsBySource(sourceId, options).then((request) => request(this.axios, this.basePath));
+    public getProblemsBySource(sourceId: string, page?: number, size?: number, options?: RawAxiosRequestConfig) {
+        return ApprovalControllerApiFp(this.configuration).getProblemsBySource(sourceId, page, size, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2646,10 +2662,13 @@ export const PublicControllerApiAxiosParamCreator = function (configuration?: Co
     return {
         /**
          * 
+         * @param {number} [page] 
+         * @param {number} [size] 
+         * @param {string} [search] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getApprovedSources: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getApprovedSources: async (page?: number, size?: number, search?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/public/approvedSources`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2661,6 +2680,18 @@ export const PublicControllerApiAxiosParamCreator = function (configuration?: Co
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (size !== undefined) {
+                localVarQueryParameter['size'] = size;
+            }
+
+            if (search !== undefined) {
+                localVarQueryParameter['search'] = search;
+            }
 
 
     
@@ -3048,11 +3079,14 @@ export const PublicControllerApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {number} [page] 
+         * @param {number} [size] 
+         * @param {string} [search] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getApprovedSources(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SourceDisplayDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getApprovedSources(options);
+        async getApprovedSources(page?: number, size?: number, search?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SourceDisplayDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getApprovedSources(page, size, search, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PublicControllerApi.getApprovedSources']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -3200,11 +3234,14 @@ export const PublicControllerApiFactory = function (configuration?: Configuratio
     return {
         /**
          * 
+         * @param {number} [page] 
+         * @param {number} [size] 
+         * @param {string} [search] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getApprovedSources(options?: any): AxiosPromise<Array<SourceDisplayDto>> {
-            return localVarFp.getApprovedSources(options).then((request) => request(axios, basePath));
+        getApprovedSources(page?: number, size?: number, search?: string, options?: any): AxiosPromise<Array<SourceDisplayDto>> {
+            return localVarFp.getApprovedSources(page, size, search, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3316,12 +3353,15 @@ export const PublicControllerApiFactory = function (configuration?: Configuratio
 export class PublicControllerApi extends BaseAPI {
     /**
      * 
+     * @param {number} [page] 
+     * @param {number} [size] 
+     * @param {string} [search] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PublicControllerApi
      */
-    public getApprovedSources(options?: RawAxiosRequestConfig) {
-        return PublicControllerApiFp(this.configuration).getApprovedSources(options).then((request) => request(this.axios, this.basePath));
+    public getApprovedSources(page?: number, size?: number, search?: string, options?: RawAxiosRequestConfig) {
+        return PublicControllerApiFp(this.configuration).getApprovedSources(page, size, search, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

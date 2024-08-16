@@ -10,7 +10,7 @@
 
 	function popup() {
 		alert(
-			'Susisiekite naglis.suliokas@gmail.com, jei norite tapti administratoriumi ir peržiūrėti kitų pateiktas užduotis.'
+			'Susisiekite info@skafis.lt, jei norite tapti administratoriumi ir peržiūrėti kitų pateiktas užduotis.'
 		);
 	}
 </script>

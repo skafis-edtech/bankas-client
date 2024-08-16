@@ -5,11 +5,11 @@
 	import type { AuthContext } from '../types';
 	import { publicApi } from '$services/apiService';
 	import HorizontalLine from '$components/ui/HorizontalLine.svelte';
-	import { Button, Search, TabItem, Tabs } from 'flowbite-svelte';
+	import { Button, TabItem, Tabs } from 'flowbite-svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import SourceWithProblems from '$components/layout/SourceWithProblems.svelte';
-	import CategoryListPageable from '$components/layout/home/CategoryListPageable.svelte';
+	import CategoryListPageable from '$components/layout/lists/CategoryListPageable.svelte';
+	import SourceListPeageable from '$components/layout/lists/SourceListPeageable.svelte';
 
 	const { user } = getContext('authContext') as AuthContext;
 
@@ -53,7 +53,7 @@
 <h1 class="text-4xl font-semibold my-4 text-center">Skafis užduočių bankas</h1>
 
 <h5 class="text-md font-semibold my-4 text-center">
-	Mokytojų pasidalintos originalios užduotys surūšiuotos į temas (kategorijas). Plačiau puslapyje <a
+	Mokytojų pasidalintos originalios užduotys, surūšiuotos į temas (kategorijas). Plačiau puslapyje <a
 		class="text-blue-800 underline"
 		href="/about">"Apie"</a
 	>
@@ -89,13 +89,7 @@
 			{/if}
 		</div>
 
-		<Search class="my-3" placeholder="Ieškoti" bind:value={searchSourcesValue} />
-
-		{#each Object.entries(sources) as [id, source]}
-			{#if source.name.toLowerCase().includes(searchSourcesValue.toLowerCase())}
-				<SourceWithProblems {source} searchValue={searchSourcesValue} />
-			{/if}
-		{/each}
+		<SourceListPeageable searchValue={searchSourcesValue} />
 	</TabItem>
 	<TabItem open={tab === 'categories'} title="Kategorijos">
 		<div class="text-center">

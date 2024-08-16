@@ -9,7 +9,7 @@
 	import MarkdownDisplay from '$components/ui/MarkdownDisplay.svelte';
 	import MarkdownInput from '$components/forms/MarkdownInput.svelte';
 	import type { SourceDisplayDto } from '$services/gen-client';
-	import SourceWithProblems from '$components/layout/SourceWithProblems.svelte';
+	import SourceWithProblems from '$components/layout/lists/SourceWithProblems.svelte';
 
 	let authContext: AuthContext | undefined;
 	let user: AuthContext['user'] | undefined;

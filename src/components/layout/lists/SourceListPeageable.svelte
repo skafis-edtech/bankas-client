@@ -1,17 +1,17 @@
 <script lang="ts">
 	import { publicApi } from '$services/apiService';
-	import type { Category } from '$services/gen-client';
+	import type { SourceDisplayDto } from '$services/gen-client';
 	import { Button, Search } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
-	import CategoryWithProblems from './CategoryWithProblems.svelte';
+	import SourceWithProblems from './SourceWithProblems.svelte';
 
-	let categories: Category[] = [];
+	let sources: SourceDisplayDto[] = [];
 	export let searchValue = '';
 	let page = 0;
 	let size = 8;
 	let timer: NodeJS.Timeout;
 
-	$: if (searchValue) {
+	$: if (searchValue !== null) {
 		if (timer) {
 			clearTimeout(timer);
 		}
@@ -19,13 +19,13 @@
 		// Call API after 1 second of no input changes
 		timer = setTimeout(async () => {
 			page = 0; // Reset to first page on new search
-			await fetchCategories();
+			await fetchSources();
 		}, 1000);
 	}
 
-	async function fetchCategories() {
-		const categoriesRes = await publicApi.getCategories(page, size, searchValue);
-		categories = categoriesRes.data;
+	async function fetchSources() {
+		const sourcesRes = await publicApi.getApprovedSources(page, size, searchValue);
+		sources = sourcesRes.data;
 	}
 
 	async function changePage(direction: number) {
@@ -33,30 +33,19 @@
 		if (page < 0) {
 			page = 0;
 		}
-		await fetchCategories();
+		await fetchSources();
 	}
 
 	onMount(async () => {
-		await fetchCategories();
+		await fetchSources();
 	});
 </script>
 
 <Search class="my-3" placeholder="Ieškoti" bind:value={searchValue} />
 
-{#each Object.entries(categories) as [id, category]}
-	<CategoryWithProblems {category} {searchValue} />
+{#each Object.entries(sources) as [id, source]}
+	<SourceWithProblems {source} {searchValue} />
 {/each}
-
-{#if 'Nesurūšiuota'.toLowerCase().includes(searchValue.toLowerCase())}
-	<CategoryWithProblems
-		category={{
-			id: '',
-			name: 'Nesurūšiuota',
-			description: 'Užduotys, kurios yra patvirtintos, tačiau dar nepriskirtos jokiai kategorijai.'
-		}}
-		{searchValue}
-	/>
-{/if}
 
 <div class="pagination">
 	<Button color="dark" on:click={() => changePage(-1)}>⬅️ Ankstesnis</Button>

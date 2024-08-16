@@ -1,5 +1,5 @@
 <script>
-	import CategoryListPageable from '$components/layout/home/CategoryListPageable.svelte';
+	import CategoryListPageable from '$components/layout/lists/CategoryListPageable.svelte';
 </script>
 
 <div class="flex flex-col my-auto">
