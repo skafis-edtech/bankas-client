@@ -12,6 +12,10 @@
 	};
 
 	async function submitSource() {
+		if (sourceData.name === '') {
+			alert('Pavadinimas privalomas');
+			return;
+		}
 		const idResponse = await approvalApi.submitSourceData(sourceData);
 		successStore.set('Šaltinis pateiktas sėkmingai');
 		goto(`/submit/edit-source/${idResponse.data.id}`);
@@ -26,7 +30,9 @@
 	<div>
 		<h3 class="text-lg text-center">
 			Pirmiausia pateikite šaltinio (užduočių rinkinio) bendrą informaciją, tuomet galėsite pridėti
-			užduotis
+			užduotis. Pavadinime pirmiausia paminėkite dalyką, taip pat, jei šaltinis dar nėra paruoštas
+			galutinei peržiūrai, parašykite tai skliaustuose. Pvz.: "Biologija. 11 kl. kontrolinis darbas
+			(DAR TVARKOMA)"
 		</h3>
 		<!-- <h3 class="text-lg text-blue-600 text-center">
 			Vos pateikę užduotis galite jas rūšiuoti į kategorijas!

@@ -6,28 +6,26 @@
 	import { approvalApi } from '$services/apiService';
 	import { type ProblemDisplayViewDto, type SourceDisplayDto } from '$services/gen-client';
 	import { Accordion, AccordionItem, Button, Skeleton } from 'flowbite-svelte';
-	import { writable } from 'svelte/store';
 
 	export let source: SourceDisplayDto;
 	export let searchValue: string;
 
 	let problems: (ProblemDisplayViewDto | null)[] = [];
-	let isLoaded = writable(false);
 	let isOpen = false;
 
 	const pageSize = 5;
 	let page = 0;
-
-	$: if (isOpen || !$isLoaded) {
-		loadProblems();
-		isLoaded.set(true);
-	}
+	let isFetching = false;
 
 	async function loadProblems() {
+		if (isFetching) return;
+		isFetching = true;
 		problems = [...problems, ...Array.from({ length: pageSize }, () => null)];
 		const response = await approvalApi.getProblemsBySource(source.id, page, pageSize);
-		problems.splice(problems.length - pageSize, pageSize, ...response.data);
+		const startIndex = problems.length - pageSize;
+		problems = [...problems.slice(0, startIndex), ...response.data];
 		page++;
+		isFetching = false;
 	}
 </script>
 
@@ -71,7 +69,7 @@
 					{/if}
 				{/each}
 			</div>
-			<Button on:click={loadProblems} class="w-full">Rodyti daugiau</Button>
+			<Button on:click={loadProblems}>Rodyti +5 užduotis</Button>
 		</div></AccordionItem
 	>
 </Accordion>

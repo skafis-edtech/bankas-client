@@ -229,7 +229,10 @@
 		Vos pateikę užduotis galite jas <a href="/sort-dashboard">rūšiuoti</a> į kategorijas!
 	</h3> -->
 </div>
-<p class="text-justify mx-4 my-4">Užduotys</p>
+<p class="text-justify mx-4 my-4">
+	Išsaugotos užduotys yra iškart pateikiamos peržiūrai. Šaltinių patvirtinimai ir atmetimai yra
+	atšaukiami, jei yra atliekami pakeitimai šaltinio informacijoje arba uždaviniuose.
+</p>
 <p class="text-justify mx-4 my-4">
 	Spausdami mygtukus "Pateikti peržiūrai" Jūs patvirtinate, kad įkeliate tik savo sukurtas
 	originalias užduotis (kitais atvejais kreipkitės el. paštu info@skafis.lt). Pateikdami savo
