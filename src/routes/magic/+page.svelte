@@ -1,5 +1,5 @@
 <script>
-	import CategoryListPageable from '$components/layout/lists/CategoryListPageable.svelte';
+	import MathLiveEditor from '$components/forms/MathLiveEditor.svelte';
 </script>
 
 <div class="flex flex-col my-auto">
@@ -10,3 +10,4 @@
 		Deja, kol kas čia nieko nėra... (Bet ateity bus kažkas įdomaus! 😉)
 	</h1>
 </div>
+<MathLiveEditor />
