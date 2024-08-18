@@ -1,4 +1,5 @@
-<script>
+<script lang="ts">
+	import MarkdownInput from '$components/forms/MarkdownInput.svelte';
 	import MathLiveEditor from '$components/forms/MathLiveEditor.svelte';
 </script>
 
@@ -10,4 +11,5 @@
 		Deja, kol kas čia nieko nėra... (Bet ateity bus kažkas įdomaus! 😉)
 	</h1>
 </div>
-<MathLiveEditor />
+<MarkdownInput />
+<MarkdownInput />
