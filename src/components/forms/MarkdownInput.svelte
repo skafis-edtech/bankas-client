@@ -5,11 +5,10 @@
 	import { onMount } from 'svelte';
 	import { tikz } from '@cartamd/plugin-tikz';
 	import MathLiveEditor from './MathLiveEditor.svelte';
-	import { Button } from 'flowbite-svelte';
+	import { Alert, Button } from 'flowbite-svelte';
 
 	export let value = '';
 	let mdEditor: HTMLElement | null = null;
-	let mathPopoverOpen = false;
 	let mathfieldContainer: HTMLElement | null;
 
 	onMount(() => {
@@ -29,6 +28,23 @@
 		previewTabs.forEach((previewTab) => {
 			if (previewTab.textContent === 'Preview') previewTab.textContent = 'Peržiūra';
 		});
+
+		const formulaButton = document.createElement('button');
+		formulaButton.textContent = 'Įterpti formulę';
+		formulaButton.addEventListener('click', () => {
+			const mathDiv = mdEditor?.querySelector('#math-editor');
+			mathDiv?.classList.remove('hidden');
+		});
+		formulaButton.classList.add(
+			'bg-blue-500',
+			'text-white',
+			'px-2',
+			'rounded-md',
+			'hover:bg-blue-600',
+			'mx-2'
+		);
+		formulaButton.id = 'formula-tool-btn';
+		mdEditor.querySelector('.carta-toolbar')?.children[1]?.before(formulaButton);
 
 		// Attach event listeners to all textareas within the editor
 		const textareas = mdEditor.querySelectorAll('textarea');
@@ -73,14 +89,46 @@
 
 		if (beforeLastDollar !== -1 && afterFirstDollar !== -1) {
 			// Cursor is between $ signs
-			mathPopoverOpen = true;
+			const formulaBtn = mdEditor?.querySelector('#formula-tool-btn');
+			if (!formulaBtn) {
+				console.error('Formula button not found');
+				return;
+			}
+
+			formulaBtn.classList.remove('bg-blue-500', 'hover:bg-blue-600');
+			formulaBtn.classList.add('bg-orange-500', 'hover:bg-orange-600');
+			formulaBtn.textContent = 'Redaguoti formulę';
+			formulaBtn.removeEventListener('click', () => {
+				openMathEditor();
+				setMathEditorValue('');
+			});
+			formulaBtn.addEventListener('click', (event) => editFormula(event));
 		} else {
-			mathPopoverOpen = false;
+			const formulaBtn = mdEditor?.querySelector('#formula-tool-btn');
+			if (!formulaBtn) {
+				console.error('Formula button not found');
+				return;
+			}
+			formulaBtn.classList.remove('bg-orange-500', 'hover:bg-orange-600');
+			formulaBtn.classList.add('bg-blue-500', 'hover:bg-blue-600');
+			if (formulaBtn.textContent === 'Redaguoti formulę') {
+				const mathDiv = mdEditor?.querySelector('#math-editor');
+				mathDiv?.classList.add('hidden');
+			}
+			formulaBtn.textContent = 'Įterpti formulę';
+			formulaBtn.removeEventListener('click', (event) => editFormula(event));
+			formulaBtn.addEventListener('click', () => {
+				openMathEditor();
+				setMathEditorValue('');
+			});
 		}
 	}
 
-	function printFormula(event: Event) {
-		event.preventDefault();
+	function selectBetweenDollars() {
+		if (!mdEditor) {
+			console.error('Md editor not found');
+			return;
+		}
 		const textarea = mdEditor?.querySelector('textarea');
 		if (!textarea) {
 			console.error('Textarea not found');
@@ -98,14 +146,20 @@
 			console.error('Cursor is not between $ signs');
 			return;
 		}
-
-		const formula = textarea.value.slice(beforeLastDollar + 1, cursorPosition + afterFirstDollar);
-		console.log('Formula:', formula);
-		mathfieldContainer?.firstElementChild &&
-			(mathfieldContainer.firstElementChild as any).setValue(formula);
-
-		// Select the formula in the textarea
 		textarea.setSelectionRange(beforeLastDollar, cursorPosition + afterFirstDollar + 1);
+
+		return textarea.value.slice(beforeLastDollar + 1, cursorPosition + afterFirstDollar);
+	}
+
+	async function editFormula(event: Event) {
+		event.preventDefault();
+
+		const formula = selectBetweenDollars() as string;
+		console.log('Formula:', formula);
+
+		setMathEditorValue(formula);
+
+		openMathEditor();
 	}
 
 	function insertTextAtCursor() {
@@ -113,7 +167,7 @@
 		if (mathfieldContainer?.firstElementChild) {
 			const mathfield = mathfieldContainer.firstElementChild as any;
 			const latex = mathfield.getValue();
-			text = '$' + latex + '$ ';
+			text = '$' + latex + '$';
 		} else {
 			alert('Mathfield container not found');
 		}
@@ -134,26 +188,56 @@
 		// Manually trigger an input event to update the editor's value
 		textarea.dispatchEvent(new Event('input', { bubbles: true }));
 	}
+
+	function openMathEditor() {
+		if (mdEditor) {
+			const mathDiv = mdEditor.querySelector('#math-editor');
+			if (mathDiv) {
+				mathDiv.classList.remove('hidden');
+			} else {
+				console.error('No math div found');
+			}
+		} else {
+			console.error('Md editor not found');
+		}
+	}
+
+	function closeMathEditor() {
+		if (mdEditor) {
+			const mathDiv = mdEditor.querySelector('#math-editor');
+			if (mathDiv) {
+				mathDiv.classList.add('hidden');
+			} else {
+				console.error('No math div found');
+			}
+		} else {
+			console.error('Md editor not found');
+		}
+	}
+
+	function setMathEditorValue(value: string) {
+		if (mathfieldContainer?.firstElementChild) {
+			const mathfield = mathfieldContainer?.firstElementChild as any;
+			mathfield.setValue(value);
+		} else {
+			console.error('MathLive editor is not initialized properly.');
+		}
+	}
 </script>
 
-<div class="text-black bg-white" bind:this={mdEditor}>
-	<MarkdownEditor
-		mode="tabs"
-		placeholder="Čia galite rašyti Markdown, LaTex ir Tikz sintakse!"
-		{carta}
-		bind:value
-	/>
-	{#if mathPopoverOpen}
-		<!-- Replace the button with a non-focusable div -->
-		<button
-			style="cursor: pointer; padding: 10px; background-color: lightgray; display: inline-block;"
-			on:click={printFormula}
-			type="button"
-		>
-			Modify formula
-		</button>
-	{/if}
+<div bind:this={mdEditor}>
+	<div class="text-black bg-white">
+		<MarkdownEditor
+			mode="tabs"
+			placeholder="Čia galite rašyti Markdown, LaTex ir Tikz sintakse!"
+			{carta}
+			bind:value
+		/>
+	</div>
+	<div id="math-editor" class="hidden w-1/2 p-4 m-2 bg-blue-100 rounded-md">
+		<p>Formulės kūrimas/redagavimas</p>
+		<MathLiveEditor bind:mathfieldContainer onChange={insertTextAtCursor} />
+		<Button on:click={insertTextAtCursor}>Įterpti</Button>
+		<Button on:click={closeMathEditor}>Uždaryti</Button>
+	</div>
 </div>
-
-<MathLiveEditor bind:mathfieldContainer />
-<Button on:click={insertTextAtCursor}>Insert formula</Button>

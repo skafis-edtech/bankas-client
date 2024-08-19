@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 
 	export let mathfieldContainer: HTMLElement | null = null;
+	export let onChange: () => void;
 
 	onMount(async () => {
 		if (typeof window !== 'undefined' && mathfieldContainer) {
@@ -32,6 +33,11 @@
 
 			// Append the Mathfield to the container
 			mathfieldContainer.appendChild(mathfield);
+
+			// Attach the onChange function to the Mathfield's 'input' event
+			mathfield.addEventListener('input', () => {
+				onChange();
+			});
 		}
 	});
 </script>
