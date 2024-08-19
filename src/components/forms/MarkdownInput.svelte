@@ -5,58 +5,26 @@
 	import { onMount } from 'svelte';
 	import { tikz } from '@cartamd/plugin-tikz';
 	import MathLiveEditor from './MathLiveEditor.svelte';
-	import { Alert, Button } from 'flowbite-svelte';
+	import { Button } from 'flowbite-svelte';
 
 	export let value = '';
 	let mdEditor: HTMLElement | null = null;
 	let mathfieldContainer: HTMLElement | null;
+	let textareaElement: HTMLTextAreaElement;
+	let mathEditorState: 'create' | 'edit' = 'create';
 
 	onMount(() => {
 		if (!mdEditor) {
-			console.error('mdEditor is not found');
+			console.error('Md editor not found');
 			return;
 		}
-
-		// Localize button text
-		const writeTabs = mdEditor.querySelectorAll('button[tabindex="0"]');
-		const previewTabs = mdEditor.querySelectorAll('button[tabindex="-1"]');
-
-		writeTabs.forEach((writeTab) => {
-			if (writeTab.textContent === 'Write') writeTab.textContent = 'Rašymas';
-		});
-
-		previewTabs.forEach((previewTab) => {
-			if (previewTab.textContent === 'Preview') previewTab.textContent = 'Peržiūra';
-		});
-
-		const formulaButton = document.createElement('button');
-		formulaButton.textContent = 'Įterpti formulę';
-		formulaButton.addEventListener('click', () => {
-			const mathDiv = mdEditor?.querySelector('#math-editor');
-			mathDiv?.classList.remove('hidden');
-		});
-		formulaButton.classList.add(
-			'bg-blue-500',
-			'text-white',
-			'px-2',
-			'rounded-md',
-			'hover:bg-blue-600',
-			'mx-2'
-		);
-		formulaButton.id = 'formula-tool-btn';
-		mdEditor.querySelector('.carta-toolbar')?.children[1]?.before(formulaButton);
-
-		// Attach event listeners to all textareas within the editor
-		const textareas = mdEditor.querySelectorAll('textarea');
-		if (textareas.length === 0) {
-			console.log('No textareas found');
+		const textarea = mdEditor?.querySelector('textarea');
+		if (!textarea) {
+			console.error('Textarea not found');
 			return;
 		}
-
-		textareas.forEach((textarea) => {
-			textarea.addEventListener('input', () => checkCursorPosition(textarea));
-			textarea.addEventListener('click', () => checkCursorPosition(textarea));
-		});
+		textareaElement = textarea;
+		makeLtAndAddMathButton();
 	});
 
 	const carta = new Carta({
@@ -77,6 +45,42 @@
 		extensions: [math(), tikz()]
 	});
 
+	function makeLtAndAddMathButton() {
+		if (!mdEditor) {
+			console.error('mdEditor is not found');
+			return;
+		}
+
+		// Localize button text
+		const writeTabs = mdEditor.querySelectorAll('button[tabindex="0"]');
+		const previewTabs = mdEditor.querySelectorAll('button[tabindex="-1"]');
+
+		writeTabs.forEach((writeTab) => {
+			if (writeTab.textContent === 'Write') writeTab.textContent = 'Rašymas';
+		});
+
+		previewTabs.forEach((previewTab) => {
+			if (previewTab.textContent === 'Preview') previewTab.textContent = 'Peržiūra';
+		});
+
+		const formulaButton = document.createElement('button');
+		formulaButton.textContent = 'Įterpti formulę';
+		formulaButton.addEventListener('click', openMathEditorForCreating);
+		formulaButton.classList.add(
+			'bg-blue-500',
+			'text-white',
+			'px-2',
+			'rounded-md',
+			'hover:bg-blue-600',
+			'mx-2'
+		);
+		formulaButton.id = 'formula-tool-btn';
+		mdEditor.querySelector('.carta-toolbar')?.children[1]?.before(formulaButton);
+
+		textareaElement.addEventListener('input', () => checkCursorPosition(textareaElement));
+		textareaElement.addEventListener('click', () => checkCursorPosition(textareaElement));
+	}
+
 	function checkCursorPosition(textarea: HTMLTextAreaElement) {
 		const cursorPosition = textarea.selectionStart;
 
@@ -87,106 +91,37 @@
 		const beforeLastDollar = beforeCursor.lastIndexOf('$');
 		const afterFirstDollar = afterCursor.indexOf('$');
 
+		const formulaBtn = mdEditor?.querySelector('#formula-tool-btn');
+		if (!formulaBtn) {
+			console.error('Formula button not found');
+			return;
+		}
+
 		if (beforeLastDollar !== -1 && afterFirstDollar !== -1) {
 			// Cursor is between $ signs
-			const formulaBtn = mdEditor?.querySelector('#formula-tool-btn');
-			if (!formulaBtn) {
-				console.error('Formula button not found');
-				return;
-			}
-
-			formulaBtn.classList.remove('bg-blue-500', 'hover:bg-blue-600');
-			formulaBtn.classList.add('bg-orange-500', 'hover:bg-orange-600');
-			formulaBtn.textContent = 'Redaguoti formulę';
-			formulaBtn.removeEventListener('click', () => {
-				openMathEditor();
-				setMathEditorValue('');
-			});
-			formulaBtn.addEventListener('click', (event) => editFormula(event));
+			setMathEditingState(formulaBtn);
 		} else {
-			const formulaBtn = mdEditor?.querySelector('#formula-tool-btn');
-			if (!formulaBtn) {
-				console.error('Formula button not found');
-				return;
-			}
-			formulaBtn.classList.remove('bg-orange-500', 'hover:bg-orange-600');
-			formulaBtn.classList.add('bg-blue-500', 'hover:bg-blue-600');
-			if (formulaBtn.textContent === 'Redaguoti formulę') {
-				const mathDiv = mdEditor?.querySelector('#math-editor');
-				mathDiv?.classList.add('hidden');
-			}
-			formulaBtn.textContent = 'Įterpti formulę';
-			formulaBtn.removeEventListener('click', (event) => editFormula(event));
-			formulaBtn.addEventListener('click', () => {
-				openMathEditor();
-				setMathEditorValue('');
-			});
+			setMathCreateState(formulaBtn);
+			closeMathEditor(); // Close the math editor if the cursor is out of dollar sign boundaries
 		}
 	}
 
-	function selectBetweenDollars() {
-		if (!mdEditor) {
-			console.error('Md editor not found');
-			return;
-		}
-		const textarea = mdEditor?.querySelector('textarea');
-		if (!textarea) {
-			console.error('Textarea not found');
-			return;
-		}
-
-		const cursorPosition = textarea.selectionStart;
-		const beforeCursor = textarea.value.slice(0, cursorPosition);
-		const afterCursor = textarea.value.slice(cursorPosition);
-
-		const beforeLastDollar = beforeCursor.lastIndexOf('$');
-		const afterFirstDollar = afterCursor.indexOf('$');
-
-		if (beforeLastDollar === -1 || afterFirstDollar === -1) {
-			console.error('Cursor is not between $ signs');
-			return;
-		}
-		textarea.setSelectionRange(beforeLastDollar, cursorPosition + afterFirstDollar + 1);
-
-		return textarea.value.slice(beforeLastDollar + 1, cursorPosition + afterFirstDollar);
+	function setMathEditingState(btn: Element) {
+		mathEditorState = 'edit';
+		btn.classList.remove('bg-blue-500', 'hover:bg-blue-600');
+		btn.classList.add('bg-orange-500', 'hover:bg-orange-600');
+		btn.textContent = 'Redaguoti formulę';
+		btn.removeEventListener('click', openMathEditorForCreating);
+		btn.addEventListener('click', openMathEditorForEditing);
 	}
 
-	async function editFormula(event: Event) {
-		event.preventDefault();
-
-		const formula = selectBetweenDollars() as string;
-		console.log('Formula:', formula);
-
-		setMathEditorValue(formula);
-
-		openMathEditor();
-	}
-
-	function insertTextAtCursor() {
-		let text = '';
-		if (mathfieldContainer?.firstElementChild) {
-			const mathfield = mathfieldContainer.firstElementChild as any;
-			const latex = mathfield.getValue();
-			text = '$' + latex + '$';
-		} else {
-			alert('Mathfield container not found');
-		}
-		const textarea = document.querySelector('textarea');
-
-		if (!textarea) return;
-
-		const start = textarea.selectionStart;
-		const end = textarea.selectionEnd;
-		const before = value.slice(0, start);
-		const after = value.slice(end);
-
-		value = before + text + after;
-
-		// Set the cursor position after the inserted text
-		textarea.selectionStart = textarea.selectionEnd = start + text.length;
-
-		// Manually trigger an input event to update the editor's value
-		textarea.dispatchEvent(new Event('input', { bubbles: true }));
+	function setMathCreateState(btn: Element) {
+		mathEditorState = 'create';
+		btn.classList.remove('bg-orange-500', 'hover:bg-orange-600');
+		btn.classList.add('bg-blue-500', 'hover:bg-blue-600');
+		btn.textContent = 'Įterpti formulę';
+		btn.removeEventListener('click', openMathEditorForEditing);
+		btn.addEventListener('click', openMathEditorForCreating);
 	}
 
 	function openMathEditor() {
@@ -222,6 +157,76 @@
 		} else {
 			console.error('MathLive editor is not initialized properly.');
 		}
+	}
+
+	function getMathEditorValue() {
+		if (mathfieldContainer?.firstElementChild) {
+			const mathfield = mathfieldContainer?.firstElementChild as any;
+			return mathfield.value;
+		} else {
+			console.error('MathLive editor is not initialized properly.');
+		}
+	}
+
+	function getCursorBetweenDollarIndexes(textarea: HTMLTextAreaElement): {
+		start: number;
+		end: number;
+	} {
+		const cursorPosition = textarea.selectionStart;
+		const beforeCursor = textarea.value.slice(0, cursorPosition);
+		const afterCursor = textarea.value.slice(cursorPosition);
+
+		const beforeLastDollar = beforeCursor.lastIndexOf('$');
+		const afterFirstDollar = afterCursor.indexOf('$');
+
+		if (beforeLastDollar === -1 || afterFirstDollar === -1) {
+			console.error('Cursor is not between $ signs');
+		}
+		return { start: beforeLastDollar, end: cursorPosition + afterFirstDollar + 1 };
+	}
+
+	function openMathEditorForCreating(event: Event) {
+		event.preventDefault();
+		openMathEditor();
+		setMathEditorValue('');
+	}
+
+	function openMathEditorForEditing(event: Event) {
+		event.preventDefault();
+		const { start, end } = getCursorBetweenDollarIndexes(textareaElement);
+		const formula = textareaElement.value.slice(start + 1, end - 1);
+		setMathEditorValue(formula);
+		openMathEditor();
+	}
+
+	function insertTextAtCursor() {
+		const latex = getMathEditorValue();
+		const text = '$' + latex + '$';
+
+		let start;
+		let end;
+
+		if (mathEditorState === 'create') {
+			start = textareaElement.selectionStart;
+			end = textareaElement.selectionEnd;
+		} else {
+			({ start, end } = getCursorBetweenDollarIndexes(textareaElement));
+		}
+
+		// Insert the text
+		value = value.slice(0, start) + text + value.slice(end);
+
+		// Update the textarea value
+		textareaElement.value = value;
+
+		// Calculate the position just after the first dollar sign
+		const cursorPosition = start + 1;
+
+		// Set the cursor position
+		textareaElement.setSelectionRange(cursorPosition, cursorPosition);
+
+		// Manually trigger an input event to update the editor's value
+		textareaElement.dispatchEvent(new Event('input', { bubbles: true }));
 	}
 </script>
 
