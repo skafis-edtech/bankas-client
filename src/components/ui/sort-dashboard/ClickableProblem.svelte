@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { ProblemDisplayViewDto } from '$services/gen-client';
 	import { Badge } from 'flowbite-svelte';
-	import ProblemComponent from './ProblemComponent.svelte';
+	import ProblemComponent from '../ProblemComponent.svelte';
 
 	export let problem: ProblemDisplayViewDto;
 	export let shadeColorStr: string;

@@ -10,7 +10,7 @@
 
 	function popup() {
 		alert(
-			'Susisiekite naglis.suliokas@gmail.com, jei norite tapti administratoriumi ir peržiūrėti kitų pateiktas užduotis.'
+			'Susisiekite info@skafis.lt, jei norite tapti administratoriumi ir peržiūrėti kitų pateiktas užduotis.'
 		);
 	}
 </script>
@@ -38,7 +38,7 @@
 		{#if $user}
 			{#if $user.role === ROLES.SUPER_ADMIN}
 				<NavLi on:click={() => goto('/super-admin')} class="text-right"
-					><Button color="red">Super admin</Button></NavLi
+					><Button color="red">Kategorijos</Button></NavLi
 				>
 			{/if}
 			{#if $user.role === ROLES.ADMIN || $user.role === ROLES.SUPER_ADMIN}
@@ -51,9 +51,9 @@
 			<NavLi on:click={() => goto('/submit/dashboard')} class="text-right"
 				><Button color="green">Pateikti</Button></NavLi
 			>
-			<NavLi on:click={() => goto('/sort-dashboard')} class="text-right"
+			<!-- <NavLi on:click={() => goto('/sort-dashboard')} class="text-right"
 				><Button color="blue">Rūšiuoti</Button></NavLi
-			>
+			> -->
 			<NavLi class="text-right" on:click={() => goto('/logout')}><Button>Atsijungti</Button></NavLi>
 		{:else}
 			<NavLi class="text-right" on:click={() => goto('/login')}>

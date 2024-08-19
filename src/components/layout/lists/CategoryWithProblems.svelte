@@ -1,9 +1,9 @@
 <script lang="ts">
-	import AuthorLink from '$components/ui/AuthorLink.svelte';
 	import MarkdownDisplay from '$components/ui/MarkdownDisplay.svelte';
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
 	import { publicApi } from '$services/apiService';
 	import type { Category, ProblemDisplayViewDto, Source } from '$services/gen-client';
+	import { normalizeString } from '$utils/helpers';
 	import { Accordion, AccordionItem } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
@@ -43,6 +43,32 @@
 
 		isLoaded.set(true);
 	}
+
+	function highlightSearch(text: string, search: string): string {
+		if (!search) return text;
+		const normalizedText = normalizeString(text);
+		const normalizedSearch = normalizeString(search);
+		const regex = new RegExp(normalizedSearch, 'gi');
+		const matchIndices = [];
+
+		let match;
+		while ((match = regex.exec(normalizedText)) !== null) {
+			matchIndices.push({ start: match.index, end: regex.lastIndex });
+		}
+
+		let highlightedText = '';
+		let currentIndex = 0;
+
+		for (const { start, end } of matchIndices) {
+			highlightedText +=
+				text.substring(currentIndex, start) + '<mark>' + text.substring(start, end) + '</mark>';
+			currentIndex = end;
+		}
+
+		highlightedText += text.substring(currentIndex);
+
+		return highlightedText;
+	}
 </script>
 
 <Accordion>
@@ -50,7 +76,7 @@
 		<span slot="header" class="text-black flex justify-between items-center w-full">
 			<p>
 				{#if searchValue}
-					{@html category.name.replace(new RegExp(searchValue, 'gi'), '<mark>$&</mark>')}
+					{@html highlightSearch(category.name, searchValue)}
 				{:else}
 					{category.name}
 				{/if}

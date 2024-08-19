@@ -1,51 +1,66 @@
 <script lang="ts">
 	import { getContext, onMount } from 'svelte';
-	import FindById from '$components/layout/FindById.svelte';
-	import type { Category } from '$services/gen-client';
-	import CategoryWithProblems from '$components/layout/CategoryWithProblems.svelte';
+	import FindById from '$components/layout/home/FindById.svelte';
+	import type { SourceDisplayDto } from '$services/gen-client';
 	import type { AuthContext } from '../types';
 	import { publicApi } from '$services/apiService';
 	import HorizontalLine from '$components/ui/HorizontalLine.svelte';
-	import { Button, Search } from 'flowbite-svelte';
+	import { Button, TabItem, Tabs } from 'flowbite-svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
+	import CategoryListPageable from '$components/layout/lists/CategoryListPageable.svelte';
+	import SourceListPeageable from '$components/layout/lists/SourceListPeageable.svelte';
 
 	const { user } = getContext('authContext') as AuthContext;
-	const searchUrlStr: string = $page.url.searchParams.get('search') || '';
 
-	let searchValue = '';
-	$: searchValue = searchUrlStr;
+	const tab = $page.url.hash.slice(1);
+	const searchCategoriesUrlStr: string = $page.url.searchParams.get('searchCategories') || '';
+	const searchSourcesUrlStr: string = $page.url.searchParams.get('searchSources') || '';
+
+	let searchCategoriesValue = '';
+	let searchSourcesValue = '';
+	$: searchCategoriesValue = searchCategoriesUrlStr;
+	$: searchSourcesValue = searchSourcesUrlStr;
 
 	page.subscribe(($page) => {
-		const searchUrlStr: string = $page.url.searchParams.get('search') || '';
-		searchValue = searchUrlStr;
+		const searchCategoriesUrlStr: string = $page.url.searchParams.get('searchCategories') || '';
+		searchCategoriesValue = searchCategoriesUrlStr;
+		const searchSourcesUrlStr: string = $page.url.searchParams.get('searchSources') || '';
+		searchSourcesValue = searchSourcesUrlStr;
 	});
 
-	let categories: Category[] = [];
+	let sources: SourceDisplayDto[] = [];
 	let numOfProblems: number | null = null;
-	let numOfCategories: number | null = null;
+	let sourcesLoaded = false;
 
 	onMount(async () => {
-		const [categoriesRes, problemsCountRes, categoriesCountRes] = await Promise.all([
-			publicApi.getCategories(),
-			publicApi.getProblemsCount(),
-			publicApi.getCategoriesCount()
-		]);
-
-		categories = categoriesRes.data;
+		const problemsCountRes = await publicApi.getProblemsCount();
 		numOfProblems = problemsCountRes.data.count;
-		numOfCategories = categoriesCountRes.data.count;
+
+		if (tab === 'sources' || !tab) {
+			await loadSources();
+		}
 	});
+
+	async function loadSources() {
+		if (sourcesLoaded) return;
+		const sourcesRes = await publicApi.getApprovedSources();
+		sources = sourcesRes.data;
+		sourcesLoaded = true;
+	}
 </script>
 
 <h1 class="text-4xl font-semibold my-4 text-center">Skafis užduočių bankas</h1>
 
 <h5 class="text-md font-semibold my-4 text-center">
-	Mokytojų pasidalintos originalios bei kitos viešos užduotys surūšiuotos į temas (kategorijas).
+	Mokytojų pasidalintos originalios užduotys, surūšiuotos į temas (kategorijas). Plačiau puslapyje <a
+		class="text-blue-800 underline"
+		href="/about">"Apie"</a
+	>
 </h5>
 
 <h4 class="text-md font-semibold my-4 text-center">
-	Užduočių: {numOfProblems || '...'} | Kategorijų: {numOfCategories || '...'}
+	Užduočių: {numOfProblems || '...'}
 </h4>
 <Button
 	color="alternative"
@@ -60,32 +75,29 @@
 
 <HorizontalLine />
 
-<div class="text-center">
-	<h1 class="text-2xl font-semibold my-3">Kategorijos</h1>
-	{#if !$user}
-		<p>
-			Norite įkelti savo užduotis ar patvirtinti pateiktas kitų? <a
-				class="text-blue-800 underline"
-				href="/register">Registruokitės!</a
-			>
-		</p>
-	{/if}
-</div>
+<Tabs>
+	<TabItem open={tab === 'sources' || !tab} title="Šaltiniai" on:click={loadSources}>
+		<div class="text-center">
+			<h1 class="text-2xl font-semibold my-3">Šaltiniai</h1>
+			{#if !$user}
+				<p>
+					Norite įkelti savo užduotis ar patvirtinti pateiktas kitų? <a
+						class="text-blue-800 underline"
+						href="/register">Registruokitės!</a
+					>
+				</p>
+			{/if}
+		</div>
 
-<Search class="my-3" placeholder="Ieškoti" bind:value={searchValue} />
-
-{#each Object.entries(categories) as [id, category]}
-	{#if category.name.toLowerCase().includes(searchValue.toLowerCase())}
-		<CategoryWithProblems {category} {searchValue} />
-	{/if}
-{/each}
-{#if 'Nesurūšiuota'.toLowerCase().includes(searchValue.toLowerCase())}
-	<CategoryWithProblems
-		category={{
-			id: '',
-			name: 'Nesurūšiuota',
-			description: 'Užduotys, kurios yra patvirtintos, tačiau dar nepriskirtos jokiai kategorijai.'
-		}}
-		{searchValue}
-	/>
-{/if}
+		<SourceListPeageable searchValue={searchSourcesValue} />
+	</TabItem>
+	<TabItem open={tab === 'categories'} title="Kategorijos">
+		<div class="text-center">
+			<h1 class="text-2xl font-semibold my-3">Kategorijos</h1>
+			<p>Šiuo metu kategorijos dar kuriamos ...</p>
+		</div>
+		{#if $user}
+			<CategoryListPageable searchValue={searchCategoriesValue} />
+		{/if}
+	</TabItem>
+</Tabs>

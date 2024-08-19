@@ -3,6 +3,13 @@
 	import { writable } from 'svelte/store';
 	import type { Problem, ProblemPostDto } from '$services/gen-client';
 	import { problemApi } from '$services/apiService';
+	import { goto } from '$app/navigation';
+
+	onMount(() => {
+		/* STAGE 1 - For now not accessible to users */
+		goto('/');
+		/* ... */
+	});
 
 	let problems = writable<Problem[]>([]);
 	let newProblem: ProblemPostDto = {
@@ -12,7 +19,7 @@
 		answerImagePath: '',
 		problemText: '',
 		answerText: '',
-		categoryId: '',
+		categories: [],
 		sourceId: ''
 	};
 	let editProblem: Problem | null = null;
@@ -38,7 +45,7 @@
 				answerImagePath: '',
 				problemText: '',
 				answerText: '',
-				categoryId: '',
+				categories: [],
 				sourceId: ''
 			};
 			fetchProblems();
@@ -151,13 +158,13 @@
 						/>
 					</div>
 					<div class="mb-4">
-						<label for="categoryId" class="block text-sm font-medium text-gray-700"
+						<label for="categories" class="block text-sm font-medium text-gray-700"
 							>Category ID</label
 						>
 						<input
-							id="categoryId"
+							id="categories"
 							type="text"
-							bind:value={editProblem.categoryId}
+							bind:value={editProblem.categories}
 							class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
 						/>
 					</div>
@@ -189,7 +196,7 @@
 						</p>
 						<p class="text-gray-600"><strong>answerText: </strong>{problem.answerText}</p>
 						<p class="text-gray-600"><strong>answerImagePath: </strong>{problem.answerImagePath}</p>
-						<p class="text-gray-600"><strong>categoryId: </strong>{problem.categoryId}</p>
+						<p class="text-gray-600"><strong>categories: </strong>{problem.categories}</p>
 						<p class="text-gray-600"><strong>sourceId: </strong>{problem.sourceId}</p>
 						<p class="text-gray-600"><strong>isAproved: </strong>{problem.isApproved}</p>
 					</div>
@@ -271,11 +278,11 @@
 			/>
 		</div>
 		<div class="mb-4">
-			<label class="block text-sm font-medium text-gray-700" for="categoryid">Category ID</label>
+			<label class="block text-sm font-medium text-gray-700" for="categories">Category ID</label>
 			<input
-				id="categoryid"
+				id="categories"
 				type="text"
-				bind:value={newProblem.categoryId}
+				bind:value={newProblem.categories}
 				class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
 			/>
 		</div>

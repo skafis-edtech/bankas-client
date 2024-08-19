@@ -5,8 +5,9 @@
 	import { getContext, onMount } from 'svelte';
 	import type { AuthContext } from '../../../types';
 	import { ROLES } from '$utils/constants';
-	import ChooseCategories from '$components/ui/ChooseCategories.svelte';
-	import ClickableProblem from '../../../components/ui/ClickableProblem.svelte';
+	import ChooseCategories from '$components/ui/sort-dashboard/ChooseCategories.svelte';
+	import ClickableProblem from '../../../components/ui/sort-dashboard/ClickableProblem.svelte';
+	import { goto } from '$app/navigation';
 	const { user } = getContext('authContext') as AuthContext;
 
 	let categories: Category[] = [];
@@ -32,6 +33,10 @@
 	let skippedProblemIdsCache: string[] = [];
 
 	onMount(async () => {
+		/* STAGE 1 - For now not accessible to users */
+		goto('/');
+		/* ... */
+
 		const [categoriesRes, problemsRes] = await Promise.all([
 			publicApi.getCategories(),
 			sortApi.getUnsortedProblems()

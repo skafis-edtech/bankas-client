@@ -1,5 +1,5 @@
 <script lang="ts">
-	import SourceWithProblems from '$components/layout/SourceWithProblems.svelte';
+	import SourceWithProblems from '$components/layout/lists/SourceWithProblems.svelte';
 	import SourceReviewBar from '$components/ui/SourceReviewBar.svelte';
 	import { approvalApi } from '$services/apiService';
 	import type { Source, SourceDisplayDto, SourceReviewStatusEnum } from '$services/gen-client';

@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { ExpandOutline } from 'flowbite-svelte-icons';
 
+	export let styleClasses = '';
+
 	let offsetX: number;
 	let offsetY: number;
 	let isDragging: boolean = false;
@@ -31,7 +33,7 @@
 
 <div
 	id="draggableDiv"
-	class="resizable md:absolute flex flex-col fixed md:top-16 md:bottom-auto bottom-0 top-auto left-1 md:w-[18%] w-screen z-10 gap-4 bg-black p-4 rounded-md overflow-scroll md:h-[calc(100%-8rem)] h-1/3"
+	class={`resizable md:absolute flex flex-col fixed md:top-16 md:bottom-auto bottom-0 top-auto left-1 md:w-[18%] w-screen z-10 gap-4 bg-black p-4 rounded-md overflow-scroll md:h-[calc(100%-8rem)] h-1/3 ${styleClasses}`}
 	role="dialog"
 >
 	<button

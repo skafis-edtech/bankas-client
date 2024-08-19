@@ -5,6 +5,7 @@
 	import { writable } from 'svelte/store';
 	import { publicApi } from '$services/apiService';
 	import CategoryLink from './CategoryLink.svelte';
+	import SourceLink from './SourceLink.svelte';
 
 	export let categories: string[];
 	export let sourceId: string;
@@ -23,15 +24,20 @@
 	async function loadStuff() {
 		if (!isOpen || $isLoaded) return;
 
-		if (categories && categories.length > 0) {
-			categoriesNames = [];
-			for (const categoryId of categories) {
-				const response = await publicApi.getCategoryById(categoryId);
-				categoriesNames.push(response.data.name);
-			}
+		let loadedCategoryNames = [];
+
+		if (categories.length > 0) {
+			loadedCategoryNames = await Promise.all(
+				categories.map(async (categoryId) => {
+					const response = await publicApi.getCategoryById(categoryId);
+					return response.data.name;
+				})
+			);
 		} else {
-			categoriesNames = ['Nesurūšiuota'];
+			loadedCategoryNames = ['Nesurūšiuota'];
 		}
+
+		categoriesNames = loadedCategoryNames;
 
 		const response = await publicApi.getSourceById1(sourceId);
 		sourceName = response.data.name;
@@ -57,6 +63,6 @@
 				{/each}
 			</ul>
 		</li>
-		<li><strong>Šaltinis: </strong> {sourceName}</li>
+		<li><strong>Šaltinis: </strong> <SourceLink {sourceName} /></li>
 	</ul>
 </Dropdown>

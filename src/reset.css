@@ -1,11 +1,10 @@
 /* reset.css */
 
-
 *::before,
 *::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 /*
 html {
@@ -24,7 +23,7 @@ body {
 /* Remove default list styles */
 ul,
 ol {
-  list-style: none;
+	list-style: none;
 }
 
 /* Default styles for headings */
@@ -34,74 +33,73 @@ h3,
 h4,
 h5,
 h6 {
-  line-height: 1.25;
+	line-height: 1.25;
 }
 
 h1 {
-  font-size: 2rem;
+	font-size: 2rem;
 }
 
 h2 {
-  font-size: 1.75rem;
+	font-size: 1.75rem;
 }
 
 h3 {
-  font-size: 1.5rem;
+	font-size: 1.5rem;
 }
 
 h4 {
-  font-size: 1.25rem;
+	font-size: 1.25rem;
 }
 
 h5 {
-  font-size: 1rem;
+	font-size: 1rem;
 }
 
 h6 {
-  font-size: 0.875rem;
+	font-size: 0.875rem;
 }
 
 /* Default styles for paragraphs */
 p {
-    font-size: 1rem; /* This sets the font size to 16px */
-    line-height: 1.5; /* This sets the line height to 1.5 times the font size */
-  }
-  
+	font-size: 1rem; /* This sets the font size to 16px */
+	line-height: 1.5; /* This sets the line height to 1.5 times the font size */
+}
+
 /* Default styles for links */
 a {
-  color: blue;
-  text-decoration: underline;
+	color: blue;
+	text-decoration: underline;
 }
 
 a:hover {
-  text-decoration: none;
+	text-decoration: none;
 }
 
 /* Default styles for lists */
 ul {
-  padding-left: 1.25rem;
-  list-style-type: disc;
+	padding-left: 1.25rem;
 }
 
 ol {
-  padding-left: 1.25rem;
-  list-style-type: decimal;
+	padding-left: 1.25rem;
+	list-style-type: decimal;
 }
 
 ul ul,
 ul ol,
 ol ol,
 ol ul {
-  margin-bottom: 0;
+	margin-bottom: 0;
 }
 
 /* Default styles for blockquotes */
 blockquote {
-  margin: 1.5rem 0;
-  padding-left: 1rem;
-  border-left: 4px solid #ccc;
-  color: #666;
-  font-style: italic;
+	margin: 1.5rem 0;
+	padding-left: 1rem;
+	border-left: 4px solid #ccc;
+	color: #666;
+	font-style: italic;
 }
 
 /* Default styles for code blocks */
@@ -110,46 +108,45 @@ code {
   font-family: 'Courier New', Courier, monospace;
 } */
 
-
 /* Default styles for tables */
 table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 1rem;
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 1rem;
 }
 
 th,
 td {
-  padding: 0.5rem;
-  border: 1px solid #ccc;
+	padding: 0.5rem;
+	border: 1px solid #ccc;
 }
 
 th {
-  background-color: #f5f5f5;
-  font-weight: bold;
+	background-color: #f5f5f5;
+	font-weight: bold;
 }
 
 /* Default styles for images */
 img {
-  max-width: 100%;
-  height: auto;
+	max-width: 100%;
+	height: auto;
 }
 
 span {
-  font-size: inherit;
+	font-size: inherit;
 }
 
 textarea,
 input {
-  font-family: inherit;
-  font-size: inherit;
-  line-height: inherit;
-  padding: 0.5rem; /* Adjust as needed */
-  margin: 0;
-  border: 1px solid #ccc; /* Adjust as needed */
-  box-sizing: border-box;
-  background: transparent; /* Ensure no background color is interfering */
-  color: inherit; /* Ensure text color is inherited */
-  outline: none; /* Remove default outline */
-  resize: none; /* Prevent resizing if that's an issue */
+	font-family: inherit;
+	font-size: inherit;
+	line-height: inherit;
+	padding: 0.5rem; /* Adjust as needed */
+	margin: 0;
+	border: 1px solid #ccc; /* Adjust as needed */
+	box-sizing: border-box;
+	background: transparent; /* Ensure no background color is interfering */
+	color: inherit; /* Ensure text color is inherited */
+	outline: none; /* Remove default outline */
+	resize: none; /* Prevent resizing if that's an issue */
 }

@@ -3,15 +3,20 @@
 	import { writable } from 'svelte/store';
 	import { SourceReviewStatusEnum, type Source, type SourcePostDto } from '$services/gen-client';
 	import { sourceApi } from '$services/apiService';
+	import { goto } from '$app/navigation';
+
+	onMount(() => {
+		/* STAGE 1 - For now not accessible to users */
+		goto('/');
+		/* ... */
+	});
 
 	let sources = writable<Source[]>([]);
 	let newSource: SourcePostDto = {
 		name: '',
 		description: '',
 		reviewStatus: SourceReviewStatusEnum.Pending,
-		reviewedById: '',
-		reviewedOn: '',
-		reviewMessage: '',
+		reviewHistory: '',
 		authorId: '',
 		createdOn: '',
 		lastModifiedOn: ''
@@ -36,9 +41,7 @@
 				name: '',
 				description: '',
 				reviewStatus: SourceReviewStatusEnum.Pending,
-				reviewedById: '',
-				reviewedOn: '',
-				reviewMessage: '',
+				reviewHistory: '',
 				authorId: '',
 				createdOn: '',
 				lastModifiedOn: ''
@@ -124,35 +127,13 @@
 						</select>
 					</div>
 					<div class="mb-4">
-						<label for="reviewedBy" class="block text-sm font-medium text-gray-700"
-							>Reviewed By</label
+						<label for="reviewHistory" class="block text-sm font-medium text-gray-700"
+							>Review History</label
 						>
 						<input
-							id="reviewedBy"
+							id="reviewHistory"
 							type="text"
-							bind:value={editSource.reviewedById}
-							class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-						/>
-					</div>
-					<div class="mb-4">
-						<label for="reviewedOn" class="block text-sm font-medium text-gray-700"
-							>Reviewed On</label
-						>
-						<input
-							id="reviewedOn"
-							type="text"
-							bind:value={editSource.reviewedOn}
-							class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-						/>
-					</div>
-					<div class="mb-4">
-						<label for="reviewMessage" class="block text-sm font-medium text-gray-700"
-							>Review Message</label
-						>
-						<input
-							id="reviewMessage"
-							type="text"
-							bind:value={editSource.reviewMessage}
+							bind:value={editSource.reviewHistory}
 							class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
 						/>
 					</div>
@@ -200,9 +181,7 @@
 						<p class="text-gray-600"><strong>Name: </strong>{source.name}</p>
 						<p class="text-gray-600"><strong>Description: </strong>{source.description}</p>
 						<p class="text-gray-600"><strong>Review Status: </strong>{source.reviewStatus}</p>
-						<p class="text-gray-600"><strong>Reviewed By: </strong>{source.reviewedById}</p>
-						<p class="text-gray-600"><strong>Reviewed On: </strong>{source.reviewedOn}</p>
-						<p class="text-gray-600"><strong>Review Message: </strong>{source.reviewMessage}</p>
+						<p class="text-gray-600"><strong>Review History: </strong>{source.reviewHistory}</p>
 						<p class="text-gray-600"><strong>Author: </strong>{source.authorId}</p>
 						<p class="text-gray-600"><strong>Created On: </strong>{source.createdOn}</p>
 						<p class="text-gray-600"><strong>Last Modified On: </strong>{source.lastModifiedOn}</p>
@@ -257,31 +236,13 @@
 			</select>
 		</div>
 		<div class="mb-4">
-			<label class="block text-sm font-medium text-gray-700" for="reviewedBy">Reviewed By</label>
-			<input
-				id="reviewedBy"
-				type="text"
-				bind:value={newSource.reviewedById}
-				class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-			/>
-		</div>
-		<div class="mb-4">
-			<label class="block text-sm font-medium text-gray-700" for="reviewedOn">Reviewed On</label>
-			<input
-				id="reviewedOn"
-				type="text"
-				bind:value={newSource.reviewedOn}
-				class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-			/>
-		</div>
-		<div class="mb-4">
-			<label class="block text-sm font-medium text-gray-700" for="reviewMessage"
-				>Review Message</label
+			<label class="block text-sm font-medium text-gray-700" for="reviewHistory"
+				>Review History</label
 			>
 			<input
-				id="reviewMessage"
+				id="reviewHistory"
 				type="text"
-				bind:value={newSource.reviewMessage}
+				bind:value={newSource.reviewHistory}
 				class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
 			/>
 		</div>
