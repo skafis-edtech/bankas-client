@@ -72,7 +72,8 @@
 			'px-2',
 			'rounded-md',
 			'hover:bg-blue-600',
-			'mx-2'
+			'mx-2',
+			'W-fit'
 		);
 		formulaButton.id = 'formula-tool-btn';
 		mdEditor.querySelector('.carta-toolbar')?.children[1]?.before(formulaButton);
@@ -239,10 +240,9 @@
 			bind:value
 		/>
 	</div>
-	<div id="math-editor" class="hidden w-1/2 p-4 m-2 bg-blue-100 rounded-md">
+	<div id="math-editor" class="hidden md:w-1/2 p-4 m-2 bg-blue-100 rounded-md relative">
 		<p>Formulės kūrimas/redagavimas</p>
 		<MathLiveEditor bind:mathfieldContainer onChange={insertTextAtCursor} />
-		<Button on:click={insertTextAtCursor}>Įterpti</Button>
-		<Button on:click={closeMathEditor}>Uždaryti</Button>
+		<Button on:click={closeMathEditor} class="absolute top-0 right-0 w-fit h-fit">x</Button>
 	</div>
 </div>

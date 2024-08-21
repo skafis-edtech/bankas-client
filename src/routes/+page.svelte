@@ -62,12 +62,20 @@
 <h4 class="text-md font-semibold my-4 text-center">
 	Užduočių: {numOfProblems || '...'}
 </h4>
-<Button
-	color="alternative"
-	on:click={() => {
-		goto('/snipping-tool');
-	}}>Karpymo įrankis</Button
->
+<div class="flex flex-row justify-between">
+	<Button
+		color="alternative"
+		on:click={() => {
+			goto('/snipping-tool');
+		}}>Karpymo įrankis</Button
+	>
+	<Button
+		color="blue"
+		on:click={() => {
+			goto('/list?list=1,2,3,4');
+		}}>Atrinktų sąrašas</Button
+	>
+</div>
 
 <HorizontalLine />
 
@@ -89,7 +97,7 @@
 			{/if}
 		</div>
 
-		<SourceListPeageable searchValue={searchSourcesValue} />
+		<SourceListPeageable searchValue={searchSourcesValue} sourcesSubset="approved" />
 	</TabItem>
 	<TabItem open={tab === 'categories'} title="Kategorijos">
 		<div class="text-center">

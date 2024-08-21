@@ -1,12 +1,16 @@
 <script lang="ts">
-	import { publicApi } from '$services/apiService';
+	import { approvalApi, publicApi } from '$services/apiService';
 	import type { SourceDisplayDto } from '$services/gen-client';
 	import { Button, Search } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import SourceWithProblems from './SourceWithProblems.svelte';
+	import SourceManageBar from '$components/ui/SourceManageBar.svelte';
+	import SourceReviewBar from '$components/ui/SourceReviewBar.svelte';
 
 	let sources: SourceDisplayDto[] = [];
 	export let searchValue = '';
+	export let sourcesSubset: 'all' | 'approved' | 'mine' | 'author';
+	export let author: string = '';
 	let page = 0;
 	let size = 8;
 	let timer: NodeJS.Timeout;
@@ -24,8 +28,25 @@
 	}
 
 	async function fetchSources() {
-		const sourcesRes = await publicApi.getApprovedSources(page, size, searchValue);
-		sources = sourcesRes.data;
+		if (sourcesSubset === 'mine') {
+			const sourcesRes = await approvalApi.getMySources(page, size, searchValue);
+			sources = sourcesRes.data;
+		} else if (sourcesSubset === 'all') {
+			const sourcesRes = await approvalApi.getSources(page, size, searchValue);
+			sources = sourcesRes.data;
+		} else if (sourcesSubset === 'approved') {
+			const sourcesRes = await publicApi.getApprovedSources(page, size, searchValue);
+			sources = sourcesRes.data;
+		} else if (sourcesSubset === 'author') {
+			if (!author) {
+				console.error('Author not provided');
+				return;
+			}
+			const sourcesRes = await publicApi.getSourcesByAuthor(author, page, size, searchValue);
+			sources = sourcesRes.data;
+		} else {
+			console.error('Invalid sources subset');
+		}
 	}
 
 	async function changePage(direction: number) {
@@ -44,6 +65,19 @@
 <Search class="my-3" placeholder="Ieškoti" bind:value={searchValue} />
 
 {#each Object.entries(sources) as [id, source]}
+	{#if sourcesSubset === 'mine'}
+		<SourceManageBar
+			reviewStatus={source.reviewStatus}
+			sourceId={source.id}
+			reviewHistory={source.reviewHistory}
+		/>
+	{:else if sourcesSubset === 'all'}
+		<SourceReviewBar
+			reviewStatus={source.reviewStatus}
+			sourceId={source.id}
+			reviewHistory={source.reviewHistory}
+		/>
+	{/if}
 	<SourceWithProblems {source} {searchValue} />
 {/each}
 

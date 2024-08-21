@@ -235,10 +235,9 @@
 </p>
 <p class="text-justify mx-4 my-4">
 	Spausdami mygtukus "Pateikti peržiūrai" Jūs patvirtinate, kad įkeliate tik savo sukurtas
-	originalias užduotis (kitais atvejais kreipkitės el. paštu info@skafis.lt). Pateikdami savo
-	užduotis atsisakote turtinių autorinių teisių į šias užduotis, leidžiate užduotimis naudotis bet
-	kam. Peržiūrėtos ir patvirtintos užduotys bus paviešintos kartu su Jūsų prisijungimo vardu, bet ne
-	el. paštu.
+	originalias užduotis (kitais atvejais kreipkitės el. paštu info@skafis.lt) bei su autorinių teisių
+	sąlygomis, aprašytomis puslapyje <a href="/about">"Apie"</a>. Peržiūrėtos ir patvirtintos užduotys
+	bus paviešintos kartu su Jūsų prisijungimo vardu, bet ne el. paštu.
 </p>
 
 <div class="relative">
@@ -308,26 +307,6 @@
 	bind:groupedUpload
 	onSubmit={fillInFileListFromGroupedUpload}
 />
-
-<p class="text-center mb-2">
-	Darydami ekrano nuotraukas rinkitės kiek įmanoma didesnį mastelį, kad būtų geresnė kokybė. (Galite
-	naudotis Win+Shift+S komanda ir tuomet įklijuoti naudojantis Ctrl+V)
-</p>
-
-<p class="text-center mb-4">
-	Tekstas rašomas Markdown sintakse. Svarbiausia - naujai eilutei reikia dviejų Enter, galite rašyti
-	LaTex (katex) formules bei Tikz diagramas. Daugiau galite paskaityti čia: <a
-		href="https://www.markdownguide.org/cheat-sheet/">https://www.markdownguide.org/cheat-sheet/</a
-	>
-</p>
-<p class="text-center mb-4">
-	Pagalba rašant formules: <a
-		class="underline"
-		href="https://latex.codecogs.com/eqneditor/editor.php"
-		target="_blank">https://latex.codecogs.com/eqneditor/editor.php</a
-	>
-</p>
-
 {#each newProblems as problem, i}
 	<div class="relative">
 		<Button
