@@ -25,3 +25,31 @@ a {
 :global(.carta-font-code) {
 	font-size: 1.1rem;
 }
+
+.important-no-border {
+	border: none !important;
+}
+
+.important-no-m-p {
+	margin-top: 3px !important;
+	margin-bottom: 0 !important;
+	margin-right: 0 !important;
+	margin-left: 0 !important;
+	padding-left: 0 !important;
+}
+
+@media print {
+	@page {
+		margin: 0;
+	}
+	.no-print,
+	.no-print * {
+		display: none;
+	}
+	.only-print {
+		display: flex;
+		flex-direction: row;
+		column-count: 2;
+		column-gap: 20px;
+	}
+}

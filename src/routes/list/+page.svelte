@@ -1,17 +1,23 @@
 <script lang="ts">
-	import MarkdownDisplay from '$components/ui/MarkdownDisplay.svelte';
-	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
-	import { publicApi } from '$services/apiService';
-	import type { ProblemDisplayViewDto } from '$services/gen-client';
-	import { Button } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
+	import jsPDF from 'jspdf';
+	import 'katex/dist/katex.css';
+	import 'carta-md/default.css';
+	import type { ProblemDisplayViewDto } from '$services/gen-client';
+	import { publicApi } from '$services/apiService';
+	import { Button } from 'flowbite-svelte';
+	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
+	import MarkdownDisplay from '$components/ui/MarkdownDisplay.svelte';
 
 	let skfList: string[] = [];
 	let problems: ProblemDisplayViewDto[] = [];
 	let html2pdf: any;
+	let pdfTitle = 'Užduotys';
+	let includeLink = true;
+	let printAnswers = false;
+	let windowLocation: string | null = null;
 
 	onMount(async () => {
-		// Dynamically import html2pdf.js only on the client-side
 		html2pdf = await import('html2pdf.js').then((module) => module.default);
 
 		const urlParams = new URLSearchParams(window.location.search);
@@ -20,123 +26,186 @@
 		const problemPromises = skfList.map((skfCode) => publicApi.getProblemBySkfCode(skfCode));
 		const problemResponses = await Promise.all(problemPromises);
 		problems = problemResponses.map((response) => response.data);
+
+		// Accessing window only after component has been mounted
+		windowLocation = window.location.href.slice(8);
 	});
 
-	function downloadPdf() {
-		// Ensure html2pdf.js is loaded
-		if (!html2pdf) {
-			console.error('html2pdf.js has not been loaded.');
-			return;
+	async function downloadPdf(isAnswers = false) {
+		if (isAnswers) {
+			printAnswers = true;
+		} else {
+			printAnswers = false;
 		}
-
-		const content = document.getElementById('content') as HTMLElement;
-		//		const content = document.querySelector('.carta-renderer') as HTMLElement;
-
-		const opt = {
-			margin: 0.5,
-			filename: 'styled-content.pdf',
-			image: { type: 'jpeg', quality: 0.98 },
-			html2canvas: { scale: 2, useCORS: true },
-			jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-		};
-
-		// Generate the PDF using html2pdf
-		html2pdf().from(content).set(opt).save();
+		window.print();
 	}
 
-	function downloadPdfNoAns() {
-		// Similar logic can be used here to generate a PDF without answers
-		// For simplicity, this is left as an exercise to implement.
+	function addSkfItem() {
+		skfList = [...skfList, `SKF-`];
+		updateUrl();
+	}
+
+	function updateSkfItem(index: number, e: Event) {
+		const value = (e.target as HTMLInputElement).value;
+		skfList[index] = value;
+		updateUrl();
+	}
+
+	function removeSkfItem(index: number) {
+		skfList = skfList.filter((_, i) => i !== index);
+		updateUrl();
+	}
+
+	function updateUrl() {
+		const queryParams = new URLSearchParams(window.location.search);
+		queryParams.set('list', skfList.map((item) => item.replace('SKF-', '')).join(','));
+		const newUrl = `${window.location.pathname}?${queryParams.toString()}`;
+		history.replaceState(null, '', newUrl);
+		windowLocation = window.location.href.slice(8);
+	}
+
+	function reloadPage() {
+		window.location.reload();
 	}
 </script>
 
-<h1 class="text-4xl font-semibold my-4 text-center">SKF sąrašas</h1>
-{#if skfList.length > 0}
-	<ul class="list-disc list-inside">
-		{#each skfList as skf}
-			<li>{skf}</li>
+<div class="no-print">
+	<h1 class="text-4xl font-semibold my-4 text-center">Atrinktų užduočių sąrašas</h1>
+	{#if problems.length > 0}
+		{#each problems as problem, i}
+			<div>
+				<h2>{i + 1}.</h2>
+				<ProblemComponent
+					problemMainData={{
+						skfCode: problem.skfCode === '' ? problem.id : problem.skfCode,
+						problemText: problem.problemText,
+						problemImageSrc: problem.problemImageSrc,
+						answerText: problem.answerText,
+						answerImageSrc: problem.answerImageSrc,
+						categories: problem.categories,
+						sourceId: problem.sourceId
+					}}
+				/>
+			</div>
 		{/each}
-	</ul>
-{:else}
-	<p>Nėra sąrašo</p>
-{/if}
-
-<h1 class="text-4xl font-semibold my-4 text-center">Užduotys</h1>
-{#if problems.length > 0}
-	<Button color="blue" on:click={downloadPdfNoAns}>Atsisiųsti PDF be atsakymų</Button>
-	<p>Užduočių skaičius: {problems.length}</p>
-	{#each problems as problem, i}
-		<div>
-			<h2>{i + 1}.</h2>
-			<ProblemComponent
-				problemMainData={{
-					skfCode: problem.skfCode === '' ? problem.id : problem.skfCode,
-					problemText: problem.problemText,
-					problemImageSrc: problem.problemImageSrc,
-					answerText: problem.answerText,
-					answerImageSrc: problem.answerImageSrc,
-					categories: problem.categories,
-					sourceId: problem.sourceId
-				}}
-			/>
+		<div class="md:w-1/2 flex flex-col m-auto gap-2 my-4">
+			<label for="pdftitle" class="block mb-2">PDF pavadinimas</label>
+			<input id="pdftitle" type="text" bind:value={pdfTitle} class="w-full p-2 mb-4" />
+			<div class="flex flex-row gap-2">
+				<input type="checkbox" bind:checked={includeLink} />
+				<p>Pridėti nuorodą, t.y. užduočių numerių sąrašą</p>
+			</div>
+			<Button color="blue" on:click={() => downloadPdf(false)}>Atsisiųsti užduočių PDF</Button>
+			<Button color="yellow" on:click={() => downloadPdf(true)}>Atsisiųsti atsakymų PDF</Button>
 		</div>
-	{/each}
-{:else}
-	<p>Nėra užduočių</p>
-{/if}
-
-<h1 class="text-4xl font-semibold my-4 text-center">PDF'ui</h1>
-{#if problems.length > 0}
-	{#each problems as problem, i}
-		<MarkdownDisplay value={(i + 1).toString() + '. ' + problem.problemText} />
-	{/each}
-{:else}
-	<p>Nėra užduočių</p>
-{/if}
-
-<!-- Content to be included in the PDF -->
-<div id="content">
-	<h1>Sample Problem</h1>
-	<p>1. What is the reciprocal of <span style="font-style: italic;">1/3</span>?</p>
-	<p>2. Solve the equation <strong>x<sup>2</sup> + 2x - 3 = 0</strong>.</p>
-	<p>3. Factorize <strong>x + 3x<sup>2</sup></strong>.</p>
-	<p>4. Which of the following numbers is divisible by both 3 and 5?</p>
-	<ul>
-		<li>A: 31245</li>
-		<li>B: 45610</li>
-		<li>C: 15658</li>
-		<li>D: 15685</li>
-	</ul>
+	{:else}
+		<p>Nėra užduočių</p>
+	{/if}
 </div>
-<!-- Button to trigger PDF download -->
-<button on:click={downloadPdf}>Download PDF</button>
 
-<style>
-	#content {
-		background-color: tomato;
-		color: white;
-		padding: 20px;
-		border-radius: 8px;
-		font-family: Arial, sans-serif;
-	}
+<div class={`${printAnswers ? 'hidden' : ''}`}>
+	<div class="hidden only-print">
+		{#if problems.length > 0}
+			<div class="flex flex-col flex-1 relative">
+				<h4 class="text-center">{pdfTitle}</h4>
+				{#each problems as problem, i}
+					<MarkdownDisplay
+						value={(i + 1).toString() +
+							'\\. ' +
+							problem.problemText +
+							(problem.problemImageSrc.length > 0
+								? `\n\n<!---The text below is autogenerated. It is amended during runtime--->\n![Užduoties ${problem.skfCode} paveikslėlis](${problem.problemImageSrc})`
+								: '')}
+					/>
+				{/each}
+			</div>
 
-	#content h1 {
-		font-size: 24px;
-		margin-bottom: 10px;
-	}
+			<div class="flex flex-col flex-1">
+				<h4 class="text-center">{pdfTitle}</h4>
+				{#each problems as problem, i}
+					<MarkdownDisplay
+						value={(i + 1).toString() +
+							'\\. ' +
+							problem.problemText +
+							(problem.problemImageSrc.length > 0
+								? `\n\n<!---The text below is autogenerated. It is amended during runtime--->\n![Užduoties ${problem.skfCode} paveikslėlis](${problem.problemImageSrc})`
+								: '')}
+					/>
+				{/each}
+			</div>
+		{:else}
+			<p>Nėra užduočių</p>
+		{/if}
+		<div class="fixed bottom-0 right-2 text-[8px]">
+			{includeLink ? windowLocation : 'Sugeneruota bankas.skafis.lt'}
+		</div>
+		<div class="fixed bottom-0 right-[50%] text-[8px]">
+			{includeLink ? windowLocation : 'Sugeneruota bankas.skafis.lt'}
+		</div>
+	</div>
+</div>
 
-	#content p {
-		font-size: 16px;
-		margin: 5px 0;
-	}
+<div class={`${printAnswers ? '' : 'hidden'}`}>
+	<div class="hidden only-print">
+		{#if problems.length > 0}
+			<div class="flex flex-col flex-1 relative">
+				<h4 class="text-center">{pdfTitle} (atsakymai)</h4>
+				{#each problems as problem, i}
+					<MarkdownDisplay
+						value={(i + 1).toString() +
+							'\\. ' +
+							problem.answerText +
+							(problem.answerImageSrc.length > 0
+								? `\n\n<!---The text below is autogenerated. It is amended during runtime--->\n![Užduoties ${problem.skfCode} paveikslėlis](${problem.answerImageSrc})`
+								: '')}
+					/>
+				{/each}
+			</div>
 
-	#content ul {
-		list-style-type: none;
-		padding: 0;
-	}
+			<div class="flex flex-col flex-1 relative">
+				<h4 class="text-center">{pdfTitle} (atsakymai)</h4>
+				{#each problems as problem, i}
+					<MarkdownDisplay
+						value={(i + 1).toString() +
+							'\\. ' +
+							problem.answerText +
+							(problem.answerImageSrc.length > 0
+								? `\n\n<!---The text below is autogenerated. It is amended during runtime--->\n![Užduoties ${problem.skfCode} paveikslėlis](${problem.answerImageSrc})`
+								: '')}
+					/>
+				{/each}
+			</div>
+		{:else}
+			<p>Nėra užduočių</p>
+		{/if}
+		<div class="fixed bottom-0 right-2 text-[8px]">
+			{includeLink ? windowLocation : 'Sugeneruota bankas.skafis.lt'}
+		</div>
+		<div class="fixed bottom-0 right-[50%] text-[8px]">
+			{includeLink ? windowLocation : 'Sugeneruota bankas.skafis.lt'}
+		</div>
+	</div>
+</div>
 
-	#content li {
-		font-size: 16px;
-		margin: 2px 0;
-	}
-</style>
+<div class="no-print">
+	<h1 class="text-4xl font-semibold my-4 text-center">SKF sąrašas</h1>
+	{#if skfList.length > 0}
+		<ul class="list-disc list-inside">
+			{#each skfList as skf, index}
+				<li>
+					<input
+						type="text"
+						bind:value={skf}
+						on:input={(e) => updateSkfItem(index, e)}
+						class="p-1 border-b border-gray-400 focus:outline-none"
+					/>
+					<Button color="red" on:click={() => removeSkfItem(index)}>Remove</Button>
+				</li>
+			{/each}
+		</ul>
+		<Button on:click={addSkfItem} class="mt-2">Add Item</Button>
+	{:else}
+		<p>Nėra sąrašo</p>
+	{/if}
+	<Button on:click={reloadPage} color="red">Reload Page</Button>
+</div>

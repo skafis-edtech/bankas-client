@@ -50,7 +50,7 @@
 	onDestroy(() => firebaseUnsubscribe());
 </script>
 
-<header>
+<header class="no-print">
 	<div class="block md:hidden"><HeaderMobile /></div>
 	<div class="hidden md:block"><HeaderDesktop /></div>
 	<p class="text-sm text-center my-2">
@@ -58,16 +58,15 @@
 	</p>
 </header>
 <main>
-	<aside></aside>
+	<aside class="no-print"></aside>
 	<section><slot /></section>
-	<aside>
+	<aside class="no-print">
 		<div class="fixed left-0 bottom-0">
 			<button on:click={() => goto('/magic')}><p>.</p></button>
 		</div>
 	</aside>
 </main>
-<footer><Footer /></footer>
-<GlobalAlert />
+<footer class="no-print"><Footer /><GlobalAlert /></footer>
 
 <style>
 	header {
