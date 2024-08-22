@@ -1,11 +1,10 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import jsPDF from 'jspdf';
+	import { getContext, onMount } from 'svelte';
 	import 'katex/dist/katex.css';
 	import 'carta-md/default.css';
 	import type { ProblemDisplayViewDto } from '$services/gen-client';
 	import { publicApi } from '$services/apiService';
-	import { Button } from 'flowbite-svelte';
+	import { Button, ButtonGroup } from 'flowbite-svelte';
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
 	import MarkdownDisplay from '$components/ui/MarkdownDisplay.svelte';
 
@@ -17,12 +16,17 @@
 	let printAnswers = false;
 	let windowLocation: string | null = null;
 
-	onMount(async () => {
-		html2pdf = await import('html2pdf.js').then((module) => module.default);
+	const { list, setList } = getContext<any>('skfList');
 
+	onMount(async () => {
 		const urlParams = new URLSearchParams(window.location.search);
 		const listValue = urlParams.get('list') || '';
-		skfList = listValue.split(',').map((item) => `SKF-${item}`);
+		skfList = listValue.split(' ').map((item) => `SKF-${item}`);
+		if (skfList[0] === 'SKF-') {
+			skfList = $list;
+			updateUrl();
+		}
+
 		const problemPromises = skfList.map((skfCode) => publicApi.getProblemBySkfCode(skfCode));
 		const problemResponses = await Promise.all(problemPromises);
 		problems = problemResponses.map((response) => response.data);
@@ -31,12 +35,7 @@
 		windowLocation = window.location.href.slice(8);
 	});
 
-	async function downloadPdf(isAnswers = false) {
-		if (isAnswers) {
-			printAnswers = true;
-		} else {
-			printAnswers = false;
-		}
+	async function downloadPdf() {
 		window.print();
 	}
 
@@ -58,7 +57,7 @@
 
 	function updateUrl() {
 		const queryParams = new URLSearchParams(window.location.search);
-		queryParams.set('list', skfList.map((item) => item.replace('SKF-', '')).join(','));
+		queryParams.set('list', skfList.map((item) => item.replace('SKF-', '')).join(' '));
 		const newUrl = `${window.location.pathname}?${queryParams.toString()}`;
 		history.replaceState(null, '', newUrl);
 		windowLocation = window.location.href.slice(8);
@@ -67,10 +66,19 @@
 	function reloadPage() {
 		window.location.reload();
 	}
+	function clearList() {
+		skfList = [];
+		updateUrl();
+	}
+
+	function updateStorage() {
+		setList(skfList);
+	}
 </script>
 
 <div class="no-print">
 	<h1 class="text-4xl font-semibold my-4 text-center">Atrinktų užduočių sąrašas</h1>
+	<p class="text-center">Atrinkta pagal nuorodą - ją galite kopijuoti ir dalintis</p>
 	{#if problems.length > 0}
 		{#each problems as problem, i}
 			<div>
@@ -95,8 +103,26 @@
 				<input type="checkbox" bind:checked={includeLink} />
 				<p>Pridėti nuorodą, t.y. užduočių numerių sąrašą</p>
 			</div>
-			<Button color="blue" on:click={() => downloadPdf(false)}>Atsisiųsti užduočių PDF</Button>
-			<Button color="yellow" on:click={() => downloadPdf(true)}>Atsisiųsti atsakymų PDF</Button>
+			<ButtonGroup class="m-auto">
+				<Button
+					color={printAnswers ? 'alternative' : 'green'}
+					on:click={() => {
+						printAnswers = false;
+					}}>Užduotys</Button
+				>
+				<Button
+					color={printAnswers ? 'blue' : 'alternative'}
+					on:click={() => {
+						printAnswers = true;
+					}}>Atsakymai</Button
+				></ButtonGroup
+			>
+			<Button
+				color="blue"
+				on:click={() => {
+					downloadPdf();
+				}}>Atsisiųsti PDF</Button
+			>
 		</div>
 	{:else}
 		<p>Nėra užduočių</p>
@@ -106,7 +132,7 @@
 <div class={`${printAnswers ? 'hidden' : ''}`}>
 	<div class="hidden only-print">
 		{#if problems.length > 0}
-			<div class="flex flex-col flex-1 relative">
+			<div class="flex flex-col flex-1 relative scale-[80%]">
 				<h4 class="text-center">{pdfTitle}</h4>
 				{#each problems as problem, i}
 					<MarkdownDisplay
@@ -120,7 +146,7 @@
 				{/each}
 			</div>
 
-			<div class="flex flex-col flex-1">
+			<div class="flex flex-col flex-1 scale-[80%]">
 				<h4 class="text-center">{pdfTitle}</h4>
 				{#each problems as problem, i}
 					<MarkdownDisplay
@@ -148,7 +174,7 @@
 <div class={`${printAnswers ? '' : 'hidden'}`}>
 	<div class="hidden only-print">
 		{#if problems.length > 0}
-			<div class="flex flex-col flex-1 relative">
+			<div class="flex flex-col flex-1 relative scale-[80%]">
 				<h4 class="text-center">{pdfTitle} (atsakymai)</h4>
 				{#each problems as problem, i}
 					<MarkdownDisplay
@@ -162,7 +188,7 @@
 				{/each}
 			</div>
 
-			<div class="flex flex-col flex-1 relative">
+			<div class="flex flex-col flex-1 relative scale-[80%]">
 				<h4 class="text-center">{pdfTitle} (atsakymai)</h4>
 				{#each problems as problem, i}
 					<MarkdownDisplay
@@ -207,5 +233,11 @@
 	{:else}
 		<p>Nėra sąrašo</p>
 	{/if}
+	<Button on:click={clearList} color="red">clear list</Button>
 	<Button on:click={reloadPage} color="red">Reload Page</Button>
+	<Button on:click={updateStorage} color="green">Išsaugoti kompiuterio atmintyje</Button>
+	<Button on:click={() => (skfList = $list)} color="green">Įkelti iš kompiuterio atminties</Button>
+	<div>
+		Atmintyje: {JSON.stringify($list)}
+	</div>
 </div>

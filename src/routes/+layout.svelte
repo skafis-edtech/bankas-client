@@ -19,8 +19,18 @@
 	import { authInitialized } from '$lib/stores';
 	import HeaderDesktop from '$components/layout/HeaderDesktop.svelte';
 	import HeaderMobile from '$components/layout/HeaderMobile.svelte';
+	import { skfList } from '$utils/persistentStore';
 
 	const userStore: Writable<User | null> = writable(null);
+
+	setContext('skfList', {
+		list: skfList,
+		setList: (list: string[]) => skfList.set(list),
+		appendItemToList: (item: string) => skfList.update((currentList) => [...currentList, item]),
+		removeItemFromList: (item: string) =>
+			skfList.update((currentList) => currentList.filter((i) => i !== item)),
+		isInList: (item: string) => $skfList.includes(item)
+	});
 
 	const firebaseUnsubscribe = auth.onAuthStateChanged(async (user) => {
 		if (user) {

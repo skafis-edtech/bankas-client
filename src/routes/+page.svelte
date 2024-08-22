@@ -72,7 +72,7 @@
 	<Button
 		color="blue"
 		on:click={() => {
-			goto('/list?list=1,2,3,4');
+			goto('/list?list=1+2+3+4+22+51');
 		}}>Atrinktų sąrašas</Button
 	>
 </div>

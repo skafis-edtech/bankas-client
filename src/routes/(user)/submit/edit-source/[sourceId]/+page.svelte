@@ -240,20 +240,30 @@
 	bus paviešintos kartu su Jūsų prisijungimo vardu, bet ne el. paštu.
 </p>
 
-<div class="relative">
-	<Button color="red" on:click={deleteSource} class="absolute top-5 right-5 z-10">Ištrinti</Button>
-	<SourceCreateForm bind:sourceData />
-	<Button
-		disabled={!isSourceDataChanged}
-		color="yellow"
-		on:click={updateSource}
-		class="w-fit absolute right-2 bottom-2">Pateikti pakeitimą peržiūrai</Button
-	>
-</div>
+<Accordion>
+	<AccordionItem closed class="bg-slate-200 mb-4">
+		<span slot="header"
+			><div class="text-black">Šaltinio informacija</div>
+			<div class="text-lg">{sourceData.name}</div></span
+		>
+		<div class="relative">
+			<Button color="red" on:click={deleteSource} class="absolute top-5 right-5 z-10"
+				>Ištrinti</Button
+			>
+			<SourceCreateForm bind:sourceData />
+			<Button
+				disabled={!isSourceDataChanged}
+				color="yellow"
+				on:click={updateSource}
+				class="w-fit absolute right-2 bottom-2">Pateikti pakeitimą peržiūrai</Button
+			>
+		</div>
+	</AccordionItem>
+</Accordion>
 
 <Accordion>
 	<AccordionItem open>
-		<span slot="header">Pateiktos užduotys (galite suskleisti)</span>
+		<span slot="header">Pateiktos užduotys (suskleiskite pateikdami užduotis)</span>
 		<div class="container mx-auto">
 			{#each submittedProblems as problem}
 				<div class="relative my-3">
@@ -298,7 +308,10 @@
 />
 
 <div class="flex flex-row justify-center">
-	<Button color="green" on:click={() => (isDropModalOpen = true)} class="w-fit mx-auto my-4"
+	<Button
+		color="alternative"
+		on:click={() => (isDropModalOpen = true)}
+		class="w-fit mx-auto text-sm p-2 my-2"
 		>Supildyti automatiškai įkeliant paveikslėlių grupę (nepateiktos užduotys panaikinamos)</Button
 	>
 </div>

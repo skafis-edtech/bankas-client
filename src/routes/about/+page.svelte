@@ -47,3 +47,5 @@
 	Tinklaraštis ir kiti projektai:
 	<a target="_blank" rel="noopener noreferrer" href="https://www.npw.lt">npw.lt </a>
 </p>
+<h2>Tikz pavyzdžiai</h2>
+<a href="https://github.com/artisticat1/obsidian-tikzjax">Čia (pascrollint reikia)</a>
