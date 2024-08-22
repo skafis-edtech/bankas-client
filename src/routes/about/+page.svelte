@@ -62,3 +62,7 @@
 </ul>
 
 <p>Prisijunkdami patvirtinate, kad pateiktas el. pašto adresas yra teisinga</p>
+
+<h2 id="editor-guide">Teksto įvesties gidas</h2>
+<p>Čia galite rašyti Markdown, LaTex ir Tikz sintakse!</p>
+<p>https://cortexjs.io/mathlive/</p>

@@ -24,7 +24,21 @@
 			return;
 		}
 		textareaElement = textarea;
-		makeLtAndAddMathButton();
+		customizeHeader();
+		customizeTextarea();
+
+		// Listen for clicks on the "Write" tab to reapply customizations
+		const writeTab = mdEditor.querySelector('button[tabindex="0"]');
+		if (writeTab) {
+			writeTab.addEventListener('click', () => {
+				// Reapply customizations when the "Write" tab is clicked
+				const newTextarea = mdEditor?.querySelector('textarea');
+				if (newTextarea) {
+					textareaElement = newTextarea;
+					customizeTextarea(); // Reapply event listeners and other customizations
+				}
+			});
+		}
 	});
 
 	const carta = new Carta({
@@ -45,28 +59,71 @@
 		extensions: [math(), tikz()]
 	});
 
-	function makeLtAndAddMathButton() {
+	function customizeHeader() {
 		if (!mdEditor) {
 			console.error('mdEditor is not found');
 			return;
 		}
 
-		// Localize button text
-		const writeTabs = mdEditor.querySelectorAll('button[tabindex="0"]');
-		const previewTabs = mdEditor.querySelectorAll('button[tabindex="-1"]');
+		// Trnaslate the tabs to LT
+		const writeTab = mdEditor.querySelector('button[tabindex="0"]') as HTMLButtonElement;
+		const previewTab = mdEditor.querySelector('button[tabindex="-1"]') as HTMLButtonElement;
 
-		writeTabs.forEach((writeTab) => {
+		if (!writeTab || !previewTab) {
+			console.error('Tabs not found');
+		} else {
 			if (writeTab.textContent === 'Write') writeTab.textContent = 'Rašymas';
-		});
-
-		previewTabs.forEach((previewTab) => {
 			if (previewTab.textContent === 'Preview') previewTab.textContent = 'Peržiūra';
-		});
+			previewTab.setAttribute(
+				'style',
+				'background-color: #4338ca; color: white; padding-left: 0.5rem; padding-right: 0.5rem; border-radius: 0.375rem; margin-left: 0.5rem; margin-right: 0.5rem; width: fit-content; transition: background-color 0.2s ease-in-out;'
+			);
+			previewTab.addEventListener('mouseover', function () {
+				previewTab.style.backgroundColor = '#3730a3'; // Darker green for hover
+			});
 
+			previewTab.addEventListener('mouseout', function () {
+				previewTab.style.backgroundColor = '#4338ca'; // Original green
+			});
+
+			writeTab.setAttribute(
+				'style',
+				'background-color: #f97316; color: white; padding-left: 0.5rem; padding-right: 0.5rem; border-radius: 0.375rem; margin-left: 0.5rem; margin-right: 0.5rem; width: fit-content; transition: background-color 0.2s ease-in-out;'
+			);
+			writeTab.addEventListener('mouseover', function () {
+				writeTab.style.backgroundColor = '#ea580c'; // Darker green for hover
+			});
+
+			writeTab.addEventListener('mouseout', function () {
+				writeTab.style.backgroundColor = '#f97316'; // Original green
+			});
+		}
+
+		// Add a button to insert math formulas
 		const formulaButton = document.createElement('button');
 		formulaButton.textContent = 'Įterpti formulę';
 		formulaButton.addEventListener('click', openMathEditorForCreating);
 		formulaButton.classList.add(
+			'bg-green-500',
+			'text-white',
+			'px-2',
+			'rounded-md',
+			'hover:bg-green-600',
+			'mx-2',
+			'w-fit',
+			'text-sm',
+			'p-0'
+		);
+		formulaButton.id = 'formula-tool-btn';
+		mdEditor.querySelector('.carta-toolbar')?.children[2]?.before(formulaButton);
+
+		// Add a help button
+		const helpButton = document.createElement('button');
+		helpButton.textContent = 'Pagalba';
+		helpButton.addEventListener('click', () => {
+			window.open('/about#editor-guide', '_blank');
+		});
+		helpButton.classList.add(
 			'bg-blue-500',
 			'text-white',
 			'px-2',
@@ -75,9 +132,80 @@
 			'mx-2',
 			'W-fit'
 		);
-		formulaButton.id = 'formula-tool-btn';
-		mdEditor.querySelector('.carta-toolbar')?.children[1]?.before(formulaButton);
+		mdEditor.querySelector('.carta-toolbar')?.children[3]?.after(helpButton);
+	}
 
+	function customizeTextarea() {
+		// Add keydown listener to intercept Enter key
+		textareaElement.addEventListener('keydown', (event) => {
+			if (event.key === 'Enter') {
+				event.preventDefault(); // Prevent default newline action
+
+				const cursorPosition = textareaElement.selectionStart;
+				const beforeCursor = textareaElement.value.slice(0, cursorPosition);
+				const afterCursor = textareaElement.value.slice(cursorPosition);
+
+				// Insert the backslash and newline character
+				textareaElement.value = `${beforeCursor}\\\n${afterCursor}`;
+
+				// Move the cursor to the correct position after inserting
+				textareaElement.setSelectionRange(cursorPosition + 2, cursorPosition + 2);
+
+				// Manually trigger an input event to update the editor's value
+				textareaElement.dispatchEvent(new Event('input', { bubbles: true }));
+			}
+			if (event.key === 'Tab') {
+				event.preventDefault(); // Prevent default tab action
+
+				const cursorPosition = textareaElement.selectionStart;
+				const beforeCursor = textareaElement.value.slice(0, cursorPosition - 1);
+				const afterCursor = textareaElement.value.slice(cursorPosition);
+
+				// Insert the tab character
+				textareaElement.value = `${beforeCursor}&emsp;${afterCursor}`;
+
+				// Move the cursor to the correct position after inserting
+				textareaElement.setSelectionRange(cursorPosition + 6, cursorPosition + 6);
+
+				// Manually trigger an input event to update the editor's value
+				textareaElement.dispatchEvent(new Event('input', { bubbles: true }));
+			}
+			if (event.key === ' ') {
+				event.preventDefault(); // Prevent default tab action
+
+				const cursorPosition = textareaElement.selectionStart;
+				const prevText = textareaElement.value.slice(cursorPosition - 6, cursorPosition); // Adjust slice length to match the longest string you're checking
+				if (
+					prevText.endsWith(' ') || // Regular space
+					prevText.endsWith('&nbsp;') || // Check if it ends with &nbsp;
+					prevText.endsWith('&emsp;') // Check if it ends with &emsp;
+				) {
+					const beforeCursor = textareaElement.value.slice(0, cursorPosition);
+					const afterCursor = textareaElement.value.slice(cursorPosition);
+
+					// Insert the tab character
+					textareaElement.value = `${beforeCursor}&nbsp;${afterCursor}`;
+
+					// Move the cursor to the correct position after inserting
+					textareaElement.setSelectionRange(cursorPosition + 6, cursorPosition + 6);
+
+					// Manually trigger an input event to update the editor's value
+					textareaElement.dispatchEvent(new Event('input', { bubbles: true }));
+				} else {
+					const beforeCursor = textareaElement.value.slice(0, cursorPosition);
+					const afterCursor = textareaElement.value.slice(cursorPosition);
+
+					// Insert the tab character
+					textareaElement.value = `${beforeCursor} ${afterCursor}`;
+
+					// Move the cursor to the correct position after inserting
+					textareaElement.setSelectionRange(cursorPosition + 1, cursorPosition + 1);
+					textareaElement.dispatchEvent(new Event('input', { bubbles: true }));
+				}
+			}
+		});
+
+		// Add input listener to check the cursor position - for formula insertion
 		textareaElement.addEventListener('input', () => checkCursorPosition(textareaElement));
 		textareaElement.addEventListener('click', () => checkCursorPosition(textareaElement));
 	}
@@ -112,7 +240,7 @@
 
 	function setMathEditingState(btn: Element) {
 		mathEditorState = 'edit';
-		btn.classList.remove('bg-blue-500', 'hover:bg-blue-600');
+		btn.classList.remove('bg-green-500', 'hover:bg-green-600');
 		btn.classList.add('bg-orange-500', 'hover:bg-orange-600');
 		btn.textContent = 'Redaguoti formulę';
 		btn.removeEventListener('click', openMathEditorForCreating);
@@ -122,7 +250,7 @@
 	function setMathCreateState(btn: Element) {
 		mathEditorState = 'create';
 		btn.classList.remove('bg-orange-500', 'hover:bg-orange-600');
-		btn.classList.add('bg-blue-500', 'hover:bg-blue-600');
+		btn.classList.add('bg-green-500', 'hover:bg-green-600');
 		btn.textContent = 'Įterpti formulę';
 		btn.removeEventListener('click', openMathEditorForEditing);
 		btn.addEventListener('click', openMathEditorForCreating);
@@ -248,15 +376,15 @@
 </script>
 
 <div bind:this={mdEditor}>
-	<div class="text-black bg-white">
+	<div class="text-black bg-white relative">
 		<MarkdownEditor
 			mode="tabs"
-			placeholder="Čia galite rašyti Markdown, LaTex ir Tikz sintakse!"
+			placeholder="Čia galite rašyti tekstą, formules ir kita..."
 			{carta}
 			bind:value
 		/>
 	</div>
-	<div id="math-editor" class="hidden md:w-1/2 p-4 m-2 bg-blue-100 rounded-md relative">
+	<div id="math-editor" class="hidden md:w-1/2 p-4 m-2 bg-blue-100 rounded-md relative bg-">
 		<p>Formulės kūrimas/redagavimas</p>
 		<MathLiveEditor bind:mathfieldContainer onChange={insertTextAtCursor} />
 		<Button on:click={closeMathEditor} class="absolute top-0 right-0 w-fit h-fit">x</Button>
