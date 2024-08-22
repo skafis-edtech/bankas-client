@@ -89,8 +89,9 @@
 		const beforeCursor = textarea.value.slice(0, cursorPosition);
 		const afterCursor = textarea.value.slice(cursorPosition);
 
-		const beforeLastDollar = beforeCursor.lastIndexOf('$');
-		const afterFirstDollar = afterCursor.indexOf('$');
+		// Count the number of $ signs before and after the cursor
+		const beforeDollarCount = (beforeCursor.match(/\$/g) || []).length;
+		const afterDollarCount = (afterCursor.match(/\$/g) || []).length;
 
 		const formulaBtn = mdEditor?.querySelector('#formula-tool-btn');
 		if (!formulaBtn) {
@@ -98,10 +99,12 @@
 			return;
 		}
 
-		if (beforeLastDollar !== -1 && afterFirstDollar !== -1) {
-			// Cursor is between $ signs
+		// Check if the cursor is within an even number of $ signs on both sides
+		if (beforeDollarCount % 2 === 1) {
+			// Cursor is genuinely between a pair of $ signs
 			setMathEditingState(formulaBtn);
 		} else {
+			// Cursor is not between valid $ pairs
 			setMathCreateState(formulaBtn);
 			closeMathEditor(); // Close the math editor if the cursor is out of dollar sign boundaries
 		}
@@ -214,14 +217,27 @@
 			({ start, end } = getCursorBetweenDollarIndexes(textareaElement));
 		}
 
+		// Determine if a space is needed before or after the insertion
+		const beforeCursor = value[start - 1];
+		const afterCursor = value[end];
+
+		let insertText = text;
+
+		if (beforeCursor === '$') {
+			insertText = ' ' + insertText;
+		}
+		if (afterCursor === '$') {
+			insertText = insertText + ' ';
+		}
+
 		// Insert the text
-		value = value.slice(0, start) + text + value.slice(end);
+		value = value.slice(0, start) + insertText + value.slice(end);
 
 		// Update the textarea value
 		textareaElement.value = value;
 
-		// Calculate the position just after the first dollar sign
-		const cursorPosition = start + 1;
+		// Calculate the position just after the first dollar sign of the inserted text
+		const cursorPosition = start + (beforeCursor === '$' ? 2 : 1);
 
 		// Set the cursor position
 		textareaElement.setSelectionRange(cursorPosition, cursorPosition);

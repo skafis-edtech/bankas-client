@@ -23,6 +23,7 @@
 	gauti pelno, neskaitant savanoriškų MB Skafis paramų. Abiejų šalių sutartimu sąlygos gali būti
 	keičiamos.
 </p>
+
 <ol>
 	<li>keisti</li>
 	<li>...</li>
@@ -49,3 +50,15 @@
 </p>
 <h2>Tikz pavyzdžiai</h2>
 <a href="https://github.com/artisticat1/obsidian-tikzjax">Čia (pascrollint reikia)</a>
+<h2 id="terms">Platformos sąlygos</h2>
+<h4>Slapukai</h4>
+<p>
+	Šis tinklapis naudoja slapukus bei vietinę kompiuterio atmintį (angl. localStorage), kad pagerintų
+	Jūsų platformos naudojimo patirtį. Tęsdami naudojimąsi tinklapiu jūs sutinkate su:
+</p>
+<ul>
+	<li>Slapukų naudojimu</li>
+	<li>Vietinės atminties naudojimu</li>
+</ul>
+
+<p>Prisijunkdami patvirtinate, kad pateiktas el. pašto adresas yra teisinga</p>
