@@ -67,7 +67,7 @@
 	<form on:submit|preventDefault={register} class="space-y-6">
 		<div>
 			<Label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-				>El. paštas (nebus matomas kitiems)</Label
+				>El. paštas (nebus matomas kitiems, naudojamas susisiekimui bei slaptažodžio atkūrimui)</Label
 			>
 			<Input
 				id="email"
@@ -121,8 +121,12 @@
 		</div>
 		<div>
 			<Label for="terms" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-				Sutinku, kad mano el. paštas būtų naudojamas sistemos administratoriui su manimi susisiekti.
-				Patvirtinu, kad el. pašto adresas yra teisingas.
+				Perskaičiau ir sutinku su <a
+					href="/about#terms"
+					class="text-blue-600 hover:underline dark:text-blue-400"
+				>
+					platformos sąlygomis</a
+				>. Patvirtinu, kad el. pašto adresas yra teisingas.
 			</Label>
 			<Checkbox id="terms" required bind:checked={terms} class="mt-1 w-6 h-6 block" />
 		</div>
