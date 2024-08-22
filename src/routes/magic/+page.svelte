@@ -1,6 +1,5 @@
 <script lang="ts">
 	import MarkdownInput from '$components/forms/MarkdownInput.svelte';
-	import MathLiveEditor from '$components/forms/MathLiveEditor.svelte';
 </script>
 
 <div class="flex flex-col my-auto">

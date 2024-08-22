@@ -66,14 +66,37 @@
 		}
 
 		// Trnaslate the tabs to LT
-		const writeTab = mdEditor.querySelector('button[tabindex="0"]');
-		const previewTab = mdEditor.querySelector('button[tabindex="-1"]');
+		const writeTab = mdEditor.querySelector('button[tabindex="0"]') as HTMLButtonElement;
+		const previewTab = mdEditor.querySelector('button[tabindex="-1"]') as HTMLButtonElement;
 
 		if (!writeTab || !previewTab) {
 			console.error('Tabs not found');
 		} else {
 			if (writeTab.textContent === 'Write') writeTab.textContent = 'Rašymas';
 			if (previewTab.textContent === 'Preview') previewTab.textContent = 'Peržiūra';
+			previewTab.setAttribute(
+				'style',
+				'background-color: #4338ca; color: white; padding-left: 0.5rem; padding-right: 0.5rem; border-radius: 0.375rem; margin-left: 0.5rem; margin-right: 0.5rem; width: fit-content; transition: background-color 0.2s ease-in-out;'
+			);
+			previewTab.addEventListener('mouseover', function () {
+				previewTab.style.backgroundColor = '#3730a3'; // Darker green for hover
+			});
+
+			previewTab.addEventListener('mouseout', function () {
+				previewTab.style.backgroundColor = '#4338ca'; // Original green
+			});
+
+			writeTab.setAttribute(
+				'style',
+				'background-color: #f97316; color: white; padding-left: 0.5rem; padding-right: 0.5rem; border-radius: 0.375rem; margin-left: 0.5rem; margin-right: 0.5rem; width: fit-content; transition: background-color 0.2s ease-in-out;'
+			);
+			writeTab.addEventListener('mouseover', function () {
+				writeTab.style.backgroundColor = '#ea580c'; // Darker green for hover
+			});
+
+			writeTab.addEventListener('mouseout', function () {
+				writeTab.style.backgroundColor = '#f97316'; // Original green
+			});
 		}
 
 		// Add a button to insert math formulas
@@ -81,16 +104,18 @@
 		formulaButton.textContent = 'Įterpti formulę';
 		formulaButton.addEventListener('click', openMathEditorForCreating);
 		formulaButton.classList.add(
-			'bg-blue-500',
+			'bg-green-500',
 			'text-white',
 			'px-2',
 			'rounded-md',
-			'hover:bg-blue-600',
+			'hover:bg-green-600',
 			'mx-2',
-			'W-fit'
+			'w-fit',
+			'text-sm',
+			'p-0'
 		);
 		formulaButton.id = 'formula-tool-btn';
-		mdEditor.querySelector('.carta-toolbar')?.children[1]?.before(formulaButton);
+		mdEditor.querySelector('.carta-toolbar')?.children[2]?.before(formulaButton);
 
 		// Add a help button
 		const helpButton = document.createElement('button');
@@ -215,7 +240,7 @@
 
 	function setMathEditingState(btn: Element) {
 		mathEditorState = 'edit';
-		btn.classList.remove('bg-blue-500', 'hover:bg-blue-600');
+		btn.classList.remove('bg-green-500', 'hover:bg-green-600');
 		btn.classList.add('bg-orange-500', 'hover:bg-orange-600');
 		btn.textContent = 'Redaguoti formulę';
 		btn.removeEventListener('click', openMathEditorForCreating);
@@ -225,7 +250,7 @@
 	function setMathCreateState(btn: Element) {
 		mathEditorState = 'create';
 		btn.classList.remove('bg-orange-500', 'hover:bg-orange-600');
-		btn.classList.add('bg-blue-500', 'hover:bg-blue-600');
+		btn.classList.add('bg-green-500', 'hover:bg-green-600');
 		btn.textContent = 'Įterpti formulę';
 		btn.removeEventListener('click', openMathEditorForEditing);
 		btn.addEventListener('click', openMathEditorForCreating);
@@ -359,7 +384,7 @@
 			bind:value
 		/>
 	</div>
-	<div id="math-editor" class="hidden md:w-1/2 p-4 m-2 bg-blue-100 rounded-md relative">
+	<div id="math-editor" class="hidden md:w-1/2 p-4 m-2 bg-blue-100 rounded-md relative bg-">
 		<p>Formulės kūrimas/redagavimas</p>
 		<MathLiveEditor bind:mathfieldContainer onChange={insertTextAtCursor} />
 		<Button on:click={closeMathEditor} class="absolute top-0 right-0 w-fit h-fit">x</Button>
