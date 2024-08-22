@@ -24,7 +24,21 @@
 			return;
 		}
 		textareaElement = textarea;
-		makeLtAndAddMathButton();
+		customizeHeader();
+		customizeTextarea();
+
+		// Listen for clicks on the "Write" tab to reapply customizations
+		const writeTab = mdEditor.querySelector('button[tabindex="0"]');
+		if (writeTab) {
+			writeTab.addEventListener('click', () => {
+				// Reapply customizations when the "Write" tab is clicked
+				const newTextarea = mdEditor?.querySelector('textarea');
+				if (newTextarea) {
+					textareaElement = newTextarea;
+					customizeTextarea(); // Reapply event listeners and other customizations
+				}
+			});
+		}
 	});
 
 	const carta = new Carta({
@@ -45,24 +59,24 @@
 		extensions: [math(), tikz()]
 	});
 
-	function makeLtAndAddMathButton() {
+	function customizeHeader() {
 		if (!mdEditor) {
 			console.error('mdEditor is not found');
 			return;
 		}
 
-		// Localize button text
-		const writeTabs = mdEditor.querySelectorAll('button[tabindex="0"]');
-		const previewTabs = mdEditor.querySelectorAll('button[tabindex="-1"]');
+		// Trnaslate the tabs to LT
+		const writeTab = mdEditor.querySelector('button[tabindex="0"]');
+		const previewTab = mdEditor.querySelector('button[tabindex="-1"]');
 
-		writeTabs.forEach((writeTab) => {
+		if (!writeTab || !previewTab) {
+			console.error('Tabs not found');
+		} else {
 			if (writeTab.textContent === 'Write') writeTab.textContent = 'Rašymas';
-		});
-
-		previewTabs.forEach((previewTab) => {
 			if (previewTab.textContent === 'Preview') previewTab.textContent = 'Peržiūra';
-		});
+		}
 
+		// Add a button to insert math formulas
 		const formulaButton = document.createElement('button');
 		formulaButton.textContent = 'Įterpti formulę';
 		formulaButton.addEventListener('click', openMathEditorForCreating);
@@ -78,6 +92,95 @@
 		formulaButton.id = 'formula-tool-btn';
 		mdEditor.querySelector('.carta-toolbar')?.children[1]?.before(formulaButton);
 
+		// Add a help button
+		const helpButton = document.createElement('button');
+		helpButton.textContent = 'Pagalba';
+		helpButton.addEventListener('click', () => {
+			window.open('/about#editor-guide', '_blank');
+		});
+		helpButton.classList.add(
+			'bg-blue-500',
+			'text-white',
+			'px-2',
+			'rounded-md',
+			'hover:bg-blue-600',
+			'mx-2',
+			'W-fit'
+		);
+		mdEditor.querySelector('.carta-toolbar')?.children[3]?.after(helpButton);
+	}
+
+	function customizeTextarea() {
+		// Add keydown listener to intercept Enter key
+		textareaElement.addEventListener('keydown', (event) => {
+			if (event.key === 'Enter') {
+				event.preventDefault(); // Prevent default newline action
+
+				const cursorPosition = textareaElement.selectionStart;
+				const beforeCursor = textareaElement.value.slice(0, cursorPosition);
+				const afterCursor = textareaElement.value.slice(cursorPosition);
+
+				// Insert the backslash and newline character
+				textareaElement.value = `${beforeCursor}\\\n${afterCursor}`;
+
+				// Move the cursor to the correct position after inserting
+				textareaElement.setSelectionRange(cursorPosition + 2, cursorPosition + 2);
+
+				// Manually trigger an input event to update the editor's value
+				textareaElement.dispatchEvent(new Event('input', { bubbles: true }));
+			}
+			if (event.key === 'Tab') {
+				event.preventDefault(); // Prevent default tab action
+
+				const cursorPosition = textareaElement.selectionStart;
+				const beforeCursor = textareaElement.value.slice(0, cursorPosition - 1);
+				const afterCursor = textareaElement.value.slice(cursorPosition);
+
+				// Insert the tab character
+				textareaElement.value = `${beforeCursor}&emsp;${afterCursor}`;
+
+				// Move the cursor to the correct position after inserting
+				textareaElement.setSelectionRange(cursorPosition + 6, cursorPosition + 6);
+
+				// Manually trigger an input event to update the editor's value
+				textareaElement.dispatchEvent(new Event('input', { bubbles: true }));
+			}
+			if (event.key === ' ') {
+				event.preventDefault(); // Prevent default tab action
+
+				const cursorPosition = textareaElement.selectionStart;
+				const prevText = textareaElement.value.slice(cursorPosition - 6, cursorPosition); // Adjust slice length to match the longest string you're checking
+				if (
+					prevText.endsWith(' ') || // Regular space
+					prevText.endsWith('&nbsp;') || // Check if it ends with &nbsp;
+					prevText.endsWith('&emsp;') // Check if it ends with &emsp;
+				) {
+					const beforeCursor = textareaElement.value.slice(0, cursorPosition);
+					const afterCursor = textareaElement.value.slice(cursorPosition);
+
+					// Insert the tab character
+					textareaElement.value = `${beforeCursor}&nbsp;${afterCursor}`;
+
+					// Move the cursor to the correct position after inserting
+					textareaElement.setSelectionRange(cursorPosition + 6, cursorPosition + 6);
+
+					// Manually trigger an input event to update the editor's value
+					textareaElement.dispatchEvent(new Event('input', { bubbles: true }));
+				} else {
+					const beforeCursor = textareaElement.value.slice(0, cursorPosition);
+					const afterCursor = textareaElement.value.slice(cursorPosition);
+
+					// Insert the tab character
+					textareaElement.value = `${beforeCursor} ${afterCursor}`;
+
+					// Move the cursor to the correct position after inserting
+					textareaElement.setSelectionRange(cursorPosition + 1, cursorPosition + 1);
+					textareaElement.dispatchEvent(new Event('input', { bubbles: true }));
+				}
+			}
+		});
+
+		// Add input listener to check the cursor position - for formula insertion
 		textareaElement.addEventListener('input', () => checkCursorPosition(textareaElement));
 		textareaElement.addEventListener('click', () => checkCursorPosition(textareaElement));
 	}
@@ -248,10 +351,10 @@
 </script>
 
 <div bind:this={mdEditor}>
-	<div class="text-black bg-white">
+	<div class="text-black bg-white relative">
 		<MarkdownEditor
 			mode="tabs"
-			placeholder="Čia galite rašyti Markdown, LaTex ir Tikz sintakse!"
+			placeholder="Čia galite rašyti tekstą, formules ir kita..."
 			{carta}
 			bind:value
 		/>
