@@ -6,10 +6,11 @@
 	import { tikz } from '@cartamd/plugin-tikz';
 
 	export let value = '';
+	let markdowndisplay: HTMLDivElement;
 
 	onMount(() => {
-		const writeTabs = document.querySelectorAll('button[tabindex="0"]');
-		const previewTabs = document.querySelectorAll('button[tabindex="-1"]');
+		const writeTabs = markdowndisplay.querySelectorAll('button[tabindex="0"]');
+		const previewTabs = markdowndisplay.querySelectorAll('button[tabindex="-1"]');
 
 		writeTabs.forEach((writeTab) => {
 			if (writeTab.textContent === 'Write') writeTab.textContent = 'Rašymas';
@@ -17,6 +18,19 @@
 
 		previewTabs.forEach((previewTab) => {
 			if (previewTab.textContent === 'Preview') previewTab.textContent = 'Peržiūra';
+		});
+
+		const cartaeditors = markdowndisplay.querySelectorAll('.carta-editor');
+		cartaeditors.forEach((cartaeditor) => {
+			cartaeditor.classList.add('important-no-border');
+		});
+		const cartawrappers = markdowndisplay.querySelectorAll('.carta-wrapper');
+		cartawrappers.forEach((cartawrapper) => {
+			cartawrapper.classList.add('important-no-m-p');
+		});
+		const cartacontainer = markdowndisplay.querySelectorAll('.carta-renderer');
+		cartacontainer.forEach((carta) => {
+			carta.classList.add('important-no-m-p');
 		});
 	});
 
@@ -39,7 +53,7 @@
 	});
 </script>
 
-<div class="text-black scale-container">
+<div class="text-black scale-container" bind:this={markdowndisplay}>
 	<MarkdownEditor
 		mode="tabs"
 		disableToolbar

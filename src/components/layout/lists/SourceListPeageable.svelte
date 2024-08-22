@@ -1,12 +1,16 @@
 <script lang="ts">
-	import { publicApi } from '$services/apiService';
-	import type { SourceDisplayDto } from '$services/gen-client';
+	import { approvalApi, publicApi } from '$services/apiService';
+	import { SourceReviewStatusEnum, type SourceDisplayDto } from '$services/gen-client';
 	import { Button, Search } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import SourceWithProblems from './SourceWithProblems.svelte';
+	import SourceManageBar from '$components/ui/SourceManageBar.svelte';
+	import SourceReviewBar from '$components/ui/SourceReviewBar.svelte';
 
 	let sources: SourceDisplayDto[] = [];
 	export let searchValue = '';
+	export let sourcesSubset: 'all' | 'approved' | 'mine' | 'author';
+	export let author: string = '';
 	let page = 0;
 	let size = 8;
 	let timer: NodeJS.Timeout;
@@ -24,8 +28,25 @@
 	}
 
 	async function fetchSources() {
-		const sourcesRes = await publicApi.getApprovedSources(page, size, searchValue);
-		sources = sourcesRes.data;
+		if (sourcesSubset === 'mine') {
+			const response = await approvalApi.getMySources(page, size, searchValue);
+			sources = response.data;
+		} else if (sourcesSubset === 'all') {
+			const sourcesRes = await approvalApi.getPendingSources(page, size, searchValue);
+			sources = sourcesRes.data;
+		} else if (sourcesSubset === 'approved') {
+			const sourcesRes = await publicApi.getApprovedSources(page, size, searchValue);
+			sources = sourcesRes.data;
+		} else if (sourcesSubset === 'author') {
+			if (!author) {
+				console.error('Author not provided');
+				return;
+			}
+			const sourcesRes = await publicApi.getSourcesByAuthor(author, page, size, searchValue);
+			sources = sourcesRes.data;
+		} else {
+			console.error('Invalid sources subset');
+		}
 	}
 
 	async function changePage(direction: number) {
@@ -44,7 +65,33 @@
 <Search class="my-3" placeholder="Ieškoti" bind:value={searchValue} />
 
 {#each Object.entries(sources) as [id, source]}
-	<SourceWithProblems {source} {searchValue} />
+	{#if sourcesSubset === 'mine' && source.reviewStatus !== SourceReviewStatusEnum.Rejected}
+		<SourceWithProblems {source} {searchValue} needApprovalStatusNone="status" />
+	{/if}
+	{#if sourcesSubset === 'approved' || sourcesSubset === 'author'}
+		<SourceWithProblems
+			{source}
+			{searchValue}
+			needApprovalStatusNone="none"
+			showIndicator={false}
+		/>
+	{/if}
+	{#if sourcesSubset === 'mine' && source.reviewStatus === SourceReviewStatusEnum.Rejected}
+		<SourceManageBar
+			reviewStatus={source.reviewStatus}
+			sourceId={source.id}
+			reviewHistory={source.reviewHistory}
+		/>
+		<SourceWithProblems {source} {searchValue} needApprovalStatusNone="none" />
+	{/if}
+	{#if sourcesSubset === 'all'}
+		<SourceWithProblems
+			{source}
+			{searchValue}
+			needApprovalStatusNone="approval"
+			showIndicator={false}
+		/>
+	{/if}
 {/each}
 
 <div class="pagination">

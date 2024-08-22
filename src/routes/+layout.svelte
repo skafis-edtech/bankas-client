@@ -19,8 +19,18 @@
 	import { authInitialized } from '$lib/stores';
 	import HeaderDesktop from '$components/layout/HeaderDesktop.svelte';
 	import HeaderMobile from '$components/layout/HeaderMobile.svelte';
+	import { skfList } from '$utils/persistentStore';
 
 	const userStore: Writable<User | null> = writable(null);
+
+	setContext('skfList', {
+		list: skfList,
+		setList: (list: string[]) => skfList.set(list),
+		appendItemToList: (item: string) => skfList.update((currentList) => [...currentList, item]),
+		removeItemFromList: (item: string) =>
+			skfList.update((currentList) => currentList.filter((i) => i !== item)),
+		isInList: (item: string) => $skfList.includes(item)
+	});
 
 	const firebaseUnsubscribe = auth.onAuthStateChanged(async (user) => {
 		if (user) {
@@ -50,7 +60,7 @@
 	onDestroy(() => firebaseUnsubscribe());
 </script>
 
-<header>
+<header class="no-print">
 	<div class="block md:hidden"><HeaderMobile /></div>
 	<div class="hidden md:block"><HeaderDesktop /></div>
 	<p class="text-sm text-center my-2">
@@ -58,16 +68,15 @@
 	</p>
 </header>
 <main>
-	<aside></aside>
+	<aside class="no-print"></aside>
 	<section><slot /></section>
-	<aside>
+	<aside class="no-print">
 		<div class="fixed left-0 bottom-0">
 			<button on:click={() => goto('/magic')}><p>.</p></button>
 		</div>
 	</aside>
 </main>
-<footer><Footer /></footer>
-<GlobalAlert />
+<footer class="no-print"><Footer /><GlobalAlert /></footer>
 
 <style>
 	header {

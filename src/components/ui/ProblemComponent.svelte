@@ -1,10 +1,12 @@
 <script lang="ts">
-	import { Card } from 'flowbite-svelte';
+	import { Card, Checkbox } from 'flowbite-svelte';
 	import ProblemMeta from './ProblemMeta.svelte';
 	import type { Components } from '../../types';
 	import MarkdownDisplay from './MarkdownDisplay.svelte';
+	import { getContext } from 'svelte';
 
 	export let problemMainData: Components.ProblemMainData;
+	const { appendItemToList, removeItemFromList, isInList } = getContext<any>('skfList');
 </script>
 
 <Card class="min-w-full">
@@ -19,7 +21,20 @@
 						: '')}
 			/>
 		{/if}
-
+		<div class="flex justify-end">
+			<Checkbox
+				checked={isInList(problemMainData.skfCode)}
+				on:change={() => {
+					if (isInList(problemMainData.skfCode)) {
+						removeItemFromList(problemMainData.skfCode);
+					} else {
+						appendItemToList(problemMainData.skfCode);
+					}
+				}}
+			>
+				Pridėti prie &nbsp;<a href="/list">sąrašo</a>
+			</Checkbox>
+		</div>
 		{#if problemMainData.answerText || problemMainData.answerImageSrc.length > 0}
 			<details>
 				<summary class="text-right">Žr. atsakymą</summary>

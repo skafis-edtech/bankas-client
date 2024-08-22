@@ -10,6 +10,7 @@
 	import MarkdownInput from '$components/forms/MarkdownInput.svelte';
 	import type { SourceDisplayDto } from '$services/gen-client';
 	import SourceWithProblems from '$components/layout/lists/SourceWithProblems.svelte';
+	import SourceListPeageable from '$components/layout/lists/SourceListPeageable.svelte';
 
 	let authContext: AuthContext | undefined;
 	let user: AuthContext['user'] | undefined;
@@ -26,9 +27,7 @@
 	let editingState = false;
 	let editedBio = '';
 
-	let searchValue = '';
-
-	let sources: SourceDisplayDto[] = [];
+	let sourceSearchValue = '';
 
 	$: username = get(page).params.username;
 
@@ -39,14 +38,6 @@
 		} catch (e) {
 			console.error('Failed to load bio:', e);
 			bio = '';
-		}
-
-		try {
-			const sourcesRes = await publicApi.getSourcesByAuthor(username);
-			sources = sourcesRes.data;
-		} catch (e) {
-			console.error('Failed to load sources:', e);
-			sources = [];
 		}
 	});
 
@@ -97,14 +88,5 @@
 	</div>
 {/if}
 <h1 class="text-4xl font-semibold my-4 text-center">Šaltiniai</h1>
-{#if sources.length === 0}
-	<p class="text-center">Nėra šaltinių</p>
-{:else}
-	<Search class="my-3" placeholder="Ieškoti" bind:value={searchValue} />
 
-	{#each sources as source}
-		{#if source.name.toLowerCase().includes(searchValue.toLowerCase())}
-			<SourceWithProblems {source} {searchValue} />
-		{/if}
-	{/each}
-{/if}
+<SourceListPeageable searchValue={sourceSearchValue} sourcesSubset="author" author={username} />
