@@ -19,7 +19,7 @@
 	import { authInitialized } from '$lib/stores';
 	import HeaderDesktop from '$components/layout/HeaderDesktop.svelte';
 	import HeaderMobile from '$components/layout/HeaderMobile.svelte';
-	import { skfList, cookiesAccepted } from '$utils/persistentStore';
+	import { skfList, websiteState } from '$utils/persistentStore';
 	import { Alert } from 'flowbite-svelte';
 
 	const userStore: Writable<User | null> = writable(null);
@@ -76,12 +76,12 @@
 </main>
 <footer class="no-print">
 	<Footer /><GlobalAlert />
-	{#if !$cookiesAccepted}
+	{#if $websiteState === 0}
 		<Alert
 			class="fixed bottom-2 w-full left-0 text-lg"
 			color="blue"
 			dismissable
-			on:click={() => ($cookiesAccepted = true)}
+			on:click={() => ($websiteState = 1)}
 			border
 		>
 			Šis tinklapis naudoja Google Analytics slapukus bei Jūsų kompiuterio atmintį. Tęsdami

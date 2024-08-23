@@ -7,7 +7,7 @@
 	import { getNiceTimeString } from '$lib/utils';
 	import { approvalApi } from '$services/apiService';
 	import {
-		SourceReviewStatusEnum,
+		SourceDisplayDtoReviewStatusEnum,
 		type ProblemDisplayViewDto,
 		type SourceDisplayDto
 	} from '$services/gen-client';
@@ -20,6 +20,10 @@
 
 	let problems: (ProblemDisplayViewDto | null)[] = [];
 	let isOpen = false;
+
+	$: if (isOpen && problems.length === 0 && source.problemCount > 0) {
+		loadProblems();
+	}
 
 	const pageSize = 5;
 	let page = 0;
@@ -42,9 +46,9 @@
 		<span slot="header" class="text-black flex justify-between items-center w-full">
 			{#if showIndicator}
 				<Indicator
-					color={source.reviewStatus === SourceReviewStatusEnum.Pending
+					color={source.reviewStatus === SourceDisplayDtoReviewStatusEnum.Pending
 						? 'yellow'
-						: source.reviewStatus === SourceReviewStatusEnum.Rejected
+						: source.reviewStatus === SourceDisplayDtoReviewStatusEnum.Rejected
 							? 'red'
 							: 'green'}
 					class="m-2"
@@ -57,7 +61,9 @@
 					{source.name}
 				{/if}
 			</p>
-			<p class="ml-auto text-right mr-2"><strong>({source.authorUsername})</strong></p>
+			<p class="ml-auto text-right mr-2">
+				<strong>({source.problemCount})</strong> <em>{source.authorUsername}</em>
+			</p>
 		</span>
 		<MarkdownDisplay value={source.description} />
 		<div>
@@ -103,7 +109,13 @@
 					{/if}
 				{/each}
 			</div>
-			<Button on:click={loadProblems} class="my-2">Rodyti +5 užduotis</Button>
+			{#if problems.length < source.problemCount}
+				<Button on:click={loadProblems} class="my-2"
+					>Rodyti +{source.problemCount - problems.length < 5
+						? source.problemCount - problems.length
+						: 5} užd.</Button
+				>
+			{/if}
 		</div></AccordionItem
 	>
 </Accordion>

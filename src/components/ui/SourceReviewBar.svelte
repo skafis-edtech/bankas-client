@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SourceReviewStatusEnum } from '$services/gen-client';
+	import { SourceDisplayDtoReviewStatusEnum } from '$services/gen-client';
 	import { Badge, Button, Input, Popover } from 'flowbite-svelte';
 	import { CheckCircleSolid, CloseCircleSolid, MessageDotsOutline } from 'flowbite-svelte-icons';
 	import { approvalApi } from '$services/apiService';
@@ -7,7 +7,7 @@
 	import { getNiceTimeString } from '$lib/utils';
 	import AuthorLink from './AuthorLink.svelte';
 
-	export let reviewStatus: SourceReviewStatusEnum;
+	export let reviewStatus: SourceDisplayDtoReviewStatusEnum;
 	export let sourceId: string;
 	export let reviewHistory: string;
 
@@ -17,13 +17,13 @@
 
 	let bgForBar = '';
 	let placeholder = '';
-	if (reviewStatus === SourceReviewStatusEnum.Pending) {
+	if (reviewStatus === SourceDisplayDtoReviewStatusEnum.Pending) {
 		bgForBar = 'bg-yellow-400';
 		placeholder = 'Čia galite parašyti žinutę...';
-	} else if (reviewStatus === SourceReviewStatusEnum.Rejected) {
+	} else if (reviewStatus === SourceDisplayDtoReviewStatusEnum.Rejected) {
 		bgForBar = 'bg-slate-400';
 		placeholder = 'Galite peržiūrėti ir papildyti kito peržiūrėtojo pastabas savomis...';
-	} else if (reviewStatus === SourceReviewStatusEnum.Approved) {
+	} else if (reviewStatus === SourceDisplayDtoReviewStatusEnum.Approved) {
 		bgForBar = 'bg-slate-300';
 		placeholder = 'Nieko nereikia daryti. Nebent norite atšaukti patvirtinimą...';
 	} else {
@@ -44,13 +44,13 @@
 </script>
 
 <div class={`flex flex-row gap-4 ${bgForBar} p-2 rounded-t-md`}>
-	{#if reviewStatus === SourceReviewStatusEnum.Pending}
+	{#if reviewStatus === SourceDisplayDtoReviewStatusEnum.Pending}
 		<Badge color="yellow" class="ml-2">Peržiūrėkite</Badge>
 	{/if}
-	{#if reviewStatus === SourceReviewStatusEnum.Rejected}
+	{#if reviewStatus === SourceDisplayDtoReviewStatusEnum.Rejected}
 		<Badge color="red" class="ml-2">Jau atmesta</Badge>
 	{/if}
-	{#if reviewStatus === SourceReviewStatusEnum.Approved}
+	{#if reviewStatus === SourceDisplayDtoReviewStatusEnum.Approved}
 		<Badge color="green" class="ml-2">Jau patvirtinta</Badge>
 	{/if}
 	{#if reviewHistory !== ''}

@@ -8,6 +8,7 @@
 
 details > summary {
 	list-style-type: '⊕ ';
+	cursor: pointer;
 }
 
 details[open] > summary {

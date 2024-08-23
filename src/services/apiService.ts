@@ -2,10 +2,8 @@ import axios from 'axios';
 import {
 	ApprovalControllerApi,
 	CategoryControllerApi,
-	ProblemControllerApi,
 	PublicControllerApi,
 	SortControllerApi,
-	SourceControllerApi,
 	UserControllerApi
 } from './gen-client/api';
 import { BASE_PATH } from './gen-client/base';
@@ -50,11 +48,11 @@ export const setAuthToken = (token: string | null) => {
 };
 
 const categoryApi = new CategoryControllerApi(undefined, BASE_PATH, axiosInstance);
-const problemApi = new ProblemControllerApi(undefined, BASE_PATH, axiosInstance);
-const sourceApi = new SourceControllerApi(undefined, BASE_PATH, axiosInstance);
+// const problemApi = new ProblemControllerApi(undefined, BASE_PATH, axiosInstance);
+// const sourceApi = new SourceControllerApi(undefined, BASE_PATH, axiosInstance);
 const approvalApi = new ApprovalControllerApi(undefined, BASE_PATH, axiosInstance);
 const sortApi = new SortControllerApi(undefined, BASE_PATH, axiosInstance);
 const publicApi = new PublicControllerApi(undefined, BASE_PATH, axiosInstance);
 const userApi = new UserControllerApi(undefined, BASE_PATH, axiosInstance);
 
-export { categoryApi, problemApi, sourceApi, approvalApi, sortApi, publicApi, userApi };
+export { categoryApi, /*problemApi, sourceApi,*/ approvalApi, sortApi, publicApi, userApi };

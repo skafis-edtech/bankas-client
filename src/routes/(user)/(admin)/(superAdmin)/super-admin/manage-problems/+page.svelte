@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
 	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
 	import type { Problem, ProblemPostDto } from '$services/gen-client';
@@ -297,4 +297,4 @@
 		</div>
 		<button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Create</button>
 	</form>
-</div>
+</div> -->

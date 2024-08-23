@@ -126,7 +126,8 @@
 					class="text-blue-600 hover:underline dark:text-blue-400"
 				>
 					platformos sąlygomis</a
-				>. Patvirtinu, kad el. pašto adresas yra teisingas.
+				> (galite teikti pasiūlymus pakeitimui el. paštu info@skafis.lt). Patvirtinu, kad el. pašto adresas
+				yra teisingas.
 			</Label>
 			<Checkbox id="terms" required bind:checked={terms} class="mt-1 w-6 h-6 block" />
 		</div>

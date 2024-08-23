@@ -1,39 +1,24 @@
 <h1 class="text-4xl font-semibold my-4 text-center">Apie</h1>
-<p>
-	Pirmas etapas (dabar): keliamos autorinės užduotys (pradžioje tik trijų dalykų), peržiūrimos ir
-	patvirtinamos. Administratoriai kuria šių dalykų kategorijas, ruošia užduočių rūšiavimui. Jau
-	galima sudarinėti užduočių sąrašus (dar negalima generuoti PDF).
-</p>
-<p>Antras etapas: rūšiuojama į kategoijas, galima generuoti sąrašo PDF.</p>
-<p>
-	Trečias etapas: Integruojama su testai.skafis.lt, skafis.lt, etestavimas.skafis.lt (būsima TAO
-	sistema)
-</p>
+<p>Funkcionalumų etapai:</p>
+<ul>
+	<li>
+		Pirmas etapas (dabar): keliamos autorinės užduotys (pradžioje tik trijų dalykų), peržiūrimos ir
+		patvirtinamos. Administratoriai kuria šių dalykų kategorijas ateities užduočių rūšiavimui. Jau
+		galima sudarinėti užduočių sąrašus (dalintis sąrašų nuorodomis) bei generuoti užduočių ir
+		atsakymų PDF'us.
+	</li>
+	<li>
+		Antras etapas: rūšiuojama į sukurtas kategorijas esamos užduotys, keliamos naujų dalykų
+		užduotys, įtraukiama išoriniai užduočių šaltiniai (ne autorinės užduotys).
+	</li>
+	<li>
+		Trečias etapas: integruojama su testai.skafis.lt, skafis.lt, etestavimas.skafis.lt (būsima TAO
+		sistema)
+	</li>
+</ul>
 
-<h2 class="text-2xl font-semibold my-4">MB Skafis</h2>
-<p>
-	Neseniai įkurta įmonė MB Skafis, jos piniginis šaltinis bus tik savanoriškos paramos. Šiuo metu
-	nėra atidarytos sąskaitos, todėl paramų procesas neveikia. Savanoriškos paramos ateityje bus
-	dalinamos administratoriams, dalių skaičiavimai bus pateikti vėliau. Pateikdami.... dalinai
-	perleidžiate turtines autorines teises MB Skafis, leisdami bet kokiems asmenims iki turtinių
-	autorinių teisių galiojimo laikotarpio pabaigos (arba raštiškai sutariant dėl pakeitimų su MB
-	Skafis) kopijuoti (pvz.: turėti atsispausdintą kopiją), keisti (pvz.: pakeisti uždavinio sąlygą
-	atsiskaitymui), išleisti (pvz.: sudaryti uždavinių sąrašus ir juos paviešinti), atlikti (pvz.:
-	spręsti uždavinius viešame renginyje), tačiau ne parduoti, ne gauti pelno, neskaitant savanoriškų
-	MB Skafis paramų. Abiejų šalių sutartimu sąlygos gali būti keičiamos.
-</p>
-<p>Perduodate VISAS neturtines teises...kai tokiu yra...</p>
-<ol>
-	<li>keisti</li>
-	<li>...</li>
-</ol>
-
-<h2 class="text-2xl font-semibold my-4">Ypatingas ačiū</h2>
-<p>Ačiū visiems, kad prisidedate ir keliate užduotis bei ypatingas ačiū administratoriams:</p>
-<ol>
-	<li>...</li>
-	<li>...</li>
-</ol>
+<h2 class="text-2xl font-semibold my-4 text-center">Nuorodos</h2>
+<p>El. paštas: <a href="mailto:info@skafis.lt">info@skafis.lt</a></p>
 <p>
 	Tinklapio kodas: <a href="https://github.com/nagissul/bankas-skafis"
 		>https://github.com/naglissul/bankas-skafis</a
@@ -47,21 +32,123 @@
 	Tinklaraštis ir kiti projektai:
 	<a target="_blank" rel="noopener noreferrer" href="https://www.npw.lt">npw.lt </a>
 </p>
-<h2>Tikz pavyzdžiai</h2>
-<a href="https://github.com/artisticat1/obsidian-tikzjax">Čia (pascrollint reikia)</a>
-<h2 id="terms">Platformos sąlygos</h2>
-<h4>Slapukai</h4>
+<h2 class="text-2xl font-semibold my-4 text-center">Apie MB Skafis</h2>
+<p>
+	Įmonė MB Skafis kuria švietimo technologijas mokytojams, mokiniams, mokykloms. Vienas iš MB Skafis
+	produktų yra šis užduočių bankas, kuriame mokytojai gali kelti savo autorines (ateityje ir kitas)
+	užduotis bei bet kas gali prieiti prie įkeltų užduočių. Įmonės piniginis šaltinis bus tik
+	savanoriškos paramos. Šiuo metu nėra atidarytoČia banko sąskaitos, todėl paramų procesas neveikia.
+	Savanoriškos paramos dalinai bus paskirstomos administratoriams (šis procesas bus aprašytas
+	vėliau).
+</p>
+
+<h2 id="terms" class="text-2xl font-semibold my-4 text-center">Privatumo politika ir sąlygos</h2>
+<p>Abiejų šalių sutartimu sąlygos gali būti keičiamos.</p>
+<p><strong>1. Naudodamiesi tinklapiu sutinkate su šiomis sąlygomis:</strong></p>
+<h4 class="text-xl font-semibold my-4">1.1. Slapukai</h4>
 <p>
 	Šis tinklapis naudoja slapukus bei vietinę kompiuterio atmintį (angl. localStorage), kad pagerintų
 	Jūsų platformos naudojimo patirtį. Tęsdami naudojimąsi tinklapiu jūs sutinkate su:
 </p>
 <ul>
-	<li>Slapukų naudojimu</li>
-	<li>Vietinės atminties naudojimu</li>
+	<li>
+		Google Analytics slapukų naudojimu su tikslu sekti tinklapio gyvybingumą ir atitinkamai gerinti
+		paslaugas,
+	</li>
+	<li>
+		Vietinės atminties (localStorage) naudojimu, įgyvendinant esminius tinklapio funkcionalumus
+		(pagrindinis iš jų - užduočių sąrašo išsaugojimas).
+	</li>
 </ul>
+<h4 class="text-xl font-semibold my-4">1.2. Užduočių naudojimas</h4>
+<p>
+	Naudojantis užduotimis turėkite omenyje, kad joms galioja <a
+		href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA</a
+	> licencija. T.y. galite laisvai naudotis, dalintis, adaptuoti, tačiau ne pardavinėti, plačiai dalinantis
+	turite kredituoti autorių. Autoriaus vardo minėjimui, platinant užduočių turinį už artimos aplinkos
+	ribų, pakanka paminėti tinklapį bei užduoties unikalų SKF kodą bet kokia forma (arba naudotojo prisijungimo
+	vardą), nebent autorius leidžia kitaip (tuomet pakanka tik paminėti tik tinklapį).
+</p>
+<p class="mt-4">
+	<strong
+		>2. Registruodamiesi ir naudodami tinklapį prisijungę sutinkate su minėtomis aukščiau (1.
+		punktas) bei šiomis sąlygomis:</strong
+	>
+</p>
 
-<p>Prisijunkdami patvirtinate, kad pateiktas el. pašto adresas yra teisinga</p>
+<h4 class="text-xl font-semibold my-4">2.1. Registracija bei asmens duomenys</h4>
+<p>
+	Prisijungdami patvirtinate, kad pateiktas el. pašto adresas yra teisingas. Jis naudojamas tik MB
+	Skafis direktoriui susiekti su Jumis tinklapio tvarkymo, susijusio su Jumis, tikslais ir nėra
+	matomas kitiems naudotojams. Jūsų prisijungimo vardas matomas visiems viešai, jį, slaptažodį ir
+	el. paštą galima pakeisti susisiekiant el. paštu info@skafis.lt. Taip pat, susisiekus galite
+	pašalinti savo paskyrą.
+</p>
+<p>
+	Prisijungimo vardas nėra priskiriamas prie asmens duomenų, todėl jei naudojate save
+	identifikuojančius žodžius, MB Skafis netvarko Jūsų duomenų išskirtinai kaip asmens duomenų.
+	Informacija apie paskyrą (el. paštas, prisijungimo vardas, biografija) yra laikoma iki naudotojo
+	išsiregistravimo iš aplinkos.
+</p>
+<p>
+	Vienintelė vieta, kur gali išlikti Jūsų senas prisijungimo vardas, jį pakeitus, tai prie užduočių
+	rinkinio peržiūrėjimo istorijos, jei esate administratorius (matoma kitiems administratoriams bei
+	šaltinio autoriui).
+</p>
+<h4 class="text-xl font-semibold my-4" id="upload-terms">2.2. Užduočių kėlimas</h4>
+<p>
+	Teikdami užduotis peržiūrai patvirtinate, kad keliate tik savo autorines užduotis (kitais atvejais
+	kreipkitės el. paštu info@skafis.lt), bei sutinkate kad jūsų turiniui galiotų <a
+		href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA</a
+	> licencija.
+</p>
 
-<h2 id="editor-guide">Teksto įvesties gidas</h2>
-<p>Čia galite rašyti Markdown, LaTex ir Tikz sintakse!</p>
-<p>https://cortexjs.io/mathlive/</p>
+<h4 class="text-xl font-semibold my-4">2.4. Turinio ištrinimas</h4>
+<p>Savo sukurtą turinį bet kada galite ištrinti.</p>
+
+<h2 id="editor-guide" class="text-2xl font-semibold my-4 text-center">Teksto įvesties gidas</h2>
+<p>Teksto įvestyje galite rašyti Markdown, LaTex ir Tikz sintakse!</p>
+<p>
+	Tekstas vedamas paprastai. Tačiau paspaudus Enter yra prirašomas \ simbolis - tik taip matysis
+	nauja eilutė tą tekstą atvaizduojant. Panašiai atsisinka vedant daug tarpų arba TAB simbolių.
+	Paspaudę "Peržiūra" galite pamatyti, įvestas tekstas bus atvaizduotas.
+</p>
+<p>
+	Formules galite vesti ranka (tarp $ simbolių) latex (katex) sintakse, arba naudojantis "Įterpti
+	formulę"/"Redaguoti formulę" mygtuku bei po jo paspaudimo atsiradusiu formulių redaktoriumi.
+</p>
+<p>
+	Galite įkelti tik vieną paveiksliuką vienam įvesties laukui - paveiksliukas bus patalpintas po
+	tekstu.
+</p>
+<h4 class="text-xl font-semibold my-4">Tikz</h4>
+<p>Tikz skirtas piešti iliustracijas (diagramas).</p>
+<p>Rašydami tikz tekstą, jį patalpinkite ```tikz ... ``` rėmuose</p>
+<p>Teksto įvesties palaikomi tikz paketai (bibliotekos):</p>
+<ul>
+	<li>chemfig</li>
+	<li>tikz-cd</li>
+	<li>circuitikz</li>
+	<li>pgfplots</li>
+	<li>array</li>
+	<li>amsmath</li>
+	<li>amstext</li>
+	<li>amsfonts</li>
+	<li>amssymb</li>
+	<li>tikz-3dplot</li>
+</ul>
+<p>
+	<a href="https://github.com/artisticat1/obsidian-tikzjax?tab=readme-ov-file#examples"
+		>Oficialūs pavyzdžiai</a
+	>
+</p>
+<p>
+	<a href="https://github.com/naglissul/bankas-skafis/blob/main/OTHER_DOCS.md#tikz-examples"
+		>Daugiau pavyzdžių</a
+	>
+</p>
+<h4 class="text-xl font-semibold my-4">Plačiau apie naudojamus įrankius</h4>
+<ul>
+	<li><a href="https://beartocode.github.io/carta/introduction">carta-md</a></li>
+	<li><a href="https://cortexjs.io/mathlive/">math-live</a></li>
+</ul>

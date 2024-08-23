@@ -1,7 +1,11 @@
-<script lang="ts">
+<!-- <script lang="ts">
 	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
-	import { SourceReviewStatusEnum, type Source, type SourcePostDto } from '$services/gen-client';
+	import {
+		SourceDisplayDtoReviewStatusEnum,
+		type Source,
+		type SourcePostDto
+	} from '$services/gen-client';
 	import { sourceApi } from '$services/apiService';
 	import { goto } from '$app/navigation';
 
@@ -15,7 +19,7 @@
 	let newSource: SourcePostDto = {
 		name: '',
 		description: '',
-		reviewStatus: SourceReviewStatusEnum.Pending,
+		reviewStatus: SourceDisplayDtoReviewStatusEnum.Pending,
 		reviewHistory: '',
 		authorId: '',
 		createdOn: '',
@@ -277,4 +281,4 @@
 		</div>
 		<button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Create</button>
 	</form>
-</div>
+</div> -->

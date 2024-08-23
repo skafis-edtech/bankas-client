@@ -22,22 +22,24 @@
 			/>
 		{/if}
 		<div class="flex justify-end">
-			<Checkbox
-				checked={isInList(problemMainData.skfCode)}
-				on:change={() => {
-					if (isInList(problemMainData.skfCode)) {
-						removeItemFromList(problemMainData.skfCode);
-					} else {
-						appendItemToList(problemMainData.skfCode);
-					}
-				}}
-			>
-				Pridėti prie &nbsp;<a href="/list">sąrašo</a>
-			</Checkbox>
+			{#if problemMainData.skfCode.substring(0, 4) === 'SKF-'}
+				<Checkbox
+					checked={isInList(problemMainData.skfCode)}
+					on:change={() => {
+						if (isInList(problemMainData.skfCode)) {
+							removeItemFromList(problemMainData.skfCode);
+						} else {
+							appendItemToList(problemMainData.skfCode);
+						}
+					}}
+				>
+					Pridėti prie &nbsp;<a href="/list">sąrašo</a>
+				</Checkbox>
+			{/if}
 		</div>
 		{#if problemMainData.answerText || problemMainData.answerImageSrc.length > 0}
 			<details>
-				<summary class="text-right">Žr. atsakymą</summary>
+				<summary class="w-fit ml-auto">Žr. atsakymą</summary>
 				<p><strong>Atsakymas:</strong></p>
 				<MarkdownDisplay
 					value={problemMainData.answerText +

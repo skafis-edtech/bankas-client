@@ -7,22 +7,21 @@
 	import { Button, ButtonGroup, Input } from 'flowbite-svelte';
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
 	import MarkdownDisplay from '$components/ui/MarkdownDisplay.svelte';
-	import {
-		ArrowDownToBracketOutline,
-		ArrowUpFromBracketOutline,
-		CloseOutline,
-		PlusOutline
-	} from 'flowbite-svelte-icons';
+	import { CloseOutline, PlusOutline } from 'flowbite-svelte-icons';
+	import type { Writable } from 'svelte/store';
 
 	let skfList: string[] = [];
 	let problems: ProblemDisplayViewDto[] = [];
-	let html2pdf: any;
 	let pdfTitle = 'Užduotys';
 	let includeLink = true;
 	let printAnswers = false;
 	let windowLocation: string | null = null;
+	let isDifferentList = false;
 
-	const { list, setList } = getContext<any>('skfList');
+	$: isDifferentList = JSON.stringify($list) !== JSON.stringify(skfList);
+
+	const { list, setList }: { list: Writable<string[]>; setList: (value: string[]) => void } =
+		getContext<any>('skfList');
 
 	onMount(async () => {
 		const urlParams = new URLSearchParams(window.location.search);
@@ -32,7 +31,7 @@
 			.filter((item) => !isNaN(Number(item)))
 			.map((item) => `SKF-${item}`);
 		if (skfList[0] === 'SKF-') {
-			skfList = $list;
+			skfList = [...$list]; // Ensure reactivity by copying $list
 			updateUrl();
 		}
 
@@ -44,24 +43,20 @@
 		windowLocation = window.location.href.slice(8);
 	});
 
-	async function downloadPdf() {
-		window.print();
-	}
-
 	function addSkfItem() {
-		skfList = [...skfList, `SKF-`];
-		updateUrl();
+		setList([...$list, `SKF-`]);
 	}
 
 	function updateSkfItem(index: number, e: Event) {
 		const value = (e.target as HTMLInputElement).value;
-		skfList[index] = value;
-		updateUrl();
+		const updatedList = [...$list];
+		updatedList[index] = value;
+		setList(updatedList);
 	}
 
 	function removeSkfItem(index: number) {
-		skfList = skfList.filter((_, i) => i !== index);
-		updateUrl();
+		const updatedList = $list.filter((_, i) => i !== index);
+		setList(updatedList);
 	}
 
 	function updateUrl() {
@@ -76,18 +71,15 @@
 		window.location.reload();
 	}
 	function clearList() {
-		skfList = [];
-		updateUrl();
-	}
-
-	function updateStorage() {
-		setList(skfList);
+		setList([]);
 	}
 </script>
 
 <div class="no-print">
 	<h1 class="text-4xl font-semibold my-4 text-center">Atrinktų užduočių sąrašas</h1>
-	<p class="text-center mb-4">Atrinkta pagal nuorodą - ją galite kopijuoti ir dalintis</p>
+	<p class="text-center mb-4">
+		Atrinkta pagal nuorodą - ją galite kopijuoti ir dalintis. Daugiau funkcionalumų apačioje
+	</p>
 	{#if problems.length > 0}
 		{#each problems as problem, i}
 			<div class="relative my-2">
@@ -130,7 +122,7 @@
 			<Button
 				color="blue"
 				on:click={() => {
-					downloadPdf();
+					window.print();
 				}}>Atsisiųsti PDF</Button
 			>
 		</div>
@@ -223,11 +215,14 @@
 	</div>
 </div>
 
-<div class="no-print mt-24">
-	<h2 class="text-3xl font-semibold my-8 text-center">SKF sąrašas</h2>
-	{#if skfList.length > 0}
+<div class="no-print mt-24 border-t-2 border-black">
+	<h2 class="text-3xl font-semibold my-4 text-center">Jūsų sukurtas sąrašas</h2>
+	<p class="text-center mb-4">
+		{isDifferentList ? '(šiuo metu rodomas sąrašas skiriasi)' : '(šiuo metu yra rodomas)'}
+	</p>
+	{#if $list.length > 0}
 		<div class="flex flex-col gap-2 flex-wrap h-48">
-			{#each skfList as skf, index}
+			{#each $list as skf, index}
 				<div class="flex flex-row gap-2 items-center w-28">
 					<Input
 						type="text"
@@ -245,19 +240,21 @@
 			{/each}
 			<Button color="green" on:click={addSkfItem} class="h-8 w-28"><PlusOutline /></Button>
 		</div>
+		<Button on:click={clearList} color="red">Išvalyti sąrašą</Button>
 	{:else}
 		<p>Nėra sąrašo</p>
 	{/if}
-	<Button on:click={clearList} color="red">Išvalyti sąrašą</Button>
-	<Button on:click={reloadPage} color="blue">Rodyti užduotis (perkrauti puslapį)</Button>
-	<div class="my-4">
-		<h3 class="my-4">Kompiuterio atmintis:</h3>
-		<Button on:click={updateStorage} color="purple"><ArrowDownToBracketOutline /></Button>
-		<Button on:click={() => (skfList = $list)} color="purple"><ArrowUpFromBracketOutline /></Button>
-		<div>
-			{JSON.stringify($list)}
+	{#if isDifferentList}
+		<div class="flex flex-row justify-center gap-4 mt-4">
+			<Button
+				on:click={() => {
+					history.replaceState(null, '', '/list');
+					reloadPage();
+				}}
+				color="blue">Rodyti Jūsų sukurtą sąrašą</Button
+			>
 		</div>
-	</div>
+	{/if}
 </div>
 
 <style>
