@@ -19,7 +19,8 @@
 	import { authInitialized } from '$lib/stores';
 	import HeaderDesktop from '$components/layout/HeaderDesktop.svelte';
 	import HeaderMobile from '$components/layout/HeaderMobile.svelte';
-	import { skfList } from '$utils/persistentStore';
+	import { skfList, websiteState } from '$utils/persistentStore';
+	import { Alert } from 'flowbite-svelte';
 
 	const userStore: Writable<User | null> = writable(null);
 
@@ -63,9 +64,6 @@
 <header class="no-print">
 	<div class="block md:hidden"><HeaderMobile /></div>
 	<div class="hidden md:block"><HeaderDesktop /></div>
-	<p class="text-sm text-center my-2">
-		Naudodamiesi šiuo tinklapiu jūs sutinkate su Google Analytics slapukų naudojimu.
-	</p>
 </header>
 <main>
 	<aside class="no-print"></aside>
@@ -76,11 +74,27 @@
 		</div>
 	</aside>
 </main>
-<footer class="no-print"><Footer /><GlobalAlert /></footer>
+<footer class="no-print">
+	<Footer /><GlobalAlert />
+	{#if $websiteState === 0}
+		<Alert
+			class="fixed bottom-2 w-full left-0 text-lg"
+			color="blue"
+			dismissable
+			on:click={() => ($websiteState = 1)}
+			border
+		>
+			Šis tinklapis naudoja Google Analytics slapukus bei Jūsų kompiuterio atmintį. Tęsdami
+			lankymąsi puslapyje Jūs sutinkate su slapukų bei kompiuterio atminties naudojimu. Plačiau
+			puslapyje{' '}
+			<a href="/about#terms">"Apie"</a>.
+		</Alert>
+	{/if}
+</footer>
 
 <style>
 	header {
-		height: 95px;
+		height: 60px;
 	}
 	footer {
 		height: 68px;
@@ -88,7 +102,7 @@
 		text-align: center;
 	}
 	main {
-		min-height: calc(100vh - 95px - 68px);
+		min-height: calc(100vh - 60px - 68px);
 		display: flex;
 	}
 	section {

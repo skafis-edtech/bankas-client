@@ -1,31 +1,34 @@
-# Using markdown editor
+# Tikz examples
 
-    ```tikz
-    \begin{document}
-      \begin{tikzpicture}
+````latex
+```tikz
+\begin{document}
+  \begin{tikzpicture}
 
-    	% Draw grid
-    	\draw[step=1cm,very thin,color=black!50] (-5,-5) grid (5,5);
+  % Draw grid
+  \draw[step=1cm,very thin,color=black!50] (-5,-5) grid (5,5);
 
-    	% Draw axes
-    	\draw[->] (-4.2,0) -- (4.2,0) node[below] {$x$};
-    	\draw[->] (0,-4.2) -- (0,4.2) node[right] {$y$};
+  % Draw axes
+  \draw[->] (-4.2,0) -- (4.2,0) node[below] {$x$};
+  \draw[->] (0,-4.2) -- (0,4.2) node[right] {$y$};
 
-    	% Draw absolute value function
-    	\draw[thick,blue,domain=-4:4] plot (\x,{abs(\x)}) node[right] {$y = |x|$};
+  % Draw absolute value function
+  \draw[thick,blue,domain=-4:4] plot (\x,{abs(\x)}) node[right] {$y = |x|$};
 
-    	% Draw horizontal line y=2
-    	\draw[thick,green!80!black] (-4,2) -- (4,2) node[right] {$y = 2$};
+  % Draw horizontal line y=2
+  \draw[thick,green!80!black] (-4,2) -- (4,2) node[right] {$y = 2$};
 
-    	% Labels for specific points
-    	\node[below] at (1,0) {1};
-    	\node[left] at (0,1) {1};
+  % Labels for specific points
+  \node[below] at (1,0) {1};
+  \node[left] at (0,1) {1};
 
-      \end{tikzpicture}
-    \end{document}
-    ```
+  \end{tikzpicture}
+\end{document}
+```
+````
 
-    ```tikz
+````latex
+```tikz
 
 \begin{document}
 \begin{tikzpicture}
@@ -47,10 +50,13 @@
 \end{tikzpicture}
 \end{document}
 
+```
 ````
 
+````latex
 Užrašykite parabolės, kurios pavaizduotas grafikas, formulę
 pavidalu $f(x) = ax^2 + bx + c$.
+
 ```tikz
 \begin{document}
   \begin{tikzpicture}
@@ -71,26 +77,5 @@ pavidalu $f(x) = ax^2 + bx + c$.
 
   \end{tikzpicture}
 \end{document}
+```
 ````
-
-# Not really important stuff
-
-## stuff/process/logs
-
-### 2024-06-18
-
-I have backend!!! (some kind of)
-
-Versions will be only after I make the basic upload & review stuff. This will be v1.0.0 which will be used for all the demos to get money and attention. Then I am going to start using CHANGELOG - next versions will have fully functional backend - i.e. with authetication management and with captcha management.
-
-Now openapi-generator. It takes openapi docs and generates services and models from it for typescript frontend.
-
-### 2024-07-05
-
-This is very good article to understand svelte store/context/props stuff:
-
-https://stackoverflow.com/questions/67663671/understanding-context-in-svelte-convert-from-react-context
-
-```
-
-```

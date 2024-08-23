@@ -8,6 +8,7 @@
 
 details > summary {
 	list-style-type: '⊕ ';
+	cursor: pointer;
 }
 
 details[open] > summary {
@@ -45,12 +46,5 @@ a {
 	.no-print,
 	.no-print * {
 		display: none;
-	}
-	.only-print {
-		display: flex;
-		flex-direction: row;
-
-		column-count: 2;
-		column-gap: 20px;
 	}
 }

@@ -24,3 +24,4 @@ export function persist<T>(key: string, initialValue: T) {
 }
 
 export const skfList = persist<string[]>('skfList', []);
+export const websiteState = persist<number>('websiteState', 0);

@@ -15,7 +15,7 @@
 	import { onMount } from 'svelte';
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
 	import MultipleFileUploadModal from '$components/ui/MultipleFileUploadModal.svelte';
-	import { CloseOutline, PlusOutline } from 'flowbite-svelte-icons';
+	import { CloseOutline, EditOutline, PlusOutline, TrashBinOutline } from 'flowbite-svelte-icons';
 	import EditProblemModal from '$components/ui/EditProblemModal.svelte';
 
 	let sourceId: string;
@@ -40,7 +40,7 @@
 	}
 
 	onMount(async () => {
-		const sourceResponse = await publicApi.getSourceById1(sourceId);
+		const sourceResponse = await publicApi.getSourceById(sourceId);
 		oldSourceData = sourceResponse.data;
 		sourceData = {
 			name: oldSourceData.name,
@@ -68,7 +68,7 @@
 	async function updateSource() {
 		await approvalApi.update(sourceId, sourceData);
 		successStore.set('Šaltinis sėkmingai pakeistas');
-		const sourceResponse = await publicApi.getSourceById1(sourceId);
+		const sourceResponse = await publicApi.getSourceById(sourceId);
 		oldSourceData = sourceResponse.data;
 	}
 
@@ -117,7 +117,7 @@
 		if (!confirm('Ar tikrai norite ištrinti šią užduotį?')) {
 			return;
 		}
-		await approvalApi.deleteProblem1(problemId);
+		await approvalApi.deleteProblem(problemId);
 		successStore.set('Užduotis ištrinta sėkmingai');
 		const problemsResponse = await approvalApi.getProblemsBySource(sourceId);
 		submittedProblems = problemsResponse.data;
@@ -127,7 +127,7 @@
 		if (!confirm('Ar tikrai norite ištrinti šaltinį?')) {
 			return;
 		}
-		await approvalApi.deleteSource1(sourceId);
+		await approvalApi.deleteSource(sourceId);
 		successStore.set('Šaltinis ištrintas sėkmingai');
 		goto('/submit/dashboard');
 	}
@@ -137,10 +137,15 @@
 	}
 
 	function addProblem() {
+		let nr;
+		if (newProblems.length === 0) {
+			nr = 1;
+		} else nr = newProblems[newProblems.length - 1].sourceListNr + 1;
+
 		newProblems = [
 			...newProblems,
 			{
-				sourceListNr: newProblems[newProblems.length - 1].sourceListNr + 1,
+				sourceListNr: nr,
 				problemText: '',
 				answerText: '',
 				problemImageFile: null,
@@ -230,14 +235,10 @@
 	</h3> -->
 </div>
 <p class="text-justify mx-4 my-4">
-	Išsaugotos užduotys yra iškart pateikiamos peržiūrai. Šaltinių patvirtinimai ir atmetimai yra
-	atšaukiami, jei yra atliekami pakeitimai šaltinio informacijoje arba uždaviniuose.
-</p>
-<p class="text-justify mx-4 my-4">
-	Spausdami mygtukus "Pateikti peržiūrai" Jūs patvirtinate, kad įkeliate tik savo sukurtas
-	originalias užduotis (kitais atvejais kreipkitės el. paštu info@skafis.lt) bei su autorinių teisių
-	sąlygomis, aprašytomis puslapyje <a href="/about">"Apie"</a>. Peržiūrėtos ir patvirtintos užduotys
-	bus paviešintos kartu su Jūsų prisijungimo vardu, bet ne el. paštu.
+	Išsaugotos užduotys yra iškart pateikiamos peržiūrai. Peržiūrėtos ir patvirtintos užduotys bus
+	paviešintos kartu su Jūsų prisijungimo vardu, bet ne el. paštu. Šaltinių patvirtinimai ir
+	atmetimai yra atšaukiami, jei yra atliekami pakeitimai šaltinio informacijoje arba uždaviniuose.
+	Prisiminkite, kad sutikote su <a href="/about#upload-terms">sąlygomis</a> :).
 </p>
 
 <Accordion>
@@ -271,16 +272,16 @@
 					<Button
 						color="red"
 						on:click={() => deleteProblem(problem.id)}
-						class="absolute top-10 right-20 z-10"
+						class="absolute top-9 right-14 z-10 p-2 mx-1"
 					>
-						Ištrinti
+						<TrashBinOutline class="w-6 h-6" />
 					</Button>
 					<Button
 						color="yellow"
 						on:click={() => openEditModal(problem.id)}
-						class="absolute top-10 right-48 z-10"
+						class="absolute top-9 right-28 z-10 p-2 mx-1"
 					>
-						Redaguoti
+						<EditOutline class="w-6 h-6" />
 					</Button>
 					<ProblemComponent
 						problemMainData={{

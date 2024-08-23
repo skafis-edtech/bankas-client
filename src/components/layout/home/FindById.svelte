@@ -3,6 +3,7 @@
 	import { publicApi } from '$services/apiService';
 	import type { ProblemDisplayViewDto } from '$services/gen-client';
 	import { Button, Input } from 'flowbite-svelte';
+	import { CloseOutline } from 'flowbite-svelte-icons';
 	import { writable } from 'svelte/store';
 	let skfCode = writable('SKF-');
 
@@ -40,13 +41,12 @@
 		<Button class="ml-3 py-3" type="submit">Rodyti</Button>
 	</form>
 	{#if problemDisplayViewDto}
-		<div class="flex justify-end">
+		<div class="flex justify-end relative">
 			<Button
 				color="red"
-				class="w-28 mb-2"
-				on:click={() => {
-					problemDisplayViewDto = null;
-				}}>Uždaryti</Button
+				on:click={() => (problemDisplayViewDto = null)}
+				class="w-5 h-5 absolute right-[-5px] top-[-5px] bg-red-600 rounded-full flex items-center hover:bg-red-800 p-0 m-0"
+				><CloseOutline class="w-full h-full p-0 m-0" /></Button
 			>
 		</div>
 		<ProblemComponent

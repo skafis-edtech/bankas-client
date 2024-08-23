@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { approvalApi, publicApi } from '$services/apiService';
-	import { SourceReviewStatusEnum, type SourceDisplayDto } from '$services/gen-client';
+	import { SourceDisplayDtoReviewStatusEnum, type SourceDisplayDto } from '$services/gen-client';
 	import { Button, Search } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import SourceWithProblems from './SourceWithProblems.svelte';
 	import SourceManageBar from '$components/ui/SourceManageBar.svelte';
-	import SourceReviewBar from '$components/ui/SourceReviewBar.svelte';
 
 	let sources: SourceDisplayDto[] = [];
 	export let searchValue = '';
@@ -65,7 +64,7 @@
 <Search class="my-3" placeholder="Ieškoti" bind:value={searchValue} />
 
 {#each Object.entries(sources) as [id, source]}
-	{#if sourcesSubset === 'mine' && source.reviewStatus !== SourceReviewStatusEnum.Rejected}
+	{#if sourcesSubset === 'mine' && source.reviewStatus !== SourceDisplayDtoReviewStatusEnum.Rejected}
 		<SourceWithProblems {source} {searchValue} needApprovalStatusNone="status" />
 	{/if}
 	{#if sourcesSubset === 'approved' || sourcesSubset === 'author'}
@@ -76,7 +75,7 @@
 			showIndicator={false}
 		/>
 	{/if}
-	{#if sourcesSubset === 'mine' && source.reviewStatus === SourceReviewStatusEnum.Rejected}
+	{#if sourcesSubset === 'mine' && source.reviewStatus === SourceDisplayDtoReviewStatusEnum.Rejected}
 		<SourceManageBar
 			reviewStatus={source.reviewStatus}
 			sourceId={source.id}
@@ -95,7 +94,7 @@
 {/each}
 
 <div class="pagination">
-	<Button color="dark" on:click={() => changePage(-1)}>⬅️ Ankstesnis</Button>
+	<Button color="dark" on:click={() => changePage(-1)}>⬅️</Button>
 	<span class="mx-3">{page + 1} puslapis</span>
-	<Button color="dark" on:click={() => changePage(1)}>Sekantis ➡️</Button>
+	<Button color="dark" on:click={() => changePage(1)}>➡️</Button>
 </div>
