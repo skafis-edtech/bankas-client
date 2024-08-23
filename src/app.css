@@ -46,11 +46,4 @@ a {
 	.no-print * {
 		display: none;
 	}
-	.only-print {
-		display: flex;
-		flex-direction: row;
-
-		column-count: 2;
-		column-gap: 20px;
-	}
 }

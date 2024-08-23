@@ -12,18 +12,17 @@
 
 <h2 class="text-2xl font-semibold my-4">MB Skafis</h2>
 <p>
-	Neseniai įkurta įmonė MB Skafis, jos piniginis šaltinis bus tik savanoriškos paramos (su viltimi,
-	kad ateityje parems kokia valdžia). Šiuo metu nėra atidarytos sąskaitos, todėl paramų procesas
-	neveikia. Savanoriškos paramos ateityje bus dalinamos administratoriams, dalių skaičiavimai bus
-	pateikti vėliau. Pateikdami.... dalinai perleidžiate turtines autorines teises MB Skafis, leisdami
-	bet kokiems asmenims iki turtinių autorinių teisių galiojimo laikotarpio pabaigos (arba raštiškai
-	sutariant dėl pakeitimų su MB Skafis) kopijuoti (pvz.: turėti atsispausdintą kopiją), keisti
-	(pvz.: pakeisti uždavinio sąlygą atsiskaitymui), išleisti (pvz.: sudaryti uždavinių sąrašus ir
-	juos paviešinti), atlikti (pvz.: spręsti uždavinius viešame renginyje), tačiau ne parduoti, ne
-	gauti pelno, neskaitant savanoriškų MB Skafis paramų. Abiejų šalių sutartimu sąlygos gali būti
-	keičiamos.
+	Neseniai įkurta įmonė MB Skafis, jos piniginis šaltinis bus tik savanoriškos paramos. Šiuo metu
+	nėra atidarytos sąskaitos, todėl paramų procesas neveikia. Savanoriškos paramos ateityje bus
+	dalinamos administratoriams, dalių skaičiavimai bus pateikti vėliau. Pateikdami.... dalinai
+	perleidžiate turtines autorines teises MB Skafis, leisdami bet kokiems asmenims iki turtinių
+	autorinių teisių galiojimo laikotarpio pabaigos (arba raštiškai sutariant dėl pakeitimų su MB
+	Skafis) kopijuoti (pvz.: turėti atsispausdintą kopiją), keisti (pvz.: pakeisti uždavinio sąlygą
+	atsiskaitymui), išleisti (pvz.: sudaryti uždavinių sąrašus ir juos paviešinti), atlikti (pvz.:
+	spręsti uždavinius viešame renginyje), tačiau ne parduoti, ne gauti pelno, neskaitant savanoriškų
+	MB Skafis paramų. Abiejų šalių sutartimu sąlygos gali būti keičiamos.
 </p>
-
+<p>Perduodate VISAS neturtines teises...kai tokiu yra...</p>
 <ol>
 	<li>keisti</li>
 	<li>...</li>

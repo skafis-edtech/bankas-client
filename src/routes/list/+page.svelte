@@ -4,9 +4,15 @@
 	import 'carta-md/default.css';
 	import type { ProblemDisplayViewDto } from '$services/gen-client';
 	import { publicApi } from '$services/apiService';
-	import { Button, ButtonGroup } from 'flowbite-svelte';
+	import { Button, ButtonGroup, Input } from 'flowbite-svelte';
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
 	import MarkdownDisplay from '$components/ui/MarkdownDisplay.svelte';
+	import {
+		ArrowDownToBracketOutline,
+		ArrowUpFromBracketOutline,
+		CloseOutline,
+		PlusOutline
+	} from 'flowbite-svelte-icons';
 
 	let skfList: string[] = [];
 	let problems: ProblemDisplayViewDto[] = [];
@@ -21,7 +27,10 @@
 	onMount(async () => {
 		const urlParams = new URLSearchParams(window.location.search);
 		const listValue = urlParams.get('list') || '';
-		skfList = listValue.split(' ').map((item) => `SKF-${item}`);
+		skfList = listValue
+			.split(' ')
+			.filter((item) => !isNaN(Number(item)))
+			.map((item) => `SKF-${item}`);
 		if (skfList[0] === 'SKF-') {
 			skfList = $list;
 			updateUrl();
@@ -78,11 +87,11 @@
 
 <div class="no-print">
 	<h1 class="text-4xl font-semibold my-4 text-center">Atrinktų užduočių sąrašas</h1>
-	<p class="text-center">Atrinkta pagal nuorodą - ją galite kopijuoti ir dalintis</p>
+	<p class="text-center mb-4">Atrinkta pagal nuorodą - ją galite kopijuoti ir dalintis</p>
 	{#if problems.length > 0}
 		{#each problems as problem, i}
-			<div>
-				<h2>{i + 1}.</h2>
+			<div class="relative my-2">
+				<p class="absolute top-1 left-2">{i + 1}.</p>
 				<ProblemComponent
 					problemMainData={{
 						skfCode: problem.skfCode === '' ? problem.id : problem.skfCode,
@@ -96,7 +105,8 @@
 				/>
 			</div>
 		{/each}
-		<div class="md:w-1/2 flex flex-col m-auto gap-2 my-4">
+		<div class="md:w-1/2 flex flex-col m-auto gap-2 my-12">
+			<h2 class="text-3xl font-semibold my-4 text-center">PDF generavimas</h2>
 			<label for="pdftitle" class="block mb-2">PDF pavadinimas</label>
 			<input id="pdftitle" type="text" bind:value={pdfTitle} class="w-full p-2 mb-4" />
 			<div class="flex flex-row gap-2">
@@ -132,7 +142,7 @@
 <div class={`${printAnswers ? 'hidden' : ''}`}>
 	<div class="hidden only-print">
 		{#if problems.length > 0}
-			<div class="flex flex-col flex-1 relative scale-[80%]">
+			<div class="print-col">
 				<h4 class="text-center">{pdfTitle}</h4>
 				{#each problems as problem, i}
 					<MarkdownDisplay
@@ -146,7 +156,7 @@
 				{/each}
 			</div>
 
-			<div class="flex flex-col flex-1 scale-[80%]">
+			<div class="print-col">
 				<h4 class="text-center">{pdfTitle}</h4>
 				{#each problems as problem, i}
 					<MarkdownDisplay
@@ -174,7 +184,7 @@
 <div class={`${printAnswers ? '' : 'hidden'}`}>
 	<div class="hidden only-print">
 		{#if problems.length > 0}
-			<div class="flex flex-col flex-1 relative scale-[80%]">
+			<div class="print-col">
 				<h4 class="text-center">{pdfTitle} (atsakymai)</h4>
 				{#each problems as problem, i}
 					<MarkdownDisplay
@@ -188,7 +198,7 @@
 				{/each}
 			</div>
 
-			<div class="flex flex-col flex-1 relative scale-[80%]">
+			<div class="print-col">
 				<h4 class="text-center">{pdfTitle} (atsakymai)</h4>
 				{#each problems as problem, i}
 					<MarkdownDisplay
@@ -213,31 +223,67 @@
 	</div>
 </div>
 
-<div class="no-print">
-	<h1 class="text-4xl font-semibold my-4 text-center">SKF sąrašas</h1>
+<div class="no-print mt-24">
+	<h2 class="text-3xl font-semibold my-8 text-center">SKF sąrašas</h2>
 	{#if skfList.length > 0}
-		<ul class="list-disc list-inside">
+		<div class="flex flex-col gap-2 flex-wrap h-48">
 			{#each skfList as skf, index}
-				<li>
-					<input
+				<div class="flex flex-row gap-2 items-center w-28">
+					<Input
 						type="text"
 						bind:value={skf}
 						on:input={(e) => updateSkfItem(index, e)}
 						class="p-1 border-b border-gray-400 focus:outline-none"
 					/>
-					<Button color="red" on:click={() => removeSkfItem(index)}>Remove</Button>
-				</li>
+					<Button
+						color="red"
+						on:click={() => removeSkfItem(index)}
+						class="w-5 h-5 bg-red-600 rounded-full flex items-center hover:bg-red-800 p-0 m-0"
+						><CloseOutline class="w-full h-full p-0 m-0" /></Button
+					>
+				</div>
 			{/each}
-		</ul>
-		<Button on:click={addSkfItem} class="mt-2">Add Item</Button>
+			<Button color="green" on:click={addSkfItem} class="h-8 w-28"><PlusOutline /></Button>
+		</div>
 	{:else}
 		<p>Nėra sąrašo</p>
 	{/if}
-	<Button on:click={clearList} color="red">clear list</Button>
-	<Button on:click={reloadPage} color="red">Reload Page</Button>
-	<Button on:click={updateStorage} color="green">Išsaugoti kompiuterio atmintyje</Button>
-	<Button on:click={() => (skfList = $list)} color="green">Įkelti iš kompiuterio atminties</Button>
-	<div>
-		Atmintyje: {JSON.stringify($list)}
+	<Button on:click={clearList} color="red">Išvalyti sąrašą</Button>
+	<Button on:click={reloadPage} color="blue">Rodyti užduotis (perkrauti puslapį)</Button>
+	<div class="my-4">
+		<h3 class="my-4">Kompiuterio atmintis:</h3>
+		<Button on:click={updateStorage} color="purple"><ArrowDownToBracketOutline /></Button>
+		<Button on:click={() => (skfList = $list)} color="purple"><ArrowUpFromBracketOutline /></Button>
+		<div>
+			{JSON.stringify($list)}
+		</div>
 	</div>
 </div>
+
+<style>
+	@media print {
+		.only-print {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap; /* Prevent wrapping to keep content within columns */
+			justify-content: space-between; /* Distribute columns evenly */
+			align-items: flex-start;
+			margin: 0;
+			padding: 0;
+		}
+
+		.print-col {
+			width: 48%; /* Each column takes up about half the page */
+			margin-bottom: 0;
+			display: block;
+			margin: 0;
+			padding: 0;
+			transform-origin: top left;
+			transform: scale(0.85); /* Adjust scale to fit content within columns */
+		}
+
+		@page {
+			margin: 0;
+		}
+	}
+</style>
