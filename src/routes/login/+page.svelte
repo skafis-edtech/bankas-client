@@ -104,7 +104,7 @@
 				href="mailto:naglis.suliokas@gmail.com"
 				class="text-blue-600 hover:underline dark:text-blue-400"
 			>
-				naglis.suliokas@gmail.com
+				info@skafis.lt
 			</a>
 		</p>
 		<p class="mt-4 text-sm text-gray-600 dark:text-gray-400">
