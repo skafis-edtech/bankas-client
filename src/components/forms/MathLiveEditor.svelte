@@ -39,6 +39,41 @@
 				onChange();
 			});
 		}
+		document?.querySelector('math-field')?.addEventListener('focus', () => {
+			mathVirtualKeyboard.layouts = [
+				{
+					label: 'Dažniausi',
+					tooltip: 'Dažniausiai naudojami simboliai',
+					rows: [
+						['\\frac{#@}{#?}', '\\sqrt{#?}', '#@^2', '#@^{#?}', '#@_{#?}', '\\log_{#?}'],
+						['\\cdot', '\\neq', '\\leqslant', '\\geqslant', '\\pm', '#@^{\\circ}'],
+						['\\infty', '\\in', '\\cup']
+					]
+				},
+				{
+					label: 'Retesni',
+					tooltip: 'Rečiau naudojami simboliai',
+					rows: [
+						['\\sqrt[#@]{#?}', '#@_{#?}^{#?}', '\\arctg', '\\log_{#?}^{#?}'],
+						[
+							'\\int_{#@}^{#@}\\!#?\\,\\mathrm{d}x',
+							'\\sum^{#@}_{#?}',
+							'\\left|_{#@}^{#@}\\right.',
+							'\\to'
+						],
+						[
+							'\\cap',
+							'\\subset',
+							'\\left\\lbrace\\begin{matrix}#@ & #@ \\\\ #@ & #@\\end{matrix}\\right.',
+							'\\left\\lbrace\\begin{matrix}#@\\\\ #@\\end{matrix}\\right.',
+							'\\left\\lbrace\\begin{matrix}#@\\\\ #@ \\\\ #@\\end{matrix}\\right.'
+						],
+						['\\angle', '\\triangle', '\\sim', '\\approx', '\\parallel', '\\perp', '\\vec{#@}']
+					]
+				}
+			];
+			mathVirtualKeyboard.visible = true;
+		});
 	});
 </script>
 
