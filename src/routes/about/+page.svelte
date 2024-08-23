@@ -116,6 +116,7 @@
 <p>
 	Formules galite vesti ranka (tarp $ simbolių) latex (katex) sintakse, arba naudojantis "Įterpti
 	formulę"/"Redaguoti formulę" mygtuku bei po jo paspaudimo atsiradusiu formulių redaktoriumi.
+	Galite teikti pasiūlymus kaip papildyti ar kitaip išdėstyti formulių redaktoriaus klaviatūrą.
 </p>
 <p>
 	Galite įkelti tik vieną paveiksliuką vienam įvesties laukui - paveiksliukas bus patalpintas po
@@ -147,7 +148,9 @@
 		>Daugiau pavyzdžių</a
 	>
 </p>
-<h4 class="text-xl font-semibold my-4">Plačiau apie naudojamus įrankius</h4>
+<h4 class="text-xl font-semibold my-4">
+	Plačiau apie naudojamus įrankius (galite rasti "shortcut'ų")
+</h4>
 <ul>
 	<li><a href="https://beartocode.github.io/carta/introduction">carta-md</a></li>
 	<li><a href="https://cortexjs.io/mathlive/">math-live</a></li>

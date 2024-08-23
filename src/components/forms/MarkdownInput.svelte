@@ -6,6 +6,7 @@
 	import { tikz } from '@cartamd/plugin-tikz';
 	import MathLiveEditor from './MathLiveEditor.svelte';
 	import { Button } from 'flowbite-svelte';
+	import { CloseOutline } from 'flowbite-svelte-icons';
 
 	export let value = '';
 	let mdEditor: HTMLElement | null = null;
@@ -387,6 +388,11 @@
 	<div id="math-editor" class="hidden md:w-1/2 p-4 m-2 bg-blue-100 rounded-md relative bg-">
 		<p>Formulės kūrimas/redagavimas</p>
 		<MathLiveEditor bind:mathfieldContainer onChange={insertTextAtCursor} />
-		<Button on:click={closeMathEditor} class="absolute top-0 right-0 w-fit h-fit">x</Button>
+		<Button
+			color="red"
+			on:click={closeMathEditor}
+			class="w-5 h-5 absolute right-[-5px] top-[-5px] bg-red-600 rounded-full flex items-center hover:bg-red-800 p-0 m-0"
+			><CloseOutline class="w-full h-full p-0 m-0" /></Button
+		>
 	</div>
 </div>
