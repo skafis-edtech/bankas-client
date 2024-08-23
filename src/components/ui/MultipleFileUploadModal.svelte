@@ -79,8 +79,10 @@
 		"3.png"
 	</h2>
 	<h3>
-		Uždavinių failų karpymą ir vardinimą galite palengvinti naudodamiesi tinklapio <Button
-			on:click={() => goto('/snipping-tool')}>KARPYMO ĮRANKIU</Button
+		Uždavinių failų karpymą ir vardinimą galite palengvinti naudodamiesi tinklapio <a
+			href="/snipping-tool"
+			target="_blank"
+			rel="noopener noreferrer"><Button>KARPYMO ĮRANKIU</Button></a
 		>
 	</h3>
 	<Dropzone

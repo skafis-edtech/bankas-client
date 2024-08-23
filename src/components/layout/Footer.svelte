@@ -6,7 +6,7 @@
 				>info@skafis.lt</a
 			>
 		</p>
-		<p>v2.0.0+ - Paskutinį kartą atnaujinta: 2024-08-23</p>
+		<p>v3.0.0 - Paskutinį kartą atnaujinta: 2024-08-24</p>
 	</div>
 	<div class="flex-1">
 		<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
