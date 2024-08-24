@@ -42,16 +42,25 @@
 			<Button {id} color="blue" class="p-2 mx-1 relative"><MessageDotsOutline /></Button>
 
 			<Popover class="w-64 text-sm font-light " triggeredBy={`#${id}`} trigger="click">
-				{#each reviewHistory.split('\\n').map((review) => {
-					const [dateTime, author, ...messageParts] = review.split(' ');
-					const message = messageParts.join(' ').replace('rašė:', '');
-					return { dateTime, author, message };
-				}) as review}
+				{#each reviewHistory
+					.trim()
+					.split('\n\n')
+					.map((entry) => {
+						const [timestamp, rest] = entry.trim().split(/ (.+)/); // Split into timestamp and the rest
+						if (!rest) {
+							console.error('Parsing error: ', entry);
+							return { timestamp: 'Invalid Date', author: '', action: '', message: '' };
+						}
+						const [author, actionMessage] = rest.split(/ (.+)/);
+						const [action, message] = actionMessage.split(':').map((s) => s.trim());
+						return { timestamp, author: author.split(' ')[0], action, message };
+					}) as entry}
 					<p>
-						{getNiceTimeString(review.dateTime)}
-						<AuthorLink author={review.author} />
-						rašė:
-						<strong>{review.message}</strong>
+						{getNiceTimeString(entry.timestamp).substring(5, 16)}
+						<AuthorLink author={entry.author} />
+						{entry.action}{entry.message ? ': ' : ''}<strong
+							>{entry.message ? entry.message : ''}</strong
+						>
 					</p>
 				{/each}
 			</Popover>
