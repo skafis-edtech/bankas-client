@@ -2396,7 +2396,7 @@ export const PublicControllerApiAxiosParamCreator = function (configuration?: Co
         },
         /**
          * Get source by ID. Returns source entity.
-         * @summary PUBLIC if approved, USER if owned, ADMIN else
+         * @summary USER if owned, ADMIN else. Idk why I\'ve put it in public controller then... :D
          * @param {string} sourceId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2630,7 +2630,7 @@ export const PublicControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * Get source by ID. Returns source entity.
-         * @summary PUBLIC if approved, USER if owned, ADMIN else
+         * @summary USER if owned, ADMIN else. Idk why I\'ve put it in public controller then... :D
          * @param {string} sourceId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2761,7 +2761,7 @@ export const PublicControllerApiFactory = function (configuration?: Configuratio
         },
         /**
          * Get source by ID. Returns source entity.
-         * @summary PUBLIC if approved, USER if owned, ADMIN else
+         * @summary USER if owned, ADMIN else. Idk why I\'ve put it in public controller then... :D
          * @param {string} sourceId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2901,7 +2901,7 @@ export class PublicControllerApi extends BaseAPI {
 
     /**
      * Get source by ID. Returns source entity.
-     * @summary PUBLIC if approved, USER if owned, ADMIN else
+     * @summary USER if owned, ADMIN else. Idk why I\'ve put it in public controller then... :D
      * @param {string} sourceId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
