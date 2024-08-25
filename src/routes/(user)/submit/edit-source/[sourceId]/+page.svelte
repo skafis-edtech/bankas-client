@@ -39,6 +39,14 @@
 			oldSourceData?.description !== sourceData?.description;
 	}
 
+	$: {
+		const lastSourceListNr = submittedProblems[submittedProblems.length - 1]?.sourceListNr || 0;
+		newProblems = newProblems.map((problem, index) => ({
+			...problem,
+			sourceListNr: lastSourceListNr + index + 1
+		}));
+	}
+
 	onMount(async () => {
 		const sourceResponse = await publicApi.getSourceById(sourceId);
 		oldSourceData = sourceResponse.data;
@@ -47,10 +55,12 @@
 			description: oldSourceData.description
 		};
 
-		const problemsResponse = await approvalApi.getProblemsBySource(sourceId);
-		submittedProblems = problemsResponse.data;
+		await loadAllProblems();
 
-		const nextSourceListNr = submittedProblems[submittedProblems.length - 1]?.sourceListNr + 1 || 1;
+		let nextSourceListNr;
+		if (submittedProblems.length === 0) {
+			nextSourceListNr = 1;
+		} else nextSourceListNr = submittedProblems[submittedProblems.length - 1].sourceListNr + 1;
 
 		newProblems = [
 			{
@@ -65,6 +75,15 @@
 		];
 	});
 
+	async function loadAllProblems() {
+		const problemsResponse = await approvalApi.getProblemsBySource(
+			sourceId,
+			0,
+			oldSourceData.problemCount
+		);
+		submittedProblems = problemsResponse.data;
+	}
+
 	async function updateSource() {
 		await approvalApi.update(sourceId, sourceData);
 		successStore.set('Šaltinis sėkmingai pakeistas');
@@ -78,7 +97,7 @@
 			alert('Užduotis turi turėti tekstą arba paveikslėlį');
 			return;
 		}
-		await approvalApi.submitProblem(
+		const response = await approvalApi.submitProblem(
 			sourceId,
 			{
 				sourceListNr: newProblems[index].sourceListNr,
@@ -90,10 +109,21 @@
 		);
 		successStore.set('Užduotis pateikta sėkmingai');
 
+		submittedProblems = [
+			...submittedProblems,
+			{
+				id: response.data.id,
+				skfCode: '',
+				sourceListNr: newProblems[index].sourceListNr,
+				problemText: newProblems[index].problemText,
+				answerText: newProblems[index].answerText,
+				problemImageSrc: newProblems[index].tempProblemImageDisplay || '',
+				answerImageSrc: newProblems[index].tempAnswerImageDisplay || '',
+				categories: [],
+				sourceId: sourceId
+			}
+		];
 		removeProblem(index);
-
-		const problemsResponse = await approvalApi.getProblemsBySource(sourceId);
-		submittedProblems = problemsResponse.data;
 
 		if (newProblems.length === 0) {
 			const nextSourceListNr =
@@ -119,11 +149,14 @@
 		}
 		await approvalApi.deleteProblem(problemId);
 		successStore.set('Užduotis ištrinta sėkmingai');
-		const problemsResponse = await approvalApi.getProblemsBySource(sourceId);
-		submittedProblems = problemsResponse.data;
+		submittedProblems = submittedProblems.filter((problem) => problem.id !== problemId);
 	}
 
 	async function deleteSource() {
+		if (submittedProblems.length > 0) {
+			alert('Pirmiausia ištrinkite visas šaltinio užduotis.');
+			return;
+		}
 		if (!confirm('Ar tikrai norite ištrinti šaltinį?')) {
 			return;
 		}
@@ -174,11 +207,7 @@
 
 	/* Edit modal */
 	let isProblemEditModalOpen = false;
-	$: if (!isProblemEditModalOpen) {
-		approvalApi.getProblemsBySource(sourceId).then((problemsResponse) => {
-			submittedProblems = problemsResponse.data;
-		});
-	}
+
 	let editModalProblem: Components.ProblemEditData = {
 		id: '',
 		sourceListNr: 0,
@@ -207,6 +236,20 @@
 
 	function closeEditModal() {
 		isProblemEditModalOpen = false;
+		submittedProblems = submittedProblems.map((problem) => {
+			if (problem.id === editModalProblem.id) {
+				return {
+					...problem,
+					sourceListNr: editModalProblem.sourceListNr,
+					problemText: editModalProblem.problemText,
+					answerText: editModalProblem.answerText,
+					problemImageSrc: editModalProblem.problemImageSrc,
+					answerImageSrc: editModalProblem.answerImageSrc
+				};
+			}
+			return problem;
+		});
+
 		editModalProblem = {
 			id: '',
 			sourceListNr: 0,
@@ -262,48 +305,43 @@
 	</AccordionItem>
 </Accordion>
 
-<Accordion>
-	<AccordionItem open>
-		<span slot="header">Pateiktos užduotys (suskleiskite pateikdami užduotis)</span>
-		<div class="container mx-auto">
-			{#each submittedProblems as problem}
-				<div class="relative my-3">
-					<div>Užduotis {problem.sourceListNr}</div>
-					<Button
-						color="red"
-						on:click={() => deleteProblem(problem.id)}
-						class="absolute top-9 right-14 z-10 p-2 mx-1"
-					>
-						<TrashBinOutline class="w-6 h-6" />
-					</Button>
-					<Button
-						color="yellow"
-						on:click={() => openEditModal(problem.id)}
-						class="absolute top-9 right-28 z-10 p-2 mx-1"
-					>
-						<EditOutline class="w-6 h-6" />
-					</Button>
-					<ProblemComponent
-						problemMainData={{
-							skfCode: problem.skfCode === '' ? problem.id : problem.skfCode,
-							problemText: problem.problemText,
-							problemImageSrc: problem.problemImageSrc,
-							answerText: problem.answerText,
-							answerImageSrc: problem.answerImageSrc,
-							categories: problem.categories,
-							sourceId: problem.sourceId
-						}}
-					/>
-				</div>
-			{/each}
+<div class="container mx-auto">
+	{#each submittedProblems as problem}
+		<div class="relative my-3">
+			<div>Užduotis {problem.sourceListNr}</div>
+			<Button
+				color="red"
+				on:click={() => deleteProblem(problem.id)}
+				class="absolute top-9 right-14 z-10 p-2 mx-1"
+			>
+				<TrashBinOutline class="w-6 h-6" />
+			</Button>
+			<Button
+				color="yellow"
+				on:click={() => openEditModal(problem.id)}
+				class="absolute top-9 right-28 z-10 p-2 mx-1"
+			>
+				<EditOutline class="w-6 h-6" />
+			</Button>
+			<ProblemComponent
+				problemMainData={{
+					skfCode: problem.skfCode === '' ? problem.id : problem.skfCode,
+					problemText: problem.problemText,
+					problemImageSrc: problem.problemImageSrc,
+					answerText: problem.answerText,
+					answerImageSrc: problem.answerImageSrc,
+					categories: problem.categories,
+					sourceId: problem.sourceId
+				}}
+			/>
 		</div>
-	</AccordionItem>
-</Accordion>
+	{/each}
+</div>
 
 <EditProblemModal
 	bind:open={isProblemEditModalOpen}
 	bind:problem={editModalProblem}
-	on:close={closeEditModal}
+	onClose={closeEditModal}
 	bind:problemImageTempDisplay={editModalProblemImageTempDisplay}
 	bind:answerImageTempDisplay={editModalAnswerImageTempDisplay}
 />

@@ -33,5 +33,5 @@
 {#if isAllowedToProceed}
 	<slot />
 {:else}
-	<div class="flex flex-row justify-center mt-8"><Spinner /></div>
+	<div class="flex flex-row justify-center mt-8">Įkeliama...</div>
 {/if}

@@ -59,6 +59,11 @@
 	onMount(async () => {
 		await fetchSources();
 	});
+
+	function removeSource(id: string) {
+		console.log('rm', id);
+		sources = sources.filter((source) => source.id !== id);
+	}
 </script>
 
 <Search class="my-3" placeholder="Ieškoti" bind:value={searchValue} />
@@ -85,6 +90,7 @@
 	{/if}
 	{#if sourcesSubset === 'all'}
 		<SourceWithProblems
+			afterReview={() => removeSource(source.id)}
 			{source}
 			{searchValue}
 			needApprovalStatusNone="approval"

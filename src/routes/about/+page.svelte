@@ -37,7 +37,7 @@
 	Įmonė MB Skafis kuria švietimo technologijas mokytojams, mokiniams, mokykloms. Vienas iš MB Skafis
 	produktų yra šis užduočių bankas, kuriame mokytojai gali kelti savo autorines (ateityje ir kitas)
 	užduotis bei bet kas gali prieiti prie įkeltų užduočių. Įmonės piniginis šaltinis bus tik
-	savanoriškos paramos. Šiuo metu nėra atidarytoČia banko sąskaitos, todėl paramų procesas neveikia.
+	savanoriškos paramos. Šiuo metu nėra atidarytos banko sąskaitos, todėl paramų procesas neveikia.
 	Savanoriškos paramos dalinai bus paskirstomos administratoriams (šis procesas bus aprašytas
 	vėliau).
 </p>
@@ -67,7 +67,7 @@
 	> licencija. T.y. galite laisvai naudotis, dalintis, adaptuoti, tačiau ne pardavinėti, plačiai dalinantis
 	turite kredituoti autorių. Autoriaus vardo minėjimui, platinant užduočių turinį už artimos aplinkos
 	ribų, pakanka paminėti tinklapį bei užduoties unikalų SKF kodą bet kokia forma (arba naudotojo prisijungimo
-	vardą), nebent autorius leidžia kitaip (tuomet pakanka tik paminėti tik tinklapį).
+	vardą), nebent autorius leidžia kitaip (tuomet pakanka tik paminėti tinklapį).
 </p>
 <p class="mt-4">
 	<strong
@@ -109,9 +109,10 @@
 <h2 id="editor-guide" class="text-2xl font-semibold my-4 text-center">Teksto įvesties gidas</h2>
 <p>Teksto įvestyje galite rašyti Markdown, LaTex ir Tikz sintakse!</p>
 <p>
-	Tekstas vedamas paprastai. Tačiau paspaudus Enter yra prirašomas \ simbolis - tik taip matysis
-	nauja eilutė tą tekstą atvaizduojant. Panašiai atsisinka vedant daug tarpų arba TAB simbolių.
-	Paspaudę "Peržiūra" galite pamatyti, įvestas tekstas bus atvaizduotas.
+	Tekstas vedamas paprastai. Paspaudę "Peržiūra" galite pamatyti, įvestas tekstas bus atvaizduotas.
+	Ypatumai: paspaudus Enter yra prirašomas \ simbolis - tik taip matysis nauja eilutė tą tekstą
+	atvaizduojant. Panašiai atsitinka vedant daug tarpų arba TAB simbolių. Suvedus ``` simbolius šis
+	funkcionalumas atšaukiamas, kad galima būtų patogiai rašyti tikz tekstą.
 </p>
 <p>
 	Formules galite vesti ranka (tarp $ simbolių) latex (katex) sintakse, arba naudojantis "Įterpti

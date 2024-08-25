@@ -1,5 +1,6 @@
 <script lang="ts">
 	import MarkdownInput from '$components/forms/MarkdownInput.svelte';
+	import { Spinner } from 'flowbite-svelte';
 </script>
 
 <div class="flex flex-col my-auto">
@@ -10,4 +11,3 @@
 		Deja, kol kas čia nieko nėra... (Bet ateity bus kažkas įdomaus! 😉)
 	</h1>
 </div>
-<MarkdownInput />

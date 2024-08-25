@@ -11,6 +11,7 @@
 	export let problem: Components.ProblemEditData;
 	export let problemImageTempDisplay: string;
 	export let answerImageTempDisplay: string;
+	export let onClose: () => void;
 
 	let problemImageFile: File | null = null;
 	let answerImageFile: File | null = null;
@@ -43,8 +44,8 @@
 		}
 		const response = await approvalApi.uploadProblemImage(problem.id, problemImageFile);
 		problemImageFile = null;
+		problem.problemImageSrc = problemImageTempDisplay;
 		problemImageTempDisplay = '';
-		problem.problemImageSrc = response.data.src;
 		successStore.set('Įkeltas užduoties paveiksliukas 😎');
 	}
 
@@ -55,13 +56,13 @@
 		}
 		const response = await approvalApi.uploadAnswerImage(problem.id, answerImageFile);
 		answerImageFile = null;
+		problem.answerImageSrc = answerImageTempDisplay;
 		answerImageTempDisplay = '';
-		problem.answerImageSrc = response.data.src;
 		successStore.set('Įkeltas atsakymo paveiksliukas 😎');
 	}
 </script>
 
-<Modal bind:open>
+<Modal bind:open on:close={onClose}>
 	<div class="p-4">
 		<h1 class="text-2xl font-semibold">Redaguojama {problem.id} užduotis</h1>
 		<div class="my-8 border-2 p-4">
@@ -73,8 +74,14 @@
 			<MarkdownInput bind:value={problem.answerText} />
 			<Button class="mt-4" color="primary" size="lg" on:click={updateProblemTexts}>Išsaugoti</Button
 			>
-			<Button class="mt-4" color="alternative" size="lg" on:click={() => (open = false)}
-				>Uždaryti</Button
+			<Button
+				class="mt-4"
+				color="alternative"
+				size="lg"
+				on:click={() => {
+					open = false;
+					onClose();
+				}}>Uždaryti</Button
 			>
 		</div>
 

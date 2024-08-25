@@ -11,12 +11,13 @@
 		type ProblemDisplayViewDto,
 		type SourceDisplayDto
 	} from '$services/gen-client';
-	import { Accordion, AccordionItem, Button, Indicator, Review, Skeleton } from 'flowbite-svelte';
+	import { Accordion, AccordionItem, Button, Indicator, Skeleton } from 'flowbite-svelte';
 
 	export let source: SourceDisplayDto;
 	export let searchValue: string;
 	export let needApprovalStatusNone: 'approval' | 'status' | 'none' = 'none';
 	export let showIndicator = true;
+	export let afterReview: () => void = () => {};
 
 	let problems: (ProblemDisplayViewDto | null)[] = [];
 	let isOpen = false;
@@ -75,6 +76,7 @@
 
 			{#if needApprovalStatusNone === 'approval'}
 				<SourceReviewBar
+					{afterReview}
 					reviewStatus={source.reviewStatus}
 					sourceId={source.id}
 					reviewHistory={source.reviewHistory}
