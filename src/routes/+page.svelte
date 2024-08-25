@@ -53,10 +53,8 @@
 <h1 class="text-4xl font-semibold my-4 text-center">Skafis užduočių bankas</h1>
 
 <h5 class="text-md font-semibold my-4 text-center">
-	Mokytojų pasidalintos originalios užduotys, surūšiuotos į temas (kategorijas). Plačiau puslapyje <a
-		class="text-blue-800 underline"
-		href="/about">"Apie"</a
-	>
+	Mokytojų pasidalintos originalios matematikos užduotys, surūšiuotos į temas (kategorijas). Plačiau
+	puslapyje <a class="text-blue-800 underline" href="/about">"Apie"</a>
 </h5>
 
 <h4 class="text-md font-semibold my-4 text-center">
