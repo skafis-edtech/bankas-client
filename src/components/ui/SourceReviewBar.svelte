@@ -10,6 +10,7 @@
 	export let reviewStatus: SourceDisplayDtoReviewStatusEnum;
 	export let sourceId: string;
 	export let reviewHistory: string;
+	export let afterReview: () => void = () => {};
 
 	let id = `button-${Math.random().toString(36).substring(2, 9)}`;
 
@@ -33,13 +34,13 @@
 	async function reject() {
 		approvalApi.reject(sourceId, { reviewMessage: newMessage });
 		successStore.set('Sėkmingai atmesta');
-		bgForBar = 'bg-slate-400';
+		afterReview();
 	}
 
 	async function approve() {
 		approvalApi.approve(sourceId, { reviewMessage: newMessage });
 		successStore.set('Sėkmingai patvirtinta');
-		bgForBar = 'bg-slate-300';
+		afterReview();
 	}
 </script>
 
