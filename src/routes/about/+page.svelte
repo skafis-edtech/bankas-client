@@ -2,9 +2,9 @@
 <p>Funkcionalumų etapai:</p>
 <ul>
 	<li>
-		Pirmas etapas (dabar): keliamos autorinės užduotys (pradžioje tik trijų dalykų), peržiūrimos ir
-		patvirtinamos. Administratoriai kuria šių dalykų kategorijas ateities užduočių rūšiavimui. Jau
-		galima sudarinėti užduočių sąrašus (dalintis sąrašų nuorodomis) bei generuoti užduočių ir
+		Pirmas etapas (dabar): keliamos pradžioje tik autorinės ir tik matematikos užduotys, peržiūrimos
+		ir patvirtinamos. Dedikuotas administratorius kuria kategorijas ateities užduočių rūšiavimui.
+		Jau galima sudarinėti užduočių sąrašus (dalintis sąrašų nuorodomis) bei generuoti užduočių ir
 		atsakymų PDF'us.
 	</li>
 	<li>

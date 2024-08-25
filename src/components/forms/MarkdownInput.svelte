@@ -7,6 +7,7 @@
 	import MathLiveEditor from './MathLiveEditor.svelte';
 	import { Button } from 'flowbite-svelte';
 	import { CloseOutline } from 'flowbite-svelte-icons';
+	import { getEventListeners } from 'events';
 
 	export let value = '';
 	let mdEditor: HTMLElement | null = null;
@@ -34,9 +35,12 @@
 			writeTab.addEventListener('click', () => {
 				// Reapply customizations when the "Write" tab is clicked
 				const newTextarea = mdEditor?.querySelector('textarea');
-				if (newTextarea) {
+				if (newTextarea && !textareaElement) {
 					textareaElement = newTextarea;
 					customizeTextarea(); // Reapply event listeners and other customizations
+					console.log('Reapplied customizations');
+				} else {
+					console.log("It's ok, no need to reapply");
 				}
 			});
 		}
@@ -137,79 +141,81 @@
 	}
 
 	function customizeTextarea() {
-		// Add keydown listener to intercept Enter key
-		textareaElement.addEventListener('keydown', (event) => {
-			if (value.includes('```') || value.match(/.[^ ]- ./)) return;
-			if (event.key === 'Enter') {
-				event.preventDefault(); // Prevent default newline action
+		textareaElement.removeEventListener('keydown', replaceKeys);
+		textareaElement.addEventListener('keydown', replaceKeys);
 
-				const cursorPosition = textareaElement.selectionStart;
+		// Add input listener to check the cursor position - for formula insertion
+		textareaElement.addEventListener('input', () => checkCursorPosition(textareaElement));
+		textareaElement.addEventListener('click', () => checkCursorPosition(textareaElement));
+	}
+
+	function replaceKeys(event: KeyboardEvent) {
+		if (value.includes('```') || value.match(/.[^ ]- ./)) return;
+		if (event.key === 'Enter') {
+			event.preventDefault(); // Prevent default newline action
+
+			const cursorPosition = textareaElement.selectionStart;
+			const beforeCursor = textareaElement.value.slice(0, cursorPosition);
+			const afterCursor = textareaElement.value.slice(cursorPosition);
+
+			// Insert the backslash and newline character
+			textareaElement.value = `${beforeCursor}\\\n${afterCursor}`;
+
+			// Move the cursor to the correct position after inserting
+			textareaElement.setSelectionRange(cursorPosition + 2, cursorPosition + 2);
+
+			// Manually trigger an input event to update the editor's value
+			textareaElement.dispatchEvent(new Event('input', { bubbles: true }));
+		}
+		if (event.key === 'Tab') {
+			event.preventDefault(); // Prevent default tab action
+
+			const cursorPosition = textareaElement.selectionStart;
+			const beforeCursor = textareaElement.value.slice(0, cursorPosition - 1);
+			const afterCursor = textareaElement.value.slice(cursorPosition);
+
+			// Insert the tab character
+			textareaElement.value = `${beforeCursor}&emsp;${afterCursor}`;
+
+			// Move the cursor to the correct position after inserting
+			textareaElement.setSelectionRange(cursorPosition + 6, cursorPosition + 6);
+
+			// Manually trigger an input event to update the editor's value
+			textareaElement.dispatchEvent(new Event('input', { bubbles: true }));
+		}
+		if (event.key === ' ') {
+			event.preventDefault(); // Prevent default tab action
+
+			const cursorPosition = textareaElement.selectionStart;
+			const prevText = textareaElement.value.slice(cursorPosition - 6, cursorPosition); // Adjust slice length to match the longest string you're checking
+			if (
+				prevText.endsWith(' ') || // Regular space
+				prevText.endsWith('&nbsp;') || // Check if it ends with &nbsp;
+				prevText.endsWith('&emsp;') // Check if it ends with &emsp;
+			) {
 				const beforeCursor = textareaElement.value.slice(0, cursorPosition);
 				const afterCursor = textareaElement.value.slice(cursorPosition);
 
-				// Insert the backslash and newline character
-				textareaElement.value = `${beforeCursor}\\\n${afterCursor}`;
-
-				// Move the cursor to the correct position after inserting
-				textareaElement.setSelectionRange(cursorPosition + 2, cursorPosition + 2);
-
-				// Manually trigger an input event to update the editor's value
-				textareaElement.dispatchEvent(new Event('input', { bubbles: true }));
-			}
-			if (event.key === 'Tab') {
-				event.preventDefault(); // Prevent default tab action
-
-				const cursorPosition = textareaElement.selectionStart;
-				const beforeCursor = textareaElement.value.slice(0, cursorPosition - 1);
-				const afterCursor = textareaElement.value.slice(cursorPosition);
-
 				// Insert the tab character
-				textareaElement.value = `${beforeCursor}&emsp;${afterCursor}`;
+				textareaElement.value = `${beforeCursor}&nbsp;${afterCursor}`;
 
 				// Move the cursor to the correct position after inserting
 				textareaElement.setSelectionRange(cursorPosition + 6, cursorPosition + 6);
 
 				// Manually trigger an input event to update the editor's value
 				textareaElement.dispatchEvent(new Event('input', { bubbles: true }));
+			} else {
+				const beforeCursor = textareaElement.value.slice(0, cursorPosition);
+				const afterCursor = textareaElement.value.slice(cursorPosition);
+
+				// Insert the tab character
+				textareaElement.value = `${beforeCursor} ${afterCursor}`;
+
+				// Move the cursor to the correct position after inserting
+				textareaElement.setSelectionRange(cursorPosition + 1, cursorPosition + 1);
+				textareaElement.dispatchEvent(new Event('input', { bubbles: true }));
 			}
-			if (event.key === ' ') {
-				event.preventDefault(); // Prevent default tab action
-
-				const cursorPosition = textareaElement.selectionStart;
-				const prevText = textareaElement.value.slice(cursorPosition - 6, cursorPosition); // Adjust slice length to match the longest string you're checking
-				if (
-					prevText.endsWith(' ') || // Regular space
-					prevText.endsWith('&nbsp;') || // Check if it ends with &nbsp;
-					prevText.endsWith('&emsp;') // Check if it ends with &emsp;
-				) {
-					const beforeCursor = textareaElement.value.slice(0, cursorPosition);
-					const afterCursor = textareaElement.value.slice(cursorPosition);
-
-					// Insert the tab character
-					textareaElement.value = `${beforeCursor}&nbsp;${afterCursor}`;
-
-					// Move the cursor to the correct position after inserting
-					textareaElement.setSelectionRange(cursorPosition + 6, cursorPosition + 6);
-
-					// Manually trigger an input event to update the editor's value
-					textareaElement.dispatchEvent(new Event('input', { bubbles: true }));
-				} else {
-					const beforeCursor = textareaElement.value.slice(0, cursorPosition);
-					const afterCursor = textareaElement.value.slice(cursorPosition);
-
-					// Insert the tab character
-					textareaElement.value = `${beforeCursor} ${afterCursor}`;
-
-					// Move the cursor to the correct position after inserting
-					textareaElement.setSelectionRange(cursorPosition + 1, cursorPosition + 1);
-					textareaElement.dispatchEvent(new Event('input', { bubbles: true }));
-				}
-			}
-		});
-
-		// Add input listener to check the cursor position - for formula insertion
-		textareaElement.addEventListener('input', () => checkCursorPosition(textareaElement));
-		textareaElement.addEventListener('click', () => checkCursorPosition(textareaElement));
+		}
 	}
 
 	function checkCursorPosition(textarea: HTMLTextAreaElement) {
