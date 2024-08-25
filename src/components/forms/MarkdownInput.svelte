@@ -116,7 +116,7 @@
 			'p-0'
 		);
 		formulaButton.id = 'formula-tool-btn';
-		mdEditor.querySelector('.carta-toolbar')?.children[2]?.before(formulaButton);
+		mdEditor.querySelector('.carta-toolbar-right')?.children[0]?.before(formulaButton);
 
 		// Add a help button
 		const helpButton = document.createElement('button');
@@ -139,6 +139,7 @@
 	function customizeTextarea() {
 		// Add keydown listener to intercept Enter key
 		textareaElement.addEventListener('keydown', (event) => {
+			if (value.includes('```') || value.match(/.[^ ]- ./)) return;
 			if (event.key === 'Enter') {
 				event.preventDefault(); // Prevent default newline action
 
@@ -376,8 +377,8 @@
 	}
 </script>
 
-<div bind:this={mdEditor}>
-	<div class="text-black bg-white relative">
+<div bind:this={mdEditor} class="w-full">
+	<div class="text-black bg-white relative w-full">
 		<MarkdownEditor
 			mode="tabs"
 			placeholder="Čia galite rašyti tekstą, formules ir kita..."

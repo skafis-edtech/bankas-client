@@ -39,7 +39,7 @@
 				onChange();
 			});
 		}
-		document?.querySelector('math-field')?.addEventListener('focus', () => {
+		mathfieldContainer?.querySelector('math-field')?.addEventListener('focus', () => {
 			mathVirtualKeyboard.layouts = [
 				{
 					label: 'Dažniausi',

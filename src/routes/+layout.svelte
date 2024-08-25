@@ -109,6 +109,8 @@
 		flex: 10 10 0;
 		background-color: beige;
 		padding: 10px;
+		max-width: 100%;
+		overflow-x: auto;
 	}
 	aside {
 		flex: 3 3 0;
