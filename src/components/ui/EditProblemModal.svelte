@@ -49,6 +49,7 @@
 		problem.problemImageSrc = problemImageTempDisplay;
 		problemImageTempDisplay = '';
 		successStore.set('Įkeltas užduoties paveiksliukas 😎');
+		onClose();
 	}
 
 	async function uploadAnswerImage() {
@@ -61,10 +62,11 @@
 		problem.answerImageSrc = answerImageTempDisplay;
 		answerImageTempDisplay = '';
 		successStore.set('Įkeltas atsakymo paveiksliukas 😎');
+		onClose();
 	}
 </script>
 
-<Modal bind:open>
+<Modal bind:open size="xl">
 	<div class="p-4">
 		<h1 class="text-2xl font-semibold">Redaguojama {problem.id} užduotis</h1>
 		<div class="my-8 border-2 p-4">
@@ -74,22 +76,27 @@
 			<MarkdownInput bind:value={problem.problemText} />
 			<p class="text-gray-600">Redaguoti atsakymo tekstą</p>
 			<MarkdownInput bind:value={problem.answerText} />
-			<Button class="mt-4" color="primary" size="lg" on:click={updateProblemTexts}>Išsaugoti</Button
-			>
-			<Button
-				class="mt-4"
-				color="alternative"
-				size="lg"
-				on:click={() => {
-					open = false;
-				}}>Uždaryti</Button
-			>
+
+			<div class="flex flex-row gap-4 justify-end">
+				<Button
+					class="mt-4"
+					color="alternative"
+					size="lg"
+					on:click={() => {
+						open = false;
+					}}>Uždaryti</Button
+				>
+				<Button class="mt-4" color="primary" size="lg" on:click={updateProblemTexts}
+					>Išsaugoti</Button
+				>
+			</div>
 		</div>
 
 		<div class="my-8 border-2 p-4">
 			<p class="text-gray-600">Redaguoti klausimo paveiksliuką</p>
 			{#if problem.problemImageSrc !== '' && !problemImageFile && problemImageTempDisplay === ''}
 				<img src={problem.problemImageSrc} alt="Užduoties paveikslėlis" />
+
 				<Button class="mt-4" color="red" size="lg" on:click={deleteProblemImage}>Ištrinti</Button>
 			{:else if problem.problemImageSrc === '' && !problemImageFile && problemImageTempDisplay === ''}
 				<SmallFileUpload
@@ -114,9 +121,11 @@
 						loading="lazy"
 					/>
 				</div>
-				<Button class="mt-4" color="primary" size="lg" on:click={uploadProblemImage}
-					>Išsaugoti</Button
-				>
+				<div class="flex flex-row gap-4 justify-end">
+					<Button class="mt-4" color="primary" size="lg" on:click={uploadProblemImage}
+						>Įkelti</Button
+					>
+				</div>
 			{:else}
 				<p class="text-gray-600">Paveiksliukas įkeliamas... (arba klaida)</p>
 			{/if}
@@ -150,9 +159,10 @@
 						loading="lazy"
 					/>
 				</div>
-				<Button class="mt-4" color="primary" size="lg" on:click={uploadAnswerImage}
-					>Išsaugoti</Button
-				>
+				<div class="flex flex-row gap-4 justify-end">
+					<Button class="mt-4" color="primary" size="lg" on:click={uploadAnswerImage}>Įkelti</Button
+					>
+				</div>
 			{:else}
 				<p class="text-gray-600">Paveiksliukas įkeliamas... (arba klaida)</p>
 			{/if}

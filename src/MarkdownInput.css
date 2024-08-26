@@ -4,6 +4,7 @@
 }
 
 .carta-renderer {
+	padding-top: 2px;
 	max-height: fit-content !important;
 	height: fit-content !important;
 }

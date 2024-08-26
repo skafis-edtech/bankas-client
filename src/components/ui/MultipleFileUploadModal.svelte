@@ -75,8 +75,9 @@
 
 <Modal bind:open>
 	<h2 class="mb-4 text-lg font-semibold">
-		Įkelkite paveikslėlius, užvardintus pradžioje numeriu, pvz. "1-failas.png", "2kitasfailas.jpg",
-		"3.png"
+		Supildykite užduočių sąrašą automatiškai, įkeliant paveikslėlių grupę. Nepateiktos užduotys
+		panaikinamos!. Įkelkite paveikslėlius, užvardintus pradžioje numeriu, pvz. "1-failas.png",
+		"2kitasfailas.jpg", "3.png"
 	</h2>
 	<h3>
 		Uždavinių failų karpymą ir vardinimą galite palengvinti naudodamiesi tinklapio <a

@@ -328,7 +328,7 @@
 	function openMathEditorForCreating(event: Event) {
 		event.preventDefault();
 		openMathEditor();
-		setMathEditorValue('');
+		setMathEditorValue('\\displaystyle ');
 	}
 
 	function openMathEditorForEditing(event: Event) {
@@ -396,7 +396,6 @@
 	</div>
 	<div class="text-black bg-white relative w-full">
 		<MarkdownEditor
-			mode="tabs"
 			placeholder="Čia galite rašyti tekstą, formules ir kita..."
 			{carta}
 			bind:value
