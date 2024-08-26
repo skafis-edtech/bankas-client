@@ -123,7 +123,7 @@
 				color="blue"
 				on:click={() => {
 					window.print();
-				}}>Atsisiųsti PDF</Button
+				}}>Atsisiųsti PDF (spausdinti)</Button
 			>
 		</div>
 	{:else}

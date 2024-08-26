@@ -150,7 +150,7 @@
 	}
 
 	function replaceKeys(event: KeyboardEvent) {
-		if (value.includes('```') || value.match(/.[^ ]- ./)) return;
+		if (value.includes('```') || value.match(/.[^ ]- ./) || value.includes('$$')) return;
 		if (event.key === 'Enter') {
 			event.preventDefault(); // Prevent default newline action
 
@@ -384,15 +384,7 @@
 </script>
 
 <div bind:this={mdEditor} class="w-full">
-	<div class="text-black bg-white relative w-full">
-		<MarkdownEditor
-			mode="tabs"
-			placeholder="Čia galite rašyti tekstą, formules ir kita..."
-			{carta}
-			bind:value
-		/>
-	</div>
-	<div id="math-editor" class="hidden md:w-1/2 p-4 m-2 bg-blue-100 rounded-md relative bg-">
+	<div id="math-editor" class="hidden lg:w-1/2 p-4 m-2 bg-blue-100 rounded-md relative">
 		<p>Formulės kūrimas/redagavimas</p>
 		<MathLiveEditor bind:mathfieldContainer onChange={insertTextAtCursor} />
 		<Button
@@ -401,5 +393,13 @@
 			class="w-5 h-5 absolute right-[-5px] top-[-5px] bg-red-600 rounded-full flex items-center hover:bg-red-800 p-0 m-0"
 			><CloseOutline class="w-full h-full p-0 m-0" /></Button
 		>
+	</div>
+	<div class="text-black bg-white relative w-full">
+		<MarkdownEditor
+			mode="tabs"
+			placeholder="Čia galite rašyti tekstą, formules ir kita..."
+			{carta}
+			bind:value
+		/>
 	</div>
 </div>

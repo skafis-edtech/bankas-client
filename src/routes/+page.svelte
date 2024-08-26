@@ -71,7 +71,7 @@
 		color="blue"
 		on:click={() => {
 			goto('/list');
-		}}>Atrinktų sąrašas</Button
+		}}>Atrinktų sąrašas (PDF generavimas)</Button
 	>
 </div>
 

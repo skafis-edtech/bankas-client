@@ -23,6 +23,8 @@
 			answerText: problem.answerText
 		});
 		successStore.set('Atnaujinti tekstai');
+		open = false;
+		onClose();
 	}
 
 	async function deleteProblemImage() {
@@ -62,7 +64,7 @@
 	}
 </script>
 
-<Modal bind:open on:close={onClose}>
+<Modal bind:open>
 	<div class="p-4">
 		<h1 class="text-2xl font-semibold">Redaguojama {problem.id} užduotis</h1>
 		<div class="my-8 border-2 p-4">
@@ -80,7 +82,6 @@
 				size="lg"
 				on:click={() => {
 					open = false;
-					onClose();
 				}}>Uždaryti</Button
 			>
 		</div>

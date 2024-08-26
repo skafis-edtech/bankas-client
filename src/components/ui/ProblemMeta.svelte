@@ -39,7 +39,7 @@
 
 		categoriesNames = loadedCategoryNames;
 
-		const response = await publicApi.getSourceById1(sourceId);
+		const response = await publicApi.getSourceById(sourceId);
 		sourceName = response.data.name;
 		author = response.data.authorUsername;
 
