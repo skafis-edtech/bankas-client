@@ -263,7 +263,9 @@
 
 <div class="flex flex-row justify-between mx-4">
 	<div class="w-28">
-		<Button on:click={() => goto('/submit/dashboard')} class="w-16 my-2">Grįžti</Button>
+		<Button on:click={() => goto('/submit/dashboard')} class="w-fit my-2"
+			>Grįžti į šaltinių sąrašą</Button
+		>
 	</div>
 	<h1 class="text-4xl font-semibold my-4 text-center">
 		Šaltinio pildymas užduotimis (redagavimas)
@@ -287,8 +289,15 @@
 <Accordion>
 	<AccordionItem closed class="bg-slate-200 mb-4">
 		<span slot="header"
-			><div class="text-black">Šaltinio informacija</div>
-			<div class="text-lg">{sourceData.name}</div></span
+			><div class="flex flex-row justify-between">
+				<div>
+					<div class="text-black">Šaltinio informacija</div>
+					<div class="text-lg">{sourceData.name}</div>
+				</div>
+				{#if sourceData.name.includes('DAR TVARKOMA')}
+					<div class="text-sm text-red-600">Pateikę užduotis ištrinkite "DAR TVARKOMA"</div>
+				{/if}
+			</div></span
 		>
 		<div class="relative">
 			<Button color="red" on:click={deleteSource} class="absolute top-5 right-5 z-10"

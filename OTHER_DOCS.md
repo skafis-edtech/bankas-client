@@ -79,3 +79,15 @@ pavidalu $f(x) = ax^2 + bx + c$.
 \end{document}
 ```
 ````
+
+# Latex examples
+
+```latex
+Formulė bus maža $\frac{x^2+23x}{\int_2^3 3 dx}$\
+Formulė bus didelė $\displaystyle \frac{x^2+23x}{\int_2^3 3 dx}$\
+Formulė bus didelė ir centruota
+$$
+\frac{x^2+23x}{\int_2^3 3 dx}
+$$
+
+```
