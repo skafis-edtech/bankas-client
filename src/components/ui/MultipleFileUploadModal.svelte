@@ -76,7 +76,7 @@
 <Modal bind:open>
 	<h2 class="mb-4 text-lg font-semibold">
 		Supildykite užduočių sąrašą automatiškai, įkeliant paveikslėlių grupę. Nepateiktos užduotys
-		panaikinamos!. Įkelkite paveikslėlius, užvardintus pradžioje numeriu, pvz. "1-failas.png",
+		panaikinamos! Įkelkite paveikslėlius, užvardintus pradžioje numeriu, pvz. "1-failas.png",
 		"2kitasfailas.jpg", "3.png"
 	</h2>
 	<h3>

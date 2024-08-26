@@ -129,7 +129,11 @@
 	tekstu.
 </p>
 <h4 class="text-xl font-semibold my-4">Tikz</h4>
-<p>Tikz skirtas piešti iliustracijas (diagramas).</p>
+<p>
+	Tikz skirtas piešti iliustracijas (diagramas). Galite naudotis Geogebra (kompiuterio programa) -
+	File > Export > Graphics View as PGF/Tikz > Generate PGF/Tikz code > Kopijuokite viską IŠSKYRUS
+	PIRMĄJĄ \documentclass EILUTĘ!
+</p>
 <p>Rašydami tikz tekstą, jį patalpinkite ```tikz ... ``` rėmuose</p>
 <p>Teksto įvesties palaikomi tikz paketai (bibliotekos):</p>
 <ul>

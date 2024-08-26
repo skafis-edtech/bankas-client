@@ -79,7 +79,7 @@
 		on:dragleave={handleDragLeave}
 		on:drop={handleDrop}
 		on:paste={handlePaste}
-		value="Tempkite arba įklijuokite paveikslėlį čia"
+		value="Tiesiog tempkite arba įklijuokite paveikslėlį čia!"
 		readonly
 	></textarea>
 	<!-- {#if isDragOver}
