@@ -270,7 +270,13 @@
 	<h1 class="text-4xl font-semibold my-4 text-center">
 		Šaltinio pildymas užduotimis (redagavimas)
 	</h1>
-	<div class="w-28"></div>
+	<div class="w-28 flex align-middle">
+		<Button
+			color="alternative"
+			on:click={() => (isDropModalOpen = true)}
+			class="w-fit my-auto text-sm p-2">Automatizuoti</Button
+		>
+	</div>
 </div>
 
 <div>
@@ -355,14 +361,6 @@
 	bind:answerImageTempDisplay={editModalAnswerImageTempDisplay}
 />
 
-<div class="flex flex-row justify-center">
-	<Button
-		color="alternative"
-		on:click={() => (isDropModalOpen = true)}
-		class="w-fit mx-auto text-sm p-2 my-2"
-		>Supildyti automatiškai įkeliant paveikslėlių grupę (nepateiktos užduotys panaikinamos)</Button
-	>
-</div>
 <MultipleFileUploadModal
 	bind:open={isDropModalOpen}
 	bind:groupedUpload
@@ -377,7 +375,7 @@
 		>
 		<ProblemCreateForm problemData={problem} />
 		<Button color="purple" on:click={() => submitProblem(i)} class="w-fit absolute right-2 bottom-2"
-			>Pateikti peržiūrai</Button
+			>Pridėti prie sąrašo</Button
 		>
 	</div>
 {/each}

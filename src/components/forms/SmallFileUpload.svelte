@@ -72,21 +72,19 @@
 <div
 	class={`flex flex-row gap-4 mt-1 px-4 py-2 w-full text-lg text-gray-900 bg-gray-50 rounded-lg border focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${isDragOver ? 'bg-blue-200' : ''} }`}
 >
-	<div class="relative">
-		<textarea
-			class="w-10/12"
-			placeholder="Tempkite arba įklijuokite paveikslėlį čia"
-			on:dragover={handleDragOver}
-			on:dragleave={handleDragLeave}
-			on:drop={handleDrop}
-			on:paste={handlePaste}
-			value="Tempkite arba įklijuokite paveikslėlį čia"
-			readonly
-		></textarea>
-		<!-- {#if isDragOver}
+	<textarea
+		class="w-10/12"
+		placeholder="Tempkite arba įklijuokite paveikslėlį čia"
+		on:dragover={handleDragOver}
+		on:dragleave={handleDragLeave}
+		on:drop={handleDrop}
+		on:paste={handlePaste}
+		value="Tiesiog tempkite arba įklijuokite paveikslėlį čia!"
+		readonly
+	></textarea>
+	<!-- {#if isDragOver}
 			<div class="absolute top-0 left-0 w-full h-full bg-blue-400"></div>
 		{/if} -->
-	</div>
 
 	<div>
 		<Fileupload

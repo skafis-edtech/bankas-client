@@ -115,7 +115,7 @@
 	aside {
 		flex: 3 3 0;
 	}
-	@media screen and (max-width: 768px) {
+	@media screen and (max-width: 1024px) {
 		aside {
 			display: none;
 		}

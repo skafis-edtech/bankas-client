@@ -109,22 +109,31 @@
 <h2 id="editor-guide" class="text-2xl font-semibold my-4 text-center">Teksto įvesties gidas</h2>
 <p>Teksto įvestyje galite rašyti Markdown, LaTex ir Tikz sintakse!</p>
 <p>
-	Tekstas vedamas paprastai. Paspaudę "Peržiūra" galite pamatyti, įvestas tekstas bus atvaizduotas.
-	Ypatumai: paspaudus Enter yra prirašomas \ simbolis - tik taip matysis nauja eilutė tą tekstą
-	atvaizduojant. Panašiai atsitinka vedant daug tarpų arba TAB simbolių. Suvedus ``` simbolius šis
-	funkcionalumas atšaukiamas, kad galima būtų patogiai rašyti tikz tekstą.
+	Tekstas vedamas paprastai. Dešinėje pusėje (arba paspaudę "Peržiūra") galite pamatyti, kaip
+	įvestas tekstas bus atvaizduotas. Ypatumai: paspaudus Enter yra prirašomas \ simbolis - tik taip
+	matysis nauja eilutė tą tekstą atvaizduojant. Panašiai atsitinka vedant daug tarpų arba TAB
+	simbolių. Suvedus ``` simbolius šis funkcionalumas atšaukiamas, kad galima būtų patogiai rašyti
+	tikz tekstą.
 </p>
 <p>
 	Formules galite vesti ranka (tarp $ simbolių) latex (katex) sintakse, arba naudojantis "Įterpti
 	formulę"/"Redaguoti formulę" mygtuku bei po jo paspaudimo atsiradusiu formulių redaktoriumi.
 	Galite teikti pasiūlymus kaip papildyti ar kitaip išdėstyti formulių redaktoriaus klaviatūrą.
+	Formulės rašomos "inline" (smulkiai) arba "display" (stambiai) stiliumi. Vedant su formulių
+	klaviatūra, automatiškai pridedama \displaystyle is formatuojama "display" stilius. Pašalinus
+	\displaystyle formatas grįš į "inline". Formulę rašant iš naujos eilutės $$ ... $$ rėmuose,
+	formulė formatuojasi centre.
 </p>
 <p>
 	Galite įkelti tik vieną paveiksliuką vienam įvesties laukui - paveiksliukas bus patalpintas po
 	tekstu.
 </p>
 <h4 class="text-xl font-semibold my-4">Tikz</h4>
-<p>Tikz skirtas piešti iliustracijas (diagramas).</p>
+<p>
+	Tikz skirtas piešti iliustracijas (diagramas). Galite naudotis Geogebra (kompiuterio programa) -
+	File > Export > Graphics View as PGF/Tikz > Generate PGF/Tikz code > Kopijuokite viską IŠSKYRUS
+	PIRMĄJĄ \documentclass EILUTĘ!
+</p>
 <p>Rašydami tikz tekstą, jį patalpinkite ```tikz ... ``` rėmuose</p>
 <p>Teksto įvesties palaikomi tikz paketai (bibliotekos):</p>
 <ul>

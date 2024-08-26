@@ -15,15 +15,15 @@
 			bind:value={problemData.problemText}
 			bind:imageFile={problemData.problemImageFile}
 			bind:tempImageDisplay={problemData.tempProblemImageDisplay}
-			label="Klausimas"
+			label="Klausimas (pasirinktinai su atsakymo variantais)"
 		/>
 		<details>
-			<summary>Pridėti atsakymą bei kitus komentarus</summary>
+			<summary>Pridėti teisingą atsakymą, pasirinktinai sprendimą bei kitus komentarus</summary>
 			<ImageUploadTextarea
 				bind:value={problemData.answerText}
 				bind:imageFile={problemData.answerImageFile}
 				bind:tempImageDisplay={problemData.tempAnswerImageDisplay}
-				label="Atsakymas bei kiti komentarai"
+				label="Teisingas atsakymas, pasirinktinai sprendimas bei kiti komentarai"
 			/>
 		</details>
 	</div>
