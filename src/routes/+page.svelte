@@ -5,7 +5,7 @@
 	import type { AuthContext } from '../types';
 	import { publicApi } from '$services/apiService';
 	import HorizontalLine from '$components/ui/HorizontalLine.svelte';
-	import { Button, TabItem, Tabs } from 'flowbite-svelte';
+	import { Alert, Button, TabItem, Tabs } from 'flowbite-svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import CategoryListPageable from '$components/layout/lists/CategoryListPageable.svelte';
@@ -53,9 +53,18 @@
 <h1 class="text-4xl font-semibold my-4 text-center">Skafis užduočių bankas</h1>
 
 <h5 class="text-md font-semibold my-4 text-center">
-	Mokytojų pasidalintos originalios matematikos užduotys, surūšiuotos į temas (kategorijas). Plačiau
-	puslapyje <a class="text-blue-800 underline" href="/about">"Apie"</a>
+	Mokytojų pasidalintos originalios matematikos užduotys. Plačiau puslapyje <a
+		class="text-blue-800 underline"
+		href="/about">"Apie"</a
+	>
 </h5>
+<Alert color="red" class="my-4 text-center">
+	<h1>
+		Labai reikalingas visapusiškas grįžtamasis ryšys! Lauksiu <a href="mailto:info@skafis.lt"
+			>info@skafis.lt</a
+		>
+	</h1>
+</Alert>
 
 <h4 class="text-md font-semibold my-4 text-center">
 	Užduočių: {numOfProblems || '...'}
