@@ -12,7 +12,11 @@
 		užduotys, įtraukiama išoriniai užduočių šaltiniai (ne autorinės užduotys).
 	</li>
 	<li>
-		Trečias etapas: integruojama su testai.skafis.lt, skafis.lt, etestavimas.skafis.lt (būsima TAO
+		Trečias etapas: sukuriama atsakymų rašymo sistema, kur bet kokie naudotojai gali siūlyti
+		atsakymų (gali ir su sprendimais) pasiūlymus. T.y. net ir mokiniai.
+	</li>
+	<li>
+		Ketvirtas etapas: integruojama su testai.skafis.lt, skafis.lt, etestavimas.skafis.lt (būsima TAO
 		sistema)
 	</li>
 </ul>
