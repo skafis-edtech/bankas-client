@@ -18,6 +18,8 @@
 	import { CloseOutline, EditOutline, PlusOutline, TrashBinOutline } from 'flowbite-svelte-icons';
 	import EditProblemModal from '$components/ui/EditProblemModal.svelte';
 	import MarkdownDisplay from '$components/ui/MarkdownDisplay.svelte';
+	import FindById from '$components/layout/home/FindById.svelte';
+	import HorizontalLine from '$components/ui/HorizontalLine.svelte';
 
 	let sourceId: string;
 	$: sourceId = $page.params.sourceId;
@@ -316,7 +318,7 @@
 				}}
 				class="p-2 mx-1"
 			>
-				Šaltinis sutvarkytas
+				Sutvarkiau šaltinį su užduotimis
 			</Button>
 		{:else}
 			<Button
@@ -327,7 +329,7 @@
 				}}
 				class="p-2 mx-1"
 			>
-				Šaltinis dar tvarkomas
+				Dar tvarkau šaltinį
 			</Button>
 		{/if}
 		<Button color="yellow" on:click={() => (isSourceModalOpen = true)} class="p-2 mx-1">
@@ -413,3 +415,5 @@
 {/each}
 
 <Button color="green" on:click={addProblem} class="w-full"><PlusOutline /></Button>
+<HorizontalLine />
+<FindById />

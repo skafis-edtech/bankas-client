@@ -1,4 +1,5 @@
 <script lang="ts">
+	import MarkdownInput from '$components/forms/MarkdownInput.svelte';
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
 	import { publicApi } from '$services/apiService';
 	import type { ProblemDisplayViewDto } from '$services/gen-client';
@@ -16,7 +17,9 @@
 </script>
 
 <div class="flex flex-col my-8 container mx-auto">
-	<p class="text-center text-sm my-0">Rodyti užduotį pagal SKF kodą</p>
+	<p class="text-center text-sm my-0">
+		Rodyti užduotį su redagavimo tekstu (kopijavimui) pagal SKF kodą
+	</p>
 
 	<form
 		on:submit|preventDefault={() => fetchStuff()}
@@ -60,5 +63,11 @@
 				sourceId: problemDisplayViewDto.sourceId
 			}}
 		/>
+		<p>Užduoties redagavimo tekstas</p>
+		<MarkdownInput value={problemDisplayViewDto.problemText} />
+		<details>
+			<summary>Atsakymo redagavimo tekstas </summary>
+			<MarkdownInput value={problemDisplayViewDto.answerText} />
+		</details>
 	{/if}
 </div>
