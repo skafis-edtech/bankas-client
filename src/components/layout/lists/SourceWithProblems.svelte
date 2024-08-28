@@ -43,7 +43,10 @@
 </script>
 
 <Accordion>
-	<AccordionItem bind:open={isOpen} class="bg-slate-200 mb-4 ">
+	<AccordionItem
+		bind:open={isOpen}
+		class={`bg-slate-200 mb-4 ${!source.name.includes('(DAR TVARKOMA)') && needApprovalStatusNone === 'approval' ? 'bg-green-200' : ''} `}
+	>
 		<span slot="header" class="text-black flex justify-between items-center w-full">
 			{#if showIndicator}
 				<Indicator
@@ -66,19 +69,12 @@
 				<strong>({source.problemCount})</strong> <em>{source.authorUsername}</em>
 			</p>
 		</span>
-		<MarkdownDisplay value={source.description} />
 		<div>
-			<p>
-				Autorius: <AuthorLink author={source.authorUsername} />
-			</p>
-			<p>Sukurta: {getNiceTimeString(source.createdOn)}</p>
-			<p>Pakeista: {getNiceTimeString(source.lastModifiedOn)}</p>
-
 			{#if needApprovalStatusNone === 'approval'}
 				<SourceReviewBar
 					afterReview={() => {
 						//TODO: FIX THIS SHIT - message and problems magically persists after closing and deleting accordion...
-						isOpen = false;
+						//isOpen = false;
 						afterReview();
 					}}
 					reviewStatus={source.reviewStatus}
@@ -93,6 +89,13 @@
 					reviewHistory={source.reviewHistory}
 				/>
 			{/if}
+			<MarkdownDisplay value={source.description} />
+
+			<p>
+				Autorius: <AuthorLink author={source.authorUsername} />
+			</p>
+			<p>Sukurta: {getNiceTimeString(source.createdOn)}</p>
+			<p>Pakeista: {getNiceTimeString(source.lastModifiedOn)}</p>
 
 			<div class="container mx-auto">
 				{#each problems as problem (problem?.id || Math.random())}

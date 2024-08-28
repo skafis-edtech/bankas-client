@@ -2,7 +2,7 @@
 	import MarkdownDisplay from '$components/ui/MarkdownDisplay.svelte';
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
 	import { publicApi } from '$services/apiService';
-	import type { Category, ProblemDisplayViewDto, Source } from '$services/gen-client';
+	import type { Category, ProblemDisplayViewDto } from '$services/gen-client';
 	import { normalizeString } from '$utils/helpers';
 	import { Accordion, AccordionItem } from 'flowbite-svelte';
 	import { onMount } from 'svelte';

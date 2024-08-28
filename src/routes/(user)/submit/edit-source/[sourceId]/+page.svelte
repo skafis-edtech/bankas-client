@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Accordion, AccordionItem, Button } from 'flowbite-svelte';
+	import { Accordion, AccordionItem, Button, Card, Modal } from 'flowbite-svelte';
 	import { goto } from '$app/navigation';
 	import SourceCreateForm from '$components/forms/SourceCreateForm.svelte';
 	import ProblemCreateForm from '$components/forms/ProblemCreateForm.svelte';
@@ -17,6 +17,9 @@
 	import MultipleFileUploadModal from '$components/ui/MultipleFileUploadModal.svelte';
 	import { CloseOutline, EditOutline, PlusOutline, TrashBinOutline } from 'flowbite-svelte-icons';
 	import EditProblemModal from '$components/ui/EditProblemModal.svelte';
+	import MarkdownDisplay from '$components/ui/MarkdownDisplay.svelte';
+	import FindById from '$components/layout/home/FindById.svelte';
+	import HorizontalLine from '$components/ui/HorizontalLine.svelte';
 
 	let sourceId: string;
 	$: sourceId = $page.params.sourceId;
@@ -259,6 +262,9 @@
 			answerImageSrc: ''
 		};
 	}
+
+	/* Source info edit modal*/
+	let isSourceModalOpen = false;
 </script>
 
 <div class="flex flex-row justify-between mx-4">
@@ -291,35 +297,63 @@
 	atmetimai yra atšaukiami, jei yra atliekami pakeitimai šaltinio informacijoje arba uždaviniuose.
 	Prisiminkite, kad sutikote su <a href="/about#upload-terms">sąlygomis</a> :).
 </p>
-
-<Accordion>
-	<AccordionItem closed class="bg-slate-200 mb-4">
-		<span slot="header"
-			><div class="flex flex-row justify-between">
-				<div>
-					<div class="text-black">Šaltinio informacija</div>
-					<div class="text-lg">{sourceData.name}</div>
-				</div>
-				{#if sourceData.name.includes('DAR TVARKOMA')}
-					<div class="text-sm text-red-600">Pateikę užduotis ištrinkite "DAR TVARKOMA"</div>
-				{/if}
-			</div></span
-		>
+<Card
+	class="max-w-md mx-auto my-6 min-w-full p-6 bg-white rounded-lg shadow-md dark:bg-gray-800 flex flex-row justify-between"
+>
+	<div>
+		<h2>{sourceData.name}</h2>
+		{#if sourceData.description === ''}
+			<h5><em>Šaltinio aprašymas nepateiktas</em></h5>
+		{:else}
+			<MarkdownDisplay value={sourceData.description} />
+		{/if}
+	</div>
+	<div>
+		{#if sourceData.name.includes('(DAR TVARKOMA)')}
+			<Button
+				color="green"
+				on:click={() => {
+					sourceData.name = sourceData.name.replace('(DAR TVARKOMA)', '');
+					updateSource();
+				}}
+				class="p-2 mx-1"
+			>
+				Sutvarkiau šaltinį su užduotimis
+			</Button>
+		{:else}
+			<Button
+				color="yellow"
+				on:click={() => {
+					sourceData.name += ' (DAR TVARKOMA)';
+					updateSource();
+				}}
+				class="p-2 mx-1"
+			>
+				Dar tvarkau šaltinį
+			</Button>
+		{/if}
+		<Button color="yellow" on:click={() => (isSourceModalOpen = true)} class="p-2 mx-1">
+			<EditOutline class="w-6 h-6" />
+		</Button>
+	</div>
+	<Modal open={isSourceModalOpen} on:close={() => (isSourceModalOpen = false)} size="xl">
 		<div class="relative">
 			<Button color="red" on:click={deleteSource} class="absolute top-5 right-5 z-10"
-				>Ištrinti</Button
+				>Ištrinti šaltinį</Button
 			>
 			<SourceCreateForm bind:sourceData />
 			<Button
 				disabled={!isSourceDataChanged}
 				color="yellow"
-				on:click={updateSource}
+				on:click={() => {
+					updateSource();
+					isSourceModalOpen = false;
+				}}
 				class="w-fit absolute right-2 bottom-2">Pateikti pakeitimą peržiūrai</Button
 			>
 		</div>
-	</AccordionItem>
-</Accordion>
-
+	</Modal>
+</Card>
 <div class="container mx-auto">
 	{#each submittedProblems as problem}
 		<div class="relative my-3">
@@ -381,3 +415,5 @@
 {/each}
 
 <Button color="green" on:click={addProblem} class="w-full"><PlusOutline /></Button>
+<HorizontalLine />
+<FindById />

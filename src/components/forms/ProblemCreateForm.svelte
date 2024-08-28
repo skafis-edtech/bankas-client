@@ -15,7 +15,7 @@
 			bind:value={problemData.problemText}
 			bind:imageFile={problemData.problemImageFile}
 			bind:tempImageDisplay={problemData.tempProblemImageDisplay}
-			label="Klausimas (pasirinktinai su atsakymo variantais)"
+			label="Užduotis"
 		/>
 		<details>
 			<summary>Pridėti teisingą atsakymą, pasirinktinai sprendimą bei kitus komentarus</summary>
