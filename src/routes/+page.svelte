@@ -61,11 +61,11 @@
 	>
 </h5>
 <Alert color="red" class="my-4 text-center">
-	<h3>
+	<h5>
 		Labai reikalingas visapusiškas grįžtamasis ryšys! Lauksiu <a href="mailto:info@skafis.lt"
 			>info@skafis.lt</a
 		>
-	</h3>
+	</h5>
 </Alert>
 
 <div class="flex flex-row justify-end">

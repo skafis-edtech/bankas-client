@@ -97,38 +97,54 @@
 				/>
 			</div>
 		{/each}
-		<div class="md:w-1/2 flex flex-col m-auto gap-2 my-12">
-			<h2 class="text-3xl font-semibold my-4 text-center">PDF generavimas</h2>
-			<label for="pdftitle" class="block mb-2">PDF pavadinimas</label>
-			<input id="pdftitle" type="text" bind:value={pdfTitle} class="w-full p-2 mb-4" />
-			<div class="flex flex-row gap-2">
-				<input type="checkbox" bind:checked={includeLink} />
-				<p>Pridėti nuorodą, t.y. užduočių numerių sąrašą</p>
-			</div>
-			<ButtonGroup class="m-auto">
-				<Button
-					color={printAnswers ? 'alternative' : 'green'}
-					on:click={() => {
-						printAnswers = false;
-					}}>Užduotys</Button
-				>
-				<Button
-					color={printAnswers ? 'blue' : 'alternative'}
-					on:click={() => {
-						printAnswers = true;
-					}}>Atsakymai</Button
-				></ButtonGroup
-			>
-			<Button
-				color="blue"
-				on:click={() => {
-					window.print();
-				}}>Atsisiųsti PDF (spausdinti)</Button
-			>
-		</div>
 	{:else}
-		<p>Nėra užduočių</p>
+		<p>
+			<strong>Užduočių nėra. </strong>
+			<em
+				>Taip yra todėl, nes nuorodoje esantis sąrašas yra tuščias, kai turėtų būti kažkas panašaus
+				kaip bankas.skafis.lt/list?list=5+1+102</em
+			>
+		</p>
+
+		<img alt="Nuorodos pavyzdys" src="/tutorial2.png" class="border-2 border-black" />
+		<p>
+			<em
+				>Jei pridėjote užduotis į sąrašą bet nematote, spauskite apačioje "Rodyti Jūsų sukurtą
+				sąrašą"</em
+			>
+		</p>
+		<img alt="Kur spausti, kad rodyti sąrašą" src="/tutorial3.png" class="border-2 border-black" />
 	{/if}
+</div>
+
+<div class="md:w-1/2 flex flex-col m-auto gap-2 my-12 no-print">
+	<h2 class="text-3xl font-semibold my-4 text-center">PDF generavimas</h2>
+	<label for="pdftitle" class="block mb-2">PDF pavadinimas</label>
+	<input id="pdftitle" type="text" bind:value={pdfTitle} class="w-full p-2 mb-4" />
+	<div class="flex flex-row gap-2">
+		<input type="checkbox" bind:checked={includeLink} />
+		<p>Pridėti nuorodą, t.y. užduočių numerių sąrašą</p>
+	</div>
+	<ButtonGroup class="m-auto">
+		<Button
+			color={printAnswers ? 'alternative' : 'green'}
+			on:click={() => {
+				printAnswers = false;
+			}}>Užduotys</Button
+		>
+		<Button
+			color={printAnswers ? 'blue' : 'alternative'}
+			on:click={() => {
+				printAnswers = true;
+			}}>Atsakymai</Button
+		></ButtonGroup
+	>
+	<Button
+		color="blue"
+		on:click={() => {
+			window.print();
+		}}>Atsisiųsti PDF (spausdinti)</Button
+	>
 </div>
 
 <div class={`${printAnswers ? 'hidden' : ''}`}>
@@ -242,7 +258,17 @@
 		</div>
 		<Button on:click={clearList} color="red">Išvalyti sąrašą</Button>
 	{:else}
-		<p>Nėra sąrašo</p>
+		<p>
+			<strong>Nėra sąrašo. </strong><em
+				>Sąrašą galite sukurti pažymėdami atskiras užduotis arba suvesdami kodus čia.</em
+			>
+			<img
+				alt="Kur pridėti užduotį prie sąrašo"
+				src="/tutorial1.png"
+				class="border-2 border-black"
+			/>
+		</p>
+		<Button color="green" on:click={addSkfItem} class="h-8 w-28"><PlusOutline /></Button>
 	{/if}
 	{#if isDifferentList}
 		<div class="flex flex-row justify-center gap-4 mt-4">
