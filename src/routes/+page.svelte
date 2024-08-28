@@ -60,13 +60,19 @@
 		href="/about">"Apie"</a
 	>
 </h5>
+<Alert color="blue" class="my-4 text-center">
+	<h5>
+		Tinklapio versija nėra stabili, todėl kartais tinklapio veikimas gali sutrikti. Tokiu atveju
+		mėginkite naudotis vėliau.
+	</h5>
+</Alert>
+
 <Alert color="red" class="my-4 text-center">
-	<h5>Atsiprašome, sistema laikinai neveikia...</h5>
-	<!-- <h5>
+	<h5>
 		Labai reikalingas visapusiškas grįžtamasis ryšys! Lauksiu <a href="mailto:info@skafis.lt"
 			>info@skafis.lt</a
 		>
-	</h5> -->
+	</h5>
 </Alert>
 
 <div class="flex flex-row justify-end">
