@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { SourceDisplayDtoReviewStatusEnum } from '$services/gen-client';
 	import { Badge, Button, Input, Popover } from 'flowbite-svelte';
-	import { CheckCircleSolid, CloseCircleSolid, MessageDotsOutline } from 'flowbite-svelte-icons';
+	import { MessageDotsOutline } from 'flowbite-svelte-icons';
 	import { approvalApi } from '$services/apiService';
 	import { successStore } from '$lib/stores';
 	import { getNiceTimeString } from '$lib/utils';
 	import AuthorLink from './AuthorLink.svelte';
-	import { onDestroy } from 'svelte';
 
 	export let reviewStatus: SourceDisplayDtoReviewStatusEnum;
 	export let sourceId: string;
@@ -26,7 +25,7 @@
 		bgForBar = 'bg-slate-400';
 		placeholder = 'Galite peržiūrėti ir papildyti kito peržiūrėtojo pastabas savomis...';
 	} else if (reviewStatus === SourceDisplayDtoReviewStatusEnum.Approved) {
-		bgForBar = 'bg-slate-300';
+		bgForBar = 'bg-slate-400';
 		placeholder = 'Nieko nereikia daryti. Nebent norite atšaukti patvirtinimą...';
 	} else {
 		throw new Error('Unknown review status');
@@ -39,12 +38,14 @@
 		}
 		approvalApi.reject(sourceId, { reviewMessage: newMessage });
 		successStore.set('Sėkmingai atmesta');
+		bgForBar = 'bg-slate-400';
 		afterReview();
 	}
 
 	async function approve() {
 		approvalApi.approve(sourceId, { reviewMessage: newMessage });
 		successStore.set('Sėkmingai patvirtinta');
+		bgForBar = 'bg-slate-400';
 		afterReview();
 	}
 </script>
@@ -87,7 +88,11 @@
 	{/if}
 	<Input type="text" {placeholder} bind:value={newMessage} />
 	<span class="flex flex-row">
-		<Button color="green" on:click={approve} class="p-2 mx-1">Patvirtinti</Button>
-		<Button color="red" on:click={reject} class="p-2 mx-1">Atmesti</Button>
+		<Button color="green" disabled={bgForBar === 'bg-slate-400'} on:click={approve} class="p-2 mx-1"
+			>Patvirtinti</Button
+		>
+		<Button color="red" disabled={bgForBar === 'bg-slate-400'} on:click={reject} class="p-2 mx-1"
+			>Atmesti</Button
+		>
 	</span>
 </div>

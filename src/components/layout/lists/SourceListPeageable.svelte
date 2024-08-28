@@ -61,41 +61,43 @@
 	});
 
 	function removeSource(id: string) {
-		sources = sources.filter((source) => source.id !== id);
+		//sources = sources.filter((source) => source.id !== id);
 	}
 </script>
 
 <Search class="my-3" placeholder="Ieškoti" bind:value={searchValue} />
 
 {#each Object.entries(sources) as [id, source]}
-	{#if sourcesSubset === 'mine' && source.reviewStatus !== SourceDisplayDtoReviewStatusEnum.Rejected}
-		<SourceWithProblems {source} {searchValue} needApprovalStatusNone="status" />
-	{/if}
-	{#if sourcesSubset === 'approved' || sourcesSubset === 'author'}
-		<SourceWithProblems
-			{source}
-			{searchValue}
-			needApprovalStatusNone="none"
-			showIndicator={false}
-		/>
-	{/if}
-	{#if sourcesSubset === 'mine' && source.reviewStatus === SourceDisplayDtoReviewStatusEnum.Rejected}
-		<SourceManageBar
-			reviewStatus={source.reviewStatus}
-			sourceId={source.id}
-			reviewHistory={source.reviewHistory}
-		/>
-		<SourceWithProblems {source} {searchValue} needApprovalStatusNone="none" />
-	{/if}
-	{#if sourcesSubset === 'all'}
-		<SourceWithProblems
-			afterReview={() => removeSource(source.id)}
-			{source}
-			{searchValue}
-			needApprovalStatusNone="approval"
-			showIndicator={false}
-		/>
-	{/if}
+	<div class="relative">
+		{#if sourcesSubset === 'mine' && source.reviewStatus !== SourceDisplayDtoReviewStatusEnum.Rejected}
+			<SourceWithProblems {source} {searchValue} needApprovalStatusNone="status" />
+		{/if}
+		{#if sourcesSubset === 'approved' || sourcesSubset === 'author'}
+			<SourceWithProblems
+				{source}
+				{searchValue}
+				needApprovalStatusNone="none"
+				showIndicator={false}
+			/>
+		{/if}
+		{#if sourcesSubset === 'mine' && source.reviewStatus === SourceDisplayDtoReviewStatusEnum.Rejected}
+			<SourceManageBar
+				reviewStatus={source.reviewStatus}
+				sourceId={source.id}
+				reviewHistory={source.reviewHistory}
+			/>
+			<SourceWithProblems {source} {searchValue} needApprovalStatusNone="none" />
+		{/if}
+		{#if sourcesSubset === 'all'}
+			<SourceWithProblems
+				afterReview={() => removeSource(source.id)}
+				{source}
+				{searchValue}
+				needApprovalStatusNone="approval"
+				showIndicator={false}
+			/>
+		{/if}
+	</div>
 {/each}
 
 <div class="pagination">
