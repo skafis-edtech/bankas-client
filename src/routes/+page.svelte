@@ -62,8 +62,8 @@
 </h5>
 <Alert color="blue" class="my-4 text-center">
 	<h5>
-		Tinklapio versija nėra stabili, todėl kartais tinklapio veikimas gali sutrikti. Tokiu atveju
-		mėginkite naudotis vėliau.
+		Dėl nemokamo servisų naudojimo limitų, antroje dienos pusėje tinklapio veikimas gali sutrikti.
+		Plačiau puslapyje <a class="text-blue-800 underline" href="/about">"Apie"</a>
 	</h5>
 </Alert>
 
