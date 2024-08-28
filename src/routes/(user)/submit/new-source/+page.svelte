@@ -12,8 +12,8 @@
 	};
 	let subject = 'Matematika';
 	let name = '';
-	let status = 'DAR TVARKOMA';
-	$: sourceData.name = `${subject}. ${name}${status !== '' ? ' (' + status + ')' : ''}`;
+	let status = '(DAR TVARKOMA)';
+	$: sourceData.name = `${subject}. ${name} ${status !== '' ? status : ''}`;
 
 	async function submitSource() {
 		if (name === '') {
@@ -52,8 +52,8 @@
 
 <div class="relative">
 	<div class="space-y-6 mt-4 mb-8">
-		<div class="flex flex-row gap-4 justify-center">
-			<div class="flex-2">
+		<div class="flex flex-col xl:flex-row gap-4 justify-center">
+			<div class="max-w-32">
 				<Label for="subject" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
 					Dalykas
 				</Label>
@@ -63,10 +63,10 @@
 					type="text"
 					bind:value={subject}
 					placeholder="Dalykas"
-					class="mt-1 block w-full px-4 py-2 text-lg border-black dark:border-white border-2"
+					class="mt-1 block px-4 py-2 text-lg border-black dark:border-white border-2"
 				/>
 			</div>
-			<div class="flex-1">
+			<div class="w-full">
 				<Label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
 					Šaltinio pavadinimas
 				</Label>
@@ -75,21 +75,20 @@
 					type="text"
 					bind:value={name}
 					placeholder="Šaltinio pavadinimas"
-					class="mt-1 block w-full px-4 py-2 text-lg border-black dark:border-white border-2"
+					class="mt-1 block  px-4 py-2 text-lg border-black dark:border-white border-2"
 				/>
 			</div>
 
-			<div class="flex-2">
+			<div class="max-w-48">
 				<Label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-					Statusas (ištrinkite įkėlę užduotis)
+					Statusas (tuščia - administratoriai jau gali peržiūrėti)
 				</Label>
 				<Input
-					disabled
 					id="status"
 					type="text"
 					bind:value={status}
 					placeholder="Statusas"
-					class="mt-1 block w-full px-4 py-2 text-lg border-black dark:border-white border-2"
+					class="mt-1 block px-4 py-2 text-lg border-black dark:border-white border-2"
 				/>
 			</div>
 		</div>

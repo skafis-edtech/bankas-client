@@ -51,44 +51,31 @@
 </script>
 
 <h1 class="text-4xl font-semibold my-4 text-center">Skafis užduočių bankas</h1>
-
+<h4 class="text-md font-semibold my-4 text-center">
+	Užduočių: {numOfProblems || '...'}
+</h4>
 <h5 class="text-md font-semibold my-4 text-center">
-	Mokytojų pasidalintos originalios matematikos užduotys. Plačiau puslapyje <a
+	Mokytojų pasidalintos originalios bei kitų šaltinių matematikos užduotys. Plačiau puslapyje <a
 		class="text-blue-800 underline"
 		href="/about">"Apie"</a
 	>
 </h5>
 <Alert color="red" class="my-4 text-center">
-	<h1>
+	<h3>
 		Labai reikalingas visapusiškas grįžtamasis ryšys! Lauksiu <a href="mailto:info@skafis.lt"
 			>info@skafis.lt</a
 		>
-	</h1>
+	</h3>
 </Alert>
 
-<h4 class="text-md font-semibold my-4 text-center">
-	Užduočių: {numOfProblems || '...'}
-</h4>
-<div class="flex flex-row justify-between">
-	<Button
-		color="alternative"
-		on:click={() => {
-			goto('/snipping-tool');
-		}}>Karpymo įrankis</Button
-	>
+<div class="flex flex-row justify-end">
 	<Button
 		color="blue"
 		on:click={() => {
 			goto('/list');
-		}}>Atrinktų sąrašas (PDF generavimas)</Button
+		}}>Atrinktų sąrašas ir PDF generavimas</Button
 	>
 </div>
-
-<HorizontalLine />
-
-<FindById />
-
-<HorizontalLine />
 
 <Tabs>
 	<TabItem open={tab === 'sources' || !tab} title="Šaltiniai" on:click={loadSources}>
@@ -111,8 +98,9 @@
 			<h1 class="text-2xl font-semibold my-3">Kategorijos</h1>
 			<p>Šiuo metu kategorijos dar kuriamos ...</p>
 		</div>
-		{#if $user}
-			<CategoryListPageable searchValue={searchCategoriesValue} />
-		{/if}
 	</TabItem>
 </Tabs>
+
+<HorizontalLine />
+
+<FindById />

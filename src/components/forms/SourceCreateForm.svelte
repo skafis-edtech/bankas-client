@@ -13,9 +13,7 @@
 	<div class="space-y-6 mt-4 mb-8">
 		<div>
 			<Label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-				Pavadinimas (pirmiausia paminėkite dalyką, taip pat, jei šaltinis dar nėra paruoštas
-				galutinei peržiūrai, parašykite tai skliaustuose. Pvz.: "Biologija. 11 kl. kontrolinis
-				darbas (DAR TVARKOMA)")
+				Pilnas pavadinimas
 			</Label>
 			<Input
 				id="name"
