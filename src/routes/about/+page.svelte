@@ -1,4 +1,14 @@
+<script>
+	import { Alert } from 'flowbite-svelte';
+</script>
+
 <h1 class="text-4xl font-semibold my-4 text-center">Apie</h1>
+<Alert color="blue"
+	>Kadangi naudojama nemokama duombazės versija, leidžiama tik 50k skaitymų (užklausų) per dieną.
+	Todėl iki tol, kol optimizuosiu kodą bei surasiu kitų nemokamų servisų, užduočių banko turinys bus
+	pasiekiamas tik pirmojoje dienos pusėje... Atsiprašau už nepatogumus, viskas bus sutvarkyta ASAP.</Alert
+>
+<img alt="Error explain screenshot" src="/tutorial4.png" />
 <p>Funkcionalumų etapai:</p>
 <ul>
 	<li>
