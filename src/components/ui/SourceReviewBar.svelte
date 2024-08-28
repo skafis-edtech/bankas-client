@@ -6,6 +6,7 @@
 	import { successStore } from '$lib/stores';
 	import { getNiceTimeString } from '$lib/utils';
 	import AuthorLink from './AuthorLink.svelte';
+	import { onDestroy } from 'svelte';
 
 	export let reviewStatus: SourceDisplayDtoReviewStatusEnum;
 	export let sourceId: string;
@@ -32,6 +33,10 @@
 	}
 
 	async function reject() {
+		if (!newMessage) {
+			alert('Atmetant privaloma parašyti žinutę (priežastį)');
+			return;
+		}
 		approvalApi.reject(sourceId, { reviewMessage: newMessage });
 		successStore.set('Sėkmingai atmesta');
 		afterReview();
@@ -82,7 +87,7 @@
 	{/if}
 	<Input type="text" {placeholder} bind:value={newMessage} />
 	<span class="flex flex-row">
-		<Button color="green" on:click={approve} class="p-2 mx-1"><CheckCircleSolid /></Button>
-		<Button color="red" on:click={reject} class="p-2 mx-1"><CloseCircleSolid /></Button>
+		<Button color="green" on:click={approve} class="p-2 mx-1">Patvirtinti</Button>
+		<Button color="red" on:click={reject} class="p-2 mx-1">Atmesti</Button>
 	</span>
 </div>

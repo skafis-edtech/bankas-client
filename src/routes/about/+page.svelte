@@ -19,6 +19,7 @@
 		Ketvirtas etapas: integruojama su testai.skafis.lt, skafis.lt, etestavimas.skafis.lt (būsima TAO
 		sistema)
 	</li>
+	<li>Penktas etapas: sistema pritaikoma dalykų ypatumams.</li>
 </ul>
 
 <h2 class="text-2xl font-semibold my-4 text-center">Nuorodos</h2>
@@ -69,9 +70,10 @@
 	Naudojantis užduotimis turėkite omenyje, kad joms galioja <a
 		href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA</a
 	> licencija. T.y. galite laisvai naudotis, dalintis, adaptuoti, tačiau ne pardavinėti, plačiai dalinantis
-	turite kredituoti autorių. Autoriaus vardo minėjimui, platinant užduočių turinį už artimos aplinkos
-	ribų, pakanka paminėti tinklapį bei užduoties unikalų SKF kodą bet kokia forma (arba naudotojo prisijungimo
-	vardą), nebent autorius leidžia kitaip (tuomet pakanka tik paminėti tinklapį).
+	turite kredituoti autorių. Platinant užduočių turinį: jei užduotys autorinės, šalia tinklapio pavadinimo
+	reikia paminėti autoriaus naudotojo vardą arba užduoties unikalų numerį, jei užduotys nėra autorinės
+	(naudotojo biografijoje parašyta, kad paskyra naudojama kelti neautorines užduotis, iš kitų šaltinių)
+	- tuomet reikia nurodyti patį išorinį šaltinį (pvz.: VBE 2022 užduotis).
 </p>
 <p class="mt-4">
 	<strong
@@ -101,8 +103,8 @@
 </p>
 <h4 class="text-xl font-semibold my-4" id="upload-terms">2.2. Užduočių kėlimas</h4>
 <p>
-	Teikdami užduotis peržiūrai patvirtinate, kad keliate tik savo autorines užduotis (kitais atvejais
-	kreipkitės el. paštu info@skafis.lt), bei sutinkate kad jūsų turiniui galiotų <a
+	Teikdami užduotis peržiūrai patvirtinate, kad keliate tik savo autorines užduotis (nebent kitaip
+	yra sutarta su MB Skafis direktoriumi info@skafis.lt), bei sutinkate kad jūsų turiniui galiotų <a
 		href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA</a
 	> licencija.
 </p>
@@ -122,7 +124,7 @@
 <p>
 	Formules galite vesti ranka (tarp $ simbolių) latex (katex) sintakse, arba naudojantis "Įterpti
 	formulę"/"Redaguoti formulę" mygtuku bei po jo paspaudimo atsiradusiu formulių redaktoriumi.
-	Galite teikti pasiūlymus kaip papildyti ar kitaip išdėstyti formulių redaktoriaus klaviatūrą.
+	Galite teikti pasiūlymus, kaip papildyti ar kitaip išdėstyti formulių redaktoriaus klaviatūrą.
 	Formulės rašomos "inline" (smulkiai) arba "display" (stambiai) stiliumi. Vedant su formulių
 	klaviatūra, automatiškai pridedama \displaystyle is formatuojama "display" stilius. Pašalinus
 	\displaystyle formatas grįš į "inline". Formulę rašant iš naujos eilutės $$ ... $$ rėmuose,

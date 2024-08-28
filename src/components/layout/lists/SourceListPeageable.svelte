@@ -61,7 +61,6 @@
 	});
 
 	function removeSource(id: string) {
-		console.log('rm', id);
 		sources = sources.filter((source) => source.id !== id);
 	}
 </script>

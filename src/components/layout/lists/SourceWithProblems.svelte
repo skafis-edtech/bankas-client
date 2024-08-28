@@ -76,7 +76,11 @@
 
 			{#if needApprovalStatusNone === 'approval'}
 				<SourceReviewBar
-					{afterReview}
+					afterReview={() => {
+						//TODO: FIX THIS SHIT - message and problems magically persists after closing and deleting accordion...
+						isOpen = false;
+						afterReview();
+					}}
 					reviewStatus={source.reviewStatus}
 					sourceId={source.id}
 					reviewHistory={source.reviewHistory}
