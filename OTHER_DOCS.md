@@ -91,3 +91,9 @@ $$
 $$
 
 ```
+
+## Svelte dev notes
+
+This is very good article to understand svelte store/context/props stuff:
+
+https://stackoverflow.com/questions/67663671/understanding-context-in-svelte-convert-from-react-context

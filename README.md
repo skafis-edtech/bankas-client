@@ -38,8 +38,22 @@ Branches:
 
 Only one instance of database is used.
 
-## Notes
+## Backup
 
-This is very good article to understand svelte store/context/props stuff:
+All firestore:
 
-https://stackoverflow.com/questions/67663671/understanding-context-in-svelte-convert-from-react-context
+```bash
+npm run backup-firestore
+```
+
+One collection (e.g. categories):
+
+```bash
+npm run backup-firestore categories
+```
+
+All storage:
+
+```bash
+npm run backup-storage
+```
