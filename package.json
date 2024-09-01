@@ -1,7 +1,10 @@
 {
 	"name": "bankas-skafis",
-	"version": "0.0.1",
+	"version": "3.1.0",
 	"private": true,
+	"workspaces": [
+		"OTHER_SCRIPTS/*"
+	],
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
@@ -13,7 +16,9 @@
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
 		"test:unit": "vitest",
-		"genapi": "openapi-generator-cli generate -i http://localhost:9000/v3/api-docs -g typescript-axios -o src/services/gen-client/"
+		"genapi": "openapi-generator-cli generate -i http://localhost:9000/v3/api-docs -g typescript-axios -o src/services/gen-client/",
+		"backup-firestore": "node OTHER_SCRIPTS/backup_firestore.js",
+		"backup-storage": "node OTHER_SCRIPTS/backup_storage.js"
 	},
 	"devDependencies": {
 		"@openapitools/openapi-generator-cli": "^2.9.0",
@@ -48,6 +53,7 @@
 		"autoprefixer": "^10.4.19",
 		"axios": "^1.7.2",
 		"carta-md": "^4.3.3",
+		"dotenv": "^16.4.5",
 		"firebase": "^10.12.2",
 		"firebase-admin": "^12.3.1",
 		"firebase-tools": "^13.10.2",

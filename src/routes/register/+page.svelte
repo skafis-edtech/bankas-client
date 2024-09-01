@@ -2,7 +2,7 @@
 	import { isUsernameAvailable, registerUser } from '$services/auth';
 	import { goto } from '$app/navigation';
 	import { ROLES } from '$utils/constants';
-	import { Button, Checkbox, Helper, Input, Label } from 'flowbite-svelte';
+	import { Alert, Button, Checkbox, Helper, Input, Label } from 'flowbite-svelte';
 	import { getContext, onMount } from 'svelte';
 	import type { AuthContext } from '../../types';
 
@@ -64,6 +64,7 @@
 
 <div class="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
 	<h2 class="text-center text-2xl font-semibold text-gray-700 dark:text-white">Registracija</h2>
+	<Alert color="red">Dėl sistemos nesklandumų savarankiška registracija laikinai uždaryta...</Alert>
 	<form on:submit|preventDefault={register} class="space-y-6">
 		<div>
 			<Label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
