@@ -8,7 +8,6 @@
 	import { Alert, Button, TabItem, Tabs } from 'flowbite-svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import CategoryListPageable from '$components/layout/lists/CategoryListPageable.svelte';
 	import SourceListPeageable from '$components/layout/lists/SourceListPeageable.svelte';
 
 	const { user } = getContext('authContext') as AuthContext;
@@ -60,18 +59,12 @@
 		href="/about">"Apie"</a
 	>
 </h5>
-<Alert color="blue" class="my-4 text-center">
-	<h5>
-		Dėl nemokamo servisų naudojimo limitų, antroje dienos pusėje tinklapio veikimas gali sutrikti.
-		Plačiau puslapyje <a class="text-blue-800 underline" href="/about">"Apie"</a>
-	</h5>
-</Alert>
 
 <Alert color="red" class="my-4 text-center">
 	<h5>
 		Labai reikalingas visapusiškas grįžtamasis ryšys! Lauksiu <a href="mailto:info@skafis.lt"
 			>info@skafis.lt</a
-		>
+		> arba bet kur kitur.
 	</h5>
 </Alert>
 
