@@ -67,6 +67,12 @@
 					<option value="Fizika">Fizika</option>
 					<option value="Chemija">Chemija</option>
 					<option value="Biologija">Biologija</option>
+					<option value="Lietuvių kalba ir literatūra">Lietuvių kalba ir literatūra</option>
+					<option value="Anglų kalba">Anglų kalba</option>
+					<option value="Istorija">Istorija</option>
+					<option value="Informatika">Informatika</option>
+					<option value="Informatika">Geografija</option>
+					<option value="...Kita...">Kita</option>
 				</select>
 			</div>
 			<div class="w-full">
