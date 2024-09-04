@@ -7,14 +7,14 @@
 <p>Funkcionalumų etapai:</p>
 <ul>
 	<li>
-		Pirmas etapas (dabar): keliamos pradžioje tik autorinės ir tik matematikos užduotys, peržiūrimos
-		ir patvirtinamos. Dedikuotas administratorius kuria kategorijas ateities užduočių rūšiavimui.
-		Jau galima sudarinėti užduočių sąrašus (dalintis sąrašų nuorodomis) bei generuoti užduočių ir
+		Pirmas etapas, pakeistas (dabar): keliamos pradžioje tik autorinės užduotys, peržiūrimos ir
+		patvirtinamos. Dedikuotas administratorius kuria kategorijas ateities užduočių rūšiavimui. Jau
+		galima sudarinėti užduočių sąrašus (dalintis sąrašų nuorodomis) bei generuoti užduočių ir
 		atsakymų PDF'us.
 	</li>
 	<li>
-		Antras etapas: rūšiuojama į sukurtas kategorijas esamos užduotys, keliamos naujų dalykų
-		užduotys, įtraukiama išoriniai užduočių šaltiniai (ne autorinės užduotys).
+		Antras etapas: rūšiuojama į sukurtas kategorijas esamos užduotys, įtraukiama išoriniai užduočių
+		šaltiniai (ne autorinės užduotys).
 	</li>
 	<li>
 		Trečias etapas: sukuriama atsakymų rašymo sistema, kur bet kokie naudotojai gali siūlyti

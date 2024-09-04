@@ -10,7 +10,7 @@
 		name: '',
 		description: ''
 	};
-	let subject = 'Matematika';
+	let subject = '';
 	let name = '';
 	let status = '(DAR TVARKOMA)';
 	$: sourceData.name = `${subject}. ${name} ${status !== '' ? status : ''}`;
@@ -53,18 +53,21 @@
 <div class="relative">
 	<div class="space-y-6 mt-4 mb-8">
 		<div class="flex flex-col xl:flex-row gap-4 justify-center">
-			<div class="max-w-32">
+			<div class="max-w-64">
 				<Label for="subject" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
 					Dalykas
 				</Label>
-				<Input
-					disabled
+				<select
 					id="subject"
-					type="text"
 					bind:value={subject}
-					placeholder="Dalykas"
 					class="mt-1 block px-4 py-2 text-lg border-black dark:border-white border-2"
-				/>
+				>
+					<option value="">Pasirinkite dalyką</option>
+					<option value="Matematika">Matematika</option>
+					<option value="Fizika">Fizika</option>
+					<option value="Chemija">Chemija</option>
+					<option value="Biologija">Biologija</option>
+				</select>
 			</div>
 			<div class="w-full">
 				<Label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">

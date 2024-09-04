@@ -54,7 +54,7 @@
 	Užduočių: {numOfProblems || '...'}
 </h4>
 <h5 class="text-md font-semibold my-4 text-center">
-	Mokytojų pasidalintos originalios bei kitų šaltinių matematikos užduotys. Plačiau puslapyje <a
+	Mokytojų pasidalintos originalios bei kitų šaltinių užduotys. Plačiau puslapyje <a
 		class="text-blue-800 underline"
 		href="/about">"Apie"</a
 	>
