@@ -5,8 +5,11 @@
 	import { Alert, Button, Checkbox, Helper, Input, Label } from 'flowbite-svelte';
 	import { getContext, onMount } from 'svelte';
 	import type { AuthContext } from '../../types';
+	import { page } from '$app/stores';
 
 	const { user } = getContext('authContext') as AuthContext;
+
+	const redirectUrl: string | null = $page.url.searchParams.get('redirect');
 
 	onMount(() => {
 		if ($user) {
@@ -54,7 +57,11 @@
 		}
 		try {
 			await registerUser(email, password, username, role);
-			goto('/');
+			if (redirectUrl) {
+				window.location.href = redirectUrl;
+			} else {
+				goto('/');
+			}
 		} catch (error: any) {
 			console.error('Registration failed:', error);
 			errorMessage = error.message;
@@ -125,9 +132,16 @@
 					href="/about#terms"
 					class="text-blue-600 hover:underline dark:text-blue-400"
 				>
-					platformos sąlygomis</a
-				> (galite teikti pasiūlymus pakeitimui el. paštu info@skafis.lt). Patvirtinu, kad el. pašto adresas
-				yra teisingas.
+					bankas.skafis.lt</a
+				>
+				bei
+				<a
+					href="https://testai.skafis.lt/terms"
+					class="text-blue-600 hover:underline dark:text-blue-400"
+				>
+					testai.skafis.lt</a
+				> platformų sąlygomis (galite teikti pasiūlymus pakeitimui el. paštu info@skafis.lt). Patvirtinu,
+				kad el. pašto adresas yra teisingas.
 			</Label>
 			<Checkbox id="terms" required bind:checked={terms} class="mt-1 w-6 h-6 block" />
 		</div>
