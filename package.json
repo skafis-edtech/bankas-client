@@ -18,7 +18,9 @@
 		"test:unit": "vitest",
 		"genapi": "openapi-generator-cli generate -i http://localhost:9000/v3/api-docs -g typescript-axios -o src/services/gen-client/",
 		"backup-firestore": "node OTHER_SCRIPTS/backup_firestore.js",
-		"backup-storage": "node OTHER_SCRIPTS/backup_storage.js"
+		"backup-storage": "node OTHER_SCRIPTS/backup_storage.js",
+		"import-users": "node OTHER_SCRIPTS/import_users.js",
+		"backup-auth": "node OTHER_SCRIPTS/backup_auth.js"
 	},
 	"devDependencies": {
 		"@openapitools/openapi-generator-cli": "^2.9.0",
