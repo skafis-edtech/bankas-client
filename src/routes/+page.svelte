@@ -3,12 +3,12 @@
 	import FindById from '$components/layout/home/FindById.svelte';
 	import type { SourceDisplayDto } from '$services/gen-client';
 	import type { AuthContext } from '../types';
-	import { publicApi } from '$services/apiService';
 	import HorizontalLine from '$components/ui/HorizontalLine.svelte';
 	import { Alert, Button, TabItem, Tabs } from 'flowbite-svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import SourceListPeageable from '$components/layout/lists/SourceListPeageable.svelte';
+	import { viewApi } from '$services/apiService';
 
 	const { user } = getContext('authContext') as AuthContext;
 
@@ -33,8 +33,8 @@
 	let sourcesLoaded = false;
 
 	onMount(async () => {
-		const problemsCountRes = await publicApi.getProblemsCount();
-		numOfProblems = problemsCountRes.data.count;
+		const problemsCountRes = await viewApi.getStats();
+		numOfProblems = problemsCountRes.data.problemCount;
 
 		if (tab === 'sources' || !tab) {
 			await loadSources();
@@ -43,7 +43,7 @@
 
 	async function loadSources() {
 		if (sourcesLoaded) return;
-		const sourcesRes = await publicApi.getApprovedSources();
+		const sourcesRes = await viewApi.getApprovedSources();
 		sources = sourcesRes.data;
 		sourcesLoaded = true;
 	}

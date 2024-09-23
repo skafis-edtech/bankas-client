@@ -6,7 +6,7 @@
 	let searchSourcesValue = '';
 </script>
 
-<h1 class="text-4xl font-semibold my-4 text-center">Užduočių pateikimas</h1>
+<h1 class="text-4xl font-semibold my-4 text-center">Mano užduotys</h1>
 <h3 class="my-4">Norėdami turinį eksportuoti, kreipkitės el. paštu.</h3>
 <Button color="green" on:click={() => goto('/submit/new-source')} class="w-full my-4"
 	>Pridėti šaltinį (užduočių rinkinį)</Button

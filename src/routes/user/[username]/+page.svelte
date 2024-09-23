@@ -3,13 +3,11 @@
 	import { getContext, onMount } from 'svelte';
 	import { get } from 'svelte/store';
 	import { UserSolid } from 'flowbite-svelte-icons';
-	import { Button, Mark, Search } from 'flowbite-svelte';
+	import { Button } from 'flowbite-svelte';
 	import type { AuthContext } from '../../../types';
-	import { publicApi, userApi } from '$services/apiService';
+	import { userApi } from '$services/apiService';
 	import MarkdownDisplay from '$components/ui/MarkdownDisplay.svelte';
 	import MarkdownInput from '$components/forms/MarkdownInput.svelte';
-	import type { SourceDisplayDto } from '$services/gen-client';
-	import SourceWithProblems from '$components/layout/lists/SourceWithProblems.svelte';
 	import SourceListPeageable from '$components/layout/lists/SourceListPeageable.svelte';
 
 	let authContext: AuthContext | undefined;
@@ -33,7 +31,7 @@
 
 	onMount(async () => {
 		try {
-			const response = await userApi.getBio(username);
+			const response = await userApi.getPublicData(username);
 			bio = response.data.bio || ''; // Ensure bio is a string
 		} catch (e) {
 			console.error('Failed to load bio:', e);

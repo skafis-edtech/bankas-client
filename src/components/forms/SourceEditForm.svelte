@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { SourceSubmitDto } from '$services/gen-client';
-	import { Card, Input, Label } from 'flowbite-svelte';
+	import { Input, Label } from 'flowbite-svelte';
 	import MarkdownInput from './MarkdownInput.svelte';
 
 	export let sourceData: SourceSubmitDto;
@@ -29,5 +29,18 @@
 		<div id="description">
 			<MarkdownInput bind:value={sourceData.description} />
 		</div>
+	</div>
+	<div class="w-full">
+		<Label for="visibility" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+			Užduočių matomumas
+		</Label>
+		<select
+			id="visibility"
+			bind:value={sourceData.visibility}
+			class="mt-1 block px-4 py-2 text-lg border-black dark:border-white border-2 w-full"
+		>
+			<option value="private">Privačios</option>
+			<option value="public">Viešos</option>
+		</select>
 	</div>
 </div>

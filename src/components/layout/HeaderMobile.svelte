@@ -88,15 +88,8 @@
 						hidden1 = true;
 						goto('/submit/dashboard');
 					}}
-					color="green">Pateikti</Button
+					color="green">Mano užduotys</Button
 				>
-				<!-- <Button
-					on:click={() => {
-						hidden1 = true;
-						goto('/sort-dashboard');
-					}}
-					color="blue">Rūšiuoti</Button
-				> -->
 				<Button
 					on:click={() => {
 						hidden1 = true;

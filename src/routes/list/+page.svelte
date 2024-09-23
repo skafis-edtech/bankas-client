@@ -3,12 +3,12 @@
 	import 'katex/dist/katex.css';
 	import 'carta-md/default.css';
 	import type { ProblemDisplayViewDto } from '$services/gen-client';
-	import { publicApi } from '$services/apiService';
 	import { Button, ButtonGroup, Input } from 'flowbite-svelte';
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
 	import MarkdownDisplay from '$components/ui/MarkdownDisplay.svelte';
 	import { CloseOutline, PlusOutline } from 'flowbite-svelte-icons';
 	import type { Writable } from 'svelte/store';
+	import { viewApi } from '$services/apiService';
 
 	let skfList: string[] = [];
 	let problems: ProblemDisplayViewDto[] = [];
@@ -35,7 +35,7 @@
 			updateUrl();
 		}
 
-		const problemPromises = skfList.map((skfCode) => publicApi.getProblemBySkfCode(skfCode));
+		const problemPromises = skfList.map((skfCode) => viewApi.getProblemBySkfCode(skfCode));
 		const problemResponses = await Promise.all(problemPromises);
 		problems = problemResponses.map((response) => response.data);
 

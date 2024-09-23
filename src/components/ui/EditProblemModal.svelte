@@ -4,8 +4,8 @@
 	import MarkdownInput from '$components/forms/MarkdownInput.svelte';
 	import SmallFileUpload from '$components/forms/SmallFileUpload.svelte';
 	import { CloseOutline } from 'flowbite-svelte-icons';
-	import { approvalApi } from '$services/apiService';
 	import { successStore } from '$lib/stores';
+	import { contentApi } from '$services/apiService';
 
 	export let open: boolean;
 	export let problem: Components.ProblemEditData;
@@ -17,7 +17,7 @@
 	let answerImageFile: File | null = null;
 
 	async function updateProblemTexts() {
-		await approvalApi.updateProblemTexts(problem.id, {
+		await contentApi.updateProblemTexts(problem.id, {
 			sourceListNr: problem.sourceListNr,
 			problemText: problem.problemText,
 			answerText: problem.answerText
@@ -29,13 +29,13 @@
 
 	async function deleteProblemImage() {
 		problem.problemImageSrc = '';
-		await approvalApi.deleteProblemImage(problem.id);
+		await contentApi.deleteProblemImage(problem.id);
 		successStore.set('Ištrintas užduoties paveiksliukas 🤨');
 	}
 
 	async function deleteAnswerImage() {
 		problem.answerImageSrc = '';
-		await approvalApi.deleteAnswerImage(problem.id);
+		await contentApi.deleteAnswerImage(problem.id);
 		successStore.set('Ištrintas atsakymo paveiksliukas 😁');
 	}
 
@@ -44,7 +44,7 @@
 			alert('No file to upload');
 			return;
 		}
-		const response = await approvalApi.uploadProblemImage(problem.id, problemImageFile);
+		const response = await contentApi.uploadProblemImage(problem.id, problemImageFile);
 		problemImageFile = null;
 		problem.problemImageSrc = problemImageTempDisplay;
 		problemImageTempDisplay = '';
@@ -57,7 +57,7 @@
 			alert('No file to upload');
 			return;
 		}
-		const response = await approvalApi.uploadAnswerImage(problem.id, answerImageFile);
+		const response = await contentApi.uploadAnswerImage(problem.id, answerImageFile);
 		answerImageFile = null;
 		problem.answerImageSrc = answerImageTempDisplay;
 		answerImageTempDisplay = '';

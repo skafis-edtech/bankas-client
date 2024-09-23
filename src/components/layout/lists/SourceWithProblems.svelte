@@ -5,7 +5,7 @@
 	import SourceManageBar from '$components/ui/SourceManageBar.svelte';
 	import SourceReviewBar from '$components/ui/SourceReviewBar.svelte';
 	import { getNiceTimeString } from '$lib/utils';
-	import { approvalApi } from '$services/apiService';
+	import { viewApi } from '$services/apiService';
 	import {
 		SourceDisplayDtoReviewStatusEnum,
 		type ProblemDisplayViewDto,
@@ -34,7 +34,7 @@
 		if (isFetching) return;
 		isFetching = true;
 		problems = [...problems, ...Array.from({ length: pageSize }, () => null)];
-		const response = await approvalApi.getProblemsBySource(source.id, page, pageSize);
+		const response = await viewApi.getProblemsBySource(source.id, page, pageSize);
 		const startIndex = problems.length - pageSize;
 		problems = [...problems.slice(0, startIndex), ...response.data];
 		page++;
@@ -73,8 +73,6 @@
 			{#if needApprovalStatusNone === 'approval'}
 				<SourceReviewBar
 					afterReview={() => {
-						//TODO: FIX THIS SHIT - message and problems magically persists after closing and deleting accordion...
-						//isOpen = false;
 						afterReview();
 					}}
 					reviewStatus={source.reviewStatus}

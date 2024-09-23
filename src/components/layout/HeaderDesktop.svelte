@@ -49,11 +49,8 @@
 				<NavLi on:click={popup} class="text-right"><Button color="light">Peržiūrėti</Button></NavLi>
 			{/if}
 			<NavLi on:click={() => goto('/submit/dashboard')} class="text-right"
-				><Button color="green">Pateikti</Button></NavLi
+				><Button color="green">Mano užduotys</Button></NavLi
 			>
-			<!-- <NavLi on:click={() => goto('/sort-dashboard')} class="text-right"
-				><Button color="blue">Rūšiuoti</Button></NavLi
-			> -->
 			<NavLi class="text-right" on:click={() => goto('/logout')}><Button>Atsijungti</Button></NavLi>
 		{:else}
 			<NavLi class="text-right" on:click={() => goto('/login')}>

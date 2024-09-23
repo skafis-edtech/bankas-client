@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { Accordion, AccordionItem, Button, Card, Modal } from 'flowbite-svelte';
+	import { Button, Card, Modal } from 'flowbite-svelte';
 	import { goto } from '$app/navigation';
-	import SourceCreateForm from '$components/forms/SourceCreateForm.svelte';
 	import ProblemCreateForm from '$components/forms/ProblemCreateForm.svelte';
-	import { approvalApi, publicApi } from '$services/apiService';
-	import type {
-		ProblemDisplayViewDto,
-		SourceDisplayDto,
-		SourceSubmitDto
+	import {
+		SourceDisplayDtoVisibilityEnum,
+		SourceSubmitDtoVisibilityEnum,
+		type ProblemDisplayViewDto,
+		type SourceDisplayDto,
+		type SourceSubmitDto
 	} from '$services/gen-client';
 	import { successStore } from '$lib/stores';
 	import type { Components } from '../../../../../types';
@@ -20,6 +20,8 @@
 	import MarkdownDisplay from '$components/ui/MarkdownDisplay.svelte';
 	import FindById from '$components/layout/home/FindById.svelte';
 	import HorizontalLine from '$components/ui/HorizontalLine.svelte';
+	import SourceEditForm from '$components/forms/SourceEditForm.svelte';
+	import { contentApi, viewApi } from '$services/apiService';
 
 	let sourceId: string;
 	$: sourceId = $page.params.sourceId;
@@ -29,7 +31,8 @@
 
 	let sourceData: SourceSubmitDto = {
 		name: '',
-		description: ''
+		description: '',
+		visibility: SourceSubmitDtoVisibilityEnum.Private
 	};
 
 	let newProblems: Components.ProblemCreateFormData[] = [];
@@ -51,11 +54,12 @@
 	}
 
 	onMount(async () => {
-		const sourceResponse = await publicApi.getSourceById(sourceId);
+		const sourceResponse = await viewApi.getSourceById(sourceId);
 		oldSourceData = sourceResponse.data;
 		sourceData = {
 			name: oldSourceData.name,
-			description: oldSourceData.description
+			description: oldSourceData.description,
+			visibility: oldSourceData.visibility
 		};
 
 		await loadAllProblems();
@@ -79,7 +83,7 @@
 	});
 
 	async function loadAllProblems() {
-		const problemsResponse = await approvalApi.getProblemsBySource(
+		const problemsResponse = await viewApi.getProblemsBySource(
 			sourceId,
 			0,
 			oldSourceData.problemCount
@@ -88,9 +92,9 @@
 	}
 
 	async function updateSource() {
-		await approvalApi.update(sourceId, sourceData);
+		await contentApi.updateSource(sourceId, sourceData);
 		successStore.set('Šaltinis sėkmingai pakeistas');
-		const sourceResponse = await publicApi.getSourceById(sourceId);
+		const sourceResponse = await viewApi.getSourceById(sourceId);
 		oldSourceData = sourceResponse.data;
 	}
 
@@ -100,7 +104,7 @@
 			alert('Užduotis turi turėti tekstą arba paveikslėlį');
 			return;
 		}
-		const response = await approvalApi.submitProblem(
+		const response = await contentApi.submitProblem(
 			sourceId,
 			{
 				sourceListNr: newProblems[index].sourceListNr,
@@ -150,7 +154,7 @@
 		if (!confirm('Ar tikrai norite ištrinti šią užduotį?')) {
 			return;
 		}
-		await approvalApi.deleteProblem(problemId);
+		await contentApi.deleteProblem(problemId);
 		successStore.set('Užduotis ištrinta sėkmingai');
 		submittedProblems = submittedProblems.filter((problem) => problem.id !== problemId);
 	}
@@ -163,7 +167,7 @@
 		if (!confirm('Ar tikrai norite ištrinti šaltinį?')) {
 			return;
 		}
-		await approvalApi.deleteSource(sourceId);
+		await contentApi.deleteSource(sourceId);
 		successStore.set('Šaltinis ištrintas sėkmingai');
 		goto('/submit/dashboard');
 	}
@@ -285,18 +289,17 @@
 	</div>
 </div>
 
-<div>
-	<!-- <h3 class="text-lg text-red-600 text-center">Progresas nėra išsaugomas automatiškai!</h3> -->
-	<!-- <h3 class="text-lg text-blue-600 text-center">
-		Vos pateikę užduotis galite jas <a href="/sort-dashboard">rūšiuoti</a> į kategorijas!
-	</h3> -->
-</div>
-<p class="text-justify mx-4 my-4">
-	Išsaugotos užduotys yra iškart pateikiamos peržiūrai. Peržiūrėtos ir patvirtintos užduotys bus
-	paviešintos kartu su Jūsų prisijungimo vardu, bet ne el. paštu. Šaltinių patvirtinimai ir
-	atmetimai yra atšaukiami, jei yra atliekami pakeitimai šaltinio informacijoje arba uždaviniuose.
-	Prisiminkite, kad sutikote su <a href="/about#upload-terms">sąlygomis</a> :).
-</p>
+{#if sourceData.visibility === SourceDisplayDtoVisibilityEnum.Public}
+	<p class="text-justify mx-4 my-4">
+		Išsaugotos "Viešos" užduotys yra iškart pateikiamos peržiūrai. Peržiūrėtos ir patvirtintos
+		užduotys bus paviešintos kartu su Jūsų prisijungimo vardu, bet ne el. paštu. Šaltinių
+		patvirtinimai ir atmetimai yra atšaukiami, jei yra atliekami pakeitimai šaltinio informacijoje
+		arba uždaviniuose. Prisiminkite, kad sutikote su <a href="/about#upload-terms">sąlygomis</a> :).
+	</p>
+{:else}
+	<p class="text-justify mx-4 my-4">Užduotys privačios ir yra matomos tik Jums.</p>
+{/if}
+
 <Card
 	class="max-w-md mx-auto my-6 min-w-full p-6 bg-white rounded-lg shadow-md dark:bg-gray-800 flex flex-row justify-between"
 >
@@ -307,6 +310,15 @@
 		{:else}
 			<MarkdownDisplay value={sourceData.description} />
 		{/if}
+	</div>
+	<div>
+		<em
+			>{#if sourceData.visibility === SourceDisplayDtoVisibilityEnum.Public}
+				Šaltinis yra viešas
+			{:else}
+				Šaltinis yra privatus
+			{/if}</em
+		>
 	</div>
 	<div>
 		{#if sourceData.name.includes('(DAR TVARKOMA)')}
@@ -341,13 +353,27 @@
 			<Button color="red" on:click={deleteSource} class="absolute top-5 right-5 z-10"
 				>Ištrinti šaltinį</Button
 			>
-			<SourceCreateForm bind:sourceData />
+			<SourceEditForm bind:sourceData />
 			<Button
 				disabled={!isSourceDataChanged}
 				color="yellow"
 				on:click={() => {
-					updateSource();
-					isSourceModalOpen = false;
+					if (
+						sourceData.visibility !== oldSourceData.visibility &&
+						sourceData.visibility === SourceDisplayDtoVisibilityEnum.Public
+					) {
+						if (
+							confirm(
+								'Išsaugotos "Viešos" užduotys yra iškart pateikiamos peržiūrai. Peržiūrėtos ir patvirtintos užduotys bus paviešintos kartu su Jūsų prisijungimo vardu, bet ne el. paštu. Šaltinių patvirtinimai ir atmetimai yra atšaukiami, jei yra atliekami pakeitimai šaltinio informacijoje arba uždaviniuose. Prisiminkite, kad sutikote su sąlygomis :) \n\n Tęsti?'
+							)
+						) {
+							updateSource();
+							isSourceModalOpen = false;
+						}
+					} else {
+						updateSource();
+						isSourceModalOpen = false;
+					}
 				}}
 				class="w-fit absolute right-2 bottom-2">Pateikti pakeitimą peržiūrai</Button
 			>

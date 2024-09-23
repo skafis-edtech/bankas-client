@@ -2,10 +2,10 @@
 	import { SourceDisplayDtoReviewStatusEnum } from '$services/gen-client';
 	import { Badge, Button, Input, Popover } from 'flowbite-svelte';
 	import { MessageDotsOutline } from 'flowbite-svelte-icons';
-	import { approvalApi } from '$services/apiService';
 	import { successStore } from '$lib/stores';
 	import { getNiceTimeString } from '$lib/utils';
 	import AuthorLink from './AuthorLink.svelte';
+	import { reviewApi } from '$services/apiService';
 
 	export let reviewStatus: SourceDisplayDtoReviewStatusEnum;
 	export let sourceId: string;
@@ -36,14 +36,14 @@
 			alert('Atmetant privaloma parašyti žinutę (priežastį)');
 			return;
 		}
-		approvalApi.reject(sourceId, { reviewMessage: newMessage });
+		reviewApi.reject(sourceId, { reviewMessage: newMessage });
 		successStore.set('Sėkmingai atmesta');
 		bgForBar = 'bg-slate-400';
 		afterReview();
 	}
 
 	async function approve() {
-		approvalApi.approve(sourceId, { reviewMessage: newMessage });
+		reviewApi.approve(sourceId, { reviewMessage: newMessage });
 		successStore.set('Sėkmingai patvirtinta');
 		bgForBar = 'bg-slate-400';
 		afterReview();
