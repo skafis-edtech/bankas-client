@@ -39,11 +39,30 @@
 	$: newProblems = [...newProblems].sort((a, b) => a.sourceListNr - b.sourceListNr);
 
 	let isSourceDataChanged = false;
-	$: {
-		isSourceDataChanged =
-			oldSourceData?.name !== sourceData?.name ||
-			oldSourceData?.description !== sourceData?.description;
+	// Temporary data used in the modal
+	let tempSourceData: SourceSubmitDto;
+
+	// When the modal is opened, create a copy of sourceData
+	function openSourceModal() {
+		tempSourceData = { ...sourceData };
+		isSourceModalOpen = true;
 	}
+
+	// Save changes from the modal
+	async function saveSourceChanges() {
+		// Only update the sourceData if changes were made
+		if (isSourceDataChanged) {
+			sourceData = { ...tempSourceData };
+			await updateSource();
+		}
+		isSourceModalOpen = false;
+	}
+
+	// This function will check if there are any changes to the source data
+	$: isSourceDataChanged =
+		oldSourceData?.name !== tempSourceData?.name ||
+		oldSourceData?.description !== tempSourceData?.description ||
+		oldSourceData?.visibility !== tempSourceData?.visibility;
 
 	$: {
 		const lastSourceListNr = submittedProblems[submittedProblems.length - 1]?.sourceListNr || 0;
@@ -344,39 +363,26 @@
 				Dar tvarkau šaltinį
 			</Button>
 		{/if}
-		<Button color="yellow" on:click={() => (isSourceModalOpen = true)} class="p-2 mx-1">
+		<Button color="yellow" on:click={openSourceModal} class="p-2 mx-1">
 			<EditOutline class="w-6 h-6" />
 		</Button>
 	</div>
 	<Modal open={isSourceModalOpen} on:close={() => (isSourceModalOpen = false)} size="xl">
 		<div class="relative">
-			<Button color="red" on:click={deleteSource} class="absolute top-5 right-5 z-10"
-				>Ištrinti šaltinį</Button
-			>
-			<SourceEditForm bind:sourceData />
-			<Button
-				disabled={!isSourceDataChanged}
-				color="yellow"
-				on:click={() => {
-					if (
-						sourceData.visibility !== oldSourceData.visibility &&
-						sourceData.visibility === SourceDisplayDtoVisibilityEnum.Public
-					) {
-						if (
-							confirm(
-								'Išsaugotos "Viešos" užduotys yra iškart pateikiamos peržiūrai. Peržiūrėtos ir patvirtintos užduotys bus paviešintos kartu su Jūsų prisijungimo vardu, bet ne el. paštu. Šaltinių patvirtinimai ir atmetimai yra atšaukiami, jei yra atliekami pakeitimai šaltinio informacijoje arba uždaviniuose. Prisiminkite, kad sutikote su sąlygomis :) \n\n Tęsti?'
-							)
-						) {
-							updateSource();
-							isSourceModalOpen = false;
-						}
-					} else {
-						updateSource();
-						isSourceModalOpen = false;
-					}
-				}}
-				class="w-fit absolute right-2 bottom-2">Pateikti pakeitimą peržiūrai</Button
-			>
+			<Button color="red" on:click={deleteSource} class="absolute top-5 right-5 z-10">
+				Ištrinti šaltinį
+			</Button>
+			<SourceEditForm bind:sourceData={tempSourceData} />
+			<div class="flex flex-row justify-end">
+				<Button
+					disabled={!isSourceDataChanged}
+					color="yellow"
+					on:click={saveSourceChanges}
+					class="w-fit"
+				>
+					Pateikti pakeitimą peržiūrai
+				</Button>
+			</div>
 		</div>
 	</Modal>
 </Card>

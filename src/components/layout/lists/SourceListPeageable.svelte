@@ -1,5 +1,9 @@
 <script lang="ts">
-	import { SourceDisplayDtoReviewStatusEnum, type SourceDisplayDto } from '$services/gen-client';
+	import {
+		SourceDisplayDtoReviewStatusEnum,
+		SourceSubmitDtoVisibilityEnum,
+		type SourceDisplayDto
+	} from '$services/gen-client';
 	import { Button, Search } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import SourceWithProblems from './SourceWithProblems.svelte';
@@ -69,8 +73,16 @@
 
 {#each Object.entries(sources) as [id, source]}
 	<div class="relative">
-		{#if sourcesSubset === 'mine' && source.reviewStatus !== SourceDisplayDtoReviewStatusEnum.Rejected}
+		{#if sourcesSubset === 'mine' && source.reviewStatus !== SourceDisplayDtoReviewStatusEnum.Rejected && source.visibility === SourceSubmitDtoVisibilityEnum.Public}
 			<SourceWithProblems {source} {searchValue} needApprovalStatusNone="status" />
+		{/if}
+		{#if sourcesSubset === 'mine' && source.reviewStatus !== SourceDisplayDtoReviewStatusEnum.Rejected && source.visibility === SourceSubmitDtoVisibilityEnum.Private}
+			<SourceWithProblems
+				{source}
+				{searchValue}
+				needApprovalStatusNone="status"
+				showIndicator={false}
+			/>
 		{/if}
 		{#if sourcesSubset === 'approved' || sourcesSubset === 'author'}
 			<SourceWithProblems
@@ -85,6 +97,7 @@
 				reviewStatus={source.reviewStatus}
 				sourceId={source.id}
 				reviewHistory={source.reviewHistory}
+				visibility={source.visibility}
 			/>
 			<SourceWithProblems {source} {searchValue} needApprovalStatusNone="none" />
 		{/if}

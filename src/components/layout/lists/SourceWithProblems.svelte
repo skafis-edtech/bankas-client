@@ -85,6 +85,7 @@
 					reviewStatus={source.reviewStatus}
 					sourceId={source.id}
 					reviewHistory={source.reviewHistory}
+					visibility={source.visibility}
 				/>
 			{/if}
 			<MarkdownDisplay value={source.description} />

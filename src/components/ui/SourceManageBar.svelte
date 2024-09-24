@@ -1,5 +1,8 @@
 <script lang="ts">
-	import { SourceDisplayDtoReviewStatusEnum } from '$services/gen-client';
+	import {
+		SourceDisplayDtoReviewStatusEnum,
+		SourceSubmitDtoVisibilityEnum
+	} from '$services/gen-client';
 	import { Badge, Button, Popover } from 'flowbite-svelte';
 	import { EditOutline, MessageDotsOutline } from 'flowbite-svelte-icons';
 	import { goto } from '$app/navigation';
@@ -7,6 +10,7 @@
 	import AuthorLink from './AuthorLink.svelte';
 
 	export let reviewStatus: SourceDisplayDtoReviewStatusEnum;
+	export let visibility: SourceSubmitDtoVisibilityEnum;
 	export let sourceId: string;
 	export let reviewHistory: string;
 
@@ -14,7 +18,11 @@
 
 	let bgForBar = '';
 	if (reviewStatus === SourceDisplayDtoReviewStatusEnum.Pending) {
-		bgForBar = 'bg-yellow-400';
+		if (visibility === SourceSubmitDtoVisibilityEnum.Private) {
+			bgForBar = 'bg-slate-400';
+		} else {
+			bgForBar = 'bg-yellow-400';
+		}
 	} else if (reviewStatus === SourceDisplayDtoReviewStatusEnum.Rejected) {
 		bgForBar = 'bg-red-400';
 	} else if (reviewStatus === SourceDisplayDtoReviewStatusEnum.Approved) {
@@ -25,8 +33,11 @@
 </script>
 
 <div class={`flex flex-row justify-between gap-4 ${bgForBar} p-2 rounded-t-md`}>
-	{#if reviewStatus === SourceDisplayDtoReviewStatusEnum.Pending}
+	{#if reviewStatus === SourceDisplayDtoReviewStatusEnum.Pending && visibility === SourceSubmitDtoVisibilityEnum.Public}
 		<Badge color="yellow" class="ml-2">Peržiūrima</Badge>
+	{/if}
+	{#if reviewStatus === SourceDisplayDtoReviewStatusEnum.Pending && visibility === SourceSubmitDtoVisibilityEnum.Private}
+		<Badge color="blue" class="ml-2">Privatus</Badge>
 	{/if}
 	{#if reviewStatus === SourceDisplayDtoReviewStatusEnum.Rejected}
 		<Badge color="red" class="ml-2">Atmesta</Badge>
