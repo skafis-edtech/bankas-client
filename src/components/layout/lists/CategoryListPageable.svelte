@@ -3,6 +3,7 @@
 	import { Button, Search } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import CategoryWithProblems from './CategoryWithProblems.svelte';
+	import { viewApi } from '$services/apiService';
 
 	let categories: Category[] = [];
 	export let searchValue = '';

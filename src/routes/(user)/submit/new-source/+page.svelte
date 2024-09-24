@@ -104,8 +104,8 @@
 					bind:value={sourceData.visibility}
 					class="mt-1 block px-4 py-2 text-lg border-black dark:border-white border-2 w-full"
 				>
-					<option value="private">Privačios</option>
-					<option value="public">Viešos</option>
+					<option value="PRIVATE">Privačios</option>
+					<option value="PUBLIC">Viešos</option>
 				</select>
 			</div>
 		</div>
