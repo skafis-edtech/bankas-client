@@ -1,10 +1,11 @@
 import axios from 'axios';
 import {
-	ApprovalControllerApi,
 	CategoryControllerApi,
-	PublicControllerApi,
-	SortControllerApi,
-	UserControllerApi
+	ContentControllerApi,
+	MiscControllerApi,
+	ReviewControllerApi,
+	UserControllerApi,
+	ViewControllerApi
 } from './gen-client/api';
 import { BASE_PATH } from './gen-client/base';
 import { errorStore, loadingStore } from '$lib/stores';
@@ -48,11 +49,10 @@ export const setAuthToken = (token: string | null) => {
 };
 
 const categoryApi = new CategoryControllerApi(undefined, BASE_PATH, axiosInstance);
-// const problemApi = new ProblemControllerApi(undefined, BASE_PATH, axiosInstance);
-// const sourceApi = new SourceControllerApi(undefined, BASE_PATH, axiosInstance);
-const approvalApi = new ApprovalControllerApi(undefined, BASE_PATH, axiosInstance);
-const sortApi = new SortControllerApi(undefined, BASE_PATH, axiosInstance);
-const publicApi = new PublicControllerApi(undefined, BASE_PATH, axiosInstance);
+const contentApi = new ContentControllerApi(undefined, BASE_PATH, axiosInstance);
+const miscApi = new MiscControllerApi(undefined, BASE_PATH, axiosInstance);
+const reviewApi = new ReviewControllerApi(undefined, BASE_PATH, axiosInstance);
 const userApi = new UserControllerApi(undefined, BASE_PATH, axiosInstance);
+const viewApi = new ViewControllerApi(undefined, BASE_PATH, axiosInstance);
 
-export { categoryApi, /*problemApi, sourceApi,*/ approvalApi, sortApi, publicApi, userApi };
+export { categoryApi, contentApi, miscApi, reviewApi, userApi, viewApi };

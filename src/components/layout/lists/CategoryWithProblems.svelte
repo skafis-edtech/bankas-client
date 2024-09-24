@@ -1,11 +1,10 @@
 <script lang="ts">
 	import MarkdownDisplay from '$components/ui/MarkdownDisplay.svelte';
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
-	import { publicApi } from '$services/apiService';
+	import { viewApi } from '$services/apiService';
 	import type { Category, ProblemDisplayViewDto } from '$services/gen-client';
 	import { normalizeString } from '$utils/helpers';
 	import { Accordion, AccordionItem } from 'flowbite-svelte';
-	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
 
 	export let category: Category;
@@ -13,16 +12,6 @@
 
 	let problems: ProblemDisplayViewDto[] = [];
 	let problemCount: number | null = null;
-
-	onMount(async () => {
-		if (category.id !== '') {
-			const response = await publicApi.getCategoryProblemCount(category.id);
-			problemCount = response.data.count;
-		} else {
-			const response = await publicApi.getUnsortedProblemsCount();
-			problemCount = response.data.count;
-		}
-	});
 
 	let isLoaded = writable(false);
 	let isOpen = false;
@@ -34,10 +23,10 @@
 	async function loadProblems() {
 		if (!isOpen || $isLoaded) return;
 		if (category.id === '') {
-			const response = await publicApi.getProblemsUnsorted();
+			const response = await viewApi.getProblemsUnsorted();
 			problems = response.data;
 		} else {
-			const response = await publicApi.getProblemsByCategory(category.id);
+			const response = await viewApi.getProblemsByCategory(category.id);
 			problems = response.data;
 		}
 

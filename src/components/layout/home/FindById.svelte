@@ -1,7 +1,7 @@
 <script lang="ts">
 	import MarkdownInput from '$components/forms/MarkdownInput.svelte';
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
-	import { publicApi } from '$services/apiService';
+	import { viewApi } from '$services/apiService';
 	import type { ProblemDisplayViewDto } from '$services/gen-client';
 	import { Button, Input } from 'flowbite-svelte';
 	import { CloseOutline } from 'flowbite-svelte-icons';
@@ -11,7 +11,7 @@
 	let problemDisplayViewDto: ProblemDisplayViewDto | null = null;
 
 	const fetchStuff = async () => {
-		const response = await publicApi.getProblemBySkfCode($skfCode);
+		const response = await viewApi.getProblemBySkfCode($skfCode);
 		problemDisplayViewDto = response.data;
 	};
 </script>

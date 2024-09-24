@@ -2,10 +2,10 @@
 	import { SourceDisplayDtoReviewStatusEnum } from '$services/gen-client';
 	import { Badge, Button, Input, Popover } from 'flowbite-svelte';
 	import { MessageDotsOutline } from 'flowbite-svelte-icons';
-	import { approvalApi } from '$services/apiService';
 	import { successStore } from '$lib/stores';
 	import { getNiceTimeString } from '$lib/utils';
 	import AuthorLink from './AuthorLink.svelte';
+	import { reviewApi } from '$services/apiService';
 
 	export let reviewStatus: SourceDisplayDtoReviewStatusEnum;
 	export let sourceId: string;
@@ -16,34 +16,22 @@
 
 	let newMessage = '';
 
-	let bgForBar = '';
-	let placeholder = '';
-	if (reviewStatus === SourceDisplayDtoReviewStatusEnum.Pending) {
-		bgForBar = 'bg-yellow-400';
-		placeholder = 'Čia galite parašyti žinutę...';
-	} else if (reviewStatus === SourceDisplayDtoReviewStatusEnum.Rejected) {
-		bgForBar = 'bg-slate-400';
-		placeholder = 'Galite peržiūrėti ir papildyti kito peržiūrėtojo pastabas savomis...';
-	} else if (reviewStatus === SourceDisplayDtoReviewStatusEnum.Approved) {
-		bgForBar = 'bg-slate-400';
-		placeholder = 'Nieko nereikia daryti. Nebent norite atšaukti patvirtinimą...';
-	} else {
-		throw new Error('Unknown review status');
-	}
+	let bgForBar = 'bg-yellow-400';
+	let placeholder = 'Čia galite parašyti žinutę...';
 
 	async function reject() {
 		if (!newMessage) {
 			alert('Atmetant privaloma parašyti žinutę (priežastį)');
 			return;
 		}
-		approvalApi.reject(sourceId, { reviewMessage: newMessage });
+		reviewApi.reject(sourceId, { reviewMessage: newMessage });
 		successStore.set('Sėkmingai atmesta');
 		bgForBar = 'bg-slate-400';
 		afterReview();
 	}
 
 	async function approve() {
-		approvalApi.approve(sourceId, { reviewMessage: newMessage });
+		reviewApi.approve(sourceId, { reviewMessage: newMessage });
 		successStore.set('Sėkmingai patvirtinta');
 		bgForBar = 'bg-slate-400';
 		afterReview();
@@ -53,12 +41,6 @@
 <div class={`flex flex-row gap-4 ${bgForBar} p-2 rounded-t-md`}>
 	{#if reviewStatus === SourceDisplayDtoReviewStatusEnum.Pending}
 		<Badge color="yellow" class="ml-2">Peržiūrėkite</Badge>
-	{/if}
-	{#if reviewStatus === SourceDisplayDtoReviewStatusEnum.Rejected}
-		<Badge color="red" class="ml-2">Jau atmesta</Badge>
-	{/if}
-	{#if reviewStatus === SourceDisplayDtoReviewStatusEnum.Approved}
-		<Badge color="green" class="ml-2">Jau patvirtinta</Badge>
 	{/if}
 	{#if reviewHistory !== ''}
 		<Button {id} color="blue" class="p-2 mx-1 relative"><MessageDotsOutline /></Button>

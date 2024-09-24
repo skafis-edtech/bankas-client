@@ -3,9 +3,9 @@
 	import { InfoCircleOutline } from 'flowbite-svelte-icons';
 	import AuthorLink from './AuthorLink.svelte';
 	import { writable } from 'svelte/store';
-	import { publicApi } from '$services/apiService';
 	import CategoryLink from './CategoryLink.svelte';
 	import SourceLink from './SourceLink.svelte';
+	import { viewApi } from '$services/apiService';
 
 	export let categories: string[];
 	export let sourceId: string;
@@ -29,7 +29,7 @@
 		if (categories.length > 0) {
 			loadedCategoryNames = await Promise.all(
 				categories.map(async (categoryId) => {
-					const response = await publicApi.getCategoryById(categoryId);
+					const response = await viewApi.getCategoryById(categoryId);
 					return response.data.name;
 				})
 			);
@@ -39,7 +39,7 @@
 
 		categoriesNames = loadedCategoryNames;
 
-		const response = await publicApi.getSourceById(sourceId);
+		const response = await viewApi.getSourceById(sourceId);
 		sourceName = response.data.name;
 		author = response.data.authorUsername;
 
