@@ -10,7 +10,7 @@
 	import type { Writable } from 'svelte/store';
 	import { viewApi } from '$services/apiService';
 
-	let skfList: string[] = [];
+	let skfList: string[] = ['SKF-'];
 	let problems: ProblemDisplayViewDto[] = [];
 	let pdfTitle = 'Užduotys';
 	let includeLink = true;
@@ -80,7 +80,10 @@
 	<p class="text-center mb-4">
 		Atrinkta pagal nuorodą - ją galite kopijuoti ir dalintis. Daugiau funkcionalumų apačioje
 	</p>
-	{#if problems.length > 0}
+	{#if skfList.length > 0}
+		{#if problems.length === 0}
+			<h3 class="text-center">Kraunama...</h3>
+		{/if}
 		{#each problems as problem, i}
 			<div class="relative my-2">
 				<p class="absolute top-1 left-2">{i + 1}.</p>
@@ -93,7 +96,7 @@
 						answerImageSrc: problem.answerImageSrc,
 						categories: problem.categories,
 						sourceId: problem.sourceId,
-						visibility: problem.problemVisibility,
+						visibility: problem.problemVisibility
 					}}
 					canList={false}
 				/>
@@ -119,35 +122,37 @@
 	{/if}
 </div>
 
-<div class="md:w-1/2 flex flex-col m-auto gap-2 my-12 no-print">
-	<h2 class="text-3xl font-semibold my-4 text-center">PDF generavimas</h2>
-	<label for="pdftitle" class="block mb-2">PDF pavadinimas</label>
-	<input id="pdftitle" type="text" bind:value={pdfTitle} class="w-full p-2 mb-4" />
-	<div class="flex flex-row gap-2">
-		<input type="checkbox" bind:checked={includeLink} />
-		<p>Pridėti nuorodą, t.y. užduočių numerių sąrašą</p>
-	</div>
-	<ButtonGroup class="m-auto">
-		<Button
-			color={printAnswers ? 'alternative' : 'green'}
-			on:click={() => {
-				printAnswers = false;
-			}}>Užduotys</Button
+{#if problems.length > 0}
+	<div class="md:w-1/2 flex flex-col m-auto gap-2 my-12 no-print">
+		<h2 class="text-3xl font-semibold my-4 text-center">PDF generavimas</h2>
+		<label for="pdftitle" class="block mb-2">PDF pavadinimas</label>
+		<input id="pdftitle" type="text" bind:value={pdfTitle} class="w-full p-2 mb-4" />
+		<div class="flex flex-row gap-2">
+			<input type="checkbox" bind:checked={includeLink} />
+			<p>Pridėti nuorodą, t.y. užduočių numerių sąrašą</p>
+		</div>
+		<ButtonGroup class="m-auto">
+			<Button
+				color={printAnswers ? 'alternative' : 'green'}
+				on:click={() => {
+					printAnswers = false;
+				}}>Užduotys</Button
+			>
+			<Button
+				color={printAnswers ? 'blue' : 'alternative'}
+				on:click={() => {
+					printAnswers = true;
+				}}>Atsakymai</Button
+			></ButtonGroup
 		>
 		<Button
-			color={printAnswers ? 'blue' : 'alternative'}
+			color="blue"
 			on:click={() => {
-				printAnswers = true;
-			}}>Atsakymai</Button
-		></ButtonGroup
-	>
-	<Button
-		color="blue"
-		on:click={() => {
-			window.print();
-		}}>Atsisiųsti PDF (spausdinti)</Button
-	>
-</div>
+				window.print();
+			}}>Atsisiųsti PDF (spausdinti)</Button
+		>
+	</div>
+{/if}
 
 <div class={`${printAnswers ? 'hidden' : ''}`}>
 	<div class="hidden only-print">
