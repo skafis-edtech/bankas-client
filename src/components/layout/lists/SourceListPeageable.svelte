@@ -78,7 +78,7 @@
 		{/if}
 		{#if sourcesSubset === 'mine' && source.reviewStatus !== SourceDisplayDtoReviewStatusEnum.Rejected && source.visibility === SourceSubmitDtoVisibilityEnum.Private}
 			<SourceWithProblems
-				{source}
+				source={{ ...source, name: "🔒 "+ source.name }}
 				{searchValue}
 				needApprovalStatusNone="status"
 				showIndicator={false}

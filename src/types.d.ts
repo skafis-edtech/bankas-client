@@ -1,4 +1,5 @@
 import type { loginUser, logout } from '$services/auth';
+import type { ProblemDisplayViewDtoProblemVisibilityEnum, SourceDisplayDtoVisibilityEnum } from '$services/gen-client';
 
 export interface User {
 	id: string;
@@ -21,6 +22,7 @@ export namespace Components {
 		answerImageSrc: string;
 		categories: string[];
 		sourceId: string;
+		visibility: ProblemDisplayViewDtoProblemVisibilityEnum;
 	}
 
 	interface ProblemMetaData {

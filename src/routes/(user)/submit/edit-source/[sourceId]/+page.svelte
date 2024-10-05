@@ -3,6 +3,7 @@
 	import { goto } from '$app/navigation';
 	import ProblemCreateForm from '$components/forms/ProblemCreateForm.svelte';
 	import {
+	ProblemDisplayViewDtoProblemVisibilityEnum,
 		SourceDisplayDtoVisibilityEnum,
 		SourceSubmitDtoVisibilityEnum,
 		type ProblemDisplayViewDto,
@@ -139,14 +140,15 @@
 			...submittedProblems,
 			{
 				id: response.data.id,
-				skfCode: '',
+				skfCode: response.data.skfCode,
 				sourceListNr: newProblems[index].sourceListNr,
 				problemText: newProblems[index].problemText,
 				answerText: newProblems[index].answerText,
 				problemImageSrc: newProblems[index].tempProblemImageDisplay || '',
 				answerImageSrc: newProblems[index].tempAnswerImageDisplay || '',
 				categories: [],
-				sourceId: sourceId
+				sourceId: sourceId,
+				problemVisibility: ProblemDisplayViewDtoProblemVisibilityEnum.Visible
 			}
 		];
 		removeProblem(index);
@@ -412,7 +414,8 @@
 					answerText: problem.answerText,
 					answerImageSrc: problem.answerImageSrc,
 					categories: problem.categories,
-					sourceId: problem.sourceId
+					sourceId: problem.sourceId,
+					visibility: problem.problemVisibility
 				}}
 			/>
 		</div>

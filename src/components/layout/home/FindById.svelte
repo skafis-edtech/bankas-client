@@ -60,7 +60,8 @@
 				answerText: problemDisplayViewDto.answerText,
 				answerImageSrc: problemDisplayViewDto.answerImageSrc,
 				categories: problemDisplayViewDto.categories,
-				sourceId: problemDisplayViewDto.sourceId
+				sourceId: problemDisplayViewDto.sourceId,
+				visibility: problemDisplayViewDto.problemVisibility,
 			}}
 		/>
 		<p>Užduoties redagavimo tekstas</p>

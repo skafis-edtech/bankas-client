@@ -114,6 +114,25 @@ export interface IdDto {
 /**
  * 
  * @export
+ * @interface IdSkfDto
+ */
+export interface IdSkfDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof IdSkfDto
+     */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof IdSkfDto
+     */
+    'skfCode': string;
+}
+/**
+ * 
+ * @export
  * @interface ImageSrcDto
  */
 export interface ImageSrcDto {
@@ -184,7 +203,22 @@ export interface ProblemDisplayViewDto {
      * @memberof ProblemDisplayViewDto
      */
     'sourceId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProblemDisplayViewDto
+     */
+    'problemVisibility': ProblemDisplayViewDtoProblemVisibilityEnum;
 }
+
+export const ProblemDisplayViewDtoProblemVisibilityEnum = {
+    Visible: 'VISIBLE',
+    Hidden: 'HIDDEN',
+    NotExisting: 'NOT_EXISTING'
+} as const;
+
+export type ProblemDisplayViewDtoProblemVisibilityEnum = typeof ProblemDisplayViewDtoProblemVisibilityEnum[keyof typeof ProblemDisplayViewDtoProblemVisibilityEnum];
+
 /**
  * 
  * @export
@@ -1376,7 +1410,7 @@ export const ContentControllerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async submitProblem(sourceId: string, problem: ProblemSubmitDto, problemImageFile?: File, answerImageFile?: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<IdDto>> {
+        async submitProblem(sourceId: string, problem: ProblemSubmitDto, problemImageFile?: File, answerImageFile?: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<IdSkfDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.submitProblem(sourceId, problem, problemImageFile, answerImageFile, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ContentControllerApi.submitProblem']?.[localVarOperationServerIndex]?.url;
@@ -1523,7 +1557,7 @@ export const ContentControllerApiFactory = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        submitProblem(sourceId: string, problem: ProblemSubmitDto, problemImageFile?: File, answerImageFile?: File, options?: any): AxiosPromise<IdDto> {
+        submitProblem(sourceId: string, problem: ProblemSubmitDto, problemImageFile?: File, answerImageFile?: File, options?: any): AxiosPromise<IdSkfDto> {
             return localVarFp.submitProblem(sourceId, problem, problemImageFile, answerImageFile, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2407,6 +2441,10 @@ export const ViewControllerApiAxiosParamCreator = function (configuration?: Conf
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
             if (page !== undefined) {
                 localVarQueryParameter['page'] = page;
             }
@@ -2450,6 +2488,10 @@ export const ViewControllerApiAxiosParamCreator = function (configuration?: Conf
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             if (page !== undefined) {
                 localVarQueryParameter['page'] = page;
@@ -2496,6 +2538,10 @@ export const ViewControllerApiAxiosParamCreator = function (configuration?: Conf
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -2529,6 +2575,10 @@ export const ViewControllerApiAxiosParamCreator = function (configuration?: Conf
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -2561,6 +2611,10 @@ export const ViewControllerApiAxiosParamCreator = function (configuration?: Conf
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -2597,6 +2651,10 @@ export const ViewControllerApiAxiosParamCreator = function (configuration?: Conf
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             if (page !== undefined) {
                 localVarQueryParameter['page'] = page;
@@ -2635,6 +2693,10 @@ export const ViewControllerApiAxiosParamCreator = function (configuration?: Conf
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -2668,6 +2730,10 @@ export const ViewControllerApiAxiosParamCreator = function (configuration?: Conf
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -2704,6 +2770,10 @@ export const ViewControllerApiAxiosParamCreator = function (configuration?: Conf
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             if (page !== undefined) {
                 localVarQueryParameter['page'] = page;
@@ -2745,6 +2815,10 @@ export const ViewControllerApiAxiosParamCreator = function (configuration?: Conf
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     

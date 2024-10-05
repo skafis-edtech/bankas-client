@@ -110,7 +110,8 @@
 									answerText: problem.answerText,
 									answerImageSrc: problem.answerImageSrc,
 									categories: problem.categories,
-									sourceId: problem.sourceId
+									sourceId: problem.sourceId,
+									visibility: problem.problemVisibility
 								}}
 							/>
 						</div>
