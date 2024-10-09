@@ -34,15 +34,19 @@ export const isUsernameAvailable = async (username: string) => {
 };
 
 export const loginUser = async (username: string, password: string) => {
-	const usersRef = collection(db, 'users');
-	const q = query(usersRef, where('username', '==', username));
-	const querySnapshot = await getDocs(q);
-	if (querySnapshot.empty) {
-		throw new Error('User does not exist');
+	if (username.includes('@')) {
+		return signInWithEmailAndPassword(auth, username, password);
+	} else {
+		const usersRef = collection(db, 'users');
+		const q = query(usersRef, where('username', '==', username));
+		const querySnapshot = await getDocs(q);
+		if (querySnapshot.empty) {
+			throw new Error('User does not exist');
+		}
+		const userDoc = querySnapshot.docs[0];
+		const email = userDoc.data().email;
+		return signInWithEmailAndPassword(auth, email, password);
 	}
-	const userDoc = querySnapshot.docs[0];
-	const email = userDoc.data().email;
-	return signInWithEmailAndPassword(auth, email, password);
 };
 
 export const logout = async () => {

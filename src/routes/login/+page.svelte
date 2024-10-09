@@ -25,7 +25,12 @@
 	const redirectLoggedInUser = () => {
 		if ($user) {
 			if (redirectUrl) {
-				goto(redirectUrl);
+				if (redirectUrl === 'https://www.skafis.lt') {
+					document.cookie = `jwt=${$user.jwt}; path=/; domain=.skafis.lt; secure; SameSite=None`;
+					window.location.href = redirectUrl;
+				} else {
+					goto(redirectUrl);
+				}
 			} else if ($user.role === ROLES.ADMIN) {
 				goto('/review-dashboard');
 			} else if ($user.role === ROLES.USER) {
@@ -68,13 +73,13 @@
 	<form on:submit|preventDefault={handleLogin} class="space-y-6">
 		<div>
 			<Label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-				Prisijungimo vardas
+				Prisijungimo vardas arba el. paštas
 			</Label>
 			<Input
 				id="username"
 				type="text"
 				bind:value={username}
-				placeholder="Prisijungimo vardas"
+				placeholder="Prisijungimo vardas arba el. paštas"
 				required
 				class="mt-1 block w-full px-4 py-2 text-lg"
 			/>

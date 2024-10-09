@@ -38,6 +38,18 @@
 			errorMessage = 'Prisijungimo vardas negali turėti tarpų ("whitespace" simbolių)';
 			return;
 		}
+		if (username.includes('@')) {
+			errorMessage = 'Prisijungimo vardas negali turėti simbolio @';
+			return;
+		}
+		if (username.length < 3) {
+			errorMessage = 'Prisijungimo vardas turi būti bent 3 simbolių ilgio';
+			return;
+		}
+		if (email.includes('?') || /\s/.test(email)) {
+			errorMessage = 'El. paštas negali turėti simbolio ? arba tarpų ("whitespace")';
+			return;
+		}
 		if (password !== confirmPassword) {
 			errorMessage = 'Slaptažodžiai nesutampa';
 			return;
