@@ -6,7 +6,6 @@
 	import { Button, ButtonGroup, Input } from 'flowbite-svelte';
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
 	import MarkdownDisplay from '$components/ui/MarkdownDisplay.svelte';
-	import { CloseOutline, PlusOutline } from 'flowbite-svelte-icons';
 	import type { Writable } from 'svelte/store';
 	import { viewApi } from '$services/apiService';
 
@@ -18,10 +17,10 @@
 	let windowLocation: string | null = null;
 	let isDifferentList = false;
 
-	$: isDifferentList = JSON.stringify($list) !== JSON.stringify(skfList);
-
 	const { list, setList }: { list: Writable<string[]>; setList: (value: string[]) => void } =
 		getContext<any>('skfList');
+
+	$: isDifferentList = JSON.stringify($list) !== JSON.stringify(skfList);
 
 	onMount(async () => {
 		const urlParams = new URLSearchParams(window.location.search);
@@ -42,22 +41,6 @@
 		// Accessing window only after component has been mounted
 		windowLocation = window.location.href.slice(8);
 	});
-
-	function addSkfItem() {
-		setList([...$list, `SKF-`]);
-	}
-
-	function updateSkfItem(index: number, e: Event) {
-		const value = (e.target as HTMLInputElement).value;
-		const updatedList = [...$list];
-		updatedList[index] = value;
-		setList(updatedList);
-	}
-
-	function removeSkfItem(index: number) {
-		const updatedList = $list.filter((_, i) => i !== index);
-		setList(updatedList);
-	}
 
 	function updateUrl() {
 		const queryParams = new URLSearchParams(window.location.search);
@@ -243,40 +226,10 @@
 	<p class="text-center mb-4">
 		{isDifferentList ? '(šiuo metu rodomas sąrašas skiriasi)' : '(šiuo metu yra rodomas)'}
 	</p>
-	{#if $list.length > 0}
-		<div class="flex flex-col gap-2 flex-wrap h-48">
-			{#each $list as skf, index}
-				<div class="flex flex-row gap-2 items-center w-28">
-					<Input
-						type="text"
-						bind:value={skf}
-						on:input={(e) => updateSkfItem(index, e)}
-						class="p-1 border-b border-gray-400 focus:outline-none"
-					/>
-					<Button
-						color="red"
-						on:click={() => removeSkfItem(index)}
-						class="w-5 h-5 bg-red-600 rounded-full flex items-center hover:bg-red-800 p-0 m-0"
-						><CloseOutline class="w-full h-full p-0 m-0" /></Button
-					>
-				</div>
-			{/each}
-			<Button color="green" on:click={addSkfItem} class="h-8 w-28"><PlusOutline /></Button>
-		</div>
-		<Button on:click={clearList} color="red">Išvalyti sąrašą</Button>
-	{:else}
-		<p>
-			<strong>Nėra sąrašo. </strong><em
-				>Sąrašą galite sukurti pažymėdami atskiras užduotis arba suvesdami kodus čia.</em
-			>
-			<img
-				alt="Kur pridėti užduotį prie sąrašo"
-				src="/tutorial1.png"
-				class="border-2 border-black"
-			/>
-		</p>
-		<Button color="green" on:click={addSkfItem} class="h-8 w-28"><PlusOutline /></Button>
-	{/if}
+	<div class="relative">
+		<Input bind:value={$list} />
+		<Button on:click={clearList} color="none" class="absolute right-0 top-0">❌</Button>
+	</div>
 	{#if isDifferentList}
 		<div class="flex flex-row justify-center gap-4 mt-4">
 			<Button
@@ -284,10 +237,17 @@
 					history.replaceState(null, '', '/list');
 					reloadPage();
 				}}
-				color="blue">Rodyti Jūsų sukurtą sąrašą</Button
+				color="blue">Atnaujinti užduočių rodymą</Button
 			>
 		</div>
 	{/if}
+	<p>
+		<em
+			>Sąrašą galite sukurti pažymėdami atskiras užduotis arba suvesdami kodus čia, atskiriant
+			tarpais, pvz.: 'SKF-1 SKF-4 SKF-112'.</em
+		>
+		<img alt="Kur pridėti užduotį prie sąrašo" src="/tutorial1.png" class="border-2 border-black" />
+	</p>
 </div>
 
 <style>
