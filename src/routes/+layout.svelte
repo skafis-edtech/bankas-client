@@ -43,7 +43,8 @@
 				userStore.set({
 					id: user.uid,
 					username: userData.username,
-					role: userData.role
+					role: userData.role,
+					jwt: idToken
 				});
 				setAuthToken(idToken);
 			} else {
