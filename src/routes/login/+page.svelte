@@ -26,7 +26,9 @@
 		if ($user) {
 			if (redirectUrl) {
 				if (redirectUrl === 'https://www.skafis.lt') {
-					document.cookie = `jwt=${$user.jwt}; path=/; domain=.skafis.lt; secure; SameSite=None`;
+					const jwtPayload = JSON.parse(atob($user.jwt.split('.')[1]));
+					const expires = new Date(jwtPayload.exp * 1000).toUTCString();
+					document.cookie = `jwt=${$user.jwt}; SameSite=None; path=/; secure; domain=.skafis.lt; expires=${expires}`;
 					window.location.href = redirectUrl;
 				} else {
 					goto(redirectUrl);
