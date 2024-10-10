@@ -26,7 +26,7 @@
 		if ($user) {
 			if (redirectUrl) {
 				if (redirectUrl === 'https://www.skafis.lt') {
-					document.cookie = `jwt=${$user.jwt}; path=/; domain=.skafis.lt; secure; SameSite=None; HttpOnly`;
+					document.cookie = `jwt=${$user.jwt}; path=/; domain=.skafis.lt; secure; SameSite=None`;
 					window.location.href = redirectUrl;
 				} else {
 					goto(redirectUrl);
