@@ -7,7 +7,6 @@
 	import MathLiveEditor from './MathLiveEditor.svelte';
 	import { Button } from 'flowbite-svelte';
 	import { CloseOutline } from 'flowbite-svelte-icons';
-	import { getEventListeners } from 'events';
 
 	export let value = '';
 	let mdEditor: HTMLElement | null = null;

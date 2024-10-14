@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { SourceSubmitDto } from '$services/gen-client';
 	import { Input, Label } from 'flowbite-svelte';
-	import MarkdownInput from './MarkdownInput.svelte';
+	import MarkdownInput from '$components/forms/MarkdownInput.svelte';
 
 	export let sourceData: SourceSubmitDto;
 </script>

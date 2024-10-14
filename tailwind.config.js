@@ -10,16 +10,18 @@ export default {
 		extend: {
 			colors: {
 				primary: {
-					700: '#EB4F27',
+					700: '#EB4F27'
 				}
 			}
+			// borderRadius: {
+			// 	// Override default Tailwind border-radius settings to remove rounded corners
+			// 	none: '0px',
+			// 	sm: '0px',
+			// 	DEFAULT: '0px', // affects `rounded` class
+			// 	md: '0px',
+			// 	lg: '0px',
+			// 	full: '0px'
+			// }
 		}
-	},
-	/* 
-	 Stuff below removes all the default styles so that freshly made h1 and p tags would have at least a bit difference :D
-	 For now the solution is reset.css file 
-	 */
-	// corePlugins: {
-	// 	preflight: false,
-	// },
+	}
 };

@@ -5,7 +5,7 @@
 	import type { ProblemDisplayViewDto } from '$services/gen-client';
 	import { Button, ButtonGroup, Input } from 'flowbite-svelte';
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
-	import MarkdownDisplay from '$components/ui/MarkdownDisplay.svelte';
+	import MarkdownDisplay from '$components/forms/MarkdownDisplay.svelte';
 	import type { Writable } from 'svelte/store';
 	import { viewApi } from '$services/apiService';
 

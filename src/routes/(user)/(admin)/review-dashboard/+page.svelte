@@ -1,5 +1,5 @@
 <script lang="ts">
-	import SourceListPeageable from '$components/layout/lists/SourceListPeageable.svelte';
+	import SourceListPeageable from '$components/lists/SourceListPeageable.svelte';
 	let searchSourcesValue = '';
 </script>
 

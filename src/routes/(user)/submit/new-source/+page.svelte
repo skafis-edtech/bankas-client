@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, Input, Label } from 'flowbite-svelte';
+	import { Button, Input, Label, Helper } from 'flowbite-svelte';
 	import { goto } from '$app/navigation';
 	import { SourceSubmitDtoVisibilityEnum, type SourceSubmitDto } from '$services/gen-client';
 	import { successStore } from '$lib/stores';
@@ -10,10 +10,9 @@
 		description: '',
 		visibility: SourceSubmitDtoVisibilityEnum.Private
 	};
-	let subject = '';
+	let subject = 'Matematika';
 	let name = '';
-	let status = '(DAR TVARKOMA)';
-	$: sourceData.name = `${subject}. ${name} ${status !== '' ? status : ''}`;
+	$: sourceData.name = `${subject}. ${name}`;
 
 	async function submitSource() {
 		if (name === '') {
@@ -57,7 +56,6 @@
 					bind:value={subject}
 					class="mt-1 block px-4 py-2 text-lg border-black dark:border-white border-2 w-full"
 				>
-					<option value="">Pasirinkite dalyką</option>
 					<option value="Matematika">Matematika</option>
 					<option value="Fizika">Fizika</option>
 					<option value="Chemija">Chemija</option>
@@ -82,35 +80,15 @@
 					class="mt-1 block  px-4 py-2 text-lg border-black dark:border-white border-2"
 				/>
 			</div>
-
-			<div class="w-full">
-				<Label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-					Statusas (tuščia - administratoriai jau gali peržiūrėti)
-				</Label>
-				<Input
-					id="status"
-					type="text"
-					bind:value={status}
-					placeholder="Statusas"
-					class="mt-1 block px-4 py-2 text-lg border-black dark:border-white border-2"
-				/>
-			</div>
-			<div class="w-full">
-				<Label for="visibility" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-					Užduočių matomumas
-				</Label>
-				<select
-					id="visibility"
-					bind:value={sourceData.visibility}
-					class="mt-1 block px-4 py-2 text-lg border-black dark:border-white border-2 w-full"
-				>
-					<option value="PRIVATE">Privačios</option>
-					<option value="PUBLIC">Viešos</option>
-				</select>
-			</div>
 		</div>
 	</div>
-	<div class="flex justify-center">
+	<div>
+		<Input disabled value={`🔒 ${sourceData.name}`} class="mt-1 block px-4 py-2 text-lg" />
+		<Helper class="text-center"
+			>Šaltinio dalyką, pavadinimą, matomumą bei aprašymą galėsite redaguoti vėliau...</Helper
+		>
+	</div>
+	<div class="flex justify-center mt-4">
 		<Button color="purple" on:click={submitSource} class="w-fit">Pridėti užduočių sąrašą</Button>
 	</div>
 </div>

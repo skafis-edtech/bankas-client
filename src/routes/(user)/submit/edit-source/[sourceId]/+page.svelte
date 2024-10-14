@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { Button, Card, Modal } from 'flowbite-svelte';
+	import { Button, Card, Dropdown } from 'flowbite-svelte';
 	import { goto } from '$app/navigation';
 	import ProblemCreateForm from '$components/forms/ProblemCreateForm.svelte';
 	import {
-	ProblemDisplayViewDtoProblemVisibilityEnum,
+		ProblemDisplayViewDtoProblemVisibilityEnum,
 		SourceDisplayDtoVisibilityEnum,
 		SourceSubmitDtoVisibilityEnum,
 		type ProblemDisplayViewDto,
@@ -15,14 +15,20 @@
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
-	import MultipleFileUploadModal from '$components/ui/MultipleFileUploadModal.svelte';
-	import { CloseOutline, EditOutline, PlusOutline, TrashBinOutline } from 'flowbite-svelte-icons';
-	import EditProblemModal from '$components/ui/EditProblemModal.svelte';
-	import MarkdownDisplay from '$components/ui/MarkdownDisplay.svelte';
-	import FindById from '$components/layout/home/FindById.svelte';
+	import MultipleFileUploadModal from '$components/edit-source/MultipleFileUploadModal.svelte';
+	import {
+		CloseOutline,
+		EditOutline,
+		PlusOutline,
+		TrashBinOutline,
+		DotsHorizontalOutline
+	} from 'flowbite-svelte-icons';
+	import EditProblemModal from '$components/edit-source/EditProblemModal.svelte';
+	import MarkdownDisplay from '$components/forms/MarkdownDisplay.svelte';
+	import FindById from '$components/layout/FindById.svelte';
 	import HorizontalLine from '$components/ui/HorizontalLine.svelte';
-	import SourceEditForm from '$components/forms/SourceEditForm.svelte';
 	import { contentApi, viewApi } from '$services/apiService';
+	import SourceModal from '$components/edit-source/SourceModal.svelte';
 
 	let sourceId: string;
 	$: sourceId = $page.params.sourceId;
@@ -310,84 +316,48 @@
 	</div>
 </div>
 
-{#if sourceData.visibility === SourceDisplayDtoVisibilityEnum.Public}
-	<p class="text-justify mx-4 my-4">
-		Išsaugotos "Viešos" užduotys yra iškart pateikiamos peržiūrai. Peržiūrėtos ir patvirtintos
-		užduotys bus paviešintos kartu su Jūsų prisijungimo vardu, bet ne el. paštu. Šaltinių
-		patvirtinimai ir atmetimai yra atšaukiami, jei yra atliekami pakeitimai šaltinio informacijoje
-		arba uždaviniuose. Prisiminkite, kad sutikote su <a href="/about#upload-terms">sąlygomis</a> :).
-	</p>
-{:else}
-	<p class="text-justify mx-4 my-4">Užduotys privačios ir yra matomos tik Jums.</p>
-{/if}
-
 <Card
-	class="max-w-md mx-auto my-6 min-w-full p-6 bg-white rounded-lg shadow-md dark:bg-gray-800 flex flex-row justify-between"
+	class="max-w-md mx-auto my-6 min-w-full p-6 bg-white rounded-lg shadow-md dark:bg-gray-800 flex flex-row justify-between "
 >
 	<div>
-		<h2>{sourceData.name}</h2>
+		<h2>
+			{sourceData.visibility === SourceDisplayDtoVisibilityEnum.Public ? '🌐' : '🔒'}
+			{sourceData.name}
+		</h2>
 		{#if sourceData.description === ''}
 			<h5><em>Šaltinio aprašymas nepateiktas</em></h5>
 		{:else}
 			<MarkdownDisplay value={sourceData.description} />
 		{/if}
 	</div>
-	<div>
-		<em
-			>{#if sourceData.visibility === SourceDisplayDtoVisibilityEnum.Public}
-				Šaltinis yra viešas
-			{:else}
-				Šaltinis yra privatus
-			{/if}</em
-		>
-	</div>
-	<div>
-		{#if sourceData.name.includes('(DAR TVARKOMA)')}
-			<Button
-				color="green"
-				on:click={() => {
-					sourceData.name = sourceData.name.replace('(DAR TVARKOMA)', '');
-					updateSource();
-				}}
-				class="p-2 mx-1"
-			>
-				Sutvarkiau šaltinį su užduotimis
-			</Button>
-		{:else}
-			<Button
-				color="yellow"
-				on:click={() => {
-					sourceData.name += ' (DAR TVARKOMA)';
-					updateSource();
-				}}
-				class="p-2 mx-1"
-			>
-				Dar tvarkau šaltinį
-			</Button>
-		{/if}
-		<Button color="yellow" on:click={openSourceModal} class="p-2 mx-1">
-			<EditOutline class="w-6 h-6" />
+
+	<div class="flex items-center gap-4">
+		<Button color="yellow" on:click={openSourceModal} class="p-2 gap-2">
+			<EditOutline class="w-6 h-6" /> Redaguoti
+		</Button>
+		<Button color="red" on:click={deleteSource} class="p-2">
+			<TrashBinOutline class="w-6 h-6" />
 		</Button>
 	</div>
-	<Modal open={isSourceModalOpen} on:close={() => (isSourceModalOpen = false)} size="xl">
-		<div class="relative">
-			<Button color="red" on:click={deleteSource} class="absolute top-5 right-5 z-10">
-				Ištrinti šaltinį
-			</Button>
-			<SourceEditForm bind:sourceData={tempSourceData} />
-			<div class="flex flex-row justify-end">
-				<Button
-					disabled={!isSourceDataChanged}
-					color="yellow"
-					on:click={saveSourceChanges}
-					class="w-fit"
-				>
-					Pateikti pakeitimą peržiūrai
-				</Button>
-			</div>
-		</div>
-	</Modal>
+	<SourceModal
+		isOpen={isSourceModalOpen}
+		sourceData={tempSourceData}
+		{isSourceDataChanged}
+		on:closeModal={() => (isSourceModalOpen = false)}
+		on:saveSourceChanges={saveSourceChanges}
+	/>
 </Card>
+{#if sourceData.visibility === SourceDisplayDtoVisibilityEnum.Public}
+	<p class="text-justify mx-4 my-4">
+		Užduotys pateiktos peržiūrai. Peržiūrėtos ir patvirtintos užduotys bus paviešintos kartu su Jūsų
+		prisijungimo vardu, bet ne el. paštu. Šaltinių patvirtinimai ir atmetimai yra atšaukiami, jei
+		yra atliekami pakeitimai šaltinio informacijoje arba uždaviniuose. Prisiminkite, kad sutikote su <a
+			href="/about#upload-terms">sąlygomis</a
+		> :)
+	</p>
+{:else}
+	<p class="text-justify mx-4 my-4">Užduotys privačios ir yra matomos tik Jums.</p>
+{/if}
 <div class="container mx-auto">
 	{#each submittedProblems as problem}
 		<div class="relative my-3">

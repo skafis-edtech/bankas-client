@@ -2,7 +2,7 @@
 	import { Card, Checkbox } from 'flowbite-svelte';
 	import ProblemMeta from './ProblemMeta.svelte';
 	import type { Components } from '../../types';
-	import MarkdownDisplay from './MarkdownDisplay.svelte';
+	import MarkdownDisplay from '$components/forms/MarkdownDisplay.svelte';
 	import { getContext } from 'svelte';
 	import { ProblemDisplayViewDtoProblemVisibilityEnum } from '$services/gen-client';
 
@@ -11,9 +11,9 @@
 	const { appendItemToList, removeItemFromList, isInList } = getContext<any>('skfList');
 </script>
 
-<Card class="min-w-full">
+<Card class="min-w-full card">
 	<div class="flex flex-col relative">
-		<h2 class="text-xl font-bold text-left">{problemMainData.skfCode}</h2>
+		<p class="text-sm font-bold text-left">{problemMainData.skfCode}</p>
 		<ProblemMeta categories={problemMainData.categories} sourceId={problemMainData.sourceId} />
 		{#if problemMainData.visibility === ProblemDisplayViewDtoProblemVisibilityEnum.Visible}
 			{#if problemMainData.problemText || problemMainData.problemImageSrc.length > 0}

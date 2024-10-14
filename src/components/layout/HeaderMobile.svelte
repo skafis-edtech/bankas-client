@@ -88,7 +88,7 @@
 						hidden1 = true;
 						goto('/submit/dashboard');
 					}}
-					color="green">Mano užduotys</Button
+					color="green">Užduotys</Button
 				>
 				<Button
 					on:click={() => {

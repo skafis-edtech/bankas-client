@@ -1,5 +1,5 @@
 <script lang="ts">
-	import MarkdownDisplay from '$components/ui/MarkdownDisplay.svelte';
+	import MarkdownDisplay from '$components/forms/MarkdownDisplay.svelte';
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
 	import { viewApi } from '$services/apiService';
 	import type { Category, ProblemDisplayViewDto } from '$services/gen-client';
@@ -86,7 +86,8 @@
 							answerText: problem.answerText,
 							answerImageSrc: problem.answerImageSrc,
 							categories: problem.categories,
-							sourceId: problem.sourceId
+							sourceId: problem.sourceId,
+							visibility: problem.problemVisibility
 						}}
 					/>
 				</div>

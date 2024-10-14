@@ -15,7 +15,7 @@
 	import Footer from '$components/layout/Footer.svelte';
 	import { setAuthToken } from '$services/apiService';
 	import { goto } from '$app/navigation';
-	import GlobalAlert from '$components/ui/GlobalAlert.svelte';
+	import GlobalAlert from '$components/layout/GlobalAlert.svelte';
 	import { authInitialized } from '$lib/stores';
 	import HeaderDesktop from '$components/layout/HeaderDesktop.svelte';
 	import HeaderMobile from '$components/layout/HeaderMobile.svelte';

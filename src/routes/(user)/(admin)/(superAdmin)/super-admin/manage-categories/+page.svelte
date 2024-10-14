@@ -1,6 +1,6 @@
 <script lang="ts">
 	import MarkdownInput from '$components/forms/MarkdownInput.svelte';
-	import MarkdownDisplay from '$components/ui/MarkdownDisplay.svelte';
+	import MarkdownDisplay from '$components/forms/MarkdownDisplay.svelte';
 	import { categoryApi } from '$services/apiService';
 	import type { Category, CategoryPostDto } from '$services/gen-client';
 	import { onMount } from 'svelte';

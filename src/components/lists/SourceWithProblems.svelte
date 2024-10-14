@@ -1,9 +1,9 @@
 <script lang="ts">
 	import AuthorLink from '$components/ui/AuthorLink.svelte';
-	import MarkdownDisplay from '$components/ui/MarkdownDisplay.svelte';
+	import MarkdownDisplay from '$components/forms/MarkdownDisplay.svelte';
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
-	import SourceManageBar from '$components/ui/SourceManageBar.svelte';
-	import SourceReviewBar from '$components/ui/SourceReviewBar.svelte';
+	import SourceManageBar from '$components/submit-dashboard/SourceManageBar.svelte';
+	import SourceReviewBar from '$components/review-dashboard/SourceReviewBar.svelte';
 	import { getNiceTimeString } from '$lib/utils';
 	import { viewApi } from '$services/apiService';
 	import {
