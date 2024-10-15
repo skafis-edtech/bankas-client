@@ -22,13 +22,8 @@
 <Modal open={isOpen} on:close={closeModal} size="xl">
 	<SourceEditForm bind:sourceData />
 	<div class="flex flex-row justify-end">
-		<Button
-			disabled={!isSourceDataChanged}
-			color="yellow"
-			on:click={saveSourceChanges}
-			class="w-fit"
-		>
-			Pateikti pakeitimą peržiūrai
+		<Button disabled={!isSourceDataChanged} color="blue" on:click={saveSourceChanges} class="w-fit">
+			Išsaugoti
 		</Button>
 	</div>
 </Modal>

@@ -11,7 +11,7 @@
 	const { appendItemToList, removeItemFromList, isInList } = getContext<any>('skfList');
 </script>
 
-<Card class="min-w-full card">
+<div class="min-w-full bg-white shadow-md p-2 rounded-md">
 	<div class="flex flex-col relative">
 		<p class="text-sm font-bold text-left">{problemMainData.skfCode}</p>
 		<ProblemMeta categories={problemMainData.categories} sourceId={problemMainData.sourceId} />
@@ -52,7 +52,7 @@
 					/>
 				</details>
 			{:else}
-				<p class="text-right">Atsakymas nėra pateiktas</p>
+				<p class="text-right text-sm italic">Atsakymas nėra pateiktas</p>
 			{/if}
 		{:else if problemMainData.visibility === ProblemDisplayViewDtoProblemVisibilityEnum.NotExisting}
 			<p class="text-center">❌ Užduotis su tokiu kodu neegzistuoja ❌</p>
@@ -64,4 +64,4 @@
 			<p class="text-center">Šito teksto neturėtumėte matyti. Susisiekite su administratoriumi</p>
 		{/if}
 	</div>
-</Card>
+</div>

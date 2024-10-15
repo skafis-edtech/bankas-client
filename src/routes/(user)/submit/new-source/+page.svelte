@@ -29,20 +29,7 @@
 	}
 </script>
 
-<h1 class="text-4xl font-semibold my-4 text-center">Naujas šaltinis</h1>
-<div class="flex flex-row justify-between mx-4">
-	<div class="w-28">
-		<Button on:click={() => goto('/submit/dashboard')} class="w-16">Grįžti</Button>
-	</div>
-	<div>
-		<h3 class="text-lg text-center">
-			Pirmiausia pateikite šaltinio (užduočių rinkinio) pavadinimą, tuomet galėsite pridėti
-			užduotis.
-		</h3>
-	</div>
-
-	<div class="w-28"></div>
-</div>
+<h1 class="text-4xl font-semibold my-4 text-center">Naujas šaltinis (užduočių rinkinys)</h1>
 
 <div class="relative">
 	<div class="flex justify-center">
