@@ -26,12 +26,21 @@
 
 	setContext('skfList', {
 		list: skfList,
-		setList: (list: string[]) => skfList.set(list),
-		appendItemToList: (item: string) => skfList.update((currentList) => [...currentList, item]),
+		setList: (list: string) => skfList.set(list),
+		appendItemToList: (item: string) =>
+			skfList.update((currentList) => currentList.concat(' ' + item)),
 		removeItemFromList: (item: string) =>
-			skfList.update((currentList) => currentList.filter((i) => i !== item)),
+			skfList.update((currentList) => currentList.split(item).join('')),
 		isInList: (item: string) => $skfList.includes(item)
 	});
+
+	$: if ($websiteState === 0) {
+		skfList.set('');
+		websiteState.set(2);
+	} else if ($websiteState === 1) {
+		skfList.set('');
+		websiteState.set(3);
+	}
 
 	const firebaseUnsubscribe = auth.onAuthStateChanged(async (user) => {
 		if (user) {
