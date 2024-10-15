@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { Button, Card, Modal } from 'flowbite-svelte';
+	import { Button, Card, Alert } from 'flowbite-svelte';
 	import { goto } from '$app/navigation';
 	import ProblemCreateForm from '$components/forms/ProblemCreateForm.svelte';
 	import {
-	ProblemDisplayViewDtoProblemVisibilityEnum,
+		ProblemDisplayViewDtoProblemVisibilityEnum,
 		SourceDisplayDtoVisibilityEnum,
 		SourceSubmitDtoVisibilityEnum,
 		type ProblemDisplayViewDto,
@@ -15,14 +15,14 @@
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
-	import MultipleFileUploadModal from '$components/ui/MultipleFileUploadModal.svelte';
+	import MultipleFileUploadModal from '$components/edit-source/MultipleFileUploadModal.svelte';
 	import { CloseOutline, EditOutline, PlusOutline, TrashBinOutline } from 'flowbite-svelte-icons';
-	import EditProblemModal from '$components/ui/EditProblemModal.svelte';
-	import MarkdownDisplay from '$components/ui/MarkdownDisplay.svelte';
-	import FindById from '$components/layout/home/FindById.svelte';
+	import EditProblemModal from '$components/edit-source/EditProblemModal.svelte';
+	import MarkdownDisplay from '$components/forms/MarkdownDisplay.svelte';
+	import FindById from '$components/layout/FindById.svelte';
 	import HorizontalLine from '$components/ui/HorizontalLine.svelte';
-	import SourceEditForm from '$components/forms/SourceEditForm.svelte';
 	import { contentApi, viewApi } from '$services/apiService';
+	import SourceModal from '$components/edit-source/SourceModal.svelte';
 
 	let sourceId: string;
 	$: sourceId = $page.params.sourceId;
@@ -292,132 +292,90 @@
 	let isSourceModalOpen = false;
 </script>
 
-<div class="flex flex-row justify-between mx-4">
-	<div class="w-28">
-		<Button on:click={() => goto('/submit/dashboard')} class="w-fit my-2"
-			>Grįžti į šaltinių sąrašą</Button
-		>
-	</div>
-	<h1 class="text-4xl font-semibold my-4 text-center">
-		Šaltinio pildymas užduotimis (redagavimas)
-	</h1>
-	<div class="w-28 flex align-middle">
+<div class="flex justify-between items-center">
+	<div class="w-48">
 		<Button
 			color="alternative"
 			on:click={() => (isDropModalOpen = true)}
 			class="w-fit my-auto text-sm p-2">Automatizuoti</Button
 		>
 	</div>
-</div>
-
-{#if sourceData.visibility === SourceDisplayDtoVisibilityEnum.Public}
-	<p class="text-justify mx-4 my-4">
-		Išsaugotos "Viešos" užduotys yra iškart pateikiamos peržiūrai. Peržiūrėtos ir patvirtintos
-		užduotys bus paviešintos kartu su Jūsų prisijungimo vardu, bet ne el. paštu. Šaltinių
-		patvirtinimai ir atmetimai yra atšaukiami, jei yra atliekami pakeitimai šaltinio informacijoje
-		arba uždaviniuose. Prisiminkite, kad sutikote su <a href="/about#upload-terms">sąlygomis</a> :).
-	</p>
-{:else}
-	<p class="text-justify mx-4 my-4">Užduotys privačios ir yra matomos tik Jums.</p>
-{/if}
-
-<Card
-	class="max-w-md mx-auto my-6 min-w-full p-6 bg-white rounded-lg shadow-md dark:bg-gray-800 flex flex-row justify-between"
->
 	<div>
-		<h2>{sourceData.name}</h2>
+		<h1 class="text-4xl font-semibold my-4 text-center">
+			{sourceData.visibility === SourceDisplayDtoVisibilityEnum.Public ? '🌐' : '🔒'}
+			{sourceData.name}
+		</h1>
+	</div>
+
+	<div class="w-48 flex items-center gap-4">
+		<Button color="yellow" on:click={openSourceModal} class="p-2 gap-2">
+			<EditOutline class="w-6 h-6" /> Redaguoti
+		</Button>
+		<Button color="red" on:click={deleteSource} class="p-2">
+			<TrashBinOutline class="w-6 h-6" />
+		</Button>
+	</div>
+</div>
+<div class="mt-2 mb-6 p-2 bg-white flex flex-row justify-between">
+	<div>
 		{#if sourceData.description === ''}
 			<h5><em>Šaltinio aprašymas nepateiktas</em></h5>
 		{:else}
 			<MarkdownDisplay value={sourceData.description} />
 		{/if}
 	</div>
-	<div>
-		<em
-			>{#if sourceData.visibility === SourceDisplayDtoVisibilityEnum.Public}
-				Šaltinis yra viešas
-			{:else}
-				Šaltinis yra privatus
-			{/if}</em
-		>
-	</div>
-	<div>
-		{#if sourceData.name.includes('(DAR TVARKOMA)')}
-			<Button
-				color="green"
-				on:click={() => {
-					sourceData.name = sourceData.name.replace('(DAR TVARKOMA)', '');
-					updateSource();
-				}}
-				class="p-2 mx-1"
-			>
-				Sutvarkiau šaltinį su užduotimis
-			</Button>
-		{:else}
-			<Button
-				color="yellow"
-				on:click={() => {
-					sourceData.name += ' (DAR TVARKOMA)';
-					updateSource();
-				}}
-				class="p-2 mx-1"
-			>
-				Dar tvarkau šaltinį
-			</Button>
-		{/if}
-		<Button color="yellow" on:click={openSourceModal} class="p-2 mx-1">
-			<EditOutline class="w-6 h-6" />
-		</Button>
-	</div>
-	<Modal open={isSourceModalOpen} on:close={() => (isSourceModalOpen = false)} size="xl">
-		<div class="relative">
-			<Button color="red" on:click={deleteSource} class="absolute top-5 right-5 z-10">
-				Ištrinti šaltinį
-			</Button>
-			<SourceEditForm bind:sourceData={tempSourceData} />
-			<div class="flex flex-row justify-end">
-				<Button
-					disabled={!isSourceDataChanged}
-					color="yellow"
-					on:click={saveSourceChanges}
-					class="w-fit"
-				>
-					Pateikti pakeitimą peržiūrai
-				</Button>
-			</div>
-		</div>
-	</Modal>
-</Card>
+	<SourceModal
+		isOpen={isSourceModalOpen}
+		bind:sourceData={tempSourceData}
+		{isSourceDataChanged}
+		on:closeModal={() => (isSourceModalOpen = false)}
+		on:saveSourceChanges={saveSourceChanges}
+	/>
+</div>
+
+{#if sourceData.visibility === SourceDisplayDtoVisibilityEnum.Public}
+	<Alert color="blue" border class="mt-2">
+		Užduotys pateiktos peržiūrai. Peržiūrėtos ir patvirtintos užduotys bus paviešintos kartu su Jūsų
+		prisijungimo vardu, bet ne el. paštu. Šaltinių patvirtinimai ir atmetimai yra atšaukiami, jei
+		yra atliekami pakeitimai šaltinio informacijoje arba uždaviniuose. Prisiminkite, kad sutikote su <a
+			href="/about#upload-terms">sąlygomis</a
+		> :)
+	</Alert>
+{/if}
+
 <div class="container mx-auto">
 	{#each submittedProblems as problem}
-		<div class="relative my-3">
-			<div>Užduotis {problem.sourceListNr}</div>
-			<Button
-				color="red"
-				on:click={() => deleteProblem(problem.id)}
-				class="absolute top-9 right-14 z-10 p-2 mx-1"
-			>
-				<TrashBinOutline class="w-6 h-6" />
-			</Button>
-			<Button
-				color="yellow"
-				on:click={() => openEditModal(problem.id)}
-				class="absolute top-9 right-28 z-10 p-2 mx-1"
-			>
-				<EditOutline class="w-6 h-6" />
-			</Button>
-			<ProblemComponent
-				problemMainData={{
-					skfCode: problem.skfCode === '' ? problem.id : problem.skfCode,
-					problemText: problem.problemText,
-					problemImageSrc: problem.problemImageSrc,
-					answerText: problem.answerText,
-					answerImageSrc: problem.answerImageSrc,
-					categories: problem.categories,
-					sourceId: problem.sourceId,
-					visibility: problem.problemVisibility
-				}}
-			/>
+		<div class="flex gap-2">
+			<div class="text-sm">{problem.sourceListNr}.</div>
+			<div class="relative my-1 w-full">
+				<Button
+					color="red"
+					on:click={() => deleteProblem(problem.id)}
+					class="absolute top-2 right-9 z-10 p-1"
+				>
+					<TrashBinOutline class="w-4 h-4" />
+				</Button>
+				<Button
+					color="yellow"
+					on:click={() => openEditModal(problem.id)}
+					class="absolute top-2 right-16 z-10 p-1"
+				>
+					<EditOutline class="w-4 h-4" />
+				</Button>
+				<ProblemComponent
+					problemMainData={{
+						skfCode: problem.skfCode === '' ? problem.id : problem.skfCode,
+						problemText: problem.problemText,
+						problemImageSrc: problem.problemImageSrc,
+						answerText: problem.answerText,
+						answerImageSrc: problem.answerImageSrc,
+						categories: problem.categories,
+						sourceId: problem.sourceId,
+						visibility: problem.problemVisibility
+					}}
+					canList={false}
+				/>
+			</div>
 		</div>
 	{/each}
 </div>

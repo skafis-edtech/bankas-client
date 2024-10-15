@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { getContext, onMount } from 'svelte';
-	import FindById from '$components/layout/home/FindById.svelte';
+	import FindById from '$components/layout/FindById.svelte';
 	import type { SourceDisplayDto } from '$services/gen-client';
 	import type { AuthContext } from '../types';
 	import HorizontalLine from '$components/ui/HorizontalLine.svelte';
 	import { Alert, Button, TabItem, Tabs } from 'flowbite-svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import SourceListPeageable from '$components/layout/lists/SourceListPeageable.svelte';
+	import SourceListPeageable from '$components/lists/SourceListPeageable.svelte';
 	import { viewApi } from '$services/apiService';
 
 	const { user } = getContext('authContext') as AuthContext;

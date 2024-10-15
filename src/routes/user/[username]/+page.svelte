@@ -6,9 +6,9 @@
 	import { Button } from 'flowbite-svelte';
 	import type { AuthContext } from '../../../types';
 	import { userApi } from '$services/apiService';
-	import MarkdownDisplay from '$components/ui/MarkdownDisplay.svelte';
+	import MarkdownDisplay from '$components/forms/MarkdownDisplay.svelte';
 	import MarkdownInput from '$components/forms/MarkdownInput.svelte';
-	import SourceListPeageable from '$components/layout/lists/SourceListPeageable.svelte';
+	import SourceListPeageable from '$components/lists/SourceListPeageable.svelte';
 
 	let authContext: AuthContext | undefined;
 	let user: AuthContext['user'] | undefined;

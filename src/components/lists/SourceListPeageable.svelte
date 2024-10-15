@@ -7,7 +7,7 @@
 	import { Button, Search } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import SourceWithProblems from './SourceWithProblems.svelte';
-	import SourceManageBar from '$components/ui/SourceManageBar.svelte';
+	import SourceManageBar from '$components/submit-dashboard/SourceManageBar.svelte';
 	import { contentApi, reviewApi, viewApi } from '$services/apiService';
 
 	let sources: SourceDisplayDto[] = [];
@@ -78,7 +78,7 @@
 		{/if}
 		{#if sourcesSubset === 'mine' && source.reviewStatus !== SourceDisplayDtoReviewStatusEnum.Rejected && source.visibility === SourceSubmitDtoVisibilityEnum.Private}
 			<SourceWithProblems
-				source={{ ...source, name: "🔒 "+ source.name }}
+				source={{ ...source, name: '🔒 ' + source.name }}
 				{searchValue}
 				needApprovalStatusNone="status"
 				showIndicator={false}

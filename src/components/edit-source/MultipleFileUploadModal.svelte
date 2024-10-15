@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { Button, Dropzone, Modal } from 'flowbite-svelte';
 
 	export let open = true;

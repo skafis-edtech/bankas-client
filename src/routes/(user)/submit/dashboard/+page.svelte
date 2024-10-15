@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import SourceListPeageable from '$components/layout/lists/SourceListPeageable.svelte';
+	import SourceListPeageable from '$components/lists/SourceListPeageable.svelte';
 	import { Button } from 'flowbite-svelte';
 
 	let searchSourcesValue = '';

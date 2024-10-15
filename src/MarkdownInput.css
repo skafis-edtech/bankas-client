@@ -10,8 +10,12 @@
 }
 
 .carta-input {
-	max-height: 200px;
-	height: 200px;
+	height: fit-content !important;
+	min-height: 200px;
+}
+
+.carta-font-code {
+	min-height: 200px;
 }
 
 @media screen and (max-width: 768px) {
@@ -20,13 +24,3 @@
 		height: 350px;
 	}
 }
-
-/* .scale-container {
-	position: relative;
-}
-
-.katex-html > .base {
-	transform: scale(1.2); 
-	transform-origin: top left; 
-}
-*/

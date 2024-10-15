@@ -2,7 +2,7 @@
 	import { Card, Checkbox } from 'flowbite-svelte';
 	import ProblemMeta from './ProblemMeta.svelte';
 	import type { Components } from '../../types';
-	import MarkdownDisplay from './MarkdownDisplay.svelte';
+	import MarkdownDisplay from '$components/forms/MarkdownDisplay.svelte';
 	import { getContext } from 'svelte';
 	import { ProblemDisplayViewDtoProblemVisibilityEnum } from '$services/gen-client';
 
@@ -11,9 +11,9 @@
 	const { appendItemToList, removeItemFromList, isInList } = getContext<any>('skfList');
 </script>
 
-<Card class="min-w-full">
+<div class="min-w-full bg-white shadow-md p-2 rounded-md">
 	<div class="flex flex-col relative">
-		<h2 class="text-xl font-bold text-left">{problemMainData.skfCode}</h2>
+		<p class="text-sm font-bold text-left">{problemMainData.skfCode}</p>
 		<ProblemMeta categories={problemMainData.categories} sourceId={problemMainData.sourceId} />
 		{#if problemMainData.visibility === ProblemDisplayViewDtoProblemVisibilityEnum.Visible}
 			{#if problemMainData.problemText || problemMainData.problemImageSrc.length > 0}
@@ -52,7 +52,7 @@
 					/>
 				</details>
 			{:else}
-				<p class="text-right">Atsakymas nėra pateiktas</p>
+				<p class="text-right text-sm italic">Atsakymas nėra pateiktas</p>
 			{/if}
 		{:else if problemMainData.visibility === ProblemDisplayViewDtoProblemVisibilityEnum.NotExisting}
 			<p class="text-center">❌ Užduotis su tokiu kodu neegzistuoja ❌</p>
@@ -64,4 +64,4 @@
 			<p class="text-center">Šito teksto neturėtumėte matyti. Susisiekite su administratoriumi</p>
 		{/if}
 	</div>
-</Card>
+</div>

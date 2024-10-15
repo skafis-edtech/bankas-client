@@ -4,10 +4,10 @@
 		SourceSubmitDtoVisibilityEnum
 	} from '$services/gen-client';
 	import { Badge, Button, Popover } from 'flowbite-svelte';
-	import { EditOutline, MessageDotsOutline } from 'flowbite-svelte-icons';
+	import { MessageDotsOutline } from 'flowbite-svelte-icons';
 	import { goto } from '$app/navigation';
 	import { getNiceTimeString } from '$lib/utils';
-	import AuthorLink from './AuthorLink.svelte';
+	import AuthorLink from '$components/ui/AuthorLink.svelte';
 
 	export let reviewStatus: SourceDisplayDtoReviewStatusEnum;
 	export let visibility: SourceSubmitDtoVisibilityEnum;

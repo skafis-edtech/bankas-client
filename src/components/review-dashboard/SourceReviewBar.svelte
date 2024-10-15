@@ -4,7 +4,7 @@
 	import { MessageDotsOutline } from 'flowbite-svelte-icons';
 	import { successStore } from '$lib/stores';
 	import { getNiceTimeString } from '$lib/utils';
-	import AuthorLink from './AuthorLink.svelte';
+	import AuthorLink from '../ui/AuthorLink.svelte';
 	import { reviewApi } from '$services/apiService';
 
 	export let reviewStatus: SourceDisplayDtoReviewStatusEnum;

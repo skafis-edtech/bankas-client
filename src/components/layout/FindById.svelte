@@ -61,7 +61,7 @@
 				answerImageSrc: problemDisplayViewDto.answerImageSrc,
 				categories: problemDisplayViewDto.categories,
 				sourceId: problemDisplayViewDto.sourceId,
-				visibility: problemDisplayViewDto.problemVisibility,
+				visibility: problemDisplayViewDto.problemVisibility
 			}}
 		/>
 		<p>Užduoties redagavimo tekstas</p>
