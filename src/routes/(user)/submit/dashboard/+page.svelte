@@ -36,12 +36,14 @@
 			on:click={() => (sortBy = GetSourcesByAuthorSortByEnum.NameDesc)}>Z-A</Button
 		>
 		<Button
+			disabled
 			class="flex-1"
 			color={sortBy === GetSourcesByAuthorSortByEnum.MostProblems ? 'red' : 'alternative'}
 			on:click={() => (sortBy = GetSourcesByAuthorSortByEnum.MostProblems)}
 			>Daugiausiai užduočių</Button
 		>
 		<Button
+			disabled
 			class="flex-1"
 			color={sortBy === GetSourcesByAuthorSortByEnum.LeastProblems ? 'green' : 'alternative'}
 			on:click={() => (sortBy = GetSourcesByAuthorSortByEnum.LeastProblems)}
@@ -49,4 +51,4 @@
 		>
 	</ButtonGroup>
 </div>
-<SourceListPeageable searchValue={searchSourcesValue} sourcesSubset="mine" />
+<SourceListPeageable searchValue={searchSourcesValue} {sortBy} sourcesSubset="mine" />

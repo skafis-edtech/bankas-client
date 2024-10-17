@@ -1,5 +1,6 @@
 <script lang="ts">
 	import {
+		GetSourcesByAuthorSortByEnum,
 		SourceDisplayDtoReviewStatusEnum,
 		SourceSubmitDtoVisibilityEnum,
 		type SourceDisplayDto
@@ -14,9 +15,16 @@
 	export let searchValue = '';
 	export let sourcesSubset: 'all' | 'approved' | 'mine' | 'author';
 	export let author: string = '';
+	export let sortBy: GetSourcesByAuthorSortByEnum = GetSourcesByAuthorSortByEnum.Newest;
 	let page = 0;
 	let size = 8;
 	let timer: NodeJS.Timeout;
+
+	$: (async () => {
+		if (sortBy) {
+			await fetchSources();
+		}
+	})();
 
 	$: if (searchValue !== null) {
 		if (timer) {
@@ -32,7 +40,7 @@
 
 	async function fetchSources() {
 		if (sourcesSubset === 'mine') {
-			const response = await contentApi.getMySources(page, size, searchValue);
+			const response = await contentApi.getMySources(page, size, searchValue, sortBy);
 			sources = response.data;
 		} else if (sourcesSubset === 'all') {
 			const sourcesRes = await reviewApi.getPendingSources(page, size, searchValue);
@@ -45,7 +53,13 @@
 				console.error('Author not provided');
 				return;
 			}
-			const sourcesRes = await sourceViewApi.getSourcesByAuthor(author, page, size, searchValue);
+			const sourcesRes = await sourceViewApi.getSourcesByAuthor(
+				author,
+				page,
+				size,
+				searchValue,
+				sortBy
+			);
 			sources = sourcesRes.data;
 		} else {
 			console.error('Invalid sources subset');
@@ -69,7 +83,7 @@
 	}
 </script>
 
-<Search class="my-3" placeholder="Ieškoti" bind:value={searchValue} />
+<Search class="my-3" placeholder="Ieškoti pagal pavadinimą ir aprašymą" bind:value={searchValue} />
 
 {#each Object.entries(sources) as [id, source]}
 	<div class="relative">

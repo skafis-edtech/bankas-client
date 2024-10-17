@@ -1407,10 +1407,11 @@ export const ContentControllerApiAxiosParamCreator = function (configuration?: C
          * @param {number} [page] 
          * @param {number} [size] 
          * @param {string} [search] 
+         * @param {GetMySourcesSortByEnum} [sortBy] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMySources: async (page?: number, size?: number, search?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getMySources: async (page?: number, size?: number, search?: string, sortBy?: GetMySourcesSortByEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/content/mySources`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1437,6 +1438,10 @@ export const ContentControllerApiAxiosParamCreator = function (configuration?: C
 
             if (search !== undefined) {
                 localVarQueryParameter['search'] = search;
+            }
+
+            if (sortBy !== undefined) {
+                localVarQueryParameter['sortBy'] = sortBy;
             }
 
 
@@ -1803,11 +1808,12 @@ export const ContentControllerApiFp = function(configuration?: Configuration) {
          * @param {number} [page] 
          * @param {number} [size] 
          * @param {string} [search] 
+         * @param {GetMySourcesSortByEnum} [sortBy] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getMySources(page?: number, size?: number, search?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SourceDisplayDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getMySources(page, size, search, options);
+        async getMySources(page?: number, size?: number, search?: string, sortBy?: GetMySourcesSortByEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SourceDisplayDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMySources(page, size, search, sortBy, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ContentControllerApi.getMySources']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1953,11 +1959,12 @@ export const ContentControllerApiFactory = function (configuration?: Configurati
          * @param {number} [page] 
          * @param {number} [size] 
          * @param {string} [search] 
+         * @param {GetMySourcesSortByEnum} [sortBy] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMySources(page?: number, size?: number, search?: string, options?: any): AxiosPromise<Array<SourceDisplayDto>> {
-            return localVarFp.getMySources(page, size, search, options).then((request) => request(axios, basePath));
+        getMySources(page?: number, size?: number, search?: string, sortBy?: GetMySourcesSortByEnum, options?: any): AxiosPromise<Array<SourceDisplayDto>> {
+            return localVarFp.getMySources(page, size, search, sortBy, options).then((request) => request(axios, basePath));
         },
         /**
          * 415 from swagger.... Submit problem with images for approval. returns ID of the created problem.
@@ -2090,12 +2097,13 @@ export class ContentControllerApi extends BaseAPI {
      * @param {number} [page] 
      * @param {number} [size] 
      * @param {string} [search] 
+     * @param {GetMySourcesSortByEnum} [sortBy] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ContentControllerApi
      */
-    public getMySources(page?: number, size?: number, search?: string, options?: RawAxiosRequestConfig) {
-        return ContentControllerApiFp(this.configuration).getMySources(page, size, search, options).then((request) => request(this.axios, this.basePath));
+    public getMySources(page?: number, size?: number, search?: string, sortBy?: GetMySourcesSortByEnum, options?: RawAxiosRequestConfig) {
+        return ContentControllerApiFp(this.configuration).getMySources(page, size, search, sortBy, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2178,6 +2186,18 @@ export class ContentControllerApi extends BaseAPI {
     }
 }
 
+/**
+ * @export
+ */
+export const GetMySourcesSortByEnum = {
+    NameAsc: 'NAME_ASC',
+    NameDesc: 'NAME_DESC',
+    Newest: 'NEWEST',
+    Oldest: 'OLDEST',
+    MostProblems: 'MOST_PROBLEMS',
+    LeastProblems: 'LEAST_PROBLEMS'
+} as const;
+export type GetMySourcesSortByEnum = typeof GetMySourcesSortByEnum[keyof typeof GetMySourcesSortByEnum];
 
 
 /**
