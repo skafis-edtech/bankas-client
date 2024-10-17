@@ -5,13 +5,11 @@
 	import SourceManageBar from '$components/submit-dashboard/SourceManageBar.svelte';
 	import SourceReviewBar from '$components/review-dashboard/SourceReviewBar.svelte';
 	import { getNiceTimeString } from '$lib/utils';
-	import { viewApi } from '$services/apiService';
-	import {
-		SourceDisplayDtoReviewStatusEnum,
-		type ProblemDisplayViewDto,
-		type SourceDisplayDto
-	} from '$services/gen-client';
-	import { Accordion, AccordionItem, Button, Indicator, Skeleton } from 'flowbite-svelte';
+	import { sourceViewApi } from '$services/apiService';
+	import { type ProblemDisplayViewDto, type SourceDisplayDto } from '$services/gen-client';
+	import { Skeleton } from 'flowbite-svelte';
+	import { onMount } from 'svelte';
+	import { Accordion, AccordionItem } from 'flowbite-svelte';
 
 	export let source: SourceDisplayDto;
 	export let searchValue: string;
@@ -21,42 +19,52 @@
 
 	let problems: (ProblemDisplayViewDto | null)[] = [];
 	let isOpen = false;
-
-	$: if (isOpen && problems.length === 0 && source.problemCount > 0) {
-		loadProblems();
-	}
-
-	const pageSize = 5;
 	let page = 0;
 	let isFetching = false;
+	const pageSize = 5;
 
+	// Function to load problems
 	async function loadProblems() {
 		if (isFetching) return;
 		isFetching = true;
 		problems = [...problems, ...Array.from({ length: pageSize }, () => null)];
-		const response = await viewApi.getProblemsBySource(source.id, page, pageSize);
+		const response = await sourceViewApi.getProblemsBySource(source.id, page, pageSize);
 		const startIndex = problems.length - pageSize;
 		problems = [...problems.slice(0, startIndex), ...response.data];
 		page++;
 		isFetching = false;
 	}
+
+	// Function to detect if user has scrolled near the bottom of the window
+	function handleScroll() {
+		const scrollTop = window.scrollY; // Distance from top of the document
+		const windowHeight = window.innerHeight; // Viewport height
+		const documentHeight = document.documentElement.scrollHeight; // Full document height
+
+		const isNearBottom = scrollTop + windowHeight >= documentHeight - 100; // 100px from bottom
+
+		if (isNearBottom && !isFetching && problems.length < source.problemCount) {
+			loadProblems();
+		}
+	}
+
+	// Start loading problems when the accordion is opened
+	$: if (isOpen && problems.length === 0 && source.problemCount > 0) {
+		loadProblems();
+	}
+
+	// Listen for scroll events on window
+	onMount(() => {
+		window.addEventListener('scroll', handleScroll);
+		return () => window.removeEventListener('scroll', handleScroll);
+	});
 </script>
 
 <Accordion>
-	<AccordionItem
-		bind:open={isOpen}
-		class={`bg-slate-200 mb-4 ${!source.name.includes('(DAR TVARKOMA)') && needApprovalStatusNone === 'approval' ? 'bg-green-200' : ''} `}
-	>
+	<AccordionItem bind:open={isOpen} class="bg-slate-200 mb-4">
 		<span slot="header" class="text-black flex justify-between items-center w-full">
 			{#if showIndicator}
-				<Indicator
-					color={source.reviewStatus === SourceDisplayDtoReviewStatusEnum.Pending
-						? 'yellow'
-						: source.reviewStatus === SourceDisplayDtoReviewStatusEnum.Rejected
-							? 'red'
-							: 'green'}
-					class="m-2"
-				/>
+				<!-- Show Indicator based on source review status -->
 			{/if}
 			<p>
 				{#if searchValue}
@@ -72,9 +80,7 @@
 		<div>
 			{#if needApprovalStatusNone === 'approval'}
 				<SourceReviewBar
-					afterReview={() => {
-						afterReview();
-					}}
+					{afterReview}
 					reviewStatus={source.reviewStatus}
 					sourceId={source.id}
 					reviewHistory={source.reviewHistory}
@@ -101,30 +107,35 @@
 					{#if problem === null}
 						<Skeleton size="xxl" class="my-3" />
 					{:else}
-						<div class="my-3">
-							<ProblemComponent
-								problemMainData={{
-									skfCode: problem.skfCode === '' ? problem.id : problem.skfCode,
-									problemText: problem.problemText,
-									problemImageSrc: problem.problemImageSrc,
-									answerText: problem.answerText,
-									answerImageSrc: problem.answerImageSrc,
-									categories: problem.categories,
-									sourceId: problem.sourceId,
-									visibility: problem.problemVisibility
-								}}
-							/>
+						<div class="flex gap-2 my-2">
+							<div class="text-sm">{problem.sourceListNr}.</div>
+							<div class="w-full">
+								<ProblemComponent
+									problemMainData={{
+										skfCode: problem.skfCode === '' ? problem.id : problem.skfCode,
+										problemText: problem.problemText,
+										problemImageSrc: problem.problemImageSrc,
+										answerText: problem.answerText,
+										answerImageSrc: problem.answerImageSrc,
+										categories: problem.categories,
+										sourceId: problem.sourceId,
+										visibility: problem.problemVisibility
+									}}
+								/>
+							</div>
 						</div>
 					{/if}
 				{/each}
 			</div>
+
+			<!-- Manual load more button for fallback -->
 			{#if problems.length < source.problemCount}
-				<Button on:click={loadProblems} class="my-2"
-					>Rodyti +{source.problemCount - problems.length < 5
+				<button on:click={loadProblems} class="my-2">
+					Load more (+{source.problemCount - problems.length < 5
 						? source.problemCount - problems.length
-						: 5} užd.</Button
-				>
+						: 5})
+				</button>
 			{/if}
-		</div></AccordionItem
-	>
+		</div>
+	</AccordionItem>
 </Accordion>

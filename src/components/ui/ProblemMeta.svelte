@@ -5,7 +5,7 @@
 	import { writable } from 'svelte/store';
 	import CategoryLink from './CategoryLink.svelte';
 	import SourceLink from './SourceLink.svelte';
-	import { viewApi } from '$services/apiService';
+	import { categoryViewApi, sourceViewApi } from '$services/apiService';
 
 	export let categories: string[];
 	export let sourceId: string;
@@ -29,7 +29,7 @@
 		if (categories.length > 0) {
 			loadedCategoryNames = await Promise.all(
 				categories.map(async (categoryId) => {
-					const response = await viewApi.getCategoryById(categoryId);
+					const response = await categoryViewApi.getCategoryById(categoryId);
 					return response.data.name;
 				})
 			);
@@ -39,7 +39,7 @@
 
 		categoriesNames = loadedCategoryNames;
 
-		const response = await viewApi.getSourceById(sourceId);
+		const response = await sourceViewApi.getSourceById(sourceId);
 		sourceName = response.data.name;
 		author = response.data.authorUsername;
 

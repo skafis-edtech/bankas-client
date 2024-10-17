@@ -8,7 +8,7 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import SourceListPeageable from '$components/lists/SourceListPeageable.svelte';
-	import { viewApi } from '$services/apiService';
+	import { sourceViewApi, viewApi } from '$services/apiService';
 
 	const { user } = getContext('authContext') as AuthContext;
 
@@ -43,7 +43,7 @@
 
 	async function loadSources() {
 		if (sourcesLoaded) return;
-		const sourcesRes = await viewApi.getApprovedSources();
+		const sourcesRes = await sourceViewApi.getApprovedSources();
 		sources = sourcesRes.data;
 		sourcesLoaded = true;
 	}

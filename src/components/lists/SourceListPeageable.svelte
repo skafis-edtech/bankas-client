@@ -8,7 +8,7 @@
 	import { onMount } from 'svelte';
 	import SourceWithProblems from './SourceWithProblems.svelte';
 	import SourceManageBar from '$components/submit-dashboard/SourceManageBar.svelte';
-	import { contentApi, reviewApi, viewApi } from '$services/apiService';
+	import { contentApi, reviewApi, sourceViewApi } from '$services/apiService';
 
 	let sources: SourceDisplayDto[] = [];
 	export let searchValue = '';
@@ -38,14 +38,14 @@
 			const sourcesRes = await reviewApi.getPendingSources(page, size, searchValue);
 			sources = sourcesRes.data;
 		} else if (sourcesSubset === 'approved') {
-			const sourcesRes = await viewApi.getApprovedSources(page, size, searchValue);
+			const sourcesRes = await sourceViewApi.getApprovedSources(page, size, searchValue);
 			sources = sourcesRes.data;
 		} else if (sourcesSubset === 'author') {
 			if (!author) {
 				console.error('Author not provided');
 				return;
 			}
-			const sourcesRes = await viewApi.getSourcesByAuthor(author, page, size, searchValue);
+			const sourcesRes = await sourceViewApi.getSourcesByAuthor(author, page, size, searchValue);
 			sources = sourcesRes.data;
 		} else {
 			console.error('Invalid sources subset');

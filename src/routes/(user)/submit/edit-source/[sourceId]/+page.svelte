@@ -21,7 +21,7 @@
 	import MarkdownDisplay from '$components/forms/MarkdownDisplay.svelte';
 	import FindById from '$components/layout/FindById.svelte';
 	import HorizontalLine from '$components/ui/HorizontalLine.svelte';
-	import { contentApi, viewApi } from '$services/apiService';
+	import { contentApi, sourceViewApi } from '$services/apiService';
 	import SourceModal from '$components/edit-source/SourceModal.svelte';
 
 	let sourceId: string;
@@ -74,7 +74,7 @@
 	}
 
 	onMount(async () => {
-		const sourceResponse = await viewApi.getSourceById(sourceId);
+		const sourceResponse = await sourceViewApi.getSourceById(sourceId);
 		oldSourceData = sourceResponse.data;
 		sourceData = {
 			name: oldSourceData.name,
@@ -103,7 +103,7 @@
 	});
 
 	async function loadAllProblems() {
-		const problemsResponse = await viewApi.getProblemsBySource(
+		const problemsResponse = await sourceViewApi.getProblemsBySource(
 			sourceId,
 			0,
 			oldSourceData.problemCount
@@ -114,7 +114,7 @@
 	async function updateSource() {
 		await contentApi.updateSource(sourceId, sourceData);
 		successStore.set('Šaltinis sėkmingai pakeistas');
-		const sourceResponse = await viewApi.getSourceById(sourceId);
+		const sourceResponse = await sourceViewApi.getSourceById(sourceId);
 		oldSourceData = sourceResponse.data;
 	}
 
