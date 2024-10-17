@@ -1,7 +1,7 @@
 <script lang="ts">
 	import MarkdownDisplay from '$components/forms/MarkdownDisplay.svelte';
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
-	import { viewApi } from '$services/apiService';
+	import { categoryViewApi } from '$services/apiService';
 	import type { Category, ProblemDisplayViewDto } from '$services/gen-client';
 	import { normalizeString } from '$utils/helpers';
 	import { Accordion, AccordionItem } from 'flowbite-svelte';
@@ -23,10 +23,10 @@
 	async function loadProblems() {
 		if (!isOpen || $isLoaded) return;
 		if (category.id === '') {
-			const response = await viewApi.getProblemsUnsorted();
+			const response = await categoryViewApi.getProblemsUnsorted();
 			problems = response.data;
 		} else {
-			const response = await viewApi.getProblemsByCategory(category.id);
+			const response = await categoryViewApi.getProblemsByCategory(category.id);
 			problems = response.data;
 		}
 

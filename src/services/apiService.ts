@@ -5,7 +5,9 @@ import {
 	MiscControllerApi,
 	ReviewControllerApi,
 	UserControllerApi,
-	ViewControllerApi
+	ViewControllerApi,
+	SourceViewControllerApi,
+	CategoryViewControllerApi
 } from './gen-client/api';
 import { BASE_PATH } from './gen-client/base';
 import { errorStore, loadingStore } from '$lib/stores';
@@ -54,5 +56,16 @@ const miscApi = new MiscControllerApi(undefined, BASE_PATH, axiosInstance);
 const reviewApi = new ReviewControllerApi(undefined, BASE_PATH, axiosInstance);
 const userApi = new UserControllerApi(undefined, BASE_PATH, axiosInstance);
 const viewApi = new ViewControllerApi(undefined, BASE_PATH, axiosInstance);
+const sourceViewApi = new SourceViewControllerApi(undefined, BASE_PATH, axiosInstance);
+const categoryViewApi = new CategoryViewControllerApi(undefined, BASE_PATH, axiosInstance);
 
-export { categoryApi, contentApi, miscApi, reviewApi, userApi, viewApi };
+export {
+	categoryApi,
+	contentApi,
+	miscApi,
+	reviewApi,
+	userApi,
+	viewApi,
+	sourceViewApi,
+	categoryViewApi
+};
