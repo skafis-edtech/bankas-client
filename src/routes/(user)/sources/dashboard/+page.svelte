@@ -7,29 +7,24 @@
 	import { GetSourcesByAuthorSortByEnum } from '$services/gen-client';
 	import { Button, ButtonGroup, Tabs, TabItem } from 'flowbite-svelte';
 	import { SourceSubsetEnum } from '../../../../enums';
+	import { onMount } from 'svelte';
 
 	let sortBy: GetSourcesByAuthorSortByEnum = GetSourcesByAuthorSortByEnum.Newest;
 
 	const tab = $page.url.hash.slice(1);
-	const loadSources = () => alert('Not implemented yet');
 
-	const searchCategoriesUrlStr: string = $page.url.searchParams.get('searchCategories') || '';
-	const searchSourcesUrlStr: string = $page.url.searchParams.get('searchSources') || '';
+	const searchUrlStr: string = $page.url.searchParams.get('search') || '';
 
-	let searchCategoriesValue = '';
-	let searchSourcesValue = '';
-	$: searchCategoriesValue = searchCategoriesUrlStr;
-	$: searchSourcesValue = searchSourcesUrlStr;
+	let searchValue = '';
+	$: searchValue = searchUrlStr;
 
 	page.subscribe(($page) => {
-		const searchCategoriesUrlStr: string = $page.url.searchParams.get('searchCategories') || '';
-		searchCategoriesValue = searchCategoriesUrlStr;
-		const searchSourcesUrlStr: string = $page.url.searchParams.get('searchSources') || '';
-		searchSourcesValue = searchSourcesUrlStr;
+		const searchSourcesUrlStr: string = $page.url.searchParams.get('search') || '';
+		searchValue = searchSourcesUrlStr;
 	});
 </script>
 
-<h1 class="text-4xl font-semibold my-4 text-center">Mano užduotys</h1>
+<h1 class="text-4xl font-semibold my-4 text-center">Užduotys pagal šaltinius</h1>
 <h3 class="my-4">Norėdami turinį eksportuoti, kreipkitės el. paštu.</h3>
 <Button color="green" on:click={() => goto('/submit/new-source')} class="w-full my-4"
 	>Pridėti šaltinį (užduočių rinkinį)</Button
@@ -73,24 +68,7 @@
 	</ButtonGroup>
 </div>
 
-<Tabs>
-	<TabItem open={tab === 'sources' || !tab} title="Šaltiniai" on:click={loadSources}>
-		<div class="text-center">
-			<h1 class="text-2xl font-semibold my-3">Šaltiniai</h1>
-		</div>
-
-		<SourceListPeageable
-			searchValue={searchSourcesValue}
-			{sortBy}
-			sourcesSubset={SourceSubsetEnum.AVAILABLE}
-		/>
-	</TabItem>
-	<TabItem open={tab === 'categories'} title="Kategorijos">
-		<div class="text-center">
-			<h1 class="text-2xl font-semibold my-3">Kategorijos</h1>
-		</div>
-	</TabItem>
-</Tabs>
+<SourceListPeageable {searchValue} {sortBy} sourcesSubset={SourceSubsetEnum.AVAILABLE} />
 
 <HorizontalLine />
 

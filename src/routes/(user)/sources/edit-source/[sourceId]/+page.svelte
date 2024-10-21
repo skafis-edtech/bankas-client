@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, Card, Alert } from 'flowbite-svelte';
+	import { Button, Alert } from 'flowbite-svelte';
 	import { goto } from '$app/navigation';
 	import ProblemCreateForm from '$components/forms/ProblemCreateForm.svelte';
 	import {

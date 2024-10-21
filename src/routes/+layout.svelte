@@ -72,8 +72,8 @@
 </script>
 
 <header class="no-print">
-	<div class="block md:hidden"><HeaderMobile /></div>
-	<div class="hidden md:block"><HeaderDesktop /></div>
+	<div class="block lg:hidden"><HeaderMobile /></div>
+	<div class="hidden lg:block"><HeaderDesktop /></div>
 </header>
 <main>
 	<aside class="no-print"></aside>
@@ -125,7 +125,7 @@
 	aside {
 		flex: 3 3 0;
 	}
-	@media screen and (max-width: 1024px) {
+	@media screen and (max-width: 1300px) {
 		aside {
 			display: none;
 		}

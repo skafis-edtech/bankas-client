@@ -4,12 +4,12 @@
 	import { get } from 'svelte/store';
 	import { UserSolid } from 'flowbite-svelte-icons';
 	import { Button } from 'flowbite-svelte';
-	import type { AuthContext } from '../../../types';
+	import type { AuthContext } from '../../../../types';
 	import { userApi } from '$services/apiService';
 	import MarkdownDisplay from '$components/forms/MarkdownDisplay.svelte';
 	import MarkdownInput from '$components/forms/MarkdownInput.svelte';
 	import SourceListPeageable from '$components/lists/SourceListPeageable.svelte';
-	import { SourceSubsetEnum } from '../../../enums';
+	import { SourceSubsetEnum } from '../../../../enums';
 
 	let authContext: AuthContext | undefined;
 	let user: AuthContext['user'] | undefined;

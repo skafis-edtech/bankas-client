@@ -27,6 +27,7 @@
 	let page = 0;
 	let isFetching = false;
 	const pageSize = 5;
+	let listContainer: HTMLElement | null = null;
 
 	// Function to load problems
 	async function loadProblems() {
@@ -40,15 +41,13 @@
 		isFetching = false;
 	}
 
-	// Function to detect if user has scrolled near the bottom of the window
 	function handleScroll() {
-		const scrollTop = window.scrollY; // Distance from top of the document
-		const windowHeight = window.innerHeight; // Viewport height
-		const documentHeight = document.documentElement.scrollHeight; // Full document height
-
-		const isNearBottom = scrollTop + windowHeight >= documentHeight - 100; // 100px from bottom
-
-		if (isNearBottom && !isFetching && problems.length < source.problemCount) {
+		if (
+			listContainer &&
+			listContainer.getBoundingClientRect().bottom - window.innerHeight < 0 &&
+			!isFetching &&
+			problems.length < source.problemCount
+		) {
 			loadProblems();
 		}
 	}
@@ -65,7 +64,7 @@
 	});
 </script>
 
-<Accordion class="bg-[#fffff0]">
+<Accordion>
 	<AccordionItem bind:open={isOpen} class="bg-slate-200 mb-4">
 		<span slot="header" class="text-black flex justify-between items-center w-full">
 			{#if showIndicator}
@@ -90,7 +89,7 @@
 				<strong>({source.problemCount})</strong> <em>{source.authorUsername}</em>
 			</p>
 		</span>
-		<div>
+		<div bind:this={listContainer}>
 			{#if displayType === SourceDisplayEnum.REVIEW}
 				<SourceReviewBar
 					{afterReview}

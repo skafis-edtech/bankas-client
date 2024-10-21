@@ -1,4 +1,4 @@
-<div class="flex flex-row justify-evenly">
+<div class="flex flex-col lg:flex-row justify-evenly">
 	<div class="flex-1"><a href="/about#terms">Privatumo politika ir sąlygos</a></div>
 	<div class="flex-1">
 		<p>
@@ -6,15 +6,7 @@
 				>info@skafis.lt</a
 			>
 		</p>
-		<p>v3.1.0+ - Paskutinį kartą atnaujinta: 2024-10-17</p>
+		<p>v3.1.0+ - Paskutinį kartą atnaujinta: 2024-10-21</p>
 	</div>
-	<div class="flex-1">
-		<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
-			><img
-				width="100"
-				alt="CC NC-SA icon"
-				src="https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-nc-sa.png"
-			/></a
-		>
-	</div>
+	<div class="flex-1">Pagrindinis puslapis: <a href="https://www.skafis.lt">skafis.lt</a></div>
 </div>

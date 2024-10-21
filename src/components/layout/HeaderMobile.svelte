@@ -2,18 +2,21 @@
 	import { goto } from '$app/navigation';
 	import { ROLES } from '$utils/constants';
 	import { Button, CloseButton, Drawer, NavBrand, Navbar } from 'flowbite-svelte';
-	import { BarsOutline, HomeSolid, UserSolid } from 'flowbite-svelte-icons';
+	import {
+		HomeSolid,
+		UserSolid,
+		FolderSolid,
+		BookmarkSolid,
+		ArrowRightToBracketOutline,
+		CogSolid,
+		ClipboardCheckSolid,
+		BarsOutline
+	} from 'flowbite-svelte-icons';
 	import { getContext } from 'svelte';
 	import type { AuthContext } from '../../types';
 	import { sineIn } from 'svelte/easing';
 
 	const { user } = getContext('authContext') as AuthContext;
-
-	function popup() {
-		alert(
-			'Susisiekite info@skafis.lt, jei norite tapti administratoriumi ir peržiūrėti kitų pateiktas užduotis.'
-		);
-	}
 
 	let hidden1 = true;
 	let transitionParams = {
@@ -63,38 +66,38 @@
 							hidden1 = true;
 							goto('/super-admin');
 						}}
-						color="red">Kategorijos</Button
+						color="red"
 					>
-				{/if}
+						<CogSolid />
+					</Button>{/if}
 				{#if $user.role === ROLES.ADMIN || $user.role === ROLES.SUPER_ADMIN}
 					<Button
 						on:click={() => {
 							hidden1 = true;
 							goto('/review-dashboard');
 						}}
-						color="purple">Peržiūrėti</Button
-					>
-				{:else}
-					<Button
-						on:click={() => {
-							hidden1 = true;
-							popup();
-						}}
-						color="light">Peržiūrėti</Button
+						color="purple"><ClipboardCheckSolid class="mr-2" />Peržiūrėti</Button
 					>
 				{/if}
 				<Button
 					on:click={() => {
 						hidden1 = true;
-						goto('/problems/dashboard');
+						goto('/sources/dashboard');
 					}}
-					color="green">Užduotys</Button
+					color="green"><FolderSolid class="mr-2" />Šaltiniai</Button
+				>
+				<Button
+					on:click={() => {
+						hidden1 = true;
+						goto('/categories/dashboard');
+					}}
+					color="green"><BookmarkSolid class="mr-2" />Kategorijos</Button
 				>
 				<Button
 					on:click={() => {
 						hidden1 = true;
 						goto('/logout');
-					}}>Atsijungti</Button
+					}}><ArrowRightToBracketOutline class="mr-2" />Atsijungti</Button
 				>
 			{:else}
 				<Button

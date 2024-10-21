@@ -36,9 +36,9 @@
 			} else if ($user.role === ROLES.ADMIN) {
 				goto('/review-dashboard');
 			} else if ($user.role === ROLES.USER) {
-				goto('/submit/dashboard');
+				goto('/sources/dashboard');
 			} else if ($user.role === ROLES.SUPER_ADMIN) {
-				goto('/super-admin');
+				goto('/sources/dashboard');
 			} else {
 				throw new Error('Unknown role: ' + $user.role);
 			}
