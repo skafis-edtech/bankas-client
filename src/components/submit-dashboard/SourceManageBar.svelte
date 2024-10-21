@@ -46,7 +46,7 @@
 		<Badge color="green" class="ml-2">Patvirtinta</Badge>
 	{/if}
 	<div class="flex flex-row justify-center">
-		<Button color="primary" on:click={() => goto(`/submit/edit-source/${sourceId}`)}
+		<Button color="primary" on:click={() => goto(`/problems/edit-source/${sourceId}`)}
 			>Redaguoti</Button
 		>
 		{#if reviewHistory !== ''}

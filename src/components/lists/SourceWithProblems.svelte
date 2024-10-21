@@ -6,11 +6,15 @@
 	import SourceReviewBar from '$components/review-dashboard/SourceReviewBar.svelte';
 	import { getNiceTimeString } from '$lib/utils';
 	import { sourceViewApi } from '$services/apiService';
-	import { type ProblemDisplayViewDto, type SourceDisplayDto } from '$services/gen-client';
+	import {
+		SourceDisplayDtoReviewStatusEnum,
+		type ProblemDisplayViewDto,
+		type SourceDisplayDto
+	} from '$services/gen-client';
 	import { Skeleton } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
-	import { Accordion, AccordionItem } from 'flowbite-svelte';
-	import { SourceDisplayEnum } from '../../types';
+	import { Accordion, AccordionItem, Indicator } from 'flowbite-svelte';
+	import { SourceDisplayEnum } from '../../enums';
 
 	export let source: SourceDisplayDto;
 	export let searchValue: string;
@@ -61,11 +65,19 @@
 	});
 </script>
 
-<Accordion>
+<Accordion class="bg-[#fffff0]">
 	<AccordionItem bind:open={isOpen} class="bg-slate-200 mb-4">
 		<span slot="header" class="text-black flex justify-between items-center w-full">
 			{#if showIndicator}
-				<!-- Show Indicator based on source review status -->
+				{#if source.reviewStatus === SourceDisplayDtoReviewStatusEnum.Pending}
+					<Indicator color="yellow" class="mr-2" />
+				{:else if source.reviewStatus === SourceDisplayDtoReviewStatusEnum.Rejected}
+					<Indicator color="red" class="mr-2" />
+				{:else if source.reviewStatus === SourceDisplayDtoReviewStatusEnum.Approved}
+					<Indicator color="green" class="mr-2" />
+				{:else}
+					<h1>Klaida: susisiekite su administratoriumi</h1>
+				{/if}
 			{/if}
 			<p>
 				{#if searchValue}

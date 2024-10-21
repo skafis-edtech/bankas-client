@@ -6,11 +6,12 @@
 		type SourceDisplayDto
 	} from '$services/gen-client';
 	import { Button, Search } from 'flowbite-svelte';
-	import { onMount } from 'svelte';
+	import { getContext, onMount } from 'svelte';
 	import SourceWithProblems from './SourceWithProblems.svelte';
 	import SourceManageBar from '$components/submit-dashboard/SourceManageBar.svelte';
 	import { reviewApi, sourceViewApi } from '$services/apiService';
-	import { SourceDisplayEnum, SourceSubsetEnum } from '../../types';
+	import { SourceDisplayEnum, SourceSubsetEnum } from '../../enums';
+	import type { AuthContext } from '../../types';
 
 	let sources: SourceDisplayDto[] = [];
 	export let searchValue = '';
@@ -20,6 +21,8 @@
 	let page = 0;
 	let size = 8;
 	let timer: NodeJS.Timeout;
+
+	const { user } = getContext('authContext') as AuthContext;
 
 	$: (async () => {
 		if (sortBy) {
@@ -93,30 +96,38 @@
 				visibility={source.visibility}
 			/>
 			<SourceWithProblems {source} {searchValue} displayType={SourceDisplayEnum.DISPLAY} />
-		{/if}
-		{#if sourcesSubset === SourceSubsetEnum.AVAILABLE && source.visibility === SourceSubmitDtoVisibilityEnum.Private}
+		{:else if sourcesSubset === SourceSubsetEnum.AVAILABLE && source.reviewStatus === SourceDisplayDtoReviewStatusEnum.Approved && source.authorUsername === $user.username}
+			<SourceWithProblems {source} {searchValue} displayType={SourceDisplayEnum.MANAGE} />
+		{:else if sourcesSubset === SourceSubsetEnum.AVAILABLE && source.reviewStatus === SourceDisplayDtoReviewStatusEnum.Approved && source.authorUsername !== $user.username}
+			<SourceWithProblems
+				source={{ ...source, name: '🌐 ' + source.name }}
+				{searchValue}
+				displayType={SourceDisplayEnum.DISPLAY}
+				showIndicator={false}
+			/>
+		{:else if sourcesSubset === SourceSubsetEnum.AVAILABLE && source.visibility === SourceSubmitDtoVisibilityEnum.Private}
 			<SourceWithProblems
 				source={{ ...source, name: '🔒 ' + source.name }}
 				{searchValue}
 				displayType={SourceDisplayEnum.MANAGE}
 				showIndicator={false}
 			/>
-		{/if}
-		{#if sourcesSubset === SourceSubsetEnum.PENDING}
+		{:else if sourcesSubset === SourceSubsetEnum.PENDING}
 			<SourceWithProblems
 				afterReview={() => removeSource(source.id)}
 				{source}
 				{searchValue}
 				displayType={SourceDisplayEnum.REVIEW}
 			/>
-		{/if}
-		{#if sourcesSubset === SourceSubsetEnum.AUTHOR}
+		{:else if sourcesSubset === SourceSubsetEnum.AUTHOR}
 			<SourceWithProblems
-				{source}
+				source={{ ...source, name: '🌐 ' + source.name }}
 				{searchValue}
 				displayType={SourceDisplayEnum.DISPLAY}
 				showIndicator={false}
 			/>
+		{:else}
+			<h1>Klaida: susisiekite su administratoriumi</h1>
 		{/if}
 	</div>
 {/each}

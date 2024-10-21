@@ -6,7 +6,7 @@
 	import HorizontalLine from '$components/ui/HorizontalLine.svelte';
 	import { GetSourcesByAuthorSortByEnum } from '$services/gen-client';
 	import { Button, ButtonGroup, Tabs, TabItem } from 'flowbite-svelte';
-	import { SourceSubsetEnum } from '../../../../types';
+	import { SourceSubsetEnum } from '../../../../enums';
 
 	let sortBy: GetSourcesByAuthorSortByEnum = GetSourcesByAuthorSortByEnum.Newest;
 

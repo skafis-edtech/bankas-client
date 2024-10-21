@@ -9,6 +9,7 @@
 	import MarkdownDisplay from '$components/forms/MarkdownDisplay.svelte';
 	import MarkdownInput from '$components/forms/MarkdownInput.svelte';
 	import SourceListPeageable from '$components/lists/SourceListPeageable.svelte';
+	import { SourceSubsetEnum } from '../../../enums';
 
 	let authContext: AuthContext | undefined;
 	let user: AuthContext['user'] | undefined;
@@ -87,4 +88,8 @@
 {/if}
 <h1 class="text-4xl font-semibold my-4 text-center">Šaltiniai</h1>
 
-<SourceListPeageable searchValue={sourceSearchValue} sourcesSubset="author" author={username} />
+<SourceListPeageable
+	searchValue={sourceSearchValue}
+	sourcesSubset={SourceSubsetEnum.AUTHOR}
+	author={username}
+/>
