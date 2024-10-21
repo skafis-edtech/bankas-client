@@ -5,13 +5,10 @@
 	import SourceListPeageable from '$components/lists/SourceListPeageable.svelte';
 	import HorizontalLine from '$components/ui/HorizontalLine.svelte';
 	import { GetSourcesByAuthorSortByEnum } from '$services/gen-client';
-	import { Button, ButtonGroup, Tabs, TabItem } from 'flowbite-svelte';
+	import { Button, ButtonGroup } from 'flowbite-svelte';
 	import { SourceSubsetEnum } from '../../../../enums';
-	import { onMount } from 'svelte';
 
 	let sortBy: GetSourcesByAuthorSortByEnum = GetSourcesByAuthorSortByEnum.Newest;
-
-	const tab = $page.url.hash.slice(1);
 
 	const searchUrlStr: string = $page.url.searchParams.get('search') || '';
 

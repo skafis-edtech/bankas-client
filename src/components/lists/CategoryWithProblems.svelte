@@ -2,35 +2,35 @@
 	import MarkdownDisplay from '$components/forms/MarkdownDisplay.svelte';
 	import ProblemComponent from '$components/ui/ProblemComponent.svelte';
 	import { categoryViewApi } from '$services/apiService';
-	import type { Category, ProblemDisplayViewDto } from '$services/gen-client';
+	import type { CategoryDisplayDto, ProblemDisplayViewDto } from '$services/gen-client';
 	import { normalizeString } from '$utils/helpers';
-	import { Accordion, AccordionItem } from 'flowbite-svelte';
+	import { Accordion, AccordionItem, Skeleton } from 'flowbite-svelte';
 	import { writable } from 'svelte/store';
 
-	export let category: Category;
+	export let category: CategoryDisplayDto;
 	export let searchValue: string;
 
-	let problems: ProblemDisplayViewDto[] = [];
-	let problemCount: number | null = null;
+	let problems: (ProblemDisplayViewDto | null)[] = [];
 
 	let isLoaded = writable(false);
 	let isOpen = false;
+	let page = 0;
+	const pageSize = 5;
+	let isFetching = false;
 
 	$: if (isOpen) {
 		loadProblems();
 	}
 
 	async function loadProblems() {
-		if (!isOpen || $isLoaded) return;
-		if (category.id === '') {
-			const response = await categoryViewApi.getProblemsUnsorted();
-			problems = response.data;
-		} else {
-			const response = await categoryViewApi.getProblemsByCategory(category.id);
-			problems = response.data;
-		}
-
-		isLoaded.set(true);
+		if (isFetching) return;
+		isFetching = true;
+		problems = [...problems, ...Array.from({ length: pageSize }, () => null)];
+		const response = await categoryViewApi.getProblemsByCategory(category.id, page, pageSize);
+		const startIndex = problems.length - pageSize;
+		problems = [...problems.slice(0, startIndex), ...response.data];
+		page++;
+		isFetching = false;
 	}
 
 	function highlightSearch(text: string, search: string): string {
@@ -70,28 +70,43 @@
 					{category.name}
 				{/if}
 			</p>
-			<p class="ml-auto text-right mr-2"><strong>({problemCount})</strong></p>
+			<p class="ml-auto text-right mr-2"><strong>({category.problemCount})</strong></p>
 		</span>
 
 		<MarkdownDisplay value={category.description} />
 
 		<div class="container mx-auto">
-			{#each problems as problem (problem.id)}
-				<div class="my-3">
-					<ProblemComponent
-						problemMainData={{
-							skfCode: problem.skfCode,
-							problemText: problem.problemText,
-							problemImageSrc: problem.problemImageSrc,
-							answerText: problem.answerText,
-							answerImageSrc: problem.answerImageSrc,
-							categories: problem.categories,
-							sourceId: problem.sourceId,
-							visibility: problem.problemVisibility
-						}}
-					/>
-				</div>
+			{#each problems as problem (problem?.id || Math.random())}
+				{#if problem === null}
+					<Skeleton size="xxl" class="my-3" />
+				{:else}
+					<div class="flex gap-2 my-2">
+						<div class="text-sm">{problem.sourceListNr}.</div>
+						<div class="w-full">
+							<ProblemComponent
+								problemMainData={{
+									skfCode: problem.skfCode === '' ? problem.id : problem.skfCode,
+									problemText: problem.problemText,
+									problemImageSrc: problem.problemImageSrc,
+									answerText: problem.answerText,
+									answerImageSrc: problem.answerImageSrc,
+									categories: problem.categories,
+									sourceId: problem.sourceId,
+									visibility: problem.problemVisibility
+								}}
+							/>
+						</div>
+					</div>
+				{/if}
 			{/each}
 		</div>
+		<!-- Manual load more button for fallback -->
+		{#if problems.length < category.problemCount}
+			<button on:click={loadProblems} class="my-2">
+				Load more (+{category.problemCount - problems.length < 5
+					? category.problemCount - problems.length
+					: 5})
+			</button>
+		{/if}
 	</AccordionItem>
 </Accordion>

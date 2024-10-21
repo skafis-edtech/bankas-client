@@ -1,14 +1,15 @@
 <script lang="ts">
-	import type { Category } from '$services/gen-client';
+	import type { CategoryDisplayDto } from '$services/gen-client';
 	import { Button, Search } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import CategoryWithProblems from './CategoryWithProblems.svelte';
 	import { categoryViewApi } from '$services/apiService';
 
-	let categories: Category[] = [];
+	let categories: CategoryDisplayDto[] = [];
 	export let searchValue = '';
 	let page = 0;
 	let size = 8;
+	const seed = 0; // TODO: later interoduce randomizer
 	let timer: NodeJS.Timeout;
 
 	$: if (searchValue !== null) {
@@ -46,17 +47,6 @@
 {#each Object.entries(categories) as [id, category]}
 	<CategoryWithProblems {category} {searchValue} />
 {/each}
-
-{#if 'Nesurūšiuota'.toLowerCase().includes(searchValue.toLowerCase())}
-	<CategoryWithProblems
-		category={{
-			id: '',
-			name: 'Nesurūšiuota',
-			description: 'Užduotys, kurios yra patvirtintos, tačiau dar nepriskirtos jokiai kategorijai.'
-		}}
-		{searchValue}
-	/>
-{/if}
 
 <div class="pagination">
 	<Button color="dark" on:click={() => changePage(-1)}>⬅️ Ankstesnis</Button>

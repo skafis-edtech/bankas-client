@@ -160,3 +160,7 @@
 	'Susisiekite info@skafis.lt, jei norite tapti administratoriumi ir peržiūrėti kitų pateiktas
 	užduotis.'
 </p>
+<p>
+	Ateityje bus mokama, tačiau neprivaloma bus likti naudotis platforma, galėsite išsiregistruoti bei
+	išsieksportuoti visus duomenis susisiekdami el paštu.
+</p>
