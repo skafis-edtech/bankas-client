@@ -47,7 +47,27 @@ export interface Category {
      * @memberof Category
      */
     'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Category
+     */
+    'visibility': CategoryVisibilityEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof Category
+     */
+    'ownerOfPrivateId': string;
 }
+
+export const CategoryVisibilityEnum = {
+    Public: 'PUBLIC',
+    Private: 'PRIVATE'
+} as const;
+
+export type CategoryVisibilityEnum = typeof CategoryVisibilityEnum[keyof typeof CategoryVisibilityEnum];
+
 /**
  * 
  * @export
@@ -78,7 +98,21 @@ export interface CategoryDisplayDto {
      * @memberof CategoryDisplayDto
      */
     'problemCount': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CategoryDisplayDto
+     */
+    'visibility': CategoryDisplayDtoVisibilityEnum;
 }
+
+export const CategoryDisplayDtoVisibilityEnum = {
+    Public: 'PUBLIC',
+    Private: 'PRIVATE'
+} as const;
+
+export type CategoryDisplayDtoVisibilityEnum = typeof CategoryDisplayDtoVisibilityEnum[keyof typeof CategoryDisplayDtoVisibilityEnum];
+
 /**
  * 
  * @export
@@ -97,7 +131,21 @@ export interface CategoryPostDto {
      * @memberof CategoryPostDto
      */
     'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CategoryPostDto
+     */
+    'visibility': CategoryPostDtoVisibilityEnum;
 }
+
+export const CategoryPostDtoVisibilityEnum = {
+    Public: 'PUBLIC',
+    Private: 'PRIVATE'
+} as const;
+
+export type CategoryPostDtoVisibilityEnum = typeof CategoryPostDtoVisibilityEnum[keyof typeof CategoryPostDtoVisibilityEnum];
+
 /**
  * 
  * @export
@@ -455,48 +503,9 @@ export const CategoryControllerApiAxiosParamCreator = function (configuration?: 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createPrivateCategory: async (categoryPostDto: CategoryPostDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createCategory: async (categoryPostDto: CategoryPostDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'categoryPostDto' is not null or undefined
-            assertParamExists('createPrivateCategory', 'categoryPostDto', categoryPostDto)
-            const localVarPath = `/category/private`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(categoryPostDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {CategoryPostDto} categoryPostDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createPublicCategory: async (categoryPostDto: CategoryPostDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'categoryPostDto' is not null or undefined
-            assertParamExists('createPublicCategory', 'categoryPostDto', categoryPostDto)
+            assertParamExists('createCategory', 'categoryPostDto', categoryPostDto)
             const localVarPath = `/category`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -533,46 +542,9 @@ export const CategoryControllerApiAxiosParamCreator = function (configuration?: 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deletePrivateCategory: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        deleteCategory: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
-            assertParamExists('deletePrivateCategory', 'id', id)
-            const localVarPath = `/category/private/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        deletePublicCategory: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('deletePublicCategory', 'id', id)
+            assertParamExists('deleteCategory', 'id', id)
             const localVarPath = `/category/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -603,18 +575,18 @@ export const CategoryControllerApiAxiosParamCreator = function (configuration?: 
         },
         /**
          * 
-         * @param {string} id 
-         * @param {CategoryPostDto} categoryPostDto 
+         * @param {string} problemId 
+         * @param {Array<string>} requestBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updatePrivateCategory: async (id: string, categoryPostDto: CategoryPostDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('updatePrivateCategory', 'id', id)
-            // verify required parameter 'categoryPostDto' is not null or undefined
-            assertParamExists('updatePrivateCategory', 'categoryPostDto', categoryPostDto)
-            const localVarPath = `/category/private/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+        sortProblem: async (problemId: string, requestBody: Array<string>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'problemId' is not null or undefined
+            assertParamExists('sortProblem', 'problemId', problemId)
+            // verify required parameter 'requestBody' is not null or undefined
+            assertParamExists('sortProblem', 'requestBody', requestBody)
+            const localVarPath = `/category/sort/{problemId}`
+                .replace(`{${"problemId"}}`, encodeURIComponent(String(problemId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -637,7 +609,7 @@ export const CategoryControllerApiAxiosParamCreator = function (configuration?: 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(categoryPostDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -651,11 +623,11 @@ export const CategoryControllerApiAxiosParamCreator = function (configuration?: 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updatePublicCategory: async (id: string, categoryPostDto: CategoryPostDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateCategory: async (id: string, categoryPostDto: CategoryPostDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
-            assertParamExists('updatePublicCategory', 'id', id)
+            assertParamExists('updateCategory', 'id', id)
             // verify required parameter 'categoryPostDto' is not null or undefined
-            assertParamExists('updatePublicCategory', 'categoryPostDto', categoryPostDto)
+            assertParamExists('updateCategory', 'categoryPostDto', categoryPostDto)
             const localVarPath = `/category/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -703,22 +675,10 @@ export const CategoryControllerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createPrivateCategory(categoryPostDto: CategoryPostDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Category>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createPrivateCategory(categoryPostDto, options);
+        async createCategory(categoryPostDto: CategoryPostDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Category>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createCategory(categoryPostDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CategoryControllerApi.createPrivateCategory']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {CategoryPostDto} categoryPostDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async createPublicCategory(categoryPostDto: CategoryPostDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Category>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createPublicCategory(categoryPostDto, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CategoryControllerApi.createPublicCategory']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['CategoryControllerApi.createCategory']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -727,22 +687,23 @@ export const CategoryControllerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deletePrivateCategory(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deletePrivateCategory(id, options);
+        async deleteCategory(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteCategory(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CategoryControllerApi.deletePrivateCategory']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['CategoryControllerApi.deleteCategory']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} problemId 
+         * @param {Array<string>} requestBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deletePublicCategory(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deletePublicCategory(id, options);
+        async sortProblem(problemId: string, requestBody: Array<string>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.sortProblem(problemId, requestBody, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CategoryControllerApi.deletePublicCategory']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['CategoryControllerApi.sortProblem']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -752,23 +713,10 @@ export const CategoryControllerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updatePrivateCategory(id: string, categoryPostDto: CategoryPostDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Category>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updatePrivateCategory(id, categoryPostDto, options);
+        async updateCategory(id: string, categoryPostDto: CategoryPostDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Category>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateCategory(id, categoryPostDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CategoryControllerApi.updatePrivateCategory']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {string} id 
-         * @param {CategoryPostDto} categoryPostDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async updatePublicCategory(id: string, categoryPostDto: CategoryPostDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Category>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updatePublicCategory(id, categoryPostDto, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CategoryControllerApi.updatePublicCategory']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['CategoryControllerApi.updateCategory']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -787,17 +735,8 @@ export const CategoryControllerApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createPrivateCategory(categoryPostDto: CategoryPostDto, options?: any): AxiosPromise<Category> {
-            return localVarFp.createPrivateCategory(categoryPostDto, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {CategoryPostDto} categoryPostDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createPublicCategory(categoryPostDto: CategoryPostDto, options?: any): AxiosPromise<Category> {
-            return localVarFp.createPublicCategory(categoryPostDto, options).then((request) => request(axios, basePath));
+        createCategory(categoryPostDto: CategoryPostDto, options?: any): AxiosPromise<Category> {
+            return localVarFp.createCategory(categoryPostDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -805,17 +744,18 @@ export const CategoryControllerApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deletePrivateCategory(id: string, options?: any): AxiosPromise<void> {
-            return localVarFp.deletePrivateCategory(id, options).then((request) => request(axios, basePath));
+        deleteCategory(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteCategory(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} problemId 
+         * @param {Array<string>} requestBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deletePublicCategory(id: string, options?: any): AxiosPromise<void> {
-            return localVarFp.deletePublicCategory(id, options).then((request) => request(axios, basePath));
+        sortProblem(problemId: string, requestBody: Array<string>, options?: any): AxiosPromise<void> {
+            return localVarFp.sortProblem(problemId, requestBody, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -824,18 +764,8 @@ export const CategoryControllerApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updatePrivateCategory(id: string, categoryPostDto: CategoryPostDto, options?: any): AxiosPromise<Category> {
-            return localVarFp.updatePrivateCategory(id, categoryPostDto, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} id 
-         * @param {CategoryPostDto} categoryPostDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        updatePublicCategory(id: string, categoryPostDto: CategoryPostDto, options?: any): AxiosPromise<Category> {
-            return localVarFp.updatePublicCategory(id, categoryPostDto, options).then((request) => request(axios, basePath));
+        updateCategory(id: string, categoryPostDto: CategoryPostDto, options?: any): AxiosPromise<Category> {
+            return localVarFp.updateCategory(id, categoryPostDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -854,19 +784,8 @@ export class CategoryControllerApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof CategoryControllerApi
      */
-    public createPrivateCategory(categoryPostDto: CategoryPostDto, options?: RawAxiosRequestConfig) {
-        return CategoryControllerApiFp(this.configuration).createPrivateCategory(categoryPostDto, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {CategoryPostDto} categoryPostDto 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof CategoryControllerApi
-     */
-    public createPublicCategory(categoryPostDto: CategoryPostDto, options?: RawAxiosRequestConfig) {
-        return CategoryControllerApiFp(this.configuration).createPublicCategory(categoryPostDto, options).then((request) => request(this.axios, this.basePath));
+    public createCategory(categoryPostDto: CategoryPostDto, options?: RawAxiosRequestConfig) {
+        return CategoryControllerApiFp(this.configuration).createCategory(categoryPostDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -876,19 +795,20 @@ export class CategoryControllerApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof CategoryControllerApi
      */
-    public deletePrivateCategory(id: string, options?: RawAxiosRequestConfig) {
-        return CategoryControllerApiFp(this.configuration).deletePrivateCategory(id, options).then((request) => request(this.axios, this.basePath));
+    public deleteCategory(id: string, options?: RawAxiosRequestConfig) {
+        return CategoryControllerApiFp(this.configuration).deleteCategory(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {string} id 
+     * @param {string} problemId 
+     * @param {Array<string>} requestBody 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CategoryControllerApi
      */
-    public deletePublicCategory(id: string, options?: RawAxiosRequestConfig) {
-        return CategoryControllerApiFp(this.configuration).deletePublicCategory(id, options).then((request) => request(this.axios, this.basePath));
+    public sortProblem(problemId: string, requestBody: Array<string>, options?: RawAxiosRequestConfig) {
+        return CategoryControllerApiFp(this.configuration).sortProblem(problemId, requestBody, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -899,20 +819,8 @@ export class CategoryControllerApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof CategoryControllerApi
      */
-    public updatePrivateCategory(id: string, categoryPostDto: CategoryPostDto, options?: RawAxiosRequestConfig) {
-        return CategoryControllerApiFp(this.configuration).updatePrivateCategory(id, categoryPostDto, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} id 
-     * @param {CategoryPostDto} categoryPostDto 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof CategoryControllerApi
-     */
-    public updatePublicCategory(id: string, categoryPostDto: CategoryPostDto, options?: RawAxiosRequestConfig) {
-        return CategoryControllerApiFp(this.configuration).updatePublicCategory(id, categoryPostDto, options).then((request) => request(this.axios, this.basePath));
+    public updateCategory(id: string, categoryPostDto: CategoryPostDto, options?: RawAxiosRequestConfig) {
+        return CategoryControllerApiFp(this.configuration).updateCategory(id, categoryPostDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -1012,14 +920,20 @@ export const CategoryViewControllerApiAxiosParamCreator = function (configuratio
         /**
          * 
          * @param {string} categoryId 
+         * @param {number} seed 
+         * @param {number} [page] 
+         * @param {number} [size] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProblemsByCategory: async (categoryId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getProblemsByCategory: async (categoryId: string, seed: number, page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'categoryId' is not null or undefined
             assertParamExists('getProblemsByCategory', 'categoryId', categoryId)
-            const localVarPath = `/categoryView/problemsByCategory/{categoryId}`
-                .replace(`{${"categoryId"}}`, encodeURIComponent(String(categoryId)));
+            // verify required parameter 'seed' is not null or undefined
+            assertParamExists('getProblemsByCategory', 'seed', seed)
+            const localVarPath = `/categoryView/problemsByCategory/{categoryId}/{seed}`
+                .replace(`{${"categoryId"}}`, encodeURIComponent(String(categoryId)))
+                .replace(`{${"seed"}}`, encodeURIComponent(String(seed)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1035,38 +949,13 @@ export const CategoryViewControllerApiAxiosParamCreator = function (configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getProblemsUnsorted: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/categoryView/problemsUnsorted`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
             }
 
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+            if (size !== undefined) {
+                localVarQueryParameter['size'] = size;
+            }
 
 
     
@@ -1118,24 +1007,16 @@ export const CategoryViewControllerApiFp = function(configuration?: Configuratio
         /**
          * 
          * @param {string} categoryId 
+         * @param {number} seed 
+         * @param {number} [page] 
+         * @param {number} [size] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getProblemsByCategory(categoryId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProblemDisplayViewDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getProblemsByCategory(categoryId, options);
+        async getProblemsByCategory(categoryId: string, seed: number, page?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProblemDisplayViewDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getProblemsByCategory(categoryId, seed, page, size, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CategoryViewControllerApi.getProblemsByCategory']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getProblemsUnsorted(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProblemDisplayViewDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getProblemsUnsorted(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CategoryViewControllerApi.getProblemsUnsorted']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -1171,19 +1052,14 @@ export const CategoryViewControllerApiFactory = function (configuration?: Config
         /**
          * 
          * @param {string} categoryId 
+         * @param {number} seed 
+         * @param {number} [page] 
+         * @param {number} [size] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProblemsByCategory(categoryId: string, options?: any): AxiosPromise<Array<ProblemDisplayViewDto>> {
-            return localVarFp.getProblemsByCategory(categoryId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getProblemsUnsorted(options?: any): AxiosPromise<Array<ProblemDisplayViewDto>> {
-            return localVarFp.getProblemsUnsorted(options).then((request) => request(axios, basePath));
+        getProblemsByCategory(categoryId: string, seed: number, page?: number, size?: number, options?: any): AxiosPromise<Array<ProblemDisplayViewDto>> {
+            return localVarFp.getProblemsByCategory(categoryId, seed, page, size, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1222,22 +1098,15 @@ export class CategoryViewControllerApi extends BaseAPI {
     /**
      * 
      * @param {string} categoryId 
+     * @param {number} seed 
+     * @param {number} [page] 
+     * @param {number} [size] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CategoryViewControllerApi
      */
-    public getProblemsByCategory(categoryId: string, options?: RawAxiosRequestConfig) {
-        return CategoryViewControllerApiFp(this.configuration).getProblemsByCategory(categoryId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof CategoryViewControllerApi
-     */
-    public getProblemsUnsorted(options?: RawAxiosRequestConfig) {
-        return CategoryViewControllerApiFp(this.configuration).getProblemsUnsorted(options).then((request) => request(this.axios, this.basePath));
+    public getProblemsByCategory(categoryId: string, seed: number, page?: number, size?: number, options?: RawAxiosRequestConfig) {
+        return CategoryViewControllerApiFp(this.configuration).getProblemsByCategory(categoryId, seed, page, size, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -1389,60 +1258,6 @@ export const ContentControllerApiAxiosParamCreator = function (configuration?: C
             // authentication bearerAuth required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Get all sources submitted by the current user.
-         * @summary USER. Get my sources
-         * @param {number} [page] 
-         * @param {number} [size] 
-         * @param {string} [search] 
-         * @param {GetMySourcesSortByEnum} [sortBy] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getMySources: async (page?: number, size?: number, search?: string, sortBy?: GetMySourcesSortByEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/content/mySources`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (page !== undefined) {
-                localVarQueryParameter['page'] = page;
-            }
-
-            if (size !== undefined) {
-                localVarQueryParameter['size'] = size;
-            }
-
-            if (search !== undefined) {
-                localVarQueryParameter['search'] = search;
-            }
-
-            if (sortBy !== undefined) {
-                localVarQueryParameter['sortBy'] = sortBy;
-            }
 
 
     
@@ -1803,22 +1618,6 @@ export const ContentControllerApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Get all sources submitted by the current user.
-         * @summary USER. Get my sources
-         * @param {number} [page] 
-         * @param {number} [size] 
-         * @param {string} [search] 
-         * @param {GetMySourcesSortByEnum} [sortBy] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getMySources(page?: number, size?: number, search?: string, sortBy?: GetMySourcesSortByEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SourceDisplayDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getMySources(page, size, search, sortBy, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ContentControllerApi.getMySources']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
          * 415 from swagger.... Submit problem with images for approval. returns ID of the created problem.
          * @summary USER. Submit problem data with images
          * @param {string} sourceId 
@@ -1954,19 +1753,6 @@ export const ContentControllerApiFactory = function (configuration?: Configurati
             return localVarFp.deleteSource(id, options).then((request) => request(axios, basePath));
         },
         /**
-         * Get all sources submitted by the current user.
-         * @summary USER. Get my sources
-         * @param {number} [page] 
-         * @param {number} [size] 
-         * @param {string} [search] 
-         * @param {GetMySourcesSortByEnum} [sortBy] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getMySources(page?: number, size?: number, search?: string, sortBy?: GetMySourcesSortByEnum, options?: any): AxiosPromise<Array<SourceDisplayDto>> {
-            return localVarFp.getMySources(page, size, search, sortBy, options).then((request) => request(axios, basePath));
-        },
-        /**
          * 415 from swagger.... Submit problem with images for approval. returns ID of the created problem.
          * @summary USER. Submit problem data with images
          * @param {string} sourceId 
@@ -2092,21 +1878,6 @@ export class ContentControllerApi extends BaseAPI {
     }
 
     /**
-     * Get all sources submitted by the current user.
-     * @summary USER. Get my sources
-     * @param {number} [page] 
-     * @param {number} [size] 
-     * @param {string} [search] 
-     * @param {GetMySourcesSortByEnum} [sortBy] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ContentControllerApi
-     */
-    public getMySources(page?: number, size?: number, search?: string, sortBy?: GetMySourcesSortByEnum, options?: RawAxiosRequestConfig) {
-        return ContentControllerApiFp(this.configuration).getMySources(page, size, search, sortBy, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
      * 415 from swagger.... Submit problem with images for approval. returns ID of the created problem.
      * @summary USER. Submit problem data with images
      * @param {string} sourceId 
@@ -2186,18 +1957,176 @@ export class ContentControllerApi extends BaseAPI {
     }
 }
 
+
+
 /**
+ * GeneralViewControllerApi - axios parameter creator
  * @export
  */
-export const GetMySourcesSortByEnum = {
-    NameAsc: 'NAME_ASC',
-    NameDesc: 'NAME_DESC',
-    Newest: 'NEWEST',
-    Oldest: 'OLDEST',
-    MostProblems: 'MOST_PROBLEMS',
-    LeastProblems: 'LEAST_PROBLEMS'
-} as const;
-export type GetMySourcesSortByEnum = typeof GetMySourcesSortByEnum[keyof typeof GetMySourcesSortByEnum];
+export const GeneralViewControllerApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} skfCode 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getProblemBySkfCode: async (skfCode: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'skfCode' is not null or undefined
+            assertParamExists('getProblemBySkfCode', 'skfCode', skfCode)
+            const localVarPath = `/view/problem/{skfCode}`
+                .replace(`{${"skfCode"}}`, encodeURIComponent(String(skfCode)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getStats: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/view/stats`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * GeneralViewControllerApi - functional programming interface
+ * @export
+ */
+export const GeneralViewControllerApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = GeneralViewControllerApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} skfCode 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getProblemBySkfCode(skfCode: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProblemDisplayViewDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getProblemBySkfCode(skfCode, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['GeneralViewControllerApi.getProblemBySkfCode']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getStats(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StatsDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getStats(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['GeneralViewControllerApi.getStats']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * GeneralViewControllerApi - factory interface
+ * @export
+ */
+export const GeneralViewControllerApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = GeneralViewControllerApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} skfCode 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getProblemBySkfCode(skfCode: string, options?: any): AxiosPromise<ProblemDisplayViewDto> {
+            return localVarFp.getProblemBySkfCode(skfCode, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getStats(options?: any): AxiosPromise<StatsDto> {
+            return localVarFp.getStats(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * GeneralViewControllerApi - object-oriented interface
+ * @export
+ * @class GeneralViewControllerApi
+ * @extends {BaseAPI}
+ */
+export class GeneralViewControllerApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} skfCode 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GeneralViewControllerApi
+     */
+    public getProblemBySkfCode(skfCode: string, options?: RawAxiosRequestConfig) {
+        return GeneralViewControllerApiFp(this.configuration).getProblemBySkfCode(skfCode, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GeneralViewControllerApi
+     */
+    public getStats(options?: RawAxiosRequestConfig) {
+        return GeneralViewControllerApiFp(this.configuration).getStats(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
 
 
 /**
@@ -2308,8 +2237,8 @@ export class MiscControllerApi extends BaseAPI {
 export const ReviewControllerApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Approve source with problems by source ID.
-         * @summary ADMIN. Approve source with problems
+         * Requests from REVIEW page.
+         * @summary Approve source with problems
          * @param {string} sourceId 
          * @param {ReviewMsgDto} reviewMsgDto 
          * @param {*} [options] Override http request option.
@@ -2352,8 +2281,8 @@ export const ReviewControllerApiAxiosParamCreator = function (configuration?: Co
             };
         },
         /**
-         * Get pending sources submitted for approval.
-         * @summary ADMIN. Get pending sources
+         * Requests from REVIEW page.
+         * @summary Get pending sources
          * @param {number} [page] 
          * @param {number} [size] 
          * @param {string} [search] 
@@ -2387,6 +2316,54 @@ export const ReviewControllerApiAxiosParamCreator = function (configuration?: Co
 
             if (search !== undefined) {
                 localVarQueryParameter['search'] = search;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Requests from REVIEW page.
+         * @summary Get pending source problems.
+         * @param {string} sourceId 
+         * @param {number} [page] 
+         * @param {number} [size] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getProblemsBySource1: async (sourceId: string, page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sourceId' is not null or undefined
+            assertParamExists('getProblemsBySource1', 'sourceId', sourceId)
+            const localVarPath = `/review/problemsBySource/{sourceId}`
+                .replace(`{${"sourceId"}}`, encodeURIComponent(String(sourceId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (size !== undefined) {
+                localVarQueryParameter['size'] = size;
             }
 
 
@@ -2455,8 +2432,8 @@ export const ReviewControllerApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = ReviewControllerApiAxiosParamCreator(configuration)
     return {
         /**
-         * Approve source with problems by source ID.
-         * @summary ADMIN. Approve source with problems
+         * Requests from REVIEW page.
+         * @summary Approve source with problems
          * @param {string} sourceId 
          * @param {ReviewMsgDto} reviewMsgDto 
          * @param {*} [options] Override http request option.
@@ -2469,8 +2446,8 @@ export const ReviewControllerApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Get pending sources submitted for approval.
-         * @summary ADMIN. Get pending sources
+         * Requests from REVIEW page.
+         * @summary Get pending sources
          * @param {number} [page] 
          * @param {number} [size] 
          * @param {string} [search] 
@@ -2481,6 +2458,21 @@ export const ReviewControllerApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPendingSources(page, size, search, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ReviewControllerApi.getPendingSources']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Requests from REVIEW page.
+         * @summary Get pending source problems.
+         * @param {string} sourceId 
+         * @param {number} [page] 
+         * @param {number} [size] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getProblemsBySource1(sourceId: string, page?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProblemDisplayViewDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getProblemsBySource1(sourceId, page, size, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ReviewControllerApi.getProblemsBySource1']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -2508,8 +2500,8 @@ export const ReviewControllerApiFactory = function (configuration?: Configuratio
     const localVarFp = ReviewControllerApiFp(configuration)
     return {
         /**
-         * Approve source with problems by source ID.
-         * @summary ADMIN. Approve source with problems
+         * Requests from REVIEW page.
+         * @summary Approve source with problems
          * @param {string} sourceId 
          * @param {ReviewMsgDto} reviewMsgDto 
          * @param {*} [options] Override http request option.
@@ -2519,8 +2511,8 @@ export const ReviewControllerApiFactory = function (configuration?: Configuratio
             return localVarFp.approve(sourceId, reviewMsgDto, options).then((request) => request(axios, basePath));
         },
         /**
-         * Get pending sources submitted for approval.
-         * @summary ADMIN. Get pending sources
+         * Requests from REVIEW page.
+         * @summary Get pending sources
          * @param {number} [page] 
          * @param {number} [size] 
          * @param {string} [search] 
@@ -2529,6 +2521,18 @@ export const ReviewControllerApiFactory = function (configuration?: Configuratio
          */
         getPendingSources(page?: number, size?: number, search?: string, options?: any): AxiosPromise<Array<SourceDisplayDto>> {
             return localVarFp.getPendingSources(page, size, search, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Requests from REVIEW page.
+         * @summary Get pending source problems.
+         * @param {string} sourceId 
+         * @param {number} [page] 
+         * @param {number} [size] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getProblemsBySource1(sourceId: string, page?: number, size?: number, options?: any): AxiosPromise<Array<ProblemDisplayViewDto>> {
+            return localVarFp.getProblemsBySource1(sourceId, page, size, options).then((request) => request(axios, basePath));
         },
         /**
          * Reject source with problems by source ID.
@@ -2552,8 +2556,8 @@ export const ReviewControllerApiFactory = function (configuration?: Configuratio
  */
 export class ReviewControllerApi extends BaseAPI {
     /**
-     * Approve source with problems by source ID.
-     * @summary ADMIN. Approve source with problems
+     * Requests from REVIEW page.
+     * @summary Approve source with problems
      * @param {string} sourceId 
      * @param {ReviewMsgDto} reviewMsgDto 
      * @param {*} [options] Override http request option.
@@ -2565,8 +2569,8 @@ export class ReviewControllerApi extends BaseAPI {
     }
 
     /**
-     * Get pending sources submitted for approval.
-     * @summary ADMIN. Get pending sources
+     * Requests from REVIEW page.
+     * @summary Get pending sources
      * @param {number} [page] 
      * @param {number} [size] 
      * @param {string} [search] 
@@ -2576,6 +2580,20 @@ export class ReviewControllerApi extends BaseAPI {
      */
     public getPendingSources(page?: number, size?: number, search?: string, options?: RawAxiosRequestConfig) {
         return ReviewControllerApiFp(this.configuration).getPendingSources(page, size, search, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Requests from REVIEW page.
+     * @summary Get pending source problems.
+     * @param {string} sourceId 
+     * @param {number} [page] 
+     * @param {number} [size] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ReviewControllerApi
+     */
+    public getProblemsBySource1(sourceId: string, page?: number, size?: number, options?: RawAxiosRequestConfig) {
+        return ReviewControllerApiFp(this.configuration).getProblemsBySource1(sourceId, page, size, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2601,15 +2619,17 @@ export class ReviewControllerApi extends BaseAPI {
 export const SourceViewControllerApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 
+         * Requests from MY_PROBLEMS page.
+         * @summary Get public approved sources + own sources.
          * @param {number} [page] 
          * @param {number} [size] 
          * @param {string} [search] 
+         * @param {GetAvailableSourcesSortByEnum} [sortBy] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getApprovedSources: async (page?: number, size?: number, search?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/sourceView/approvedSources`;
+        getAvailableSources: async (page?: number, size?: number, search?: string, sortBy?: GetAvailableSourcesSortByEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/sourceView/availableSources`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2637,6 +2657,10 @@ export const SourceViewControllerApiAxiosParamCreator = function (configuration?
                 localVarQueryParameter['search'] = search;
             }
 
+            if (sortBy !== undefined) {
+                localVarQueryParameter['sortBy'] = sortBy;
+            }
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -2649,8 +2673,8 @@ export const SourceViewControllerApiAxiosParamCreator = function (configuration?
             };
         },
         /**
-         * Get all problems submitted for the source.
-         * @summary Either USER with it\'s problems, or ADMIN, or PUBLIC && source.reviewStatus === ReviewStatus.APPROVED.
+         * Requests from MY_PROBLEMS and EDITING and PROFILE pages.
+         * @summary USER - public approved + owned.
          * @param {string} sourceId 
          * @param {number} [page] 
          * @param {number} [size] 
@@ -2697,8 +2721,8 @@ export const SourceViewControllerApiAxiosParamCreator = function (configuration?
             };
         },
         /**
-         * Get source by ID. Returns source entity.
-         * @summary PUBLIC if approved, USER if owned, ADMIN else.
+         * Requests from problemInfo button and EDITING page.
+         * @summary USER - public approved + owned.
          * @param {string} sourceId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2706,7 +2730,7 @@ export const SourceViewControllerApiAxiosParamCreator = function (configuration?
         getSourceById: async (sourceId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'sourceId' is not null or undefined
             assertParamExists('getSourceById', 'sourceId', sourceId)
-            const localVarPath = `/sourceView/source/{sourceId}`
+            const localVarPath = `/sourceView/availableSource/{sourceId}`
                 .replace(`{${"sourceId"}}`, encodeURIComponent(String(sourceId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2735,7 +2759,8 @@ export const SourceViewControllerApiAxiosParamCreator = function (configuration?
             };
         },
         /**
-         * 
+         * Requests from PROFILE page.
+         * @summary USER. Get public approved sources of user
          * @param {string} authorUsername 
          * @param {number} [page] 
          * @param {number} [size] 
@@ -2802,22 +2827,24 @@ export const SourceViewControllerApiFp = function(configuration?: Configuration)
     const localVarAxiosParamCreator = SourceViewControllerApiAxiosParamCreator(configuration)
     return {
         /**
-         * 
+         * Requests from MY_PROBLEMS page.
+         * @summary Get public approved sources + own sources.
          * @param {number} [page] 
          * @param {number} [size] 
          * @param {string} [search] 
+         * @param {GetAvailableSourcesSortByEnum} [sortBy] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getApprovedSources(page?: number, size?: number, search?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SourceDisplayDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getApprovedSources(page, size, search, options);
+        async getAvailableSources(page?: number, size?: number, search?: string, sortBy?: GetAvailableSourcesSortByEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SourceDisplayDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAvailableSources(page, size, search, sortBy, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['SourceViewControllerApi.getApprovedSources']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['SourceViewControllerApi.getAvailableSources']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Get all problems submitted for the source.
-         * @summary Either USER with it\'s problems, or ADMIN, or PUBLIC && source.reviewStatus === ReviewStatus.APPROVED.
+         * Requests from MY_PROBLEMS and EDITING and PROFILE pages.
+         * @summary USER - public approved + owned.
          * @param {string} sourceId 
          * @param {number} [page] 
          * @param {number} [size] 
@@ -2831,8 +2858,8 @@ export const SourceViewControllerApiFp = function(configuration?: Configuration)
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Get source by ID. Returns source entity.
-         * @summary PUBLIC if approved, USER if owned, ADMIN else.
+         * Requests from problemInfo button and EDITING page.
+         * @summary USER - public approved + owned.
          * @param {string} sourceId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2844,7 +2871,8 @@ export const SourceViewControllerApiFp = function(configuration?: Configuration)
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Requests from PROFILE page.
+         * @summary USER. Get public approved sources of user
          * @param {string} authorUsername 
          * @param {number} [page] 
          * @param {number} [size] 
@@ -2870,19 +2898,21 @@ export const SourceViewControllerApiFactory = function (configuration?: Configur
     const localVarFp = SourceViewControllerApiFp(configuration)
     return {
         /**
-         * 
+         * Requests from MY_PROBLEMS page.
+         * @summary Get public approved sources + own sources.
          * @param {number} [page] 
          * @param {number} [size] 
          * @param {string} [search] 
+         * @param {GetAvailableSourcesSortByEnum} [sortBy] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getApprovedSources(page?: number, size?: number, search?: string, options?: any): AxiosPromise<Array<SourceDisplayDto>> {
-            return localVarFp.getApprovedSources(page, size, search, options).then((request) => request(axios, basePath));
+        getAvailableSources(page?: number, size?: number, search?: string, sortBy?: GetAvailableSourcesSortByEnum, options?: any): AxiosPromise<Array<SourceDisplayDto>> {
+            return localVarFp.getAvailableSources(page, size, search, sortBy, options).then((request) => request(axios, basePath));
         },
         /**
-         * Get all problems submitted for the source.
-         * @summary Either USER with it\'s problems, or ADMIN, or PUBLIC && source.reviewStatus === ReviewStatus.APPROVED.
+         * Requests from MY_PROBLEMS and EDITING and PROFILE pages.
+         * @summary USER - public approved + owned.
          * @param {string} sourceId 
          * @param {number} [page] 
          * @param {number} [size] 
@@ -2893,8 +2923,8 @@ export const SourceViewControllerApiFactory = function (configuration?: Configur
             return localVarFp.getProblemsBySource(sourceId, page, size, options).then((request) => request(axios, basePath));
         },
         /**
-         * Get source by ID. Returns source entity.
-         * @summary PUBLIC if approved, USER if owned, ADMIN else.
+         * Requests from problemInfo button and EDITING page.
+         * @summary USER - public approved + owned.
          * @param {string} sourceId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2903,7 +2933,8 @@ export const SourceViewControllerApiFactory = function (configuration?: Configur
             return localVarFp.getSourceById(sourceId, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Requests from PROFILE page.
+         * @summary USER. Get public approved sources of user
          * @param {string} authorUsername 
          * @param {number} [page] 
          * @param {number} [size] 
@@ -2926,21 +2957,23 @@ export const SourceViewControllerApiFactory = function (configuration?: Configur
  */
 export class SourceViewControllerApi extends BaseAPI {
     /**
-     * 
+     * Requests from MY_PROBLEMS page.
+     * @summary Get public approved sources + own sources.
      * @param {number} [page] 
      * @param {number} [size] 
      * @param {string} [search] 
+     * @param {GetAvailableSourcesSortByEnum} [sortBy] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SourceViewControllerApi
      */
-    public getApprovedSources(page?: number, size?: number, search?: string, options?: RawAxiosRequestConfig) {
-        return SourceViewControllerApiFp(this.configuration).getApprovedSources(page, size, search, options).then((request) => request(this.axios, this.basePath));
+    public getAvailableSources(page?: number, size?: number, search?: string, sortBy?: GetAvailableSourcesSortByEnum, options?: RawAxiosRequestConfig) {
+        return SourceViewControllerApiFp(this.configuration).getAvailableSources(page, size, search, sortBy, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * Get all problems submitted for the source.
-     * @summary Either USER with it\'s problems, or ADMIN, or PUBLIC && source.reviewStatus === ReviewStatus.APPROVED.
+     * Requests from MY_PROBLEMS and EDITING and PROFILE pages.
+     * @summary USER - public approved + owned.
      * @param {string} sourceId 
      * @param {number} [page] 
      * @param {number} [size] 
@@ -2953,8 +2986,8 @@ export class SourceViewControllerApi extends BaseAPI {
     }
 
     /**
-     * Get source by ID. Returns source entity.
-     * @summary PUBLIC if approved, USER if owned, ADMIN else.
+     * Requests from problemInfo button and EDITING page.
+     * @summary USER - public approved + owned.
      * @param {string} sourceId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2965,7 +2998,8 @@ export class SourceViewControllerApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Requests from PROFILE page.
+     * @summary USER. Get public approved sources of user
      * @param {string} authorUsername 
      * @param {number} [page] 
      * @param {number} [size] 
@@ -2980,6 +3014,18 @@ export class SourceViewControllerApi extends BaseAPI {
     }
 }
 
+/**
+ * @export
+ */
+export const GetAvailableSourcesSortByEnum = {
+    NameAsc: 'NAME_ASC',
+    NameDesc: 'NAME_DESC',
+    Newest: 'NEWEST',
+    Oldest: 'OLDEST',
+    MostProblems: 'MOST_PROBLEMS',
+    LeastProblems: 'LEAST_PROBLEMS'
+} as const;
+export type GetAvailableSourcesSortByEnum = typeof GetAvailableSourcesSortByEnum[keyof typeof GetAvailableSourcesSortByEnum];
 /**
  * @export
  */
@@ -3241,176 +3287,6 @@ export class UserControllerApi extends BaseAPI {
      */
     public updateBio(userPublicDataDto: UserPublicDataDto, options?: RawAxiosRequestConfig) {
         return UserControllerApiFp(this.configuration).updateBio(userPublicDataDto, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-
-/**
- * ViewControllerApi - axios parameter creator
- * @export
- */
-export const ViewControllerApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @param {string} skfCode 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getProblemBySkfCode: async (skfCode: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'skfCode' is not null or undefined
-            assertParamExists('getProblemBySkfCode', 'skfCode', skfCode)
-            const localVarPath = `/view/problem/{skfCode}`
-                .replace(`{${"skfCode"}}`, encodeURIComponent(String(skfCode)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getStats: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/view/stats`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * ViewControllerApi - functional programming interface
- * @export
- */
-export const ViewControllerApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = ViewControllerApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @param {string} skfCode 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getProblemBySkfCode(skfCode: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProblemDisplayViewDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getProblemBySkfCode(skfCode, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ViewControllerApi.getProblemBySkfCode']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getStats(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StatsDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getStats(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ViewControllerApi.getStats']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-    }
-};
-
-/**
- * ViewControllerApi - factory interface
- * @export
- */
-export const ViewControllerApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = ViewControllerApiFp(configuration)
-    return {
-        /**
-         * 
-         * @param {string} skfCode 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getProblemBySkfCode(skfCode: string, options?: any): AxiosPromise<ProblemDisplayViewDto> {
-            return localVarFp.getProblemBySkfCode(skfCode, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getStats(options?: any): AxiosPromise<StatsDto> {
-            return localVarFp.getStats(options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * ViewControllerApi - object-oriented interface
- * @export
- * @class ViewControllerApi
- * @extends {BaseAPI}
- */
-export class ViewControllerApi extends BaseAPI {
-    /**
-     * 
-     * @param {string} skfCode 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ViewControllerApi
-     */
-    public getProblemBySkfCode(skfCode: string, options?: RawAxiosRequestConfig) {
-        return ViewControllerApiFp(this.configuration).getProblemBySkfCode(skfCode, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ViewControllerApi
-     */
-    public getStats(options?: RawAxiosRequestConfig) {
-        return ViewControllerApiFp(this.configuration).getStats(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

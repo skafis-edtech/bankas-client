@@ -5,7 +5,7 @@ import {
 	MiscControllerApi,
 	ReviewControllerApi,
 	UserControllerApi,
-	ViewControllerApi,
+	GeneralViewControllerApi,
 	SourceViewControllerApi,
 	CategoryViewControllerApi
 } from './gen-client/api';
@@ -55,7 +55,7 @@ const contentApi = new ContentControllerApi(undefined, BASE_PATH, axiosInstance)
 const miscApi = new MiscControllerApi(undefined, BASE_PATH, axiosInstance);
 const reviewApi = new ReviewControllerApi(undefined, BASE_PATH, axiosInstance);
 const userApi = new UserControllerApi(undefined, BASE_PATH, axiosInstance);
-const viewApi = new ViewControllerApi(undefined, BASE_PATH, axiosInstance);
+const viewApi = new GeneralViewControllerApi(undefined, BASE_PATH, axiosInstance);
 const sourceViewApi = new SourceViewControllerApi(undefined, BASE_PATH, axiosInstance);
 const categoryViewApi = new CategoryViewControllerApi(undefined, BASE_PATH, axiosInstance);
 

@@ -17,6 +17,18 @@ export interface AuthContext {
 	logout: typeof logout;
 }
 
+export enum SourceSubsetEnum {
+	AVAILABLE,
+	PENDING,
+	AUTHOR
+}
+
+export enum SourceDisplayEnum {
+	REVIEW,
+	MANAGE,
+	DISPLAY
+}
+
 export namespace Components {
 	interface ProblemMainData {
 		skfCode: string;

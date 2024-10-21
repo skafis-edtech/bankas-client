@@ -10,10 +10,11 @@
 	import { Skeleton } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import { Accordion, AccordionItem } from 'flowbite-svelte';
+	import { SourceDisplayEnum } from '../../types';
 
 	export let source: SourceDisplayDto;
 	export let searchValue: string;
-	export let needApprovalStatusNone: 'approval' | 'status' | 'none' = 'none';
+	export let displayType: SourceDisplayEnum = SourceDisplayEnum.DISPLAY;
 	export let showIndicator = true;
 	export let afterReview: () => void = () => {};
 
@@ -78,7 +79,7 @@
 			</p>
 		</span>
 		<div>
-			{#if needApprovalStatusNone === 'approval'}
+			{#if displayType === SourceDisplayEnum.REVIEW}
 				<SourceReviewBar
 					{afterReview}
 					reviewStatus={source.reviewStatus}
@@ -86,7 +87,7 @@
 					reviewHistory={source.reviewHistory}
 				/>
 			{/if}
-			{#if needApprovalStatusNone === 'status'}
+			{#if displayType === SourceDisplayEnum.MANAGE}
 				<SourceManageBar
 					reviewStatus={source.reviewStatus}
 					sourceId={source.id}
