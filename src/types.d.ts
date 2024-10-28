@@ -17,6 +17,10 @@ export interface AuthContext {
 	logout: typeof logout;
 }
 
+export interface RandomContext {
+	seed: Writable<number>;
+}
+
 export namespace Components {
 	interface ProblemMainData {
 		skfCode: string;

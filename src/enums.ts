@@ -10,3 +10,14 @@ export enum SourceSubsetEnum {
 	PENDING = 'PENDING',
 	AUTHOR = 'AUTHOR'
 }
+
+export enum CategoryDisplayEnum {
+	DISPLAY = 'DISPLAY',
+	MANAGE = 'MANAGE'
+}
+
+export enum SourceFilterOptionEnum {
+	EXCEPT = 'EXCEPT',
+	ONLY = 'ONLY',
+	IGNORE = 'IGNORE'
+}

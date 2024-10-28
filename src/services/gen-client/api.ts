@@ -837,10 +837,12 @@ export const CategoryViewControllerApiAxiosParamCreator = function (configuratio
          * @param {number} [page] 
          * @param {number} [size] 
          * @param {string} [search] 
+         * @param {Array<string>} [allSourcesExcept] 
+         * @param {Array<string>} [onlySources] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCategories: async (page?: number, size?: number, search?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getCategories: async (page?: number, size?: number, search?: string, allSourcesExcept?: Array<string>, onlySources?: Array<string>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/categoryView/categories`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -867,6 +869,14 @@ export const CategoryViewControllerApiAxiosParamCreator = function (configuratio
 
             if (search !== undefined) {
                 localVarQueryParameter['search'] = search;
+            }
+
+            if (allSourcesExcept) {
+                localVarQueryParameter['allSourcesExcept'] = allSourcesExcept;
+            }
+
+            if (onlySources) {
+                localVarQueryParameter['onlySources'] = onlySources;
             }
 
 
@@ -923,10 +933,12 @@ export const CategoryViewControllerApiAxiosParamCreator = function (configuratio
          * @param {number} seed 
          * @param {number} [page] 
          * @param {number} [size] 
+         * @param {Array<string>} [allSourcesExcept] 
+         * @param {Array<string>} [onlySources] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProblemsByCategory: async (categoryId: string, seed: number, page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getProblemsByCategory: async (categoryId: string, seed: number, page?: number, size?: number, allSourcesExcept?: Array<string>, onlySources?: Array<string>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'categoryId' is not null or undefined
             assertParamExists('getProblemsByCategory', 'categoryId', categoryId)
             // verify required parameter 'seed' is not null or undefined
@@ -957,6 +969,14 @@ export const CategoryViewControllerApiAxiosParamCreator = function (configuratio
                 localVarQueryParameter['size'] = size;
             }
 
+            if (allSourcesExcept) {
+                localVarQueryParameter['allSourcesExcept'] = allSourcesExcept;
+            }
+
+            if (onlySources) {
+                localVarQueryParameter['onlySources'] = onlySources;
+            }
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -983,11 +1003,13 @@ export const CategoryViewControllerApiFp = function(configuration?: Configuratio
          * @param {number} [page] 
          * @param {number} [size] 
          * @param {string} [search] 
+         * @param {Array<string>} [allSourcesExcept] 
+         * @param {Array<string>} [onlySources] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getCategories(page?: number, size?: number, search?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CategoryDisplayDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getCategories(page, size, search, options);
+        async getCategories(page?: number, size?: number, search?: string, allSourcesExcept?: Array<string>, onlySources?: Array<string>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CategoryDisplayDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCategories(page, size, search, allSourcesExcept, onlySources, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CategoryViewControllerApi.getCategories']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1010,11 +1032,13 @@ export const CategoryViewControllerApiFp = function(configuration?: Configuratio
          * @param {number} seed 
          * @param {number} [page] 
          * @param {number} [size] 
+         * @param {Array<string>} [allSourcesExcept] 
+         * @param {Array<string>} [onlySources] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getProblemsByCategory(categoryId: string, seed: number, page?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProblemDisplayViewDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getProblemsByCategory(categoryId, seed, page, size, options);
+        async getProblemsByCategory(categoryId: string, seed: number, page?: number, size?: number, allSourcesExcept?: Array<string>, onlySources?: Array<string>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProblemDisplayViewDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getProblemsByCategory(categoryId, seed, page, size, allSourcesExcept, onlySources, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CategoryViewControllerApi.getProblemsByCategory']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1034,11 +1058,13 @@ export const CategoryViewControllerApiFactory = function (configuration?: Config
          * @param {number} [page] 
          * @param {number} [size] 
          * @param {string} [search] 
+         * @param {Array<string>} [allSourcesExcept] 
+         * @param {Array<string>} [onlySources] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCategories(page?: number, size?: number, search?: string, options?: any): AxiosPromise<Array<CategoryDisplayDto>> {
-            return localVarFp.getCategories(page, size, search, options).then((request) => request(axios, basePath));
+        getCategories(page?: number, size?: number, search?: string, allSourcesExcept?: Array<string>, onlySources?: Array<string>, options?: any): AxiosPromise<Array<CategoryDisplayDto>> {
+            return localVarFp.getCategories(page, size, search, allSourcesExcept, onlySources, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1055,11 +1081,13 @@ export const CategoryViewControllerApiFactory = function (configuration?: Config
          * @param {number} seed 
          * @param {number} [page] 
          * @param {number} [size] 
+         * @param {Array<string>} [allSourcesExcept] 
+         * @param {Array<string>} [onlySources] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProblemsByCategory(categoryId: string, seed: number, page?: number, size?: number, options?: any): AxiosPromise<Array<ProblemDisplayViewDto>> {
-            return localVarFp.getProblemsByCategory(categoryId, seed, page, size, options).then((request) => request(axios, basePath));
+        getProblemsByCategory(categoryId: string, seed: number, page?: number, size?: number, allSourcesExcept?: Array<string>, onlySources?: Array<string>, options?: any): AxiosPromise<Array<ProblemDisplayViewDto>> {
+            return localVarFp.getProblemsByCategory(categoryId, seed, page, size, allSourcesExcept, onlySources, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1076,12 +1104,14 @@ export class CategoryViewControllerApi extends BaseAPI {
      * @param {number} [page] 
      * @param {number} [size] 
      * @param {string} [search] 
+     * @param {Array<string>} [allSourcesExcept] 
+     * @param {Array<string>} [onlySources] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CategoryViewControllerApi
      */
-    public getCategories(page?: number, size?: number, search?: string, options?: RawAxiosRequestConfig) {
-        return CategoryViewControllerApiFp(this.configuration).getCategories(page, size, search, options).then((request) => request(this.axios, this.basePath));
+    public getCategories(page?: number, size?: number, search?: string, allSourcesExcept?: Array<string>, onlySources?: Array<string>, options?: RawAxiosRequestConfig) {
+        return CategoryViewControllerApiFp(this.configuration).getCategories(page, size, search, allSourcesExcept, onlySources, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1101,12 +1131,14 @@ export class CategoryViewControllerApi extends BaseAPI {
      * @param {number} seed 
      * @param {number} [page] 
      * @param {number} [size] 
+     * @param {Array<string>} [allSourcesExcept] 
+     * @param {Array<string>} [onlySources] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CategoryViewControllerApi
      */
-    public getProblemsByCategory(categoryId: string, seed: number, page?: number, size?: number, options?: RawAxiosRequestConfig) {
-        return CategoryViewControllerApiFp(this.configuration).getProblemsByCategory(categoryId, seed, page, size, options).then((request) => request(this.axios, this.basePath));
+    public getProblemsByCategory(categoryId: string, seed: number, page?: number, size?: number, allSourcesExcept?: Array<string>, onlySources?: Array<string>, options?: RawAxiosRequestConfig) {
+        return CategoryViewControllerApiFp(this.configuration).getProblemsByCategory(categoryId, seed, page, size, allSourcesExcept, onlySources, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

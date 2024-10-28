@@ -22,11 +22,15 @@
 </script>
 
 <h1 class="text-4xl font-semibold my-4 text-center">Užduotys pagal šaltinius</h1>
-<h3 class="my-4">Norėdami turinį eksportuoti, kreipkitės el. paštu.</h3>
+<div class="flex justify-end h-10">
+	<Button on:click={() => alert('Norėdami turinį eksportuoti, kreipkitės el. paštu info@skafis.lt')}
+		>Eksportas</Button
+	>
+</div>
 <Button color="green" on:click={() => goto('/submit/new-source')} class="w-full my-4"
 	>Pridėti šaltinį (užduočių rinkinį)</Button
 >
-<div class="w-full">
+<div class="w-full h-10">
 	<ButtonGroup class="w-full flex flex-wrap">
 		<Button
 			class="flex-1"
@@ -65,7 +69,7 @@
 	</ButtonGroup>
 </div>
 
-<SourceListPeageable {searchValue} {sortBy} sourcesSubset={SourceSubsetEnum.AVAILABLE} />
+<SourceListPeageable bind:searchValue {sortBy} sourcesSubset={SourceSubsetEnum.AVAILABLE} />
 
 <HorizontalLine />
 

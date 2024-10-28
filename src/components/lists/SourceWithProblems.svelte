@@ -65,7 +65,11 @@
 </script>
 
 <Accordion>
-	<AccordionItem bind:open={isOpen} class="bg-slate-200 mb-4">
+	<AccordionItem
+		bind:open={isOpen}
+		activeClass="bg-slate-200 mb-4"
+		inactiveClass="bg-slate-200 mb-4"
+	>
 		<span slot="header" class="text-black flex justify-between items-center w-full">
 			{#if showIndicator}
 				{#if source.reviewStatus === SourceDisplayDtoReviewStatusEnum.Pending}
@@ -117,7 +121,9 @@
 			<div class="container mx-auto">
 				{#each problems as problem (problem?.id || Math.random())}
 					{#if problem === null}
-						<Skeleton size="xxl" class="my-3" />
+						<div class="my-3">
+							<Skeleton size="xxl" />
+						</div>
 					{:else}
 						<div class="flex gap-2 my-2">
 							<div class="text-sm">{problem.sourceListNr}.</div>

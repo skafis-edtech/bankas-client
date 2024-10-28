@@ -39,6 +39,7 @@
 		timer = setTimeout(async () => {
 			page = 0; // Reset to first page on new search
 			await fetchSources();
+			history.replaceState(null, '', `?search=${searchValue}`);
 		}, 1000);
 	}
 
