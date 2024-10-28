@@ -3,8 +3,7 @@
 	import { page } from '$app/stores';
 	import FindById from '$components/layout/FindById.svelte';
 	import CategoryListPageable from '$components/lists/CategoryListPageable.svelte';
-	import HorizontalLine from '$components/ui/HorizontalLine.svelte';
-	import { Button, Accordion, AccordionItem } from 'flowbite-svelte';
+	import { Button, Accordion, AccordionItem, Modal } from 'flowbite-svelte';
 	import type { RandomContext } from '../../../../types';
 	import { setContext } from 'svelte';
 	import SourceNamesPageable from '$components/lists/SourceNamesPageable.svelte';
@@ -16,6 +15,7 @@
 	let seed = new Date().setHours(0, 0, 0, 0) / 10000000;
 	let selectedFilter: SourceFilterOptionEnum = SourceFilterOptionEnum.EXCEPT;
 	let selectedSourceIds: string[] = [];
+	let showModal = false;
 
 	$: searchValue = searchUrlStr;
 
@@ -28,9 +28,20 @@
 </script>
 
 <h1 class="text-4xl font-semibold my-4 text-center">Užduotys pagal kategorijas</h1>
-<div class="flex flex-col items-end h-10">
-	<input id="seed" type="number" bind:value={seed} class="border rounded p-2 text-sm w-24" />
-	<label for="seed" class="text-xs">Atsitiktinio rinkinio numeris (atsinaujina kasdien)</label>
+<div class="flex justify-between h-10">
+	<Button on:click={() => (showModal = true)}>Pagal SKF kodą (kopijavimui)</Button>
+	<Modal
+		size="lg"
+		classBody="bg-[beige] rounded-md"
+		open={showModal}
+		on:close={() => (showModal = false)}
+	>
+		<FindById />
+	</Modal>
+	<div class="flex flex-col items-end">
+		<input id="seed" type="number" bind:value={seed} class="border rounded p-2 text-sm w-24" />
+		<label for="seed" class="text-xs">Atsitiktinio rinkinio numeris (atsinaujina kasdien)</label>
+	</div>
 </div>
 
 <Button color="green" on:click={() => goto('/categories/new-category')} class="w-full my-4">
@@ -74,7 +85,3 @@
 </Accordion>
 
 <CategoryListPageable {searchValue} sourceIds={selectedSourceIds} filterOption={selectedFilter} />
-
-<HorizontalLine />
-
-<FindById />

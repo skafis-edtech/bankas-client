@@ -3,12 +3,13 @@
 	import { page } from '$app/stores';
 	import FindById from '$components/layout/FindById.svelte';
 	import SourceListPeageable from '$components/lists/SourceListPeageable.svelte';
-	import HorizontalLine from '$components/ui/HorizontalLine.svelte';
 	import { GetSourcesByAuthorSortByEnum } from '$services/gen-client';
 	import { Button, ButtonGroup } from 'flowbite-svelte';
 	import { SourceSubsetEnum } from '../../../../enums';
+	import { Modal } from 'flowbite-svelte';
 
 	let sortBy: GetSourcesByAuthorSortByEnum = GetSourcesByAuthorSortByEnum.Newest;
+	let showModal = false;
 
 	const searchUrlStr: string = $page.url.searchParams.get('search') || '';
 
@@ -22,7 +23,16 @@
 </script>
 
 <h1 class="text-4xl font-semibold my-4 text-center">Užduotys pagal šaltinius</h1>
-<div class="flex justify-end h-10">
+<div class="flex justify-between h-10">
+	<Button on:click={() => (showModal = true)}>Pagal SKF kodą (kopijavimui)</Button>
+	<Modal
+		size="lg"
+		classBody="bg-[beige] rounded-md"
+		open={showModal}
+		on:close={() => (showModal = false)}
+	>
+		<FindById />
+	</Modal>
 	<Button on:click={() => alert('Norėdami turinį eksportuoti, kreipkitės el. paštu info@skafis.lt')}
 		>Eksportas</Button
 	>
@@ -70,7 +80,3 @@
 </div>
 
 <SourceListPeageable bind:searchValue {sortBy} sourcesSubset={SourceSubsetEnum.AVAILABLE} />
-
-<HorizontalLine />
-
-<FindById />

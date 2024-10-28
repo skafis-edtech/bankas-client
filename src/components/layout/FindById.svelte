@@ -44,14 +44,6 @@
 		<Button class="ml-3 py-3" type="submit">Rodyti</Button>
 	</form>
 	{#if problemDisplayViewDto}
-		<div class="flex justify-end relative">
-			<Button
-				color="red"
-				on:click={() => (problemDisplayViewDto = null)}
-				class="w-5 h-5 absolute right-[-5px] top-[-5px] bg-red-600 rounded-full flex items-center hover:bg-red-800 p-0 m-0"
-				><CloseOutline class="w-full h-full p-0 m-0" /></Button
-			>
-		</div>
 		<ProblemComponent
 			problemMainData={{
 				skfCode: problemDisplayViewDto.skfCode,
