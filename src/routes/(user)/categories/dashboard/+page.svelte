@@ -12,7 +12,7 @@
 	const searchUrlStr: string = $page.url.searchParams.get('search') || '';
 
 	let searchValue = '';
-	let seed = new Date().setHours(0, 0, 0, 0) / 10000000;
+	let seed = new Date().setHours(0, 0, 0, 0) / 100000;
 	let selectedFilter: SourceFilterOptionEnum = SourceFilterOptionEnum.EXCEPT;
 	let selectedSourceIds: string[] = [];
 	let showModal = false;
@@ -39,7 +39,7 @@
 		<FindById />
 	</Modal>
 	<div class="flex flex-col items-end">
-		<input id="seed" type="number" bind:value={seed} class="border rounded p-2 text-sm w-24" />
+		<input id="seed" type="number" bind:value={seed} class="border rounded p-2 text-sm w-28" />
 		<label for="seed" class="text-xs">Atsitiktinio rinkinio numeris (atsinaujina kasdien)</label>
 	</div>
 </div>

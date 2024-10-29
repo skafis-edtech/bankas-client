@@ -28,9 +28,11 @@
 	const { seed } = getContext('randomContext') as RandomContext;
 
 	$: if (sourceIds || filterOption) {
-		page = 0;
-		problems = [];
-		loadProblems();
+		if (isOpen) {
+			page = 0;
+			problems = [];
+			loadProblems();
+		}
 	}
 
 	async function loadProblems() {

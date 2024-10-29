@@ -320,6 +320,31 @@ export interface ProblemTextsDto {
 /**
  * 
  * @export
+ * @interface RegisterData
+ */
+export interface RegisterData {
+    /**
+     * 
+     * @type {string}
+     * @memberof RegisterData
+     */
+    'username': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegisterData
+     */
+    'email': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegisterData
+     */
+    'password': string;
+}
+/**
+ * 
+ * @export
  * @interface ReviewMsgDto
  */
 export interface ReviewMsgDto {
@@ -458,6 +483,58 @@ export interface StatsDto {
      */
     'problemCount': number;
 }
+/**
+ * 
+ * @export
+ * @interface User
+ */
+export interface User {
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    'email': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    'username': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    'role': UserRoleEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    'bio': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof User
+     */
+    'balance': number;
+}
+
+export const UserRoleEnum = {
+    User: 'USER',
+    Admin: 'ADMIN',
+    SuperAdmin: 'SUPER_ADMIN'
+} as const;
+
+export type UserRoleEnum = typeof UserRoleEnum[keyof typeof UserRoleEnum];
+
 /**
  * 
  * @export
@@ -930,7 +1007,7 @@ export const CategoryViewControllerApiAxiosParamCreator = function (configuratio
         /**
          * 
          * @param {string} categoryId 
-         * @param {number} seed 
+         * @param {number} [seed] 
          * @param {number} [page] 
          * @param {number} [size] 
          * @param {Array<string>} [allSourcesExcept] 
@@ -938,14 +1015,11 @@ export const CategoryViewControllerApiAxiosParamCreator = function (configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProblemsByCategory: async (categoryId: string, seed: number, page?: number, size?: number, allSourcesExcept?: Array<string>, onlySources?: Array<string>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getProblemsByCategory: async (categoryId: string, seed?: number, page?: number, size?: number, allSourcesExcept?: Array<string>, onlySources?: Array<string>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'categoryId' is not null or undefined
             assertParamExists('getProblemsByCategory', 'categoryId', categoryId)
-            // verify required parameter 'seed' is not null or undefined
-            assertParamExists('getProblemsByCategory', 'seed', seed)
-            const localVarPath = `/categoryView/problemsByCategory/{categoryId}/{seed}`
-                .replace(`{${"categoryId"}}`, encodeURIComponent(String(categoryId)))
-                .replace(`{${"seed"}}`, encodeURIComponent(String(seed)));
+            const localVarPath = `/categoryView/problemsByCategory/{categoryId}`
+                .replace(`{${"categoryId"}}`, encodeURIComponent(String(categoryId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -960,6 +1034,10 @@ export const CategoryViewControllerApiAxiosParamCreator = function (configuratio
             // authentication bearerAuth required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (seed !== undefined) {
+                localVarQueryParameter['seed'] = seed;
+            }
 
             if (page !== undefined) {
                 localVarQueryParameter['page'] = page;
@@ -1029,7 +1107,7 @@ export const CategoryViewControllerApiFp = function(configuration?: Configuratio
         /**
          * 
          * @param {string} categoryId 
-         * @param {number} seed 
+         * @param {number} [seed] 
          * @param {number} [page] 
          * @param {number} [size] 
          * @param {Array<string>} [allSourcesExcept] 
@@ -1037,7 +1115,7 @@ export const CategoryViewControllerApiFp = function(configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getProblemsByCategory(categoryId: string, seed: number, page?: number, size?: number, allSourcesExcept?: Array<string>, onlySources?: Array<string>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProblemDisplayViewDto>>> {
+        async getProblemsByCategory(categoryId: string, seed?: number, page?: number, size?: number, allSourcesExcept?: Array<string>, onlySources?: Array<string>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProblemDisplayViewDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getProblemsByCategory(categoryId, seed, page, size, allSourcesExcept, onlySources, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CategoryViewControllerApi.getProblemsByCategory']?.[localVarOperationServerIndex]?.url;
@@ -1078,7 +1156,7 @@ export const CategoryViewControllerApiFactory = function (configuration?: Config
         /**
          * 
          * @param {string} categoryId 
-         * @param {number} seed 
+         * @param {number} [seed] 
          * @param {number} [page] 
          * @param {number} [size] 
          * @param {Array<string>} [allSourcesExcept] 
@@ -1086,7 +1164,7 @@ export const CategoryViewControllerApiFactory = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProblemsByCategory(categoryId: string, seed: number, page?: number, size?: number, allSourcesExcept?: Array<string>, onlySources?: Array<string>, options?: any): AxiosPromise<Array<ProblemDisplayViewDto>> {
+        getProblemsByCategory(categoryId: string, seed?: number, page?: number, size?: number, allSourcesExcept?: Array<string>, onlySources?: Array<string>, options?: any): AxiosPromise<Array<ProblemDisplayViewDto>> {
             return localVarFp.getProblemsByCategory(categoryId, seed, page, size, allSourcesExcept, onlySources, options).then((request) => request(axios, basePath));
         },
     };
@@ -1128,7 +1206,7 @@ export class CategoryViewControllerApi extends BaseAPI {
     /**
      * 
      * @param {string} categoryId 
-     * @param {number} seed 
+     * @param {number} [seed] 
      * @param {number} [page] 
      * @param {number} [size] 
      * @param {Array<string>} [allSourcesExcept] 
@@ -1137,7 +1215,7 @@ export class CategoryViewControllerApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof CategoryViewControllerApi
      */
-    public getProblemsByCategory(categoryId: string, seed: number, page?: number, size?: number, allSourcesExcept?: Array<string>, onlySources?: Array<string>, options?: RawAxiosRequestConfig) {
+    public getProblemsByCategory(categoryId: string, seed?: number, page?: number, size?: number, allSourcesExcept?: Array<string>, onlySources?: Array<string>, options?: RawAxiosRequestConfig) {
         return CategoryViewControllerApiFp(this.configuration).getProblemsByCategory(categoryId, seed, page, size, allSourcesExcept, onlySources, options).then((request) => request(this.axios, this.basePath));
     }
 }
@@ -3114,6 +3192,40 @@ export const UserControllerApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * 
+         * @summary USER
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMyInfo: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/user/myInfo`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary PUBLIC
          * @param {string} username 
          * @param {*} [options] Override http request option.
@@ -3140,6 +3252,42 @@ export const UserControllerApiAxiosParamCreator = function (configuration?: Conf
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary PUBLIC
+         * @param {RegisterData} registerData 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registerUser: async (registerData: RegisterData, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'registerData' is not null or undefined
+            assertParamExists('registerUser', 'registerData', registerData)
+            const localVarPath = `/user/register`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(registerData, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3211,6 +3359,18 @@ export const UserControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary USER
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMyInfo(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMyInfo(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserControllerApi.getMyInfo']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @summary PUBLIC
          * @param {string} username 
          * @param {*} [options] Override http request option.
@@ -3220,6 +3380,19 @@ export const UserControllerApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPublicData(username, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UserControllerApi.getPublicData']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary PUBLIC
+         * @param {RegisterData} registerData 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async registerUser(registerData: RegisterData, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.registerUser(registerData, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserControllerApi.registerUser']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -3257,6 +3430,15 @@ export const UserControllerApiFactory = function (configuration?: Configuration,
         },
         /**
          * 
+         * @summary USER
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMyInfo(options?: any): AxiosPromise<User> {
+            return localVarFp.getMyInfo(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary PUBLIC
          * @param {string} username 
          * @param {*} [options] Override http request option.
@@ -3264,6 +3446,16 @@ export const UserControllerApiFactory = function (configuration?: Configuration,
          */
         getPublicData(username: string, options?: any): AxiosPromise<UserPublicDataDto> {
             return localVarFp.getPublicData(username, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary PUBLIC
+         * @param {RegisterData} registerData 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registerUser(registerData: RegisterData, options?: any): AxiosPromise<void> {
+            return localVarFp.registerUser(registerData, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3299,6 +3491,17 @@ export class UserControllerApi extends BaseAPI {
 
     /**
      * 
+     * @summary USER
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserControllerApi
+     */
+    public getMyInfo(options?: RawAxiosRequestConfig) {
+        return UserControllerApiFp(this.configuration).getMyInfo(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary PUBLIC
      * @param {string} username 
      * @param {*} [options] Override http request option.
@@ -3307,6 +3510,18 @@ export class UserControllerApi extends BaseAPI {
      */
     public getPublicData(username: string, options?: RawAxiosRequestConfig) {
         return UserControllerApiFp(this.configuration).getPublicData(username, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary PUBLIC
+     * @param {RegisterData} registerData 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserControllerApi
+     */
+    public registerUser(registerData: RegisterData, options?: RawAxiosRequestConfig) {
+        return UserControllerApiFp(this.configuration).registerUser(registerData, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

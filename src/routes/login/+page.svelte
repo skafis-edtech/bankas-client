@@ -8,7 +8,7 @@
 	import type { AuthContext } from '../../types';
 	import { page } from '$app/stores';
 
-	let username = '';
+	let email = '';
 	let password = '';
 	let errorMessage = '';
 
@@ -36,9 +36,9 @@
 			} else if ($user.role === ROLES.ADMIN) {
 				goto('/review-dashboard');
 			} else if ($user.role === ROLES.USER) {
-				goto('/sources/dashboard');
+				goto('/categories/dashboard');
 			} else if ($user.role === ROLES.SUPER_ADMIN) {
-				goto('/sources/dashboard');
+				goto('/categories/dashboard');
 			} else {
 				throw new Error('Unknown role: ' + $user.role);
 			}
@@ -54,7 +54,7 @@
 	async function handleLogin() {
 		try {
 			console.log('Attempting login...');
-			await login(username, password);
+			await login(email, password);
 			userLoaded.subscribe(($user) => {
 				if ($user) {
 					console.log('User logged in:', $user);
@@ -74,14 +74,14 @@
 	</h2>
 	<form on:submit|preventDefault={handleLogin} class="space-y-6">
 		<div>
-			<Label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-				Prisijungimo vardas arba el. paštas
+			<Label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+				El. paštas
 			</Label>
 			<Input
-				id="username"
+				id="email"
 				type="text"
-				bind:value={username}
-				placeholder="Prisijungimo vardas arba el. paštas"
+				bind:value={email}
+				placeholder="El. paštas"
 				required
 				class="mt-1 block w-full px-4 py-2 text-lg"
 			/>

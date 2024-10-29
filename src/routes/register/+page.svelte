@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { isUsernameAvailable, registerUser } from '$services/auth';
+	import { isUsernameAvailable } from '$services/auth';
 	import { goto } from '$app/navigation';
 	import { ROLES } from '$utils/constants';
-	import { Alert, Button, Checkbox, Helper, Input, Label } from 'flowbite-svelte';
+	import { Button, Checkbox, Helper, Input, Label } from 'flowbite-svelte';
 	import { getContext, onMount } from 'svelte';
 	import type { AuthContext } from '../../types';
 	import { page } from '$app/stores';
+	import { userApi } from '$services/apiService';
 
 	const { user } = getContext('authContext') as AuthContext;
 
@@ -29,7 +30,6 @@
 	let password = '';
 	let confirmPassword = '';
 	let username = '';
-	let role = ROLES.USER;
 	let errorMessage = '';
 	let terms = false;
 
@@ -68,14 +68,13 @@
 			return;
 		}
 		try {
-			await registerUser(email, password, username, role);
+			await userApi.registerUser({ username, email, password });
 			if (redirectUrl) {
 				window.location.href = redirectUrl;
 			} else {
 				goto('/');
 			}
 		} catch (error: any) {
-			console.error('Registration failed:', error);
 			errorMessage = error.message;
 		}
 	}

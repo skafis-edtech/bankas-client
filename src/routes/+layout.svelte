@@ -13,7 +13,7 @@
 	import { auth, db } from '$services/firebaseConfig';
 	import { doc, getDoc } from 'firebase/firestore';
 	import Footer from '$components/layout/Footer.svelte';
-	import { setAuthToken } from '$services/apiService';
+	import { setAuthToken, userApi } from '$services/apiService';
 	import { goto } from '$app/navigation';
 	import GlobalAlert from '$components/layout/GlobalAlert.svelte';
 	import { authInitialized } from '$lib/stores';
@@ -44,21 +44,20 @@
 
 	const firebaseUnsubscribe = auth.onAuthStateChanged(async (user) => {
 		if (user) {
-			const userDoc = await getDoc(doc(db, 'users', user.uid));
 			const idToken = await user.getIdToken();
+			setAuthToken(idToken);
 
-			if (userDoc.exists()) {
-				const userData = userDoc.data() as User;
-				userStore.set({
-					id: user.uid,
-					username: userData.username,
-					role: userData.role,
-					jwt: idToken
-				});
-				setAuthToken(idToken);
-			} else {
-				throw new Error('User not found in database');
-			}
+			const userRes = await userApi.getMyInfo();
+			const userData = userRes.data;
+
+			userStore.set({
+				id: user.uid,
+				username: userData.username,
+				role: userData.role,
+				jwt: idToken
+			});
+
+			console.log('User email verified:', user.emailVerified);
 		} else {
 			userStore.set(null);
 			setAuthToken(null);
