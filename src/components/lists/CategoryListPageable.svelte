@@ -1,12 +1,17 @@
 <script lang="ts">
-	import type { Category } from '$services/gen-client';
+	import { CategoryVisibilityEnum, type CategoryDisplayDto } from '$services/gen-client';
 	import { Button, Search } from 'flowbite-svelte';
-	import { onMount } from 'svelte';
+	import { getContext, onMount } from 'svelte';
 	import CategoryWithProblems from './CategoryWithProblems.svelte';
 	import { categoryViewApi } from '$services/apiService';
+	import { CategoryDisplayEnum, SourceFilterOptionEnum } from '../../enums';
+	import type { AuthContext } from '../../types';
+	import { ROLES } from '$utils/constants';
 
-	let categories: Category[] = [];
+	let categories: CategoryDisplayDto[] = [];
 	export let searchValue = '';
+	export let sourceIds: string[] = [];
+	export let filterOption: SourceFilterOptionEnum = SourceFilterOptionEnum.IGNORE;
 	let page = 0;
 	let size = 8;
 	let timer: NodeJS.Timeout;
@@ -20,12 +25,48 @@
 		timer = setTimeout(async () => {
 			page = 0; // Reset to first page on new search
 			await fetchCategories();
+			history.replaceState(null, '', `?search=${searchValue}`);
 		}, 1000);
 	}
 
+	$: if (sourceIds || filterOption) {
+		console.log('sourceIds', sourceIds, 'filterOption', filterOption);
+
+		page = 0;
+		fetchCategories();
+	}
+
 	async function fetchCategories() {
-		const categoriesRes = await categoryViewApi.getCategories(page, size, searchValue);
-		categories = categoriesRes.data;
+		if (filterOption === SourceFilterOptionEnum.IGNORE) {
+			const categoriesRes = await categoryViewApi.getCategories(
+				page,
+				size,
+				searchValue,
+				undefined,
+				undefined
+			);
+			categories = categoriesRes.data;
+		} else if (filterOption === SourceFilterOptionEnum.EXCEPT) {
+			const categoriesRes = await categoryViewApi.getCategories(
+				page,
+				size,
+				searchValue,
+				sourceIds,
+				undefined
+			);
+			categories = categoriesRes.data;
+		} else if (filterOption === SourceFilterOptionEnum.ONLY) {
+			const categoriesRes = await categoryViewApi.getCategories(
+				page,
+				size,
+				searchValue,
+				undefined,
+				sourceIds
+			);
+			categories = categoriesRes.data;
+		} else {
+			throw new Error('Unknown filter option');
+		}
 	}
 
 	async function changePage(direction: number) {
@@ -39,24 +80,43 @@
 	onMount(async () => {
 		await fetchCategories();
 	});
+
+	const { user } = getContext('authContext') as AuthContext;
 </script>
 
-<Search class="my-3" placeholder="Ieškoti" bind:value={searchValue} />
+<Search
+	class="my-3"
+	placeholder="Ieškoti pagal pavadinimą arba aprašymą..."
+	bind:value={searchValue}
+/>
 
 {#each Object.entries(categories) as [id, category]}
-	<CategoryWithProblems {category} {searchValue} />
+	{#if category.visibility === CategoryVisibilityEnum.Private}
+		<CategoryWithProblems
+			category={{ ...category, name: '🔒 ' + category.name }}
+			{searchValue}
+			displayType={CategoryDisplayEnum.MANAGE}
+			{sourceIds}
+			{filterOption}
+		/>
+	{:else if $user.role === ROLES.SUPER_ADMIN}
+		<CategoryWithProblems
+			category={{ ...category, name: '🌐 ' + category.name }}
+			{searchValue}
+			displayType={CategoryDisplayEnum.MANAGE}
+			{sourceIds}
+			{filterOption}
+		/>
+	{:else}
+		<CategoryWithProblems
+			category={{ ...category, name: '🌐 ' + category.name }}
+			{searchValue}
+			displayType={CategoryDisplayEnum.DISPLAY}
+			{sourceIds}
+			{filterOption}
+		/>
+	{/if}
 {/each}
-
-{#if 'Nesurūšiuota'.toLowerCase().includes(searchValue.toLowerCase())}
-	<CategoryWithProblems
-		category={{
-			id: '',
-			name: 'Nesurūšiuota',
-			description: 'Užduotys, kurios yra patvirtintos, tačiau dar nepriskirtos jokiai kategorijai.'
-		}}
-		{searchValue}
-	/>
-{/if}
 
 <div class="pagination">
 	<Button color="dark" on:click={() => changePage(-1)}>⬅️ Ankstesnis</Button>

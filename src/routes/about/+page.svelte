@@ -2,40 +2,19 @@
 <h3 class="my-4">
 	Sekite tinklapio statusą, naujienas bei bendraukite tarpusavyje <a
 		href="https://www.facebook.com/share/g/GxkKxrKPeSNoM1nJ/?mibextid=K35XfP">Facebook grupėje</a
-	>
+	> ŠIO PUSLAPIO INFORMACIJA PASENUSI IR NEGALIOJA
 </h3>
-<p>Funkcionalumų etapai:</p>
-<ul>
-	<li>
-		Pirmas etapas, pakeistas (dabar): keliamos pradžioje tik autorinės užduotys, peržiūrimos ir
-		patvirtinamos. Dedikuotas administratorius kuria kategorijas ateities užduočių rūšiavimui. Jau
-		galima sudarinėti užduočių sąrašus (dalintis sąrašų nuorodomis) bei generuoti užduočių ir
-		atsakymų PDF'us.
-	</li>
-	<li>
-		Antras etapas: rūšiuojama į sukurtas kategorijas esamos užduotys, įtraukiama išoriniai užduočių
-		šaltiniai (ne autorinės užduotys).
-	</li>
-	<li>
-		Trečias etapas: sukuriama atsakymų rašymo sistema, kur bet kokie naudotojai gali siūlyti
-		atsakymų (gali ir su sprendimais) pasiūlymus. T.y. net ir mokiniai.
-	</li>
-	<li>
-		Ketvirtas etapas: integruojama su testai.skafis.lt, skafis.lt, etestavimas.skafis.lt (būsima TAO
-		sistema)
-	</li>
-	<li>Penktas etapas: sistema pritaikoma dalykų ypatumams.</li>
-</ul>
 
 <h2 class="text-2xl font-semibold my-4 text-center">Nuorodos</h2>
+<p>Pagrindinis puslapis: <a href="https://www.skafis.lt">skafis.lt</a></p>
 <p>El. paštas: <a href="mailto:info@skafis.lt">info@skafis.lt</a></p>
 <p>
-	Tinklapio kodas: <a href="https://github.com/nagissul/bankas-skafis"
-		>https://github.com/naglissul/bankas-skafis</a
+	Tinklapio kodas: <a href="https://github.com/skafis-edtech/bankas-client"
+		>https://github.com/skafis-edtech/bankas-client</a
 	>
 	ir
-	<a href="https://github.com/nagissul/bankas-skafis-api"
-		>https://github.com/naglissul/bankas-skafis-api</a
+	<a href="https://github.com/skafis-edtech/bankas-api"
+		>https://github.com/skafis-edtech/bankas-api</a
 	>
 </p>
 <p>
@@ -176,3 +155,12 @@
 	<li><a href="https://beartocode.github.io/carta/introduction">carta-md</a></li>
 	<li><a href="https://cortexjs.io/mathlive/">math-live</a></li>
 </ul>
+
+<p>
+	'Susisiekite info@skafis.lt, jei norite tapti administratoriumi ir peržiūrėti kitų pateiktas
+	užduotis.'
+</p>
+<p>
+	Ateityje bus mokama, tačiau neprivaloma bus likti naudotis platforma, galėsite išsiregistruoti bei
+	išsieksportuoti visus duomenis susisiekdami el paštu.
+</p>

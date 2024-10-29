@@ -6,19 +6,23 @@
 		type SourceDisplayDto
 	} from '$services/gen-client';
 	import { Button, Search } from 'flowbite-svelte';
-	import { onMount } from 'svelte';
+	import { getContext, onMount } from 'svelte';
 	import SourceWithProblems from './SourceWithProblems.svelte';
 	import SourceManageBar from '$components/submit-dashboard/SourceManageBar.svelte';
-	import { contentApi, reviewApi, sourceViewApi } from '$services/apiService';
+	import { reviewApi, sourceViewApi } from '$services/apiService';
+	import { SourceDisplayEnum, SourceSubsetEnum } from '../../enums';
+	import type { AuthContext } from '../../types';
 
 	let sources: SourceDisplayDto[] = [];
 	export let searchValue = '';
-	export let sourcesSubset: 'all' | 'approved' | 'mine' | 'author';
+	export let sourcesSubset: SourceSubsetEnum;
 	export let author: string = '';
 	export let sortBy: GetSourcesByAuthorSortByEnum = GetSourcesByAuthorSortByEnum.Newest;
 	let page = 0;
 	let size = 8;
 	let timer: NodeJS.Timeout;
+
+	const { user } = getContext('authContext') as AuthContext;
 
 	$: (async () => {
 		if (sortBy) {
@@ -35,20 +39,18 @@
 		timer = setTimeout(async () => {
 			page = 0; // Reset to first page on new search
 			await fetchSources();
+			history.replaceState(null, '', `?search=${searchValue}`);
 		}, 1000);
 	}
 
 	async function fetchSources() {
-		if (sourcesSubset === 'mine') {
-			const response = await contentApi.getMySources(page, size, searchValue, sortBy);
+		if (sourcesSubset === SourceSubsetEnum.AVAILABLE) {
+			const response = await sourceViewApi.getAvailableSources(page, size, searchValue, sortBy);
 			sources = response.data;
-		} else if (sourcesSubset === 'all') {
+		} else if (sourcesSubset === SourceSubsetEnum.PENDING) {
 			const sourcesRes = await reviewApi.getPendingSources(page, size, searchValue);
 			sources = sourcesRes.data;
-		} else if (sourcesSubset === 'approved') {
-			const sourcesRes = await sourceViewApi.getApprovedSources(page, size, searchValue);
-			sources = sourcesRes.data;
-		} else if (sourcesSubset === 'author') {
+		} else if (sourcesSubset === SourceSubsetEnum.AUTHOR) {
 			if (!author) {
 				console.error('Author not provided');
 				return;
@@ -87,42 +89,46 @@
 
 {#each Object.entries(sources) as [id, source]}
 	<div class="relative">
-		{#if sourcesSubset === 'mine' && source.reviewStatus !== SourceDisplayDtoReviewStatusEnum.Rejected && source.visibility === SourceSubmitDtoVisibilityEnum.Public}
-			<SourceWithProblems {source} {searchValue} needApprovalStatusNone="status" />
-		{/if}
-		{#if sourcesSubset === 'mine' && source.reviewStatus !== SourceDisplayDtoReviewStatusEnum.Rejected && source.visibility === SourceSubmitDtoVisibilityEnum.Private}
-			<SourceWithProblems
-				source={{ ...source, name: '🔒 ' + source.name }}
-				{searchValue}
-				needApprovalStatusNone="status"
-				showIndicator={false}
-			/>
-		{/if}
-		{#if sourcesSubset === 'approved' || sourcesSubset === 'author'}
-			<SourceWithProblems
-				{source}
-				{searchValue}
-				needApprovalStatusNone="none"
-				showIndicator={false}
-			/>
-		{/if}
-		{#if sourcesSubset === 'mine' && source.reviewStatus === SourceDisplayDtoReviewStatusEnum.Rejected}
+		{#if sourcesSubset === SourceSubsetEnum.AVAILABLE && source.reviewStatus === SourceDisplayDtoReviewStatusEnum.Rejected}
 			<SourceManageBar
 				reviewStatus={source.reviewStatus}
 				sourceId={source.id}
 				reviewHistory={source.reviewHistory}
 				visibility={source.visibility}
 			/>
-			<SourceWithProblems {source} {searchValue} needApprovalStatusNone="none" />
-		{/if}
-		{#if sourcesSubset === 'all'}
+			<SourceWithProblems {source} {searchValue} displayType={SourceDisplayEnum.DISPLAY} />
+		{:else if sourcesSubset === SourceSubsetEnum.AVAILABLE && source.reviewStatus === SourceDisplayDtoReviewStatusEnum.Approved && source.authorUsername === $user.username}
+			<SourceWithProblems {source} {searchValue} displayType={SourceDisplayEnum.MANAGE} />
+		{:else if sourcesSubset === SourceSubsetEnum.AVAILABLE && source.reviewStatus === SourceDisplayDtoReviewStatusEnum.Approved && source.authorUsername !== $user.username}
+			<SourceWithProblems
+				source={{ ...source, name: '🌐 ' + source.name }}
+				{searchValue}
+				displayType={SourceDisplayEnum.DISPLAY}
+				showIndicator={false}
+			/>
+		{:else if sourcesSubset === SourceSubsetEnum.AVAILABLE && source.visibility === SourceSubmitDtoVisibilityEnum.Private}
+			<SourceWithProblems
+				source={{ ...source, name: '🔒 ' + source.name }}
+				{searchValue}
+				displayType={SourceDisplayEnum.MANAGE}
+				showIndicator={false}
+			/>
+		{:else if sourcesSubset === SourceSubsetEnum.PENDING}
 			<SourceWithProblems
 				afterReview={() => removeSource(source.id)}
 				{source}
 				{searchValue}
-				needApprovalStatusNone="approval"
+				displayType={SourceDisplayEnum.REVIEW}
+			/>
+		{:else if sourcesSubset === SourceSubsetEnum.AUTHOR}
+			<SourceWithProblems
+				source={{ ...source, name: '🌐 ' + source.name }}
+				{searchValue}
+				displayType={SourceDisplayEnum.DISPLAY}
 				showIndicator={false}
 			/>
+		{:else}
+			<h1>Klaida: susisiekite su administratoriumi</h1>
 		{/if}
 	</div>
 {/each}

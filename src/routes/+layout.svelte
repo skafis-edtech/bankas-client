@@ -13,7 +13,7 @@
 	import { auth, db } from '$services/firebaseConfig';
 	import { doc, getDoc } from 'firebase/firestore';
 	import Footer from '$components/layout/Footer.svelte';
-	import { setAuthToken } from '$services/apiService';
+	import { setAuthToken, userApi } from '$services/apiService';
 	import { goto } from '$app/navigation';
 	import GlobalAlert from '$components/layout/GlobalAlert.svelte';
 	import { authInitialized } from '$lib/stores';
@@ -44,21 +44,20 @@
 
 	const firebaseUnsubscribe = auth.onAuthStateChanged(async (user) => {
 		if (user) {
-			const userDoc = await getDoc(doc(db, 'users', user.uid));
 			const idToken = await user.getIdToken();
+			setAuthToken(idToken);
 
-			if (userDoc.exists()) {
-				const userData = userDoc.data() as User;
-				userStore.set({
-					id: user.uid,
-					username: userData.username,
-					role: userData.role,
-					jwt: idToken
-				});
-				setAuthToken(idToken);
-			} else {
-				throw new Error('User not found in database');
-			}
+			const userRes = await userApi.getMyInfo();
+			const userData = userRes.data;
+
+			userStore.set({
+				id: user.uid,
+				username: userData.username,
+				role: userData.role,
+				jwt: idToken
+			});
+
+			console.log('User email verified:', user.emailVerified);
 		} else {
 			userStore.set(null);
 			setAuthToken(null);
@@ -72,8 +71,8 @@
 </script>
 
 <header class="no-print">
-	<div class="block md:hidden"><HeaderMobile /></div>
-	<div class="hidden md:block"><HeaderDesktop /></div>
+	<div class="block lg:hidden"><HeaderMobile /></div>
+	<div class="hidden lg:block"><HeaderDesktop /></div>
 </header>
 <main>
 	<aside class="no-print"></aside>
@@ -125,7 +124,7 @@
 	aside {
 		flex: 3 3 0;
 	}
-	@media screen and (max-width: 1024px) {
+	@media screen and (max-width: 1300px) {
 		aside {
 			display: none;
 		}

@@ -6,14 +6,19 @@
 	import SourceReviewBar from '$components/review-dashboard/SourceReviewBar.svelte';
 	import { getNiceTimeString } from '$lib/utils';
 	import { sourceViewApi } from '$services/apiService';
-	import { type ProblemDisplayViewDto, type SourceDisplayDto } from '$services/gen-client';
+	import {
+		SourceDisplayDtoReviewStatusEnum,
+		type ProblemDisplayViewDto,
+		type SourceDisplayDto
+	} from '$services/gen-client';
 	import { Skeleton } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
-	import { Accordion, AccordionItem } from 'flowbite-svelte';
+	import { Accordion, AccordionItem, Indicator } from 'flowbite-svelte';
+	import { SourceDisplayEnum } from '../../enums';
 
 	export let source: SourceDisplayDto;
 	export let searchValue: string;
-	export let needApprovalStatusNone: 'approval' | 'status' | 'none' = 'none';
+	export let displayType: SourceDisplayEnum = SourceDisplayEnum.DISPLAY;
 	export let showIndicator = true;
 	export let afterReview: () => void = () => {};
 
@@ -22,6 +27,7 @@
 	let page = 0;
 	let isFetching = false;
 	const pageSize = 5;
+	let listContainer: HTMLElement | null = null;
 
 	// Function to load problems
 	async function loadProblems() {
@@ -35,15 +41,13 @@
 		isFetching = false;
 	}
 
-	// Function to detect if user has scrolled near the bottom of the window
 	function handleScroll() {
-		const scrollTop = window.scrollY; // Distance from top of the document
-		const windowHeight = window.innerHeight; // Viewport height
-		const documentHeight = document.documentElement.scrollHeight; // Full document height
-
-		const isNearBottom = scrollTop + windowHeight >= documentHeight - 100; // 100px from bottom
-
-		if (isNearBottom && !isFetching && problems.length < source.problemCount) {
+		if (
+			listContainer &&
+			listContainer.getBoundingClientRect().bottom - window.innerHeight < 0 &&
+			!isFetching &&
+			problems.length < source.problemCount
+		) {
 			loadProblems();
 		}
 	}
@@ -61,10 +65,22 @@
 </script>
 
 <Accordion>
-	<AccordionItem bind:open={isOpen} class="bg-slate-200 mb-4">
+	<AccordionItem
+		bind:open={isOpen}
+		activeClass="bg-slate-200 mb-4"
+		inactiveClass="bg-slate-200 mb-4"
+	>
 		<span slot="header" class="text-black flex justify-between items-center w-full">
 			{#if showIndicator}
-				<!-- Show Indicator based on source review status -->
+				{#if source.reviewStatus === SourceDisplayDtoReviewStatusEnum.Pending}
+					<Indicator color="yellow" class="mr-2" />
+				{:else if source.reviewStatus === SourceDisplayDtoReviewStatusEnum.Rejected}
+					<Indicator color="red" class="mr-2" />
+				{:else if source.reviewStatus === SourceDisplayDtoReviewStatusEnum.Approved}
+					<Indicator color="green" class="mr-2" />
+				{:else}
+					<h1>Klaida: susisiekite su administratoriumi</h1>
+				{/if}
 			{/if}
 			<p>
 				{#if searchValue}
@@ -77,8 +93,8 @@
 				<strong>({source.problemCount})</strong> <em>{source.authorUsername}</em>
 			</p>
 		</span>
-		<div>
-			{#if needApprovalStatusNone === 'approval'}
+		<div bind:this={listContainer}>
+			{#if displayType === SourceDisplayEnum.REVIEW}
 				<SourceReviewBar
 					{afterReview}
 					reviewStatus={source.reviewStatus}
@@ -86,7 +102,7 @@
 					reviewHistory={source.reviewHistory}
 				/>
 			{/if}
-			{#if needApprovalStatusNone === 'status'}
+			{#if displayType === SourceDisplayEnum.MANAGE}
 				<SourceManageBar
 					reviewStatus={source.reviewStatus}
 					sourceId={source.id}
@@ -105,7 +121,9 @@
 			<div class="container mx-auto">
 				{#each problems as problem (problem?.id || Math.random())}
 					{#if problem === null}
-						<Skeleton size="xxl" class="my-3" />
+						<div class="my-3">
+							<Skeleton size="xxl" />
+						</div>
 					{:else}
 						<div class="flex gap-2 my-2">
 							<div class="text-sm">{problem.sourceListNr}.</div>

@@ -25,7 +25,7 @@
 		}
 		const idResponse = await contentApi.submitSourceData(sourceData);
 		successStore.set('Šaltinis pateiktas sėkmingai');
-		goto(`/submit/edit-source/${idResponse.data.id}`);
+		goto(`/sources/edit-source/${idResponse.data.id}`);
 	}
 </script>
 

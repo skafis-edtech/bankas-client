@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, Card, Alert } from 'flowbite-svelte';
+	import { Button, Alert, Input, Label } from 'flowbite-svelte';
 	import { goto } from '$app/navigation';
 	import ProblemCreateForm from '$components/forms/ProblemCreateForm.svelte';
 	import {
@@ -19,9 +19,7 @@
 	import { CloseOutline, EditOutline, PlusOutline, TrashBinOutline } from 'flowbite-svelte-icons';
 	import EditProblemModal from '$components/edit-source/EditProblemModal.svelte';
 	import MarkdownDisplay from '$components/forms/MarkdownDisplay.svelte';
-	import FindById from '$components/layout/FindById.svelte';
-	import HorizontalLine from '$components/ui/HorizontalLine.svelte';
-	import { contentApi, sourceViewApi } from '$services/apiService';
+	import { contentApi, sourceViewApi, viewApi } from '$services/apiService';
 	import SourceModal from '$components/edit-source/SourceModal.svelte';
 
 	let sourceId: string;
@@ -290,6 +288,17 @@
 
 	/* Source info edit modal*/
 	let isSourceModalOpen = false;
+
+	/* fetch skf content into problem field */
+	let skfCodeToFetch = 'SKF-';
+
+	async function fetchSkfStuff(index: number) {
+		const response = await viewApi.getProblemBySkfCode(skfCodeToFetch);
+		const problem = response.data;
+		newProblems[index].problemText = problem.problemText;
+		newProblems[index].answerText = problem.answerText;
+		skfCodeToFetch = 'SKF-';
+	}
 </script>
 
 <div class="flex justify-between items-center">
@@ -400,6 +409,29 @@
 			on:click={() => removeProblem(i)}
 			class="w-10 h-10 absolute right-2 top-2"><CloseOutline /></Button
 		>
+
+		<form
+			on:submit|preventDefault={() => fetchSkfStuff(i)}
+			class="absolute top-2 right-20 flex flex-row items-center border-2 px-2"
+		>
+			<Input
+				type="text"
+				id="skf-code"
+				bind:value={skfCodeToFetch}
+				on:input={() => {
+					if (skfCodeToFetch.slice(0, 4) !== 'SKF-') {
+						skfCodeToFetch = 'SKF-';
+					}
+					const numericPart = skfCodeToFetch.slice(4).replace(/\D/g, '');
+					skfCodeToFetch = 'SKF-' + numericPart;
+				}}
+				required
+				placeholder="SKF-"
+				class="block px-4 py-2 text-lg w-32 my-4 h-6"
+				autocomplete="off"
+			/>
+			<Button class="ml-3 py-3 h-6" color="blue" type="submit">Įkelti tekstus</Button>
+		</form>
 		<ProblemCreateForm problemData={problem} />
 		<Button color="purple" on:click={() => submitProblem(i)} class="w-fit absolute right-2 bottom-2"
 			>Pridėti prie sąrašo</Button
@@ -408,5 +440,3 @@
 {/each}
 
 <Button color="green" on:click={addProblem} class="w-full"><PlusOutline /></Button>
-<HorizontalLine />
-<FindById />
