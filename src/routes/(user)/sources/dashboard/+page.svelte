@@ -37,7 +37,7 @@
 		>Eksportas</Button
 	>
 </div>
-<Button color="green" on:click={() => goto('/submit/new-source')} class="w-full my-4"
+<Button color="green" on:click={() => goto('/sources/new-source')} class="w-full my-4"
 	>Pridėti šaltinį (užduočių rinkinį)</Button
 >
 <div class="w-full h-10">
