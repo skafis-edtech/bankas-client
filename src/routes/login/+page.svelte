@@ -57,7 +57,7 @@
 			await login(email, password);
 			userLoaded.subscribe(($user) => {
 				if ($user) {
-					console.log('User logged in:', $user);
+					console.log('User logged in, redirecting...');
 					redirectLoggedInUser();
 				}
 			});

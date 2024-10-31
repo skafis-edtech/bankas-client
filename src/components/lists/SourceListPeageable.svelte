@@ -128,7 +128,10 @@
 				showIndicator={false}
 			/>
 		{:else}
-			<h1>Klaida: susisiekite su administratoriumi</h1>
+			<h1>Klaida: susisiekite su administratoriumi!</h1>
+			<p>source: {source.name}</p>
+			<p>sourcesSubset: {sourcesSubset}</p>
+			<p>source.visibility: {source.visibility}</p>
 		{/if}
 	</div>
 {/each}
