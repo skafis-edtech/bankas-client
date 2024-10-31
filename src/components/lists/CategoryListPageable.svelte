@@ -30,8 +30,6 @@
 	}
 
 	$: if (sourceIds || filterOption) {
-		console.log('sourceIds', sourceIds, 'filterOption', filterOption);
-
 		page = 0;
 		fetchCategories();
 	}

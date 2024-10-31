@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { isUsernameAvailable } from '$services/auth';
 	import { goto } from '$app/navigation';
 	import { ROLES } from '$utils/constants';
 	import { Button, Checkbox, Helper, Input, Label } from 'flowbite-svelte';
@@ -60,11 +59,6 @@
 		}
 		if (!email || !password || !username) {
 			errorMessage = 'Visi laukai turi būti užpildyti';
-			return;
-		}
-		const isAvailable = await isUsernameAvailable(username);
-		if (!isAvailable) {
-			errorMessage = 'Prisijungimo vardas jau užimtas';
 			return;
 		}
 		try {
